@@ -1,0 +1,5 @@
+pytest
+pytest-mock
+boto3
+aws-lambda-powertools
+aws-lambda-powertools[pydantic]
