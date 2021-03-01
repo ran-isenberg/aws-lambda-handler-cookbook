@@ -1,30 +1,46 @@
 import json
 from json import JSONDecodeError
 from typing import Dict
+from uuid import UUID
+
+def lambda_handler(event, context) -> None:
+    # validate input
+    validate(event)
+    write_order(event)
 
 
-def lambda_handler(event, context):
-    try:
-        order = json.loads(event['Records'][0]['body'])
-        validate(order)
-        write_order(order)
-    except JSONDecodeError as err:
-        print("ERROR: could not parse json body of the message")
-        raise err
-
-
-def validate(order: Dict):
-    if not order:
-        raise ValueError("ValidationError: order should not be empty")
-    # check the structure
-    if not {'id', 'description', 'items'}.issubset(order.keys()):
-        raise ValueError("ValidationError: malformed metadata")
+def _validate_order_item(items: Dict) -> None:
     # check the value of the items
-    for item in order["items"]:
-        # here you have to check a lot more fields
+    if not items:
+        raise ValueError("ValidationError: order items should not be empty")
+    for item in items:
+        if not {'type', 'id', 'quantity', 'description'}.issubset(item.keys()):
+            raise ValueError("ValidationError: malformed item")
+            # here you have to check a lot more fields
         if item["quantity"] < 0:
-            raise ValueError("ValidationError: Quantity cant be negative")
+            raise ValueError("ValidationError: quantity cant be negative")
+        UUID(item["id"]) # raises value error in case of invalid UUID format
+        if item["type"] not in ["ACCESSORIES", "COMPUTER"]:
+            raise ValueError(f'ValidationError: invalid item type, type={item["type"]}') 
+
+def validate(event: Dict) -> None:
+    if not event or event is None:
+        raise ValueError("event should not be empty")
+    records = event.get('Records',[])
+    if not records:
+        raise ValueError("ValidationError: orders should not be empty")
+    for record in records:
+        try: 
+            order = json.loads(record['body'])
+        except (IndexError, KeyError, JSONDecodeError) as err:
+            raise ValueError('ValidationError: invalid order body, unable to decode')
+        # check the structure
+        if not {'id', 'description', 'items'}.issubset(order.keys()):
+            raise ValueError("ValidationError: malformed order metadata")
+        UUID(order["id"]) # raises value error in case of invalid UUID format
+        
+        _validate_order_item(order.get("items", {}))
 
 
-def write_order(order):
+def write_order(order: Dict):
     pass

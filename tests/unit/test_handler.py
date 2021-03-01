@@ -1,30 +1,32 @@
-import pytest
 import json
+from typing import Dict
 
+import pytest
+from app import handler, powertools_handler
 from pydantic import ValidationError
 
-from app import handler, powertools_handler
-
 ORDER = {
-    "id": "123456",
+    "id": "abbcf84d-489e-4b60-bc4e-df2399a9f098",
     "description": "This is an order description",
     "items": [
         {
-            "id": "K986455",
+            "id": "1b67d0fc-c893-463c-80a0-1ff182767403",
             "quantity": 2,
-            "description": "Keyboard Model 1"
+            "description": "Laptop Model 1",
+            "type": 'COMPUTER',
         },
         {
-            "id": "P99553",
+            "id": "aa95a311-e3e1-458c-99c6-089be4349703",
             "quantity": 5,
-            "description": "Cable ST 1"
+            "description": "Cable ST 1",
+            "type": "ACCESSORIES",
         }
     ],
-    "otpional_field": "this is sometimes empty, sometimes not"
+    "optional_field": "this is sometimes empty, sometimes not"
 }
 
 
-def create_sqs_event(body):
+def create_sqs_event(body: Dict):
     return {
         "Records": [
             {
@@ -60,7 +62,7 @@ def test_lambda_handler_powertools():
     powertools_handler.lambda_handler(create_sqs_event(ORDER), None)
 
 
-def test_lambda_handler_powertools_raises_validation_errro():
+def test_lambda_handler_powertools_raises_validation_error():
     ORDER["items"][0]['quantity'] = -5
     with pytest.raises(ValidationError):
         powertools_handler.lambda_handler(create_sqs_event(ORDER), None)

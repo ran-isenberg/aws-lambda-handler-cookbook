@@ -1,34 +1,32 @@
 from typing import List, Optional
+from uuid import UUID
 
 from aws_lambda_powertools.utilities.parser import BaseModel, event_parser
 from aws_lambda_powertools.utilities.parser.envelopes import SqsEnvelope
-from pydantic import validator
+from aws_lambda_powertools.utilities.typing import LambdaContext
+from pydantic import PositiveInt, conlist, validator
+from typing_extensions import Literal
 
 
 class OrderItem(BaseModel):
-    id: str
-    quantity: int
+    id: UUID
+    quantity: PositiveInt
     description: str
-
-    @validator('quantity')
-    def quantity_should_not_be_negative(cls, v):
-        if v < 0:
-            raise ValueError('must not be negative')
-        return v
-
+    type: Literal["ACCESSORIES", "COMPUTER"]
 
 class Order(BaseModel):
-    id: str
+    id: UUID
     description: str
-    items: List[OrderItem]
+    items: conlist(OrderItem, min_items=1)
     optional_field: Optional[str]
 
 
+
 @event_parser(model=Order, envelope=SqsEnvelope)
-def lambda_handler(event, context):
+def lambda_handler(event: List[Order], context: LambdaContext) -> None:
     write_order(event)
     pass
 
 
-def write_order(order):
+def write_order(order: Order):
     pass

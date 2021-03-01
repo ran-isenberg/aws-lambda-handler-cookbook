@@ -3,13 +3,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
-[packages]
-aws-lambda-powertools = "*"
+[dev-packages]
 pytest = "*"
 pytest-mock = "*"
+
+[packages]
+aws-lambda-powertools = {extras = ["pydantic"],version = "*"}
+typing-extensions = "*"
 boto3 = "*"
-pydantic = "*"
-[dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = ">=3.7"
