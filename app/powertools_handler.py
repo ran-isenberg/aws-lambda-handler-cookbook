@@ -1,11 +1,10 @@
-from typing import List, Optional
+from typing import List, Literal, Optional
 from uuid import UUID
 
 from aws_lambda_powertools.utilities.parser import BaseModel, event_parser
 from aws_lambda_powertools.utilities.parser.envelopes import SqsEnvelope
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from pydantic import PositiveInt, conlist, validator
-from typing_extensions import Literal
 
 
 class OrderItem(BaseModel):
