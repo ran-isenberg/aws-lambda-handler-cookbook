@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
 from pydantic import BaseModel
 from aws_lambda_powertools.utilities.parser.models import EventBridgeModel
+from aws_lambda_powertools.utilities.parser import parse, event_parser
 
     """In this example we want to use an attribute from the EventBridge envelope, the region string and also to use our payload UserModel data. 
        However, if we parse as before by usig the envelope parameter (envelope=EventBridgeEnvelope) we dont have access to the envelope parameters.
