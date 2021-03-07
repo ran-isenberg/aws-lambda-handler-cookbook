@@ -24,7 +24,6 @@ class Order(BaseModel):
 @event_parser(model=Order, envelope=SqsEnvelope)
 def lambda_handler(event: List[Order], context: LambdaContext) -> None:
     write_order(event)
-    pass
 
 
 def write_order(order: Order):

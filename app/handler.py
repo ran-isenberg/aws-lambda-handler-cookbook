@@ -3,9 +3,10 @@ from json import JSONDecodeError
 from typing import Dict
 from uuid import UUID
 
-def lambda_handler(event, context) -> None:
+def lambda_handler(event: Dict, context) -> None:
     # validate input
     validate(event)
+    # process validated data
     write_order(event)
 
 
@@ -17,8 +18,8 @@ def _validate_order_item(items: Dict) -> None:
         if not {'type', 'id', 'quantity', 'description'}.issubset(item.keys()):
             raise ValueError("ValidationError: malformed item")
             # here you have to check a lot more fields
-        if item["quantity"] < 0:
-            raise ValueError("ValidationError: quantity cant be negative")
+        if item["quantity"] <= 0:
+            raise ValueError("ValidationError: quantity cant be negative or zero")
         UUID(item["id"]) # raises value error in case of invalid UUID format
         if item["type"] not in ["ACCESSORIES", "COMPUTER"]:
             raise ValueError(f'ValidationError: invalid item type, type={item["type"]}') 
@@ -31,7 +32,7 @@ def validate(event: Dict) -> None:
         raise ValueError("ValidationError: orders should not be empty")
     for record in records:
         try: 
-            order = json.loads(record['body'])
+            order: Dict = json.loads(record['body'])
         except (IndexError, KeyError, JSONDecodeError) as err:
             raise ValueError('ValidationError: invalid order body, unable to decode')
         # check the structure
