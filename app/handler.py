@@ -43,5 +43,5 @@ def validate(event: Dict) -> None:
         _validate_order_item(order.get("items", {}))
 
 
-def write_order(order: Dict):
+def write_order(order: Dict) -> None:
     pass

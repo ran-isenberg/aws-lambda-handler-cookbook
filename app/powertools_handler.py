@@ -23,8 +23,12 @@ class Order(BaseModel):
 
 @event_parser(model=Order, envelope=SqsEnvelope)
 def lambda_handler(event: List[Order], context: LambdaContext) -> None:
-    write_order(event)
+    for order in event:
+        write_order(order)
 
 
-def write_order(order: Order):
-    pass
+def write_order(order: Order) -> None:
+    print(f'handling order {str(order.id)}')
+    for item in order.items:
+        print(f'handling item {str(item.id)}')
+    return
