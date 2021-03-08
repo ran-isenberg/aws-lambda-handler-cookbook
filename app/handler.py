@@ -10,7 +10,7 @@ def lambda_handler(event: Dict, context) -> None:
     write_order(event)
 
 
-def _validate_order_item(items: Dict) -> None:
+def _validate_order_items(items: Dict) -> None:
     # check the value of the items
     if not items:
         raise ValueError("ValidationError: order items should not be empty")
@@ -40,7 +40,7 @@ def validate(event: Dict) -> None:
             raise ValueError("ValidationError: malformed order metadata")
         UUID(order["id"]) # raises value error in case of invalid UUID format
         
-        _validate_order_item(order.get("items", {}))
+        _validate_order_items(order.get("items", {}))
 
 
 def write_order(order: Dict) -> None:
