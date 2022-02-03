@@ -17,6 +17,8 @@ It will cover issues such as:
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
 
 Most of the code examples here are taken from the excellent AWS Lambda Powertools repository:  https://github.com/awslabs/aws-lambda-powertools-python
+
+
 I've written several of the utilities which are mentioned in this blog series and donated 2 of them, the parser and feature flags to AWS Lambda Powertools.
 
 This repository is the complementary code examples of my blog series "AWS Lambda Cookbook - Elevate your handler's code"
