@@ -26,4 +26,3 @@ pr: yapf pre-commit complex lint coverage
 
 yapf:
 	yapf -i -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .
-

@@ -6,15 +6,22 @@ What makes an AWS Lambda handler resilient, traceable and easy to maintain? How 
 
 This repository provides a working, open source based, AWS Lambda handler skeleton Python code.
 This handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
-It will cover issues such as logging, tracing, input validation, features flags, dynamic configuration, and how to safely use environment variables.
+It will cover issues such as:
+1.  Logging
+2.  Tracing
+3.  Input validation
+4.  Features flags & dynamic configuration
+5.  Environment variables.
+
+
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
 
-Most of the code examples here are taken from the excellent AWS Lambda Powertools repository.
+Most of the code examples here are taken from the excellent AWS Lambda Powertools repository:  https://github.com/awslabs/aws-lambda-powertools-python
 I've written several of the utilities which are mentioned in this blog series and donated 2 of them, the parser and feature flags to AWS Lambda Powertools.
 
 This repository is the complementary code examples of my blog series "AWS Lambda Cookbook - Elevate your handler's code"
 
-First post:
+First blog post: xxxx
 
 
 ## Getting started
