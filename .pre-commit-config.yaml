@@ -1,0 +1,26 @@
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: trailing-whitespace
+        name: Ensure that code don't have trailing whitespace
+      - id: check-ast
+        name: Check python abstract syntax trees
+      - id: check-case-conflict
+        name: Check for case conflicts
+      - id: check-json
+        name: Check JSON files format
+      - id: check-shebang-scripts-are-executable
+        name: Check that scripts with shebangs are executable
+      - id: check-merge-conflict
+        name: Check for merge conflicts in code
+      - id: end-of-file-fixer
+        name: Files should end with empty line
+        exclude: ".json"
+      - id: double-quote-string-fixer
+        name: Strings should be single quoted
+      - id: name-tests-test
+        name: Tests should begin with test_
+        args: ["--django"]
+        exclude: "^(?!helpers/)"

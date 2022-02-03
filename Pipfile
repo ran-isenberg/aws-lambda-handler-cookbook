@@ -6,10 +6,21 @@ name = "pypi"
 [dev-packages]
 pytest = "*"
 pytest-mock = "*"
+pycodestyle = "*"
+pytest-cov = "*"
+pytest-html = "*"
+python-dateutil = "*"
+python-dotenv = "*"
+GitPython = "*"
+yapf = "*"
+radon = "*"
+xenon = "*"
+pre-commit = "*"
+flake8= "*"
 
 [packages]
 aws-lambda-powertools = {extras = ["pydantic"],version = "*"}
-boto3 = "*"
+aws-lambda-context = "*"
 
 [requires]
 python_version = "3.8"
