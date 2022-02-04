@@ -1,7 +1,5 @@
 # AWS Lambda Cookbook - Elevate your handler's code
 
-This repository is designed to be a starting point for a new business service in the platform.
-In order to create a new repository from this template follow these steps -
 What makes an AWS Lambda handler resilient, traceable and easy to maintain? How do you write such a code?
 
 This repository provides a working, open source based, AWS Lambda handler skeleton Python code.
