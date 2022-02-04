@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from aws_lambda_context import LambdaContext
 from service.my_handler import my_handler
 
@@ -9,4 +11,5 @@ def generate_context() -> LambdaContext:
 
 
 def test_handler_200_ok():
-    my_handler({}, generate_context())
+    response = my_handler({}, generate_context())
+    assert response['statusCode'] == HTTPStatus.OK
