@@ -4,7 +4,7 @@ from typing import Any, Dict
 from aws_lambda_powertools.logging.logger import Logger
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-logger: Logger = Logger('my_service')  # JSON output format, service name can be set by environment variable "POWERTOOLS_SERVICE_NAME"
+logger: Logger = Logger(service='my_service')  # JSON output format, service name can be set by environment variable "POWERTOOLS_SERVICE_NAME"
 
 
 def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
