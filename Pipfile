@@ -20,7 +20,6 @@ flake8= "*"
 
 [packages]
 aws-lambda-powertools = {extras = ["pydantic"],version = "*"}
-aws-lambda-context = "*"
 
 [requires]
 python_version = "3.8"
