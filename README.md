@@ -6,7 +6,7 @@ This repository provides a working, open source based, AWS Lambda handler skelet
 This handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 It will cover issues such as:
 1.  Logging
-2.  Tracing
+2.  Observability: Tracing and Metrics
 3.  Input validation
 4.  Features flags & dynamic configuration
 5.  Environment variables.
