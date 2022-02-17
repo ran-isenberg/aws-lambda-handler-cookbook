@@ -1,4 +1,4 @@
-.PHONY: dev lint complex pre-commit yapf
+.PHONY: dev lint complex coverage pre-commit yapf sort
 
 
 
@@ -18,11 +18,13 @@ complex:
 	@echo "Running xenon"
 	xenon --max-absolute B --max-modules A --max-average A -e 'tests/*,.venv/*,cdk.out/*' .
 
+sort:
+	isort ${PWD}
 
 pre-commit:
 	pre-commit run -a
 
-pr: yapf pre-commit complex lint coverage
+pr: yapf sort pre-commit complex lint coverage
 
 yapf:
 	yapf -i -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .

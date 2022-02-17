@@ -2,6 +2,7 @@ from http import HTTPStatus
 from typing import Any, Dict
 
 from aws_lambda_powertools.utilities.typing import LambdaContext
+
 from service.utils.utils import logger, tracer
 
 

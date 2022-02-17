@@ -16,7 +16,8 @@ yapf = "*"
 radon = "*"
 xenon = "*"
 pre-commit = "*"
-flake8= "*"
+flake8 = "*"
+isort = "*"
 
 [packages]
 pydantic = {extras = ["email"],version = "*"}
