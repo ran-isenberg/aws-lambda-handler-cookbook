@@ -22,8 +22,9 @@ I've written several of the utilities which are mentioned in this blog series an
 
 This repository is the complementary code examples of my blog series "AWS Lambda Cookbook - Elevate your handler's code"
 
-- First blog post:  https://isenberg-ran.medium.com/aws-lambda-cookbook-elevate-your-handlers-code-part-1-bc160a10679a
-- Second blog post: https://isenberg-ran.medium.com/aws-lambda-cookbook-elevate-your-handlers-code-part-2-observability-eff158307180
+## The Blog Series
+- First blog post - Logging:  https://isenberg-ran.medium.com/aws-lambda-cookbook-elevate-your-handlers-code-part-1-bc160a10679a
+- Second blog post- Observability: Monitoring and Tracing: https://isenberg-ran.medium.com/aws-lambda-cookbook-elevate-your-handlers-code-part-2-observability-eff158307180
 
 
 ## Getting started
