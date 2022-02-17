@@ -19,7 +19,8 @@ pre-commit = "*"
 flake8= "*"
 
 [packages]
-aws-lambda-powertools = {extras = ["pydantic"],version = "*"}
+pydantic = {extras = ["email"],version = "*"}
+aws-lambda-powertools = "*"
 
 [requires]
 python_version = "3.8"

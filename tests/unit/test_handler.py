@@ -1,7 +1,8 @@
 from http import HTTPStatus
 
-from service.my_handler import my_handler
+from service.handlers.my_handler import my_handler
 from aws_lambda_powertools.utilities.typing import LambdaContext
+
 
 def generate_context() -> LambdaContext:
     context = LambdaContext()
