@@ -62,9 +62,7 @@ Follow this guide https://docs.aws.amazon.com/cdk/v1/guide/getting_started.html
 
 You must make sure your AWS account and machine can deploy stack and have all the tokens and configuration as described in the page above.
 
-All Lambda function configuration are saved as constants at the cdk.aws_lambda_handler_cookbook.constants.py file
-
-and can easily be changed: lambda memory size, etc.
+All Lambda function configuration are saved as constants at the cdk.aws_lambda_handler_cookbook.constants.py file and can easily be changed: lambda memory size, etc.
 
 
 ## Deleting the stack
