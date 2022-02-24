@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+cookbook-cdk = {editable = true,path = "cdk"}
 pytest = "*"
 pytest-mock = "*"
 pycodestyle = "*"
@@ -18,6 +19,7 @@ xenon = "*"
 pre-commit = "*"
 flake8 = "*"
 isort = "*"
+boto3 = "*"
 
 [packages]
 pydantic = {extras = ["email"],version = "*"}

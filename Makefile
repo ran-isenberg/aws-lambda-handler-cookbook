@@ -1,4 +1,4 @@
-.PHONY: dev lint complex coverage pre-commit yapf sort
+.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy
 
 
 
@@ -28,3 +28,12 @@ pr: yapf sort pre-commit complex lint coverage
 
 yapf:
 	yapf -i -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .
+
+deploy:
+	mkdir -p .build/lambdas ; cp -r service .build/lambdas
+	mkdir -p .build/common_layer ; pipenv lock -r > .build/common_layer/requirements.txt
+
+	cdk deploy --app="python3 ${PWD}/cdk/aws_lambda_handler_cookbook/app.py" -require-approval=True
+
+destroy:
+	cdk destroy --app="python3 ${PWD}/cdk/aws_lambda_handler_cookbook/app.py" -require-approval=True
