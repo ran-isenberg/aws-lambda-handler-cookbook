@@ -1,4 +1,5 @@
 # AWS Lambda Cookbook - Elevate your handler's code
+![PythonSupport](https://img.shields.io/static/v1?label=python&message=3.8&color=blue?style=flat-square&logo=python)
 
 What makes an AWS Lambda handler resilient, traceable and easy to maintain? How do you write such a code?
 
@@ -91,3 +92,6 @@ The tests are run automatically by:
 ```shell script
 pytest --cov
 ```
+
+## License
+This library is licensed under the MIT-0 License. See the LICENSE file.
