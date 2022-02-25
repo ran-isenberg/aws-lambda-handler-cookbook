@@ -1,4 +1,4 @@
-.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy
+.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit e2e
 
 
 
@@ -8,9 +8,6 @@ dev:
 lint:
 	@echo "Running flake8"
 	flake8 service/* tests/*
-
-coverage:
-	pytest --cov
 
 complex:
 	@echo "Running Radon"
@@ -24,7 +21,17 @@ sort:
 pre-commit:
 	pre-commit run -a
 
-pr: yapf sort pre-commit complex lint coverage
+deps:
+	pipenv lock -r -d > dev_requirements.txt
+	pipenv lock -r  > lambda_requirements.txt
+
+unit:
+	pytest tests/unit  --cov-config=.coveragerc --cov=service
+
+e2e:
+	pytest tests/e2e  --cov-config=.coveragerc --cov=service
+
+pr: deps yapf sort pre-commit complex lint unit e2e
 
 yapf:
 	yapf -i -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .

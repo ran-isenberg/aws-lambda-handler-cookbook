@@ -1,4 +1,5 @@
 # AWS Lambda Cookbook - Elevate your handler's code
+![PythonSupport](https://img.shields.io/static/v1?label=python&message=3.8&color=blue?style=flat-square&logo=python)
 
 What makes an AWS Lambda handler resilient, traceable and easy to maintain? How do you write such a code?
 
@@ -74,13 +75,7 @@ make destroy
 Unit tests can be found under the `tests` folder.
 You can run the tests by using the following command:
 ```shell script
-pytest -v
-```
-
-
-To calculate test code coverage us the command:
-```shell script
-pytest --cov
+make unit
 ```
 
 ## E2E Tests
@@ -89,5 +84,8 @@ These tests send a 'GET' message to the deployed API GW and trigger the actual L
 
 The tests are run automatically by:
 ```shell script
-pytest --cov
+make e2e
 ```
+
+## License
+This library is licensed under the MIT License. See the LICENSE file.
