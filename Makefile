@@ -26,10 +26,10 @@ deps:
 	pipenv lock -r  > lambda_requirements.txt
 
 unit:
-	pytest tests/unit  --cov-config=.coveragerc --cov=service
+	pytest tests/unit  --cov-config=.coveragerc --cov=service --cov-report xml
 
 e2e:
-	pytest tests/e2e  --cov-config=.coveragerc --cov=service
+	pytest tests/e2e  --cov-config=.coveragerc --cov=service --cov-report xml
 
 pr: deps yapf sort pre-commit complex lint unit e2e
 
