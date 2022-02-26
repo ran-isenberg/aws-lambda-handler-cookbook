@@ -52,6 +52,6 @@ jobs:
           files: ./coverage.xml
           name: aws-lambda-handler-cookbook-codecov
           fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
+          verbose: false # optional (default = false)
           #token: ${{ secrets.CODECOV_TOKEN }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
