@@ -10,3 +10,4 @@ def test_handler_200_ok():
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
     assert body_dict['message'] == 'success'
+    assert False
