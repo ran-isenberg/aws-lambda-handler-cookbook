@@ -53,5 +53,5 @@ jobs:
           name: aws-lambda-handler-cookbook-codecov
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false)
-          #token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
