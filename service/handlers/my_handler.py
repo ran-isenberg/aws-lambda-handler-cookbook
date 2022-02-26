@@ -12,6 +12,10 @@ def inner_function_example(event: Dict[str, Any]) -> Dict[str, Any]:
     return {}
 
 
+def new_func_not_called_cov_check() -> None:
+    return
+
+
 @tracer.capture_lambda_handler(capture_response=False)
 def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     logger.set_correlation_id(context.aws_request_id)
