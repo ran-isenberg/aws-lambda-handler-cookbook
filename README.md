@@ -1,6 +1,11 @@
 # AWS Lambda Cookbook - Elevate your handler's code
+[![license](https://img.shields.io/github/license/ran-isenberg/aws-lambda-handler-cookbook)](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/master/LICENSE)
 ![PythonSupport](https://img.shields.io/static/v1?label=python&message=3.8&color=blue?style=flat-square&logo=python)
 [![codecov](https://codecov.io/gh/ran-isenberg/aws-lambda-handler-cookbook/branch/main/graph/badge.svg?token=P2K7K4KICF)](https://codecov.io/gh/ran-isenberg/aws-lambda-handler-cookbook)
+![version](https://img.shields.io/github/v/release/ran-isenberg/aws-lambda-handler-cookbook)
+![issues](https://img.shields.io/github/issues/ran-isenberg/aws-lambda-handler-cookbook)
+
+
 
 What makes an AWS Lambda handler resilient, traceable and easy to maintain? How do you write such a code?
 
