@@ -1,8 +1,18 @@
 import json
+import os
 from http import HTTPStatus
 
+import pytest
+
+from cdk.aws_lambda_handler_cookbook.service_stack.constants import POWER_TOOLS_LOG_LEVEL, POWERTOOLS_SERVICE_NAME, SERVICE_NAME
 from service.handlers.my_handler import my_handler
 from tests.utils import generate_api_gw_event, generate_context
+
+
+@pytest.fixture(scope='module', autouse=True)
+def init():
+    os.environ[POWERTOOLS_SERVICE_NAME] = SERVICE_NAME
+    os.environ[POWER_TOOLS_LOG_LEVEL] = 'DEBUG'
 
 
 def test_handler_200_ok():
