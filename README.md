@@ -42,8 +42,9 @@ This repository is the complementary code examples of my blog series "AWS Lambda
 
 
 ## The Blog Series
-- First blog post - Logging:  https://isenberg-ran.medium.com/aws-lambda-cookbook-elevate-your-handlers-code-part-1-bc160a10679a
-- Second blog post- Observability: Monitoring and Tracing: https://isenberg-ran.medium.com/aws-lambda-cookbook-elevate-your-handlers-code-part-2-observability-eff158307180
+- First blog post - Logging:  https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging
+- Second blog post- Observability: Monitoring and Tracing: https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability
+- Third blog post- Observability: Business KPIs Metrics: https://isenberg-ran.medium.com/aws-lambda-cookbook-elevate-your-handlers-code-part-2-observability-eff158307180
 
 
 ## Getting started
