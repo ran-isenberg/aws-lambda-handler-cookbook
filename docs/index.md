@@ -2,7 +2,8 @@
 title: Homepage
 description: AWS Lambda Cookbook - Elevate Your Handler's Code for Python
 ---
-[<img alt="alt_text" src="../media/banner.png" />](https://www.ranthebuilder.cloud/)
+[<img alt="alt_text" src="./media/banner.png" />](https://www.ranthebuilder.cloud/)
+
 # AWS Lambda Cookbook - Elevate Your Handler's Code
 
 
