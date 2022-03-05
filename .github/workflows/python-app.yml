@@ -55,3 +55,8 @@ jobs:
           verbose: false # optional (default = false)
           token: ${{ secrets.CODECOV_TOKEN }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+      - run: echo "Run CDK deploy to your AWS account"
+      - run: echo "Run E2E"
+      - run: echo "Update documentation"
+      - run: pip install mkdocs-material mkdocs-git-revision-date-plugin
+      #- run: mkdocs gh-deploy --force
