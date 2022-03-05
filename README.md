@@ -58,7 +58,7 @@ This repository is the complementary code examples of my blog series "AWS Lambda
 
 
 ## Getting started
-Head over to the complete project documentation pages at GitHub pages.
+Head over to the complete project documentation pages at GitHub pages at [https://ran-isenberg.github.io/aws-lambda-handler-cookbook](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)
 
 ## License
 This library is licensed under the MIT License. See the [LICENSE](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/LICENSE) file.
