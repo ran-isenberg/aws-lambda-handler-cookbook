@@ -9,7 +9,7 @@
 
 What makes an AWS Lambda handler resilient, traceable and easy to maintain? How do you write such a code?
 
-The project is a template project that is based on my AWS Lambda handler cookbook blog series that I publish in [ranthebuilder.cloud](https://www.ranthebuilder.cloud){:target="_blank" rel="noopener"} and attempt to answer those questions.
+The project is a template project that is based on my AWS Lambda handler cookbook blog series that I publish in [ranthebuilder.cloud](https://www.ranthebuilder.cloud) and attempt to answer those questions.
 
 This project provides a working, open source based, AWS Lambda handler skeleton Python code including DEPLOYMENT code with CDK and a pipeline.
 
@@ -42,9 +42,9 @@ The utilities cover multiple aspect of a production-ready service, including:
 
 
 ## The Blog Series
-- First blog post - [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}
-- Second blog post- [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}
-- Third blog post- [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
+- First blog post - [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging)
+- Second blog post- [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability)
+- Third blog post- [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability)
 
 
 #
