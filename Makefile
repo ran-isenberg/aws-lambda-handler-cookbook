@@ -1,9 +1,10 @@
-.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit e2e
+.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit e2e docs
 
 
 
 dev:
 	pipenv install --dev
+	make deps
 
 lint:
 	@echo "Running flake8"
@@ -37,10 +38,13 @@ yapf:
 	yapf -i -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .
 
 deploy:
+	make deps
 	mkdir -p .build/lambdas ; cp -r service .build/lambdas
 	mkdir -p .build/common_layer ; pipenv lock -r > .build/common_layer/requirements.txt
-
 	cdk deploy --app="python3 ${PWD}/cdk/aws_lambda_handler_cookbook/app.py" -require-approval=True
 
 destroy:
 	cdk destroy --app="python3 ${PWD}/cdk/aws_lambda_handler_cookbook/app.py" -require-approval=True
+
+docs:
+	mkdocs serve

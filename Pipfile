@@ -20,6 +20,8 @@ pre-commit = "*"
 flake8 = "*"
 isort = "*"
 boto3 = "*"
+mkdocs-material = "*"
+mkdocs-git-revision-date-plugin = "*"
 
 [packages]
 pydantic = {extras = ["email"],version = "*"}

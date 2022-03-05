@@ -1,0 +1,71 @@
+site_name: AWS Lambda Handler CookBook
+site_description: AWS Lambda Handler CookBook
+site_author: Ran Isenberg
+repo_url: https://github.com/ran-isenberg/aws-lambda-handler-cookbook
+edit_uri: edit/main/docs
+
+nav:
+  - Homepage: index.md
+  - Getting Started: getting_started.md
+  - CDK: cdk.md
+  - Pipeline: pipeline.md
+  - Best Practices:
+      - best_practices/logger.md
+      - best_practices/tracer.md
+      - best_practices/metrics.md
+
+theme:
+  name: material
+  font:
+    text: Ubuntu
+  palette:
+    - scheme: default
+      primary: blue
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.instant
+    - navigation.indexes
+    - navigation.tracking
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+  logo: media/builder.png
+  favicon: media/favicon.png
+
+markdown_extensions:
+  - admonition
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      linenums: true
+  - pymdownx.details
+  - pymdownx.snippets:
+      base_path: "."
+      check_paths: true
+  - meta
+  - toc:
+      permalink: true
+      toc_depth: 4
+  - attr_list
+  - pymdownx.emoji
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+
+copyright: Copyright &copy; 2021 Ran Isenberg
+
+plugins:
+  - git-revision-date
+  - search
+extra_css:
+  - stylesheets/extra.css
