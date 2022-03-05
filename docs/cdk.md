@@ -12,7 +12,7 @@ description: AWS Lambda Cookbook CDK Project
 
 <img alt="alt_text" src="../media/cdk.png" />
 
-All CDK project files can be found under the CDK folder. 
+All CDK project files can be found under the CDK folder.
 
 The CDK code create an API GW with a path of /api/service which triggers the lambda on 'GET' requests.
 
@@ -35,12 +35,7 @@ All ASW Lambda function configurations are saved as constants at the `cdk.aws_la
 ### Deployed Resources
 - AWS Cloudformation stack: **cdk.aws_lambda_handler_cookbook.service_stack.cookbook_stack.py** which is consisted of one construct
 - Construct: **cdk.aws_lambda_handler_cookbook.service_stack.cookbook_construct.py** which includes:
-    * **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more about it in Yan - Cui's [blog](https://medium.com/theburningmonk-com/lambda-layer-not-a-package-manager-but-a-deployment-optimization-85ddcae40a96){:target="_blank" rel="noopener"} 
+    * **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more about it in Yan - Cui's [blog](https://medium.com/theburningmonk-com/lambda-layer-not-a-package-manager-but-a-deployment-optimization-85ddcae40a96){:target="_blank" rel="noopener"}
     * **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     * **Lambda Role** - The role of the Lambda function.
     * **API GW with Lambda Integration** - API GW with a Lambda integration GET /api/service that triggers the Lambda function.
-
-
-
-
-

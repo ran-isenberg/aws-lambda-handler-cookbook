@@ -8,7 +8,7 @@ description: AWS Lambda Cookbook Project Getting started
 * Python 3.8
 
 
-## Creating a Virtual Python Environment 
+## Creating a Virtual Python Environment
 Run ``make dev``
 
 ## Deploy CDK
@@ -32,7 +32,7 @@ CDK destroy can be run with ``make destroy``
 ## Preparing Code for PR
 Run ``make pr``. This command will run all the required checks, pre commit hooks, linters, code formats, pylint and tests, so you can be sure GitHub's pipeline will pass.
 
-The command auto fixes errors in the code for you. 
+The command auto fixes errors in the code for you.
 
 If there's an error in the pre-commit stage, it gets auto fixed. However, are required to run ``make pr`` again so it continues to the next stages.
 
@@ -43,18 +43,18 @@ Be sure to commit all the changes that ``make pr`` does.
 
 ## Building dev/lambda_requirements.txt
 ### lambda_requirements.txt
-This command is used during ``make pr`` to generate a requirements.txt files for CDK Lambda layer creation (lambda_requirements.txt). 
+This command is used during ``make pr`` to generate a requirements.txt files for CDK Lambda layer creation (lambda_requirements.txt).
 
-CDK requires a requirements.txt in order to create a zip file with the Lambda layer dependencies. It's based on the project's Pipfile.lock file. 
+CDK requires a requirements.txt in order to create a zip file with the Lambda layer dependencies. It's based on the project's Pipfile.lock file.
 
-Due to a bug in CDK zip creation, it doesn't work with Pipfile.lock file but only with lambda_requirements.txt. 
+Due to a bug in CDK zip creation, it doesn't work with Pipfile.lock file but only with lambda_requirements.txt.
 
-This command will generate the required file out of the Pipfile.lock file. It's important to commit this file when you update your Pipfile. 
+This command will generate the required file out of the Pipfile.lock file. It's important to commit this file when you update your Pipfile.
 
 Make sure to run  ``make pr`` or ``make deploy`` or so the file is updated.
 
 ### dev_requirements.txt
-This file is used during GitHub CI to install all the required Python libraries without using pipenv. 
+This file is used during GitHub CI to install all the required Python libraries without using pipenv.
 
 File contents are created out of the Pipfile.lock.
 

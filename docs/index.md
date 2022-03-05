@@ -26,7 +26,7 @@ The project is a template project that is based on my AWS Lambda handler cookboo
 
 
 ## Serverless Best Practices
-The AWS Lambda handler will implement multiple best practice utilities. 
+The AWS Lambda handler will implement multiple best practice utilities.
 
 Each utility is implemented when a new blog post is published about that utility.
 
