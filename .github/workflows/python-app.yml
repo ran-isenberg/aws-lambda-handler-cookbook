@@ -59,4 +59,4 @@ jobs:
       - run: echo "Run E2E"
       - run: echo "Update documentation"
       - run: pip install mkdocs-material mkdocs-git-revision-date-plugin
-      #- run: mkdocs gh-deploy --force
+      - run: mkdocs gh-deploy --force
