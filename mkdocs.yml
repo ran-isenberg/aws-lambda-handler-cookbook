@@ -69,3 +69,8 @@ plugins:
   - search
 extra_css:
   - stylesheets/extra.css
+
+extra:
+  analytics:
+    provider: google
+    property: G-VN803S5YZ3
