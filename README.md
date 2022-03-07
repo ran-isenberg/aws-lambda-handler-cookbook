@@ -71,5 +71,14 @@ This repository is the complementary code examples of my blog series "AWS Lambda
 Head over to the complete project documentation pages at GitHub pages at [https://ran-isenberg.github.io/aws-lambda-handler-cookbook](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)
 
 
+## Connect
+* Email: [ran.isenberg@ranthebuilder.cloud](mailto:ran.isenberg@ranthebuilder.cloud)
+* Blog Website [RanTheBuilder](https://www.ranthebuilder.cloud)
+* LinkedIn: [ranisenberg](https://www.linkedin.com/in/ranisenberg/)
+* Twitter: [IsenbergRan](https://twitter.com/IsenbergRan)
+
+## Credits
+* [AWS Lambda Powertools (Python)](https://github.com/awslabs/aws-lambda-powertools-python)
+
 ## License
 This library is licensed under the MIT License. See the [LICENSE](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/LICENSE) file.
