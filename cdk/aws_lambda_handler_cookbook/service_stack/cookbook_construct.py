@@ -77,8 +77,10 @@ class LambdaConstruct(core.Construct):
             code=_lambda.Code.from_asset(BUILD_FOLDER),
             handler='service.handlers.my_handler.my_handler',
             environment={
-                POWERTOOLS_SERVICE_NAME: SERVICE_NAME,
-                POWER_TOOLS_LOG_LEVEL: 'DEBUG',
+                POWERTOOLS_SERVICE_NAME: SERVICE_NAME,  # for logger, tracer and metrics
+                POWER_TOOLS_LOG_LEVEL: 'DEBUG',  # for logger
+                'REST_API': 'https://www.ranthebuilder.cloud/api',  # for env vars example
+                'ROLE_ARN': 'arn:partition:service:region:account-id:resource-type:resource-id',  # for env vars example
             },
             tracing=_lambda.Tracing.ACTIVE,
             retry_attempts=0,

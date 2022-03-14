@@ -36,7 +36,7 @@ The utilities cover multiple aspects of a production-ready service, including:
 * [**Logging**](best_practices/logger.md)
 * [**Observability: Monitoring and Tracing**](best_practices/tracer.md)
 * [**Observability: Business KPI Metrics**](best_practices/metrics.md)
-* **Environment variables** - Not published yet
+* [**Environment variables**](best_practices/environment_variables.md)
 * **Input validation** - Not published yet
 * **Features flags & dynamic configuration** - Not published yet
 

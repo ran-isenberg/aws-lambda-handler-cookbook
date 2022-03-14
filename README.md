@@ -48,7 +48,7 @@ The utilities cover multiple aspect of a production-ready service, including:
 1.  [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging)
 2.  [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability)
 3.  [Observability: Business Domain Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability)
-4.  Environment variables.
+4.  [Environment variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability)
 5.  Input validation
 6.  Features flags & dynamic configuration
 
