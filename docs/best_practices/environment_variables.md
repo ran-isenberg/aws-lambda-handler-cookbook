@@ -13,7 +13,7 @@ Environment Variables decorator is a simple parser for environment variables tha
 
 
 
-The best practice for handling environment variables is to validate & parse them according to a predefined schema as soon as the AWS Lambda function is triggered. 
+The best practice for handling environment variables is to validate & parse them according to a predefined schema as soon as the AWS Lambda function is triggered.
 
 In case of misconfiguration, a validation exception is raised with all the relevant exception details.
 

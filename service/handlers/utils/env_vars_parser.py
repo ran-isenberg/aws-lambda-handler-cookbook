@@ -4,7 +4,7 @@ from typing import Any, TypeVar
 from aws_lambda_powertools.middleware_factory import lambda_handler_decorator
 from pydantic import BaseModel, ValidationError
 
-Model = TypeVar("Model", bound=BaseModel)
+Model = TypeVar('Model', bound=BaseModel)
 
 # global instance of the parsed Pydantic data class
 ENV_CONF: BaseModel = None
