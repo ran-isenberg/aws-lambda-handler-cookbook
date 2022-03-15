@@ -19,7 +19,7 @@ In case of misconfiguration, a validation exception is raised with all the relev
 
 
 ## Blog Reference
-Read more about the importance of validating environment variables and how this utility works. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
+Read more about the importance of validating environment variables and how this utility works. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
 
 
 ## Schema Definition
