@@ -13,6 +13,7 @@ nav:
       - best_practices/logger.md
       - best_practices/tracer.md
       - best_practices/metrics.md
+      - best_practices/environment_variables.md
 
 theme:
   name: material
@@ -60,7 +61,11 @@ markdown_extensions:
   - attr_list
   - pymdownx.emoji
   - pymdownx.inlinehilite
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 copyright: Copyright &copy; 2022 Ran Isenberg
 

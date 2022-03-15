@@ -20,11 +20,11 @@ These metrics can be visualized through [Amazon CloudWatch Console](https://cons
 
 
 ## Usage in Handler
-The metrics is a singleton which is defined under the utility folder **service.utils.infra.py** and imported in the handler.
+The metrics is a singleton which is defined under the utility folder **service.utils.observability.py** and imported in the handler.
 
 ## Blog Reference
 Read more about the importance of the business KPis and metrics in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
 
 
-## More details
+## More Details
 You can find more information at the official documentation. Go to [https://awslabs.github.io/aws-lambda-powertools-python/latest/core/metrics/](https://awslabs.github.io/aws-lambda-powertools-python/latest/core/metrics/){:target="_blank" rel="noopener"}

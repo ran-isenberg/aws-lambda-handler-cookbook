@@ -13,6 +13,8 @@ from tests.utils import generate_api_gw_event, generate_context
 def init():
     os.environ[POWERTOOLS_SERVICE_NAME] = SERVICE_NAME
     os.environ[POWER_TOOLS_LOG_LEVEL] = 'DEBUG'
+    os.environ['REST_API'] = 'https://www.ranthebuilder.cloud/api'
+    os.environ['ROLE_ARN'] = 'arn:partition:service:region:account-id:resource-type:resource-id'
 
 
 def test_handler_200_ok():
