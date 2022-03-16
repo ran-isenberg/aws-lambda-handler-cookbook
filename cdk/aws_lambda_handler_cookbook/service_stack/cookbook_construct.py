@@ -2,11 +2,11 @@ import os
 from pathlib import Path
 
 import boto3
-from aws_cdk import aws_apigateway
+from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
-from aws_cdk import core
-from aws_cdk.aws_lambda_python import PythonLayerVersion
+from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
+from constructs import Construct
 
 from .constants import (
     API_HANDLER_LAMBDA_MEMORY_SIZE,
@@ -26,10 +26,10 @@ from .constants import (
 )
 
 
-class LambdaConstruct(core.Construct):
+class LambdaConstruct(Construct):
 
     # pylint: disable=invalid-name, no-value-for-parameter
-    def __init__(self, scope: core.Construct, id_: str) -> None:
+    def __init__(self, scope: Construct, id_: str) -> None:
         super().__init__(scope, id_)
 
         self.lambda_role = self._build_lambda_role()
@@ -48,7 +48,7 @@ class LambdaConstruct(core.Construct):
             deploy_options=aws_apigateway.StageOptions(throttling_rate_limit=2, throttling_burst_limit=10),
         )
 
-        core.CfnOutput(self, id=APIGATEWAY, value=rest_api.url).override_logical_id(APIGATEWAY)
+        CfnOutput(self, id=APIGATEWAY, value=rest_api.url).override_logical_id(APIGATEWAY)
         return rest_api
 
     def _build_lambda_role(self) -> iam.Role:
@@ -66,7 +66,7 @@ class LambdaConstruct(core.Construct):
             'CommonLayer',
             entry=COMMION_LAYER_BUILD_FOLDER,
             compatible_runtimes=[_lambda.Runtime.PYTHON_3_8],
-            removal_policy=core.RemovalPolicy.DESTROY,
+            removal_policy=RemovalPolicy.DESTROY,
         )
 
     def __add_get_lambda_integration(self, api_name: aws_apigateway.Resource):
@@ -84,7 +84,7 @@ class LambdaConstruct(core.Construct):
             },
             tracing=_lambda.Tracing.ACTIVE,
             retry_attempts=0,
-            timeout=core.Duration.seconds(API_HANDLER_LAMBDA_TIMEOUT),
+            timeout=Duration.seconds(API_HANDLER_LAMBDA_TIMEOUT),
             memory_size=API_HANDLER_LAMBDA_MEMORY_SIZE,
             layers=[self.common_layer],
         )
