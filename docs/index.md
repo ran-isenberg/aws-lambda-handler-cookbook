@@ -4,7 +4,7 @@ description: AWS Lambda Cookbook - Elevate Your Handler's Code for Python
 ---
 [<img alt="alt_text" src="./media/banner.png" />](https://www.ranthebuilder.cloud/)
 
-# AWS Lambda Cookbook - Elevate Your Handler's Code
+# **AWS Lambda Cookbook - Elevate Your Handler's Code**
 
 
 What makes an AWS Lambda handler resilient, traceable and easy to maintain? How do you write such a code?
@@ -19,14 +19,14 @@ The project is a template project that is based on my AWS Lambda handler cookboo
 
 - This project can serve as a template for new Serverless services - CDK deployment code, pipeline and handler are covered.
 
-## The Blog Series
+## **The Blog Series**
 - First blog post - [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}
 - Second blog post- [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}
 - Third blog post- [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
+- Fourth blog post- [Environment Variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
 
 
-
-## Serverless Best Practices
+## **Serverless Best Practices**
 The AWS Lambda handler will implement multiple best practice utilities.
 
 Each utility is implemented when a new blog post is published about that utility.
@@ -49,5 +49,5 @@ While the code examples are written in Python, the principles are valid to any s
 
 
 
-## License
+## **License**
 This library is licensed under the MIT License. See the [LICENSE](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/LICENSE) file.

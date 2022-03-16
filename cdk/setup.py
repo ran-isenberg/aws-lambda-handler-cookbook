@@ -23,10 +23,8 @@ setup(
     include_package_data=True,
     python_requires='>=3.8',
     install_requires=[
-        'aws-cdk.aws-sam<2.0.0',
-        'aws-cdk.core<2.0.0',
-        'aws_cdk.aws_lambda<2.0.0',
-        'aws-cdk.aws_apigateway<2.0.0',
-        'aws-cdk.aws_lambda_python<2.0.0',
+        'aws-cdk-lib>=2.0.0',
+        'constructs>=10.0.0',
+        'aws-cdk.aws-lambda-python-alpha==2.16.0a0',
     ],
 )

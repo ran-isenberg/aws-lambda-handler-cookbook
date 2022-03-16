@@ -2,34 +2,34 @@
 title: Getting Started
 description: AWS Lambda Cookbook Project Getting started
 ---
-## Prerequisites
+## **Prerequisites**
 * **Docker** - install [Docker](https://www.docker.com/){target="_blank"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack.
 * Python 3.8
 
 
-## Creating a Virtual Python Environment
+## **Creating a Virtual Python Environment**
 Run ``make dev``
 
-## Deploy CDK
+## **Deploy CDK**
 Create a cloudformation stack by running ``make deploy``
 
 
-## Tests
+## **Tests**
 Unit tests can be found under the ``tests`` folder.
 You can run the tests by using the following command: ``make unit``
 
-## E2E Tests
+## **E2E Tests**
 Make sure you deploy the stack first.
 These tests send a 'GET' message to the deployed API GW and trigger the Lambda function on AWS.
 
 The tests are run automatically by: ``make e2e``
 
 
-## Deleting the stack
+## **Deleting the stack**
 CDK destroy can be run with ``make destroy``
 
-## Preparing Code for PR
+## **Preparing Code for PR**
 Run ``make pr``. This command will run all the required checks, pre commit hooks, linters, code formats, pylint and tests, so you can be sure GitHub's pipeline will pass.
 
 The command auto fixes errors in the code for you.
@@ -38,10 +38,10 @@ If there's an error in the pre-commit stage, it gets auto fixed. However, are re
 
 Be sure to commit all the changes that ``make pr`` does.
 
-## GitHub Pages Documentation
+## **GitHub Pages Documentation**
 ``make docs`` can be run to start a local HTTP server with the project's documentation pages.
 
-## Building dev/lambda_requirements.txt
+## **Building dev/lambda_requirements.txt**
 ### lambda_requirements.txt
 This command is used during ``make pr`` to generate a requirements.txt files for CDK Lambda layer creation (lambda_requirements.txt).
 

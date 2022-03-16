@@ -6,7 +6,7 @@ Environment Variables decorator is a simple parser for environment variables tha
 
 ![Environment Variables](../media/pydantic.png){: style="height:50%;width:20%"}
 
-## Key features
+## **Key features**
 * A defined [Pydantic](https://pydantic-docs.helpmanual.io/){:target="_blank" rel="noopener"} schema for all required environment variables
 * A decorator that parses and validates environment variables, value constraints included
 * Global getter for parsed & valid schema dataclass with all environment variables
@@ -18,11 +18,11 @@ The best practice for handling environment variables is to validate & parse them
 In case of misconfiguration, a validation exception is raised with all the relevant exception details.
 
 
-## Blog Reference
+## **Blog Reference**
 Read more about the importance of validating environment variables and how this utility works. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
 
 
-## Schema Definition
+## **Schema Definition**
 
 You need to define all your environment variables in a Pydantic schema class that extend Pydantic's BaseModel class.
 
@@ -55,7 +55,7 @@ This schema makes sure that:
 
 Read [here](https://pydantic-docs.helpmanual.io/usage/models/){:target="_blank" rel="noopener"} about Pydantic Model capabilities.
 
-## Decorator Usage
+## **Decorator Usage**
 The decorator 'init_environment_variables' is defined under the utility folder **service.utils.env_vars_parser.py** and imported in the handler.
 
 The decorator requires a **model** parameter, which in this example is the name of the schema class we defined above.
@@ -78,7 +78,7 @@ The decorator requires a **model** parameter, which in this example is the name 
         return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}
     ```
 
-## Global Getter Usage
+## **Global Getter Usage**
 The getter function 'get_environment_variables' is defined under the utility folder **service.utils.env_vars_parser.py** and imported in the handler.
 
 The getter function returns a parsed and validated global instance of the environment variables Pydantic schema class.
@@ -106,7 +106,7 @@ It can be used *anywhere* in the function code, not just the handler.
 
 
 
-## More Details
+## **More Details**
 
 Read [here](https://pydantic-docs.helpmanual.io/usage/types/){:target="_blank" rel="noopener"} about Pydantic field types.
 
