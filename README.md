@@ -25,14 +25,14 @@ The project is a template project that is based on my AWS Lambda handler cookboo
 
 This project provides a working, open source based, AWS Lambda handler skeleton Python code including DEPLOYMENT code with CDK and a pipeline.
 
-The project deploys an API GW with an AWS Lambda integration under the path GET /api/service/.
+The project deploys an API GW with an AWS Lambda integration under the path POST /api/service/.
 
 The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 
 
 
 ## CDK Deployment
-The CDK code create an API GW with a path of /api/service which triggers the lambda on 'GET' requests.
+The CDK code create an API GW with a path of /api/service which triggers the lambda on 'POST' requests.
 
 The AWS Lambda handler uses a Lambda layer optimization which takes all the packages under the [packages] section in the Pipfile and downloads them in via a Docker instance.
 

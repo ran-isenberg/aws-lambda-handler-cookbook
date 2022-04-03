@@ -14,6 +14,7 @@ nav:
       - best_practices/tracer.md
       - best_practices/metrics.md
       - best_practices/environment_variables.md
+      - best_practices/input_validation.md
 
 theme:
   name: material

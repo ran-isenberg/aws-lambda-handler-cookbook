@@ -13,7 +13,7 @@ The project is a template project that is based on my AWS Lambda handler cookboo
 
 - This project provides a working, open source based, AWS Lambda handler skeleton Python code including DEPLOYMENT code with CDK.
 
-- The project deploys an API GW with an AWS Lambda integration under the path GET /api/service/.
+- The project deploys an API GW with an AWS Lambda integration under the path POST /api/service/.
 
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 
@@ -24,6 +24,7 @@ The project is a template project that is based on my AWS Lambda handler cookboo
 - Second blog post- [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}
 - Third blog post- [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
 - Fourth blog post- [Environment Variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
+- Fifth blog post- [Input Validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
 
 
 ## **Serverless Best Practices**
@@ -36,8 +37,8 @@ The utilities cover multiple aspects of a production-ready service, including:
 * [**Logging**](best_practices/logger.md)
 * [**Observability: Monitoring and Tracing**](best_practices/tracer.md)
 * [**Observability: Business KPI Metrics**](best_practices/metrics.md)
-* [**Environment variables**](best_practices/environment_variables.md)
-* **Input validation** - Not published yet
+* [**Environment Variables**](best_practices/environment_variables.md)
+* [**Input Validation**](best_practices/input_validation.md)
 * **Features flags & dynamic configuration** - Not published yet
 
 

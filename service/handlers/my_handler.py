@@ -1,17 +1,21 @@
-import json
 from http import HTTPStatus
 from typing import Any, Dict
 
 from aws_lambda_powertools.metrics.metrics import MetricUnit
+from aws_lambda_powertools.utilities.parser import ValidationError, parse
+from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.schemas.env_vars import MyHandlerEnvVars
+from service.handlers.schemas.input import Input
 from service.handlers.utils.env_vars_parser import get_environment_variables, init_environment_variables
+from service.handlers.utils.http_responses import build_response
 from service.handlers.utils.observability import logger, metrics, tracer
 
 
 @tracer.capture_method(capture_response=False)
-def inner_function_example(event: Dict[str, Any]) -> Dict[str, Any]:
+def inner_function_example(my_name: str, order_item_count: int) -> Dict[str, Any]:
+    # process input, etc. return output
     return {}
 
 
@@ -25,7 +29,15 @@ def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     env_vars: MyHandlerEnvVars = get_environment_variables()
     logger.debug('environment variables', extra=env_vars.dict())
 
-    inner_function_example(event)
+    try:
+        # we want to extract and parse the HTTP body from the api gw envelope
+        input: Input = parse(event=event, model=Input, envelope=ApiGatewayEnvelope)
+        logger.info('got create request', extra={'order_item_count': input.order_item_count})
+    except (ValidationError, TypeError) as exc:
+        logger.error('event failed input validation', extra={'error': str(exc)})
+        return build_response(http_status=HTTPStatus.BAD_REQUEST, body={})
+
+    inner_function_example(input.my_name, input.order_item_count)
     logger.info('inner_function_example finished successfully')
     metrics.add_metric(name='ValidEvents', unit=MetricUnit.Count, value=1)
-    return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}
+    return build_response(http_status=HTTPStatus.OK, body={'message': 'success'})

@@ -1,4 +1,5 @@
-from typing import Any, Dict
+import json
+from typing import Any, Dict, Optional
 
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
@@ -14,12 +15,12 @@ def generate_context() -> LambdaContext:
 
 # example taken from AWS Lambda Powertools test files
 # https://github.com/awslabs/aws-lambda-powertools-python/blob/develop/tests/events/apiGatewayProxyEvent.json
-def generate_api_gw_event() -> Dict[str, Any]:
+def generate_api_gw_event(body: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     return {
         'version': '1.0',
         'resource': '/my/path',
         'path': '/my/path',
-        'httpMethod': 'GET',
+        'httpMethod': 'POST',
         'headers': {
             'Header1': 'value1',
             'Header2': 'value2'
@@ -46,7 +47,7 @@ def generate_api_gw_event() -> Dict[str, Any]:
             'domainName': 'id.execute-api.us-east-1.amazonaws.com',
             'domainPrefix': 'id',
             'extendedRequestId': 'request-id',
-            'httpMethod': 'GET',
+            'httpMethod': 'POST',
             'identity': {
                 'accessKey': None,
                 'accountId': None,
@@ -82,7 +83,7 @@ def generate_api_gw_event() -> Dict[str, Any]:
         },
         'pathParameters': None,
         'stageVariables': None,
-        'body': 'Hello from Lambda!',
+        'body': 'Hello from Lambda!' if body is None else json.dumps(body),
         'isBase64Encoded': True
     }
 
