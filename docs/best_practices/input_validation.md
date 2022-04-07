@@ -101,7 +101,7 @@ Read more about it [**here**](https://awslabs.github.io/aws-lambda-powertools-py
 
 
 ## **Blog Reference**
-Read more about the importance of input validation and the potential pitfalls it prevents in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}.
+Read more about the importance of input validation and the potential pitfalls it prevents in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation){:target="_blank" rel="noopener"}.
 
 
 ## **More Details**
