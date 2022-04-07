@@ -21,7 +21,7 @@ You can run the tests by using the following command: ``make unit``
 
 ## **E2E Tests**
 Make sure you deploy the stack first.
-These tests send a 'GET' message to the deployed API GW and trigger the Lambda function on AWS.
+These tests send a 'POST' message to the deployed API GW and trigger the Lambda function on AWS.
 
 The tests are run automatically by: ``make e2e``
 

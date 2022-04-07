@@ -37,7 +37,7 @@ class LambdaConstruct(Construct):
 
         self.rest_api = self._build_api_gw()
         api_resource: aws_apigateway.Resource = self.rest_api.root.add_resource('api').add_resource(GW_RESOURCE)
-        self.__add_get_lambda_integration(api_resource)
+        self.__add_post_lambda_integration(api_resource)
 
     def _build_api_gw(self) -> aws_apigateway.LambdaRestApi:
         rest_api: aws_apigateway.LambdaRestApi = aws_apigateway.RestApi(
@@ -69,10 +69,10 @@ class LambdaConstruct(Construct):
             removal_policy=RemovalPolicy.DESTROY,
         )
 
-    def __add_get_lambda_integration(self, api_name: aws_apigateway.Resource):
+    def __add_post_lambda_integration(self, api_name: aws_apigateway.Resource):
         lambda_function = _lambda.Function(
             self,
-            'CookBookGet',
+            'CookBookPost',
             runtime=_lambda.Runtime.PYTHON_3_8,
             code=_lambda.Code.from_asset(BUILD_FOLDER),
             handler='service.handlers.my_handler.my_handler',
@@ -89,5 +89,5 @@ class LambdaConstruct(Construct):
             layers=[self.common_layer],
         )
 
-        # GET /api/service/
-        api_name.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
+        # POST /api/service/
+        api_name.add_method(http_method='POST', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
