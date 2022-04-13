@@ -100,7 +100,7 @@ It can be used *anywhere* in the function code, not just the handler.
 
     @init_environment_variables(model=MyHandlerEnvVars)
     def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
-        env_vars: MyHandlerEnvVars = get_environment_variables()
+        env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
         return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}
     ```
 
