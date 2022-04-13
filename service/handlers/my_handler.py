@@ -26,7 +26,7 @@ def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     logger.set_correlation_id(context.aws_request_id)
     logger.info('my_handler is called, calling inner_function_example')
 
-    env_vars: MyHandlerEnvVars = get_environment_variables()
+    env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', extra=env_vars.dict())
 
     try:
