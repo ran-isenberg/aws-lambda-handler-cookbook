@@ -27,20 +27,10 @@ Read more about the importance of validating environment variables and how this 
 You need to define all your environment variables in a Pydantic schema class that extend Pydantic's BaseModel class.
 
 For example:
-=== "schemas/env_vars.py"
 
-    ```python hl_lines="5"
-    from typing import Literal
-
-    from pydantic import BaseModel, HttpUrl, constr
-
-    class MyHandlerEnvVars(BaseModel):
-        REST_API: HttpUrl
-        ROLE_ARN: constr(min_length=20, max_length=2048)
-        POWERTOOLS_SERVICE_NAME: constr(min_length=1)
-        LOG_LEVEL: Literal['DEBUG', 'INFO', 'ERROR', 'CRITICAL', 'WARNING', 'EXCEPTION']
-
-    ```
+```python hl_lines="6" title="schemas/env_vars.py"
+--8<-- "docs/examples/best_practices/environment_variables/env_vars.py"
+```
 
 All Pydantic schemas extend Pydantic’s ‘BaseModel’ class, turning them into a dataclass.
 
@@ -60,23 +50,10 @@ The decorator 'init_environment_variables' is defined under the utility folder *
 
 The decorator requires a **model** parameter, which in this example is the name of the schema class we defined above.
 
-=== "handlers/my_handler.py"
 
-    ```python hl_lines="11"
-    import json
-    from http import HTTPStatus
-    from typing import Any, Dict
-
-    from aws_lambda_powertools.utilities.typing import LambdaContext
-
-    from service.handlers.schemas.env_vars import MyHandlerEnvVars
-    from service.handlers.utils.env_vars_parser import init_environment_variables
-
-
-    @init_environment_variables(model=MyHandlerEnvVars)
-    def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
-        return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}
-    ```
+```python hl_lines="11" title="handlers/my_handler.py"
+--8<-- "docs/examples/best_practices/environment_variables/my_handler.py"
+```
 
 ## **Global Getter Usage**
 The getter function 'get_environment_variables' is defined under the utility folder **service.utils.env_vars_parser.py** and imported in the handler.
@@ -85,25 +62,9 @@ The getter function returns a parsed and validated global instance of the enviro
 
 It can be used *anywhere* in the function code, not just the handler.
 
-=== "handlers/my_handler.py"
-
-    ```python hl_lines="13"
-    import json
-    from http import HTTPStatus
-    from typing import Any, Dict
-
-    from aws_lambda_powertools.utilities.typing import LambdaContext
-
-    from service.handlers.schemas.env_vars import MyHandlerEnvVars
-    from service.handlers.utils.env_vars_parser import get_environment_variables, init_environment_variables
-
-
-    @init_environment_variables(model=MyHandlerEnvVars)
-    def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
-        env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
-        return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}
-    ```
-
+```python hl_lines="13" title="handlers/my_handler.py"
+--8<-- "docs/examples/best_practices/environment_variables/getter.py"
+```
 
 
 ## **More Details**

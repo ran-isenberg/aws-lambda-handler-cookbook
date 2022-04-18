@@ -14,7 +14,10 @@ Tracer is a thin wrapper for [AWS X-Ray Python SDK](https://github.com/aws/aws-x
 
 
 ## **Usage in Handler**
-The tracer is a singleton which is defined under the utility folder **service.utils.observability.py** and imported in the handler.
+
+```python hl_lines="11 14 19" title="my_handler.py"
+--8<-- "docs/examples/best_practices/tracer/my_handler.py"
+```
 
 ## **Blog Reference**
 Read more about the importance of observability and traces in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}

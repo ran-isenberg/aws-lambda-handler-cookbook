@@ -69,29 +69,9 @@ The parser is a called with the function 'parse'.
 
 Use the envelope class that matches the AWS service that triggers your AWS Lambda function.
 
-=== "my_handler.py"
-
-    ```python hl_lines="14"
-    from typing import Any, Dict
-
-    from aws_lambda_powertools.utilities.parser import ValidationError, parse
-    from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
-    from aws_lambda_powertools.utilities.typing import LambdaContext
-
-    from service.handlers.schemas.input import Input
-
-
-    def my_handler(event: Dict[str, Any], context: LambdaContext):
-        # validate input
-        try:
-            # we want to extract and parse the HTTP body from the api gw envelope
-            input: Input = parse(event=event, model=Input, envelope=ApiGatewayEnvelope)
-        except (ValidationError, TypeError) as err:
-            # log error, return BAD_REQUEST
-
-        # process input
-
-    ```
+```python hl_lines="13" title="my_handler.py"
+--8<-- "docs/examples/best_practices/input_validation/my_handler.py"
+```
 
 ## Accessing Envelope Metadata
 

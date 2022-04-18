@@ -14,7 +14,10 @@ It’s a wrapper of Python’s logging library that provides extra capabilities 
 
 
 ## **Usage in Handler**
-The logger is a singleton which is defined under the utility folder **service.utils.observability.py** and imported in the handler.
+
+```python hl_lines="8 12 13" title="my_handler.py"
+--8<-- "docs/examples/best_practices/logger/my_handler.py"
+```
 
 ## **Blog Reference**
 Read more about the importance of the logger and how to use AWS CloudWatch logs in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}
