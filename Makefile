@@ -8,7 +8,7 @@ dev:
 
 lint:
 	@echo "Running flake8"
-	flake8 service/* tests/*
+	flake8 service/* tests/* docs/examples/*
 
 complex:
 	@echo "Running Radon"
