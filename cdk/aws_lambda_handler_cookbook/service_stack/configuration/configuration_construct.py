@@ -6,7 +6,7 @@ import aws_cdk.aws_appconfig as appconfig
 from aws_lambda_handler_cookbook.service_stack.configuration.schema import FeatureFlagsConfiguration
 from constructs import Construct
 
-DEFAULT_DEPLOYMENT_STRATEGY = "AppConfig.AllAtOnce"
+DEFAULT_DEPLOYMENT_STRATEGY = 'AppConfig.AllAtOnce'
 
 
 class ConfigurationStore(Construct):
@@ -14,7 +14,7 @@ class ConfigurationStore(Construct):
     def __init__(self, scope: Construct, id_: str, environment: str, service_name: str, configuration_name: str,
                  deployment_strategy_id: Optional[str] = DEFAULT_DEPLOYMENT_STRATEGY) -> None:
         """
-        This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled from 
+        This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled from
         running the service pipeline and without redeploying the service lambdas.
 
         Args:
@@ -23,7 +23,7 @@ class ConfigurationStore(Construct):
             environment (str): environment name. Used for loading the corresponding JSON file to upload under 'configuration/json/{environment}_configuration.json'
             service_name (str): application name.
             configuration_name (str): configuration name
-            deployment_strategy_id (str, optional): AWS AppConfig deployment strategy. 
+            deployment_strategy_id (str, optional): AWS AppConfig deployment strategy.
                                                     See https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
                                                     Defaults to DEFAULT_DEPLOYMENT_STRATEGY.
         """
@@ -38,28 +38,28 @@ class ConfigurationStore(Construct):
         )
         self.config_env = appconfig.CfnEnvironment(
             self,
-            id="env",
+            id='env',
             application_id=self.config_app.ref,
             name=environment,
         )
         self.config_profile = appconfig.CfnConfigurationProfile(
             self,
-            id="profile",
+            id='profile',
             application_id=self.config_app.ref,
-            location_uri="hosted",
+            location_uri='hosted',
             name=configuration_name,
         )
         self.hosted_cfg_version = appconfig.CfnHostedConfigurationVersion(
             self,
-            "version",
+            'version',
             application_id=self.config_app.ref,
             configuration_profile_id=self.config_profile.ref,
             content=configuration_str,
-            content_type="application/json",
+            content_type='application/json',
         )
         self.app_config_deployment = appconfig.CfnDeployment(
             self,
-            id="deploy",
+            id='deploy',
             application_id=self.config_app.ref,
             configuration_profile_id=self.config_profile.ref,
             configuration_version=self.hosted_cfg_version.ref,

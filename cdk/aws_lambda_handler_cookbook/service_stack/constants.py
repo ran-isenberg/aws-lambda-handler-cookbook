@@ -16,7 +16,7 @@ BUILD_FOLDER = '.build/lambdas/'
 COMMION_LAYER_BUILD_FOLDER = '.build/common_layer'
 ENVIRONMENT = 'dev'
 CONFIGURATION_NAME = 'my_conf'
-CONFIGURATION_MAX_AGE_MINUTES = '5'  # time to store appconfig conf in the cache before refetching it 
+CONFIGURATION_MAX_AGE_MINUTES = '5'  # time to store appconfig conf in the cache before refetching it
 
 
 def get_stack_name() -> str:
