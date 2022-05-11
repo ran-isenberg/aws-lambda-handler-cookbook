@@ -21,12 +21,12 @@ MOCKED_SCHEMA = {
         'premium_features': {
             'default': False,
             'rules': {
-                'customer tier equals premium': {
+                'enable premium features for this specific customer name"': {
                     'when_match': True,
                     'conditions': [{
                         'action': 'EQUALS',
-                        'key': 'tier',
-                        'value': 'premium'
+                        'key': 'customer_name',
+                        'value': 'RanTheBuilder'
                     }]
                 }
             }
@@ -35,7 +35,7 @@ MOCKED_SCHEMA = {
             'default': True
         }
     },
-    'region': 'us-east-1'
+    'countries': ['ISRAEL', 'USA']
 }
 
 
@@ -61,7 +61,7 @@ def init():
 def test_handler_200_ok(mocker):
 
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    body = Input(my_name='RanTheBuilder', order_item_count=5)
+    body = Input(my_name='RanTheBuilder', order_item_count=5, tier='premium')
     response = my_handler(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])

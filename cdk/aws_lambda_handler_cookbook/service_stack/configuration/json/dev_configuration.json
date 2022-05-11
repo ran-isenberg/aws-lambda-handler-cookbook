@@ -3,13 +3,13 @@
         "premium_features": {
             "default": false,
             "rules": {
-                "customer tier equals premium": {
+                "enable premium features for this specific customer name": {
                     "when_match": true,
                     "conditions": [
                         {
                             "action": "EQUALS",
-                            "key": "tier",
-                            "value": "premium"
+                            "key": "customer_name",
+                            "value": "RanTheBuilder"
                         }
                     ]
                 }
@@ -19,5 +19,8 @@
             "default": true
         }
     },
-    "region": "us-east-1"
+    "countries": [
+        "ISRAEL",
+        "USA"
+    ]
 }
