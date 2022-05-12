@@ -4,6 +4,7 @@ from http import HTTPStatus
 from typing import Any, Dict
 
 import pytest
+from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 
 from cdk.aws_lambda_handler_cookbook.service_stack.constants import (
     CONFIGURATION_NAME,
@@ -45,6 +46,11 @@ def mock_dynamic_configuration(mocker, mock_schema: Dict[str, Any]) -> None:
     mocked_get_conf.return_value = mock_schema
 
 
+def mock_exception_dynamic_configuration(mocker) -> None:
+    """Mock AppConfig Store get_configuration method to use mock schema instead"""
+    mocker.patch('aws_lambda_powertools.utilities.parameters.AppConfigProvider.get', side_effect=SchemaValidationError('error'))
+
+
 @pytest.fixture(scope='module', autouse=True)
 def init():
     os.environ[POWERTOOLS_SERVICE_NAME] = SERVICE_NAME
@@ -72,5 +78,13 @@ def test_handler_bad_request(mocker):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     response = my_handler(generate_api_gw_event({'order_item_count': 5}), generate_context())
     assert response['statusCode'] == HTTPStatus.BAD_REQUEST
+    body_dict = json.loads(response['body'])
+    assert body_dict == {}
+
+
+def test_handler_failed_appconfig_fetch(mocker):
+    mock_exception_dynamic_configuration(mocker)
+    response = my_handler(generate_api_gw_event({'order_item_count': 5}), generate_context())
+    assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
     body_dict = json.loads(response['body'])
     assert body_dict == {}

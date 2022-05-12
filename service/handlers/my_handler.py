@@ -19,19 +19,20 @@ from service.handlers.utils.observability import logger, metrics, tracer
 @tracer.capture_method(capture_response=False)
 def inner_function_example(my_name: str, order_item_count: int) -> Dict[str, Any]:
     # process input, etc. return output
-    campaign: bool = get_dynamic_configuration_store().evaluate(
+    config_store = get_dynamic_configuration_store()
+    campaign: bool = config_store.evaluate(
         name=FeatureFlagsNames.TEN_PERCENT_CAMPAIGN.value,
         context={},
         default=False,
     )
     logger.debug('campaign feature flag value', extra={'campaign': campaign})
-    premium: bool = get_dynamic_configuration_store().evaluate(
+    premium: bool = config_store.evaluate(
         name=FeatureFlagsNames.PREMIUM.value,
         context={'customer_name': my_name},
         default=False,
     )
     logger.debug('premium feature flag value', extra={'premium': premium})
-    return {}
+    return {'message': 'success'}
 
 
 @init_environment_variables(model=MyHandlerEnvVars)
@@ -59,7 +60,7 @@ def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         logger.error('event failed input validation', extra={'error': str(exc)})
         return build_response(http_status=HTTPStatus.BAD_REQUEST, body={})
 
-    inner_function_example(input.my_name, input.order_item_count)
+    response: Dict[str, str] = inner_function_example(input.my_name, input.order_item_count)
     logger.info('inner_function_example finished successfully')
     metrics.add_metric(name='ValidEvents', unit=MetricUnit.Count, value=1)
-    return build_response(http_status=HTTPStatus.OK, body={'message': 'success'})
+    return build_response(http_status=HTTPStatus.OK, body=response)
