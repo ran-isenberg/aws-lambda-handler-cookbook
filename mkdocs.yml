@@ -15,7 +15,6 @@ nav:
       - best_practices/metrics.md
       - best_practices/environment_variables.md
       - best_practices/input_validation.md
-      - best_practices/dynamic_configuration.md
 
 theme:
   name: material
