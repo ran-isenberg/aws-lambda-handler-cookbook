@@ -1,0 +1,13 @@
+# conventional commit types: https://github.com/commitizen/conventional-commit-types/blob/v3.0.0/index.json
+types:
+  - feature
+  - fix
+  - docs
+  - refactor
+  - perf
+  - test
+  - chore
+  - revert
+
+# Always validate the PR title
+titleOnly: true

@@ -245,3 +245,4 @@ $RECYCLE.BIN/
 .coverage
 cdk.out
 .build
+.vscode

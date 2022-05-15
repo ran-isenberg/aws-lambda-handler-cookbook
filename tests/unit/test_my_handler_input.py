@@ -14,7 +14,7 @@ def test_invalid_name_too_long():
         Input(my_name='1234567890112123423232323232323', order_item_count=4)
 
 
-def test_missing_mandatory_field():
+def test_missing_mandatory_fields():
     with pytest.raises(ValidationError):
         Input(my_name='a')
 
