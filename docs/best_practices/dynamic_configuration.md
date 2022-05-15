@@ -14,7 +14,7 @@ This utility is based on the [Feature Flags utility of AWS Lambda Powertools](ht
 
 
 ## **Blog Reference**
-Read more about the differences between static and dynamic configurations, when to use each type how this utility works. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
+Read more about the differences between static and dynamic configurations, when to use each type how this utility works. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}
 
 
 ## **Key features**
@@ -120,7 +120,7 @@ The function fetch the JSON file from AWS AppConfig and return a parsed instance
 --8<-- "docs/examples/best_practices/dynamic_configuration/parse_configuration.py"
 ```
 
-If you want to learn more about how ``parse_configuration`` function works, click [here](http://www.google.com){:target="_blank" rel="noopener"}.
+If you want to learn more about how ``parse_configuration`` function works, click [here](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}.
 
 ## **Feature Flags**
 
