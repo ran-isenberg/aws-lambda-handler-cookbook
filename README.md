@@ -50,7 +50,7 @@ The utilities cover multiple aspect of a production-ready service, including:
 3.  [Observability: Business Domain Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability)
 4.  [Environment variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables)
 5.  [Input validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation)
-6.  Features flags & dynamic configuration
+6.  [Features flags & dynamic configuration](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices)
 
 #
 I've written 3 of the mentioned utilities (parser, feature flags and environment variables) and donated two of them, the [parser](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/parser/) and [feature flags](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/) to [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/latest/).
