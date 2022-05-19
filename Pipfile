@@ -22,7 +22,7 @@ isort = "*"
 boto3 = "*"
 mkdocs-material = "*"
 mkdocs-git-revision-date-plugin = "*"
-cattrs = "==1.10.0"
+cattrs = "==22.1.0"
 
 [packages]
 pydantic = {extras = ["email"],version = "*"}
