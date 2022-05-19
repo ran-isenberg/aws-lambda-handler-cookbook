@@ -14,7 +14,8 @@ def test_handler_200_ok():
     response = requests.post(f'{api_gw_url}/api/{GW_RESOURCE}', data=body.json())
     assert response.status_code == HTTPStatus.OK
     body_dict = json.loads(response.text)
-    assert body_dict['message'] == 'success'
+    assert body_dict['success']
+    assert body_dict['order_item_count'] == 5
 
 
 def test_handler_bad_request():
