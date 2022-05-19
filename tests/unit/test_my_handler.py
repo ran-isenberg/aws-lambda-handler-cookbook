@@ -71,7 +71,8 @@ def test_handler_200_ok(mocker):
     response = my_handler(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
-    assert body_dict['message'] == 'success'
+    assert body_dict['success']
+    assert body_dict['order_item_count'] == 5
 
 
 def test_handler_bad_request(mocker):
