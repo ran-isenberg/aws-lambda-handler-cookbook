@@ -18,11 +18,11 @@
     "default": {
         "aws-lambda-powertools": {
             "hashes": [
-                "sha256:5385af7cb60977d5cd22d0ff16097994807d6c28807a805f330f15bce8ecd964",
-                "sha256:fcc6866667cbe52e8ac23883662f75a9d1d47d052cb1de47aab546537b55ba83"
+                "sha256:7d4b8571996c63943173969d34d74505d49aca360e1b2f2f09c658f8702b18e1",
+                "sha256:8c5bedc68613b74c3aade27e634bda399047d05d0895ae5fff1724f5b110966d"
             ],
             "index": "pypi",
-            "version": "==1.25.10"
+            "version": "==1.26.0"
         },
         "aws-xray-sdk": {
             "hashes": [
@@ -33,17 +33,15 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:5f27eec9b0a43edbfb3ed5e748837b10219a972f0728fecd78f84ec3629f2092",
-                "sha256:9d5ce5ae3ddd4429cf752efe7c9f39691db6c85b6b5f1cfc8861b8f23b72b67a"
+                "sha256:cef1730f607939da45b9c3c413f8b93f7c445bd74e24be7cbcdd817ebbf58fbc"
             ],
-            "version": "==1.23.3"
+            "version": "==1.23.4"
         },
         "botocore": {
             "hashes": [
-                "sha256:869308e29c1e8a9baa3e2fc336a1293e098855e34ea77c035dc4194a96316688",
-                "sha256:f83c5cd7b3e1889aabf2fcf7926ddafc41f249a29f76f37cdb9e8680ac9b5af4"
+                "sha256:bd436455310f8876dfab1a27760afffa5e34dced24b4ea6a9f6b20fec082e47e"
             ],
-            "version": "==1.26.3"
+            "version": "==1.26.4"
         },
         "dnspython": {
             "hashes": [
@@ -259,17 +257,15 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:5f27eec9b0a43edbfb3ed5e748837b10219a972f0728fecd78f84ec3629f2092",
-                "sha256:9d5ce5ae3ddd4429cf752efe7c9f39691db6c85b6b5f1cfc8861b8f23b72b67a"
+                "sha256:cef1730f607939da45b9c3c413f8b93f7c445bd74e24be7cbcdd817ebbf58fbc"
             ],
-            "version": "==1.23.3"
+            "version": "==1.23.4"
         },
         "botocore": {
             "hashes": [
-                "sha256:869308e29c1e8a9baa3e2fc336a1293e098855e34ea77c035dc4194a96316688",
-                "sha256:f83c5cd7b3e1889aabf2fcf7926ddafc41f249a29f76f37cdb9e8680ac9b5af4"
+                "sha256:bd436455310f8876dfab1a27760afffa5e34dced24b4ea6a9f6b20fec082e47e"
             ],
-            "version": "==1.26.3"
+            "version": "==1.26.4"
         },
         "cattrs": {
             "hashes": [
@@ -281,10 +277,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:6ae10321df3e464305a46e997da41ea56c1d311fb9ff1dd4e04d6f14653ec63a",
-                "sha256:8d15a5a7fde18536a249c49e07e8e462b8fc13de21b3c80e8a68315dfa227c99"
+                "sha256:9c5705e395cd70084351dd8ad5c41e65655e08ce46f2ec9cf6c2c08390f71eb7",
+                "sha256:f1d53542ee8cbedbe2118b5686372fb33c297fcd6379b050cca0ef13a597382a"
             ],
-            "version": "==2022.5.18"
+            "version": "==2022.5.18.1"
         },
         "cfgv": {
             "hashes": [
@@ -318,10 +314,10 @@
         },
         "constructs": {
             "hashes": [
-                "sha256:0d6c79bb5d32c593aa784e06fec47d4760daf92a77f97d41ba45b26a32cac03c",
-                "sha256:ca4e6ec13202356510c593479dbfd6814d5d83d204108715332551d633aae8f3"
+                "sha256:0a52df35978ee9a8d13873c7acfb96f27948678587500eb141c0b00557a42e92",
+                "sha256:e34724050ad35adda280a0f0119374321722e980b5871309d0ed57bb27fbc92f"
             ],
-            "version": "==10.1.11"
+            "version": "==10.1.12"
         },
         "cookbook-cdk": {
             "editable": true,
