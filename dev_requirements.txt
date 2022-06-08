@@ -3,7 +3,7 @@
 attrs==21.4.0
 aws-cdk-lib==2.25.0
 aws-cdk.aws-lambda-python-alpha==2.24.1a0
-boto3==1.23.9
+boto3==1.24.5
 botocore==1.26.9
 cattrs==1.10.0
 certifi==2022.5.18.1
