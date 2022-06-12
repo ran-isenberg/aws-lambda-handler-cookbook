@@ -25,6 +25,6 @@ setup(
     install_requires=[
         'aws-cdk-lib>=2.0.0',
         'constructs>=10.0.0',
-        'aws-cdk.aws-lambda-python-alpha==2.24.1-alpha.0',
+        'aws-cdk.aws-lambda-python-alpha==2.27.0-alpha.0',
     ],
 )

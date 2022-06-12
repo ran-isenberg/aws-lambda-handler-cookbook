@@ -1,8 +1,8 @@
 -i https://pypi.org/simple
-aws-lambda-powertools==1.26.0
+aws-lambda-powertools==1.26.1
 aws-xray-sdk==2.9.0
-boto3==1.23.9
-botocore==1.26.9
+boto3==1.24.7
+botocore==1.27.7
 dnspython==2.2.1
 email-validator==1.2.1
 fastjsonschema==2.15.3
@@ -11,7 +11,7 @@ idna==3.3
 jmespath==1.0.0
 pydantic[email]==1.9.1
 python-dateutil==2.8.2
-s3transfer==0.5.2
+s3transfer==0.6.0
 six==1.16.0
 typing-extensions==4.2.0
 urllib3==1.26.9

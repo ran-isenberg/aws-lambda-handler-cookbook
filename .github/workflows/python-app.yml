@@ -43,9 +43,9 @@ jobs:
         run: |
           make complex
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: Unit tests
+      - name: Unit and Integration tests
         run: |
-          make unit
+          make pipeline-tests
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
