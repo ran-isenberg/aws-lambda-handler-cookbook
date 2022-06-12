@@ -46,6 +46,9 @@ jobs:
       - name: Unit tests
         run: |
           make unit
+      - name: Integration tests
+        run: |
+          make integration
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
