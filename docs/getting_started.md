@@ -15,12 +15,25 @@ Run ``make dev``
 Create a cloudformation stack by running ``make deploy``
 
 
-## **Tests**
-Unit tests can be found under the ``tests`` folder.
+## **Unit Tests**
+Unit tests can be found under the ``tests/unit`` folder.
+
+You can run the tests by using the following command: ``make unit``
+
+## **Integration Tests**
+Make sure you deploy the stack first as these tests trigger your lambda handler LOCALLY but they can communicate with AWS services.
+
+These tests allow you to debug in your IDE your AWS Lambda function.
+
+Integration tests can be found under the ``tests/integration`` folder.
+
 You can run the tests by using the following command: ``make unit``
 
 ## **E2E Tests**
 Make sure you deploy the stack first.
+
+E2E tests can be found under the ``tests/e2e`` folder.
+
 These tests send a 'POST' message to the deployed API GW and trigger the Lambda function on AWS.
 
 The tests are run automatically by: ``make e2e``
