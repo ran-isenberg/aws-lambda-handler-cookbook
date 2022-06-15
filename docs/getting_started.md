@@ -12,13 +12,13 @@ description: AWS Lambda Cookbook Project Getting started
 Run ``make dev``
 
 ## **Deploy CDK**
-Create a cloudformation stack by running ``make deploy``
+Create a cloudformation stack by running ``make deploy``.
 
 
 ## **Unit Tests**
 Unit tests can be found under the ``tests/unit`` folder.
 
-You can run the tests by using the following command: ``make unit``
+You can run the tests by using the following command: ``make unit``.
 
 ## **Integration Tests**
 Make sure you deploy the stack first as these tests trigger your lambda handler LOCALLY but they can communicate with AWS services.
@@ -27,7 +27,7 @@ These tests allow you to debug in your IDE your AWS Lambda function.
 
 Integration tests can be found under the ``tests/integration`` folder.
 
-You can run the tests by using the following command: ``make unit``
+You can run the tests by using the following command: ``make integration``.
 
 ## **E2E Tests**
 Make sure you deploy the stack first.
@@ -36,11 +36,11 @@ E2E tests can be found under the ``tests/e2e`` folder.
 
 These tests send a 'POST' message to the deployed API GW and trigger the Lambda function on AWS.
 
-The tests are run automatically by: ``make e2e``
+The tests are run automatically by: ``make e2e``.
 
 
 ## **Deleting the stack**
-CDK destroy can be run with ``make destroy``
+CDK destroy can be run with ``make destroy``.
 
 ## **Preparing Code for PR**
 Run ``make pr``. This command will run all the required checks, pre commit hooks, linters, code formats, pylint and tests, so you can be sure GitHub's pipeline will pass.
