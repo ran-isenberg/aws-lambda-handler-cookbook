@@ -33,17 +33,17 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:6e243e28c804dccd2015935acfac0567e1861b20fdd96aa47f232b47aa214a69",
-                "sha256:925a34a55257219f4601e803951fd4d61ed6eac2208dc834a04fe150b03f265e"
+                "sha256:0821212ff521cb934801b1f655cef3c0e976775324b1018f1751700d0f42dbb4",
+                "sha256:87d34861727699c795bf8d65703f2435e75f12879bdd483e08b35b7c5510e8c8"
             ],
-            "version": "==1.24.7"
+            "version": "==1.24.9"
         },
         "botocore": {
             "hashes": [
-                "sha256:3e0cbe26f08fe9a3f6df5de4dcc3bef686e01ba5f79ad03ffbe79d92f51ecea5",
-                "sha256:dc83ef991c730ab0f06b51fcefda74f493b990903b882452aff78c123e3040e2"
+                "sha256:5669b982b0583e73daef1fe0a4df311055e6287326f857dbb1dcc2de1d8412ad",
+                "sha256:7a7588b0170e571317496ac4104803329d5bc792bc008e8a757ffd440f1b6fa6"
             ],
-            "version": "==1.27.7"
+            "version": "==1.27.9"
         },
         "dnspython": {
             "hashes": [
@@ -245,31 +245,31 @@
         },
         "aws-cdk-lib": {
             "hashes": [
-                "sha256:5a3519081099e0fc9adb094fc8020ccc8e7c2b096c1eb6cc05450c3df897ee01",
-                "sha256:d57f68420b13ecc48aa2b781f54733e14aa9caf657c2712bab9d5223a4c49225"
+                "sha256:7961d058dc4beda9ed0f88f32966fab5bb4d8044527162a8b18147436bc2fb8c",
+                "sha256:f739c4e5e80d77e40ca161d58727aecb262eaa2d976d10bee6ddb79ebf0b99cb"
             ],
-            "version": "==2.27.0"
+            "version": "==2.28.0"
         },
         "aws-cdk.aws-lambda-python-alpha": {
             "hashes": [
-                "sha256:855e7c4080a6e1283634a15a49ea7d8f2e3aca83aebe4eaaa749929c46237344",
-                "sha256:d1136da4f4f6e0f398a0eb238142375fc81ff088fe7643f054b453760ed94820"
+                "sha256:0458f9591e3fb2e1b9db00c9a11b1de0ced49cf529aca513b92821e26789977b",
+                "sha256:b1fdc46795e22bd895e105c567ebe804ae3f1af54fe9822861281ea21901df5a"
             ],
-            "version": "==2.27.0a0"
+            "version": "==2.28.0a0"
         },
         "boto3": {
             "hashes": [
-                "sha256:6e243e28c804dccd2015935acfac0567e1861b20fdd96aa47f232b47aa214a69",
-                "sha256:925a34a55257219f4601e803951fd4d61ed6eac2208dc834a04fe150b03f265e"
+                "sha256:0821212ff521cb934801b1f655cef3c0e976775324b1018f1751700d0f42dbb4",
+                "sha256:87d34861727699c795bf8d65703f2435e75f12879bdd483e08b35b7c5510e8c8"
             ],
-            "version": "==1.24.7"
+            "version": "==1.24.9"
         },
         "botocore": {
             "hashes": [
-                "sha256:3e0cbe26f08fe9a3f6df5de4dcc3bef686e01ba5f79ad03ffbe79d92f51ecea5",
-                "sha256:dc83ef991c730ab0f06b51fcefda74f493b990903b882452aff78c123e3040e2"
+                "sha256:5669b982b0583e73daef1fe0a4df311055e6287326f857dbb1dcc2de1d8412ad",
+                "sha256:7a7588b0170e571317496ac4104803329d5bc792bc008e8a757ffd440f1b6fa6"
             ],
-            "version": "==1.27.7"
+            "version": "==1.27.9"
         },
         "cattrs": {
             "hashes": [
@@ -281,10 +281,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:9c5705e395cd70084351dd8ad5c41e65655e08ce46f2ec9cf6c2c08390f71eb7",
-                "sha256:f1d53542ee8cbedbe2118b5686372fb33c297fcd6379b050cca0ef13a597382a"
+                "sha256:84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d",
+                "sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412"
             ],
-            "version": "==2022.5.18.1"
+            "version": "==2022.6.15"
         },
         "cfgv": {
             "hashes": [
@@ -317,10 +317,10 @@
         },
         "constructs": {
             "hashes": [
-                "sha256:75cf2f1df5f326f5330f7ab0ce8d84520910e188612c7546c7888f2666d0d50d",
-                "sha256:a62d2746930a55f141201ab1a367d2911d8ebf949061090bfd074e5f24209e7a"
+                "sha256:6353b07e6a29a4d4e2d5ada1db6df4100336fe0a6ef5725145c8bd9ff83e9cd6",
+                "sha256:b749cd725bc4696259b817c780ee5dc51c9ed0a24e1887a2456190ac807d5db9"
             ],
-            "version": "==10.1.36"
+            "version": "==10.1.41"
         },
         "cookbook-cdk": {
             "editable": true,
@@ -572,11 +572,11 @@
         },
         "mkdocs-material": {
             "hashes": [
-                "sha256:04db519908cd2bee450b0d2bdad3ac365d788e774528dd37f11e2ce3586d8e13",
-                "sha256:467040e9c93fada45f78398336595158ed5f398e49291186e2cfc2f3e8b1973e"
+                "sha256:0d7ae82b28fa57a2ad9a4eeb5fd01704cb8fe963eb20c56a68afdd735e52b432",
+                "sha256:9190aef365bd6ed43b27f47d1de956d9e67b61f4b9edb444563337ef717cacd3"
             ],
             "index": "pypi",
-            "version": "==8.3.4"
+            "version": "==8.3.5"
         },
         "mkdocs-material-extensions": {
             "hashes": [
