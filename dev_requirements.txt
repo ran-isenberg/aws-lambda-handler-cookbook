@@ -4,7 +4,7 @@ attrs==21.4.0
 aws-cdk-lib==2.28.0
 aws-cdk.aws-lambda-python-alpha==2.28.0a0
 boto3==1.24.9
-botocore==1.27.9
+botocore==1.27.13
 cattrs==1.10.0
 certifi==2022.6.15
 cfgv==3.3.1
