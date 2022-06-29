@@ -22,7 +22,6 @@ All steps can be run locally using the makefile. See details below:
 - E2E tests  - not run in GitHub yet (add your own AWS secrets), can be run locally at this moment - run `make e2e` in the IDE
 - Update GitHub documentation branch
 
-
 ### Other Capabilities
 
 - Automatic Python dependencies update with Dependabot

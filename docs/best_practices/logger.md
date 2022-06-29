@@ -12,7 +12,6 @@ It’s a wrapper of Python’s logging library that provides extra capabilities 
 * Log Lambda event when instructed (disabled by default)
 * Append additional keys to structured log at any point in time
 
-
 ## **Usage in Handler**
 
 ```python hl_lines="8 12 13" title="my_handler.py"
@@ -20,10 +19,11 @@ It’s a wrapper of Python’s logging library that provides extra capabilities 
 ```
 
 ## **Blog Reference**
+
 Read more about the importance of the logger and how to use AWS CloudWatch logs in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}
 
-
 ## **More Details**
+
 You can find more information at the official documentation.
 
 Go to [https://awslabs.github.io/aws-lambda-powertools-python/latest/core/logger/](https://awslabs.github.io/aws-lambda-powertools-python/latest/core/logger/){:target="_blank" rel="noopener"}
