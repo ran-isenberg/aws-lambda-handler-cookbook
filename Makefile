@@ -1,4 +1,4 @@
-.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit integration e2e pipeline-tests docs
+.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit integration e2e pipeline-tests docs lint-docs
 
 
 
@@ -35,7 +35,7 @@ integration:
 e2e:
 	pytest tests/e2e  --cov-config=.coveragerc --cov=service --cov-report xml
 
-pr: deps yapf sort pre-commit complex lint unit integration e2e
+pr: deps yapf sort pre-commit complex lint lint-docs unit integration e2e
 
 yapf:
 	yapf -i -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .
@@ -54,3 +54,6 @@ destroy:
 
 docs:
 	mkdocs serve
+
+lint-docs:
+	docker run -v ${PWD}:/markdown 06kellyjac/markdownlint-cli --fix "docs"

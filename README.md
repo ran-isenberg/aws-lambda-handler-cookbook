@@ -51,12 +51,12 @@ The utilities cover multiple aspect of a production-ready service, including:
 4.  [Environment variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables)
 5.  [Input validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation)
 6.  [Features flags & dynamic configuration](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices)
+7.  [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project)
 
-#
+
 I've written 3 of the mentioned utilities (parser, feature flags and environment variables) and donated two of them, the [parser](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/parser/) and [feature flags](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/) to [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/latest/).
 
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
-
 
 This repository is the complementary code examples of my blog series "AWS Lambda Cookbook - Elevate your handler's code"
 
