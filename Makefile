@@ -3,7 +3,7 @@
 
 
 dev:
-	pipenv install --dev
+	pipenv install -d
 	make deps
 
 lint:
@@ -23,7 +23,7 @@ pre-commit:
 	pre-commit run -a
 
 deps:
-	pipenv lock -r -d > dev_requirements.txt
+	pipenv lock --dev-only -r > dev_requirements.txt
 	pipenv lock -r  > lambda_requirements.txt
 
 unit:

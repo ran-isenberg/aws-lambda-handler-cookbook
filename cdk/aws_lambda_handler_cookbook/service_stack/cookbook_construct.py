@@ -6,6 +6,7 @@ import boto3
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
+from aws_cdk import aws_logs
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
 
@@ -56,7 +57,7 @@ class LambdaConstruct(Construct):
         return PythonLayerVersion(
             self,
             'CommonLayer',
-            entry=constants.COMMION_LAYER_BUILD_FOLDER,
+            entry=constants.COMMON_LAYER_BUILD_FOLDER,
             compatible_runtimes=[_lambda.Runtime.PYTHON_3_8],
             removal_policy=RemovalPolicy.DESTROY,
         )
@@ -84,6 +85,7 @@ class LambdaConstruct(Construct):
             memory_size=constants.API_HANDLER_LAMBDA_MEMORY_SIZE,
             layers=[self.common_layer],
             role=role,
+            log_retention=aws_logs.RetentionDays.ONE_DAY,
         )
 
         # POST /api/service/
