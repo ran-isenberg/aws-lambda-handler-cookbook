@@ -10,7 +10,7 @@ What makes an AWS Lambda handler resilient, traceable and easy to maintain? How 
 
 The project is a template project that is based on my AWS Lambda handler cookbook blog series that I publish in [ranthebuilder.cloud](https://www.ranthebuilder.cloud){:target="_blank" rel="noopener"} and attempt to answer those questions.
 
-The GitHub template project can be found [here](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
+The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
 - This project provides a working, open source based, AWS Lambda handler skeleton Python code including DEPLOYMENT code with CDK.
 
