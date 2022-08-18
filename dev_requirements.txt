@@ -28,7 +28,7 @@ iniconfig==1.1.1
 isort==5.10.1
 jinja2==3.1.2; python_version >= '3.7'
 jmespath==1.0.1; python_version >= '3.7'
-jsii==1.64.0; python_version ~= '3.7'
+jsii==1.65.0; python_version ~= '3.7'
 mando==0.6.4
 markdown==3.3.7; python_version >= '3.6'
 markupsafe==2.1.1; python_version >= '3.7'
