@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "594a885d0a9e06f97f362d6386406429325b49b6e210add63dcdd62dc63e8252"
+            "sha256": "23eef504dbe2f52107f08e1339ea4680ac2196b77b006cce6ef4a9484a71c91f"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.8"
+            "python_version": "3.9"
         },
         "sources": [
             {
@@ -52,7 +52,7 @@
                 "sha256:0f7569a4a6ff151958b64304071d370daa3243d15941a7beedf0c9fe5105603e",
                 "sha256:a851e51367fb93e9e1361732c1d60dab63eff98712e503ea7d92e6eccb109b4f"
             ],
-            "markers": "python_version >= '3.6' and python_version < '4'",
+            "markers": "python_version >= '3.6' and python_full_version < '4.0.0'",
             "version": "==2.2.1"
         },
         "email-validator": {
@@ -166,7 +166,7 @@
                 "sha256:c33ccba33c819596124764c23a97d25f32b28433ba0dedeb77d873a38722c9bc",
                 "sha256:ea6e8fb210b19d950fab93b60c9009226c63a28808bc8386e05301e25883ac0a"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_version < '4'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_full_version < '4.0.0'",
             "version": "==1.26.11"
         },
         "wrapt": {
@@ -259,11 +259,11 @@
         },
         "aws-cdk.aws-lambda-python-alpha": {
             "hashes": [
-                "sha256:0263c621d5db8db928c1d09ce344930f2466fdf96b407270b4df0951b326fc78",
-                "sha256:c9021a78f195fed7bb1aad730f83c6bbdd01d139d2279c82689b119c1150bca3"
+                "sha256:05303a06245d34e080d658bdb1d7f5678c8629141e3e54c4b357ea2cb5b54b6e",
+                "sha256:8079f357c20e18dceb5e57e0abc71d9d72327df58888501e018c9267a13bf9a7"
             ],
             "markers": "python_version ~= '3.7'",
-            "version": "==2.37.1a0"
+            "version": "==2.38.0a0"
         },
         "aws-lambda-handler-cookbook": {
             "editable": true,
@@ -911,7 +911,7 @@
                 "sha256:c33ccba33c819596124764c23a97d25f32b28433ba0dedeb77d873a38722c9bc",
                 "sha256:ea6e8fb210b19d950fab93b60c9009226c63a28808bc8386e05301e25883ac0a"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_version < '4'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_full_version < '4.0.0'",
             "version": "==1.26.11"
         },
         "virtualenv": {

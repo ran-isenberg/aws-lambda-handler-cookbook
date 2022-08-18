@@ -6,7 +6,7 @@ description: AWS Lambda Cookbook Project Getting started
 
 * **Docker** - install [Docker](https://www.docker.com/){target="_blank"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack.
-* Python 3.8
+* Python 3.9
 
 ## **Creating a Virtual Python Environment**
 
