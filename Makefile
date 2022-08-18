@@ -23,8 +23,8 @@ pre-commit:
 	pre-commit run -a
 
 deps:
-	pipenv lock --dev-only -r > dev_requirements.txt
-	pipenv lock -r  > lambda_requirements.txt
+	pipenv requirements --dev > dev_requirements.txt
+	pipenv requirements  > lambda_requirements.txt
 
 unit:
 	pytest tests/unit  --cov-config=.coveragerc --cov=service --cov-report xml
@@ -46,7 +46,7 @@ pipeline-tests:
 deploy:
 	make deps
 	mkdir -p .build/lambdas ; cp -r service .build/lambdas
-	mkdir -p .build/common_layer ; pipenv lock -r > .build/common_layer/requirements.txt
+	mkdir -p .build/common_layer ; pipenv requirements > .build/common_layer/requirements.txt
 	cdk deploy --app="python3 ${PWD}/cdk/aws_lambda_handler_cookbook/app.py" -require-approval=True
 
 destroy:

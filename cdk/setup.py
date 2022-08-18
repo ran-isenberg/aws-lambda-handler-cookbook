@@ -13,7 +13,7 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
-        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     url='https://github.com/ran-isenberg/aws-lambda-handler-cookbook',
     author='Ran Isenberg',
@@ -21,10 +21,10 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     package_data={'': ['*.json']},
     include_package_data=True,
-    python_requires='>=3.8',
+    python_requires='>=3.9',
     install_requires=[
         'aws-cdk-lib>=2.0.0',
         'constructs>=10.0.0',
-        'aws-cdk.aws-lambda-python-alpha==2.37.1-alpha.0',
+        'aws-cdk.aws-lambda-python-alpha==2.38.0-alpha.0',
     ],
 )

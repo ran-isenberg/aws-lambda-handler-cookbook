@@ -58,7 +58,7 @@ class LambdaConstruct(Construct):
             self,
             'CommonLayer',
             entry=constants.COMMON_LAYER_BUILD_FOLDER,
-            compatible_runtimes=[_lambda.Runtime.PYTHON_3_8],
+            compatible_runtimes=[_lambda.Runtime.PYTHON_3_9],
             removal_policy=RemovalPolicy.DESTROY,
         )
 
@@ -66,7 +66,7 @@ class LambdaConstruct(Construct):
         lambda_function = _lambda.Function(
             self,
             'CookBookPost',
-            runtime=_lambda.Runtime.PYTHON_3_8,
+            runtime=_lambda.Runtime.PYTHON_3_9,
             code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
             handler='service.handlers.my_handler.my_handler',
             environment={
