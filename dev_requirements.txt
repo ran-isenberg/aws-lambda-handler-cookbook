@@ -1,7 +1,7 @@
 -i https://pypi.org/simple
 attrs==22.1.0; python_version >= '3.5'
 aws-cdk-lib==2.38.0; python_version ~= '3.7'
-aws-cdk.aws-lambda-python-alpha==2.38.0a0; python_version ~= '3.7'
+aws-cdk.aws-lambda-python-alpha==2.39.1a0; python_version ~= '3.7'
 -e ./cdk
 boto3==1.24.54; python_version >= '3.7'
 botocore==1.27.54; python_version >= '3.7'
