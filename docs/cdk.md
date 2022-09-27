@@ -24,7 +24,7 @@ In order to add a new dependency, add it to the Pipfile under the [packages] sec
 
 ### **CDK Constants**
 
-All ASW Lambda function configurations are saved as constants at the `cdk.aws_lambda_handler_cookbook.service_stack.constants.py` file and can easily be changed.
+All ASW Lambda function configurations are saved as constants at the `cdk.my_service.service_stack.constants.py` file and can easily be changed.
 
 - Memory size
 - Timeout in seconds
@@ -35,8 +35,8 @@ All ASW Lambda function configurations are saved as constants at the `cdk.aws_la
 
 ### **Deployed Resources**
 
-- AWS Cloudformation stack: **cdk.aws_lambda_handler_cookbook.service_stack.service_stack.py** which is consisted of one construct
-- Construct: **cdk.aws_lambda_handler_cookbook.service_stack.service_construct.py** which includes:
+- AWS Cloudformation stack: **cdk.my_service.service_stack.service_stack.py** which is consisted of one construct
+- Construct: **cdk.my_service.service_stack.service_construct.py** which includes:
     - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more about it in Yan - Cui's [blog](https://medium.com/theburningmonk-com/lambda-layer-not-a-package-manager-but-a-deployment-optimization-85ddcae40a96){:target="_blank" rel="noopener"}
     - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     - **Lambda Role** - The role of the Lambda function.

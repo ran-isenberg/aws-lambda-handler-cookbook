@@ -1,4 +1,4 @@
-import aws_lambda_handler_cookbook.service_stack.constants as constants
+import my_service.service_stack.constants as constants
 from aws_cdk import Duration, aws_apigateway
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda

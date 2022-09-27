@@ -1,7 +1,7 @@
 from aws_cdk import App, Aspects
 from cdk_nag import AwsSolutionsChecks, HIPAASecurityChecks
 
-from cdk.aws_lambda_handler_cookbook.service_stack.service_stack import ServiceStack
+from cdk.my_service.service_stack.service_stack import ServiceStack
 
 
 def test_cdk_nag_default():

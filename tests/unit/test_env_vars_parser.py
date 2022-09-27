@@ -5,7 +5,7 @@ from unittest import mock
 import pytest
 from pydantic import BaseModel, HttpUrl
 
-from cdk.aws_lambda_handler_cookbook.service_stack.constants import POWER_TOOLS_LOG_LEVEL, POWERTOOLS_SERVICE_NAME, SERVICE_NAME
+from cdk.my_service.service_stack.constants import POWER_TOOLS_LOG_LEVEL, POWERTOOLS_SERVICE_NAME, SERVICE_NAME
 from service.handlers.utils.env_vars_parser import get_environment_variables, init_environment_variables
 from tests.utils import generate_context
 

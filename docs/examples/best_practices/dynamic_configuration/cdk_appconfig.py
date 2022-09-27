@@ -1,10 +1,10 @@
 from aws_cdk import Stack
-from aws_lambda_handler_cookbook.service_stack.configuration.configuration_construct import ConfigurationStore
-from aws_lambda_handler_cookbook.service_stack.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
+from my_service.service_stack.configuration.configuration_construct import ConfigurationStore
+from my_service.service_stack.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
 from constructs import Construct
 
 
-class CookBookConfigurationStack(Stack):
+class DynamicConfigurationStack(Stack):
 
     # pylint: disable=redefined-builtin
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:

@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 import aws_cdk.aws_appconfig as appconfig
-from aws_lambda_handler_cookbook.service_stack.configuration.schema import FeatureFlagsConfiguration
+from my_service.service_stack.configuration.schema import FeatureFlagsConfiguration
 from constructs import Construct
 
 DEFAULT_DEPLOYMENT_STRATEGY = 'AppConfig.AllAtOnce'

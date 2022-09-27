@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-import aws_lambda_handler_cookbook.service_stack.constants as constants
+import my_service.service_stack.constants as constants
 import boto3
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_iam as iam

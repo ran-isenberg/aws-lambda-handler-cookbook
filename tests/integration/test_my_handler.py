@@ -6,7 +6,7 @@ from typing import Any, Dict
 import pytest
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 
-from cdk.aws_lambda_handler_cookbook.service_stack.constants import (
+from cdk.my_service.service_stack.constants import (
     CONFIGURATION_NAME,
     ENVIRONMENT,
     POWER_TOOLS_LOG_LEVEL,
