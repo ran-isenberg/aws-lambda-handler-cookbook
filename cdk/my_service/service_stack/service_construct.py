@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-import aws_lambda_handler_cookbook.service_stack.constants as constants
 import boto3
+import my_service.service_stack.constants as constants
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
@@ -11,7 +11,7 @@ from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
 
 
-class LambdaConstruct(Construct):
+class ApiConstruct(Construct):
 
     # pylint: disable=invalid-name, no-value-for-parameter
     def __init__(self, scope: Construct, id_: str) -> None:
@@ -27,8 +27,8 @@ class LambdaConstruct(Construct):
     def _build_api_gw(self) -> aws_apigateway.LambdaRestApi:
         rest_api: aws_apigateway.LambdaRestApi = aws_apigateway.RestApi(
             self,
-            'cookbook-rest-api',
-            rest_api_name='Lambda CookBook Rest API',
+            'service-rest-api',
+            rest_api_name='Service Rest API',
             description='This service handles /api/service requests',
             deploy_options=aws_apigateway.StageOptions(throttling_rate_limit=2, throttling_burst_limit=10),
         )
@@ -65,7 +65,7 @@ class LambdaConstruct(Construct):
     def __add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role):
         lambda_function = _lambda.Function(
             self,
-            'CookBookPost',
+            'ServicePost',
             runtime=_lambda.Runtime.PYTHON_3_9,
             code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
             handler='service.handlers.my_handler.my_handler',

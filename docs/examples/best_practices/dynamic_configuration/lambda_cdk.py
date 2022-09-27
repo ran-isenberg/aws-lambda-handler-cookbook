@@ -1,4 +1,4 @@
-import aws_lambda_handler_cookbook.service_stack.constants as constants
+import my_service.service_stack.constants as constants
 from aws_cdk import Duration, aws_apigateway
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
@@ -24,7 +24,7 @@ def _build_lambda_role(self) -> iam.Role:
 def _build_lambda_function(self, api_name: aws_apigateway.Resource, role: iam.Role) -> _lambda.Function:
     return _lambda.Function(
         self,
-        'CookBookPost',
+        'ServicePost',
         runtime=_lambda.Runtime.PYTHON_3_8,
         code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
         handler='service.handlers.my_handler.my_handler',
