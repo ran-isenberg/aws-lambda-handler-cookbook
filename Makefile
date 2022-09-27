@@ -47,10 +47,10 @@ deploy:
 	make deps
 	mkdir -p .build/lambdas ; cp -r service .build/lambdas
 	mkdir -p .build/common_layer ; pipenv requirements > .build/common_layer/requirements.txt
-	cdk deploy --app="python3 ${PWD}/cdk/my_service/app.py" --require-approval=False
+	cdk deploy --app="python3 ${PWD}/cdk/my_service/app.py" --require-approval=never
 
 destroy:
-	cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --require-approval=False
+	cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --require-approval=never
 
 docs:
 	mkdocs serve
