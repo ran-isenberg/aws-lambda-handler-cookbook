@@ -31,9 +31,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: "us-east-1"
       - name: Deploy stack
-        run: cdk deploy --all --require-approval never
+        run: make deploy
       - name: Run E2E tests
-        run: |
-          make e2e
+        run: make e2e
       - name: Destroy stack
-        run: cdk destroy --all --require-approval never
+        run: make destroy
