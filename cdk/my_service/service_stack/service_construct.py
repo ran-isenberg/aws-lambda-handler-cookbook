@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-import my_service.service_stack.constants as constants
 import boto3
+import my_service.service_stack.constants as constants
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
