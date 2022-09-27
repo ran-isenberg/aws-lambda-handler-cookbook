@@ -24,10 +24,6 @@ jobs:
           pip install -r dev_requirements.txt
           pip install -r lambda_requirements.txt
           npm install -g aws-cdk
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          chmod +x ./aws/install
-          ./aws/install
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
