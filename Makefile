@@ -50,7 +50,7 @@ deploy:
 	cdk deploy --app="python3 ${PWD}/cdk/my_service/app.py" --require-approval=never
 
 destroy:
-	cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --require-approval=never
+	cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --force
 
 docs:
 	mkdocs serve
