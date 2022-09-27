@@ -1,3 +1,5 @@
+name: Serverless Service E2E tests
+
 on:
   push:
     branches: [main]
@@ -27,14 +29,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: "us-east-1"
-      - name: Install dependencies
-        run: yarn
-      - name: Synth stack
-        run: yarn cdk synth
       - name: Deploy stack
-        run: yarn cdk deploy --all --require-approval never
+        run: cdk deploy --all --require-approval never
       - name: Run E2E tests
         run: |
           make e2e
       - name: Destroy stack
-        run: yarn cdk destroy --all --require-approval never
+        run: cdk destroy --all --require-approval never
