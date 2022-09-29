@@ -66,6 +66,7 @@ jobs:
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false)
           token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Deploy to AWS
         run: make deploy
       - name: Run E2E tests
         run: make e2e
