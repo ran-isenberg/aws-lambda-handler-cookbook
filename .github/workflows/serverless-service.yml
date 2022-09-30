@@ -31,8 +31,6 @@ jobs:
         run: |
           pip install --upgrade pip pre-commit poetry
           npm install -g aws-cdk
-          poetry config --local virtualenvs.in-project true
-          poetry shell
           poetry install --with=dev
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@master
