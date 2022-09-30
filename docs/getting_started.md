@@ -48,7 +48,7 @@ CDK destroy can be run with ``make destroy``.
 
 ## **Preparing Code for PR**
 
-Run ``make pr``. This command will run all the required checks, pre commit hooks, linters, code formats, pylint and tests, so you can be sure GitHub's pipeline will pass.
+Run ``make pr``. This command will run all the required checks, pre commit hooks, linters, code formats, flake8 and tests, so you can be sure GitHub's pipeline will pass.
 
 The command auto fixes errors in the code for you.
 

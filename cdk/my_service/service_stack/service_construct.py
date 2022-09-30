@@ -1,7 +1,3 @@
-import os
-from pathlib import Path
-
-import boto3
 import my_service.service_stack.constants as constants
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_iam as iam
@@ -13,7 +9,6 @@ from constructs import Construct
 
 class ApiConstruct(Construct):
 
-    # pylint: disable=invalid-name, no-value-for-parameter
     def __init__(self, scope: Construct, id_: str) -> None:
         super().__init__(scope, id_)
 
