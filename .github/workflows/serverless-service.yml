@@ -31,6 +31,8 @@ jobs:
         run: |
           pip install --upgrade pip pre-commit poetry
           npm install -g aws-cdk
+          poetry config --local virtualenvs.in-project true
+          poetry shell
           poetry install --with=dev
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@master
@@ -41,9 +43,9 @@ jobs:
       - name: pre commit
         run: |
           make pre-commit
-      #- name: Lint with flake8
-      #  run: |
-      #    make lint
+      - name: Lint with flake8
+        run: |
+          make lint
       - name: file format
         run: |
           yapf -d -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .
