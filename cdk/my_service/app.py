@@ -6,7 +6,6 @@ from boto3 import client, session
 from service_stack.constants import get_stack_name
 from service_stack.service_stack import ServiceStack
 
-# pylint: disable=invalid-name
 account = client('sts').get_caller_identity()['Account']
 region = session.Session().region_name
 app = App()

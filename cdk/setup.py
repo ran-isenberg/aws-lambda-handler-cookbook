@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-from os import getenv, path
+from os import path
 
 from setuptools import find_packages, setup
 
-# pylint: disable=invalid-name
 here = path.abspath(path.dirname(__file__))
 
 setup(
@@ -26,6 +25,6 @@ setup(
         'aws-cdk-lib>=2.0.0',
         'constructs>=10.0.0',
         'cdk-nag>2.0.0',
-        'aws-cdk.aws-lambda-python-alpha==2.39.1-alpha.0',
+        'aws-cdk.aws-lambda-python-alpha==2.44.0-alpha.0',
     ],
 )

@@ -8,7 +8,7 @@ dev:
 
 lint:
 	@echo "Running flake8"
-	flake8 service/* tests/* docs/examples/*
+	flake8 service/* cdk/* tests/* docs/examples/* --exclude patterns='build,cdk.json,cdk.context.json,.yaml'
 
 complex:
 	@echo "Running Radon"

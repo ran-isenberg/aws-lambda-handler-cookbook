@@ -6,7 +6,6 @@ from my_service.service_stack.constants import CONFIGURATION_NAME, ENVIRONMENT, 
 
 class DynamicConfigurationStack(Stack):
 
-    # pylint: disable=redefined-builtin
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
