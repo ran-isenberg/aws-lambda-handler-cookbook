@@ -31,7 +31,8 @@ jobs:
         run: |
           pip install --upgrade pip pre-commit poetry
           npm install -g aws-cdk
-          poetry install --with=dev
+          pip install -r dev_requirements.txt
+          pip install -r lambda_requirements.txt
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
