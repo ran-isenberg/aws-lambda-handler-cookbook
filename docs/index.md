@@ -31,7 +31,7 @@ The GitHub template project can be found at [https://github.com/ran-isenberg/aws
 - Fifth blog post   - [Input Validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation){:target="_blank" rel="noopener"}
 - Sixth blog post   - [Dynamic Configuration & feature flags](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}
 - Seventh blog post - [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project){:target="_blank" rel="noopener"}
-- CDK Best practices blog - [TBR]
+- CDK  post         - [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
 
 ## **Serverless Best Practices**
 
