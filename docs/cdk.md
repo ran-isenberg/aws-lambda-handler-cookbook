@@ -6,7 +6,7 @@ description: AWS Lambda Cookbook CDK Project
 
 - Follow this [getting started with CDK guide](https://docs.aws.amazon.com/cdk/v1/guide/getting_started.html){:target="_blank" rel="noopener"}
 - You must make sure your AWS account and machine can deploy an AWS Cloudformation stack and have all the tokens and configuration as described in the page above.
-- CDK Best practices blog [TBR]
+- CDK Best practices [blog](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
 
 ## **CDK Deployment**
 
