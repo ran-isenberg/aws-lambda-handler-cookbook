@@ -2,7 +2,7 @@
 aws-lambda-powertools==1.29.2
 aws-xray-sdk==2.10.0
 boto3==1.24.83; python_version >= '3.7'
-botocore==1.27.83; python_version >= '3.7'
+botocore==1.27.87; python_version >= '3.7'
 dnspython==2.2.1; python_version >= '3.6' and python_version < '4'
 email-validator==1.3.0
 fastjsonschema==2.16.2
