@@ -23,7 +23,7 @@ aws-lambda-powertools = "*"
 
 
 [tool.poetry.dev-dependencies]
-service-cdk = {path = "cdk", develop = true}
+cdk = {path = "cdk", develop = true}
 pytest = "*"
 pytest-mock = "*"
 pycodestyle = "*"
