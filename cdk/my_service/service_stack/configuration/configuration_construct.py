@@ -21,13 +21,13 @@ class ConfigurationStore(Construct):
         Args:
             scope (Construct): The scope in which to define this construct.
             id_ (str): The scoped construct ID. Must be unique amongst siblings. If the ID includes a path separator (``/``), then it will be
-                        replaced by double dash ``--``.
+                       replaced by double dash ``--``.
             environment (str): environment name. Used for loading the corresponding JSON file to upload under
                                'configuration/json/{environment}_configuration.json'
             service_name (str): application name.
             configuration_name (str): configuration name
             deployment_strategy_id (str, optional): AWS AppConfig deployment strategy.
-                                                See https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
+                                                see https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
                                                     Defaults to DEFAULT_DEPLOYMENT_STRATEGY.
         """
         super().__init__(scope, id_)

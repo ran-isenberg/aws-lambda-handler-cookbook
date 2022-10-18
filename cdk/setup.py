@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 here = path.abspath(path.dirname(__file__))
 
 setup(
-    name='aws-lambda-handler-cookbook',
+    name='service-cdk',
     version='1.0',
     description='CDK code for deploying an AWS Lambda handler that implements the best practices described at https://www.ranthebuilder.cloud',
     classifiers=[
