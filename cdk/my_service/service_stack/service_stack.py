@@ -1,8 +1,9 @@
 from aws_cdk import Stack
 from constructs import Construct
-from my_service.service_stack.configuration.configuration_construct import ConfigurationStore
-from my_service.service_stack.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
-from my_service.service_stack.service_construct import ApiConstruct
+
+from cdk.my_service.service_stack.configuration.configuration_construct import ConfigurationStore
+from cdk.my_service.service_stack.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
+from cdk.my_service.service_stack.service_construct import ApiConstruct
 
 
 class ServiceStack(Stack):
