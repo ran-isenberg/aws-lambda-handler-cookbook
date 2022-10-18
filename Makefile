@@ -20,7 +20,7 @@ sort:
 	isort ${PWD}
 
 pre-commit:
-	pre-commit run -a
+	pre-commit run -a --show-diff-on-failure
 
 deps:
 	pipenv requirements --dev > dev_requirements.txt
