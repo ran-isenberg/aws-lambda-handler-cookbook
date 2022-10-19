@@ -16,6 +16,7 @@ nav:
       - best_practices/environment_variables.md
       - best_practices/input_validation.md
       - best_practices/dynamic_configuration.md
+      - CDK Best practices: https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches" target="_blank"
 
 theme:
   name: material
