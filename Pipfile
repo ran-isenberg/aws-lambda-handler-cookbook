@@ -25,6 +25,7 @@ mkdocs-git-revision-date-plugin = "*"
 
 [packages]
 aws-lambda-powertools = "*"
+pydantic = "*"
 
 [requires]
 python_version = "3.9"
