@@ -24,8 +24,9 @@ mkdocs-material = "*"
 mkdocs-git-revision-date-plugin = "*"
 
 [packages]
-pydantic = {extras = ["email"],version = "*"}
 aws-lambda-powertools = "*"
+pydantic = "*"
+aws_xray_sdk = "*"
 
 [requires]
 python_version = "3.9"

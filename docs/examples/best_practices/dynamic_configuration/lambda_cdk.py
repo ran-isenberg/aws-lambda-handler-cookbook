@@ -12,7 +12,8 @@ def _build_lambda_role(self) -> iam.Role:
         inline_policies={
             'dynamic_configuration':
                 iam.PolicyDocument(statements=[
-                    iam.PolicyStatement(actions=['appconfig:GetConfiguration'], resources=['*'], effect=iam.Effect.ALLOW),
+                    iam.PolicyStatement(actions=['appconfig:GetLatestConfiguration', 'appconfig:StartConfigurationSession'], resources=['*'],
+                                        effect=iam.Effect.ALLOW),
                 ]),
         },
         managed_policies=[
