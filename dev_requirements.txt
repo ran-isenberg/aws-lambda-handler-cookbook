@@ -56,7 +56,7 @@ pytest-cov==4.0.0
 pytest-html==3.1.1
 pytest-metadata==2.0.2; python_version >= '3.7' and python_version < '4'
 pytest-mock==3.10.0
-python-dateutil==2.8.2
+python-dateutil==2.8.2; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 python-dotenv==0.21.0
 pyyaml==6.0; python_version >= '3.6'
 pyyaml-env-tag==0.1; python_version >= '3.6'
@@ -71,10 +71,13 @@ toml==0.10.2; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 
 tomli==2.0.1; python_version >= '3.7'
 typeguard==2.13.3; python_full_version >= '3.5.3'
 typing-extensions==4.4.0; python_version >= '3.7'
-urllib3==1.26.12; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_version < '4'
+urllib3==1.26.12; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_full_version < '4.0.0'
 virtualenv==20.16.5; python_version >= '3.6'
 watchdog==2.1.9; python_version >= '3.6'
 xenon==0.9.0
 yapf==0.32.0
 zipp==3.10.0; python_version >= '3.7'
 aws-lambda-powertools==2.0.0
+aws-xray-sdk==2.10.0
+pydantic==1.10.2
+wrapt==1.14.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
