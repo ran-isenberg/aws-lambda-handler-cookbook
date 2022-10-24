@@ -39,7 +39,8 @@ class ApiConstruct(Construct):
             inline_policies={
                 'dynamic_configuration':
                     iam.PolicyDocument(statements=[
-                        iam.PolicyStatement(actions=['appconfig:GetConfiguration'], resources=['*'], effect=iam.Effect.ALLOW),
+                        iam.PolicyStatement(actions=['appconfig:GetLatestConfiguration', 'appconfig:StartConfigurationSession'], resources=['*'],
+                                            effect=iam.Effect.ALLOW),
                     ]),
             },
             managed_policies=[

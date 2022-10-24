@@ -87,7 +87,7 @@ You need to add two new settings in order to use this utility:
    * AWS AppConfig environment name (‘CONFIGURATION_ENV’)
    * AWS AppConfig configuration name to fetch (‘CONFIGURATION_NAME’)
    * Cache TTL in minutes (‘CONFIGURATION_MAX_AGE_MINUTES’)
-2. AWS Lambda IAM role to include allow 'appconfig:GetConfiguration' on '*'.
+2. AWS Lambda IAM role to include allow 'appconfig:GetLatestConfiguration' and 'appconfig:StartConfigurationSession' on '*'.
 
 === "cdk_lambda.py"
 
