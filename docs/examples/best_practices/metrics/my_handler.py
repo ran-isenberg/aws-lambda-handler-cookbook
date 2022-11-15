@@ -2,7 +2,7 @@ import json
 from http import HTTPStatus
 from typing import Any, Dict
 
-from aws_lambda_powertools.metrics.metrics import Metrics, MetricUnit
+from aws_lambda_powertools.metrics import Metrics, MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 SERVICE_NAME = 'my_service'
