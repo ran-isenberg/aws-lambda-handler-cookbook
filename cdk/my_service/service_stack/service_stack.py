@@ -13,7 +13,11 @@ from my_service.service_stack.service_construct import ApiConstruct
 def _get_stack_prefix() -> str:
     repo = Repo(Path.cwd())
     username = pwd.getpwuid(os.getuid()).pw_name
-    return f'{username}{repo.active_branch}'
+    print(f'username={username}')
+    try:
+        return f'{username}{repo.active_branch}'
+    except TypeError:
+        return username
 
 
 class ServiceStack(Stack):
