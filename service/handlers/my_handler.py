@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from typing import Any, Dict
 
-from aws_lambda_powertools.metrics.metrics import MetricUnit
+from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.feature_flags.exceptions import ConfigurationStoreError, SchemaValidationError
 from aws_lambda_powertools.utilities.parser import ValidationError, parse
 from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
