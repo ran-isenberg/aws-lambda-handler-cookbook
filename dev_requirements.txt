@@ -3,7 +3,7 @@ attrs==22.1.0; python_version >= '3.5'
 aws-cdk-lib==2.50.0; python_version ~= '3.7'
 aws-cdk.aws-lambda-python-alpha==2.50.0a0; python_version ~= '3.7'
 boto3==1.26.9
-botocore==1.29.9; python_version >= '3.7'
+botocore==1.29.13; python_version >= '3.7'
 cattrs==22.2.0; python_version >= '3.7'
 -e ./cdk
 cdk-nag==2.20.11; python_version ~= '3.7'
