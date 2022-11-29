@@ -46,7 +46,7 @@ pipeline-tests:
 deploy:
 	make deps
 	if not exist ".build\lambdas" mkdir ".build\lambdas"
-	xcopy /s /e /y service .build\lambdas 
+	xcopy /s /e /y service .build\lambdas
 	if not exist ".build\common_layer" mkdir ".build\common_layer"
 	pipenv requirements > .build\common_layer\requirements.txt
 	cdk deploy --app="python cdk\my_service\app.py" --require-approval=never
