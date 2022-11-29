@@ -17,7 +17,3 @@ COMMON_LAYER_BUILD_FOLDER = '.build/common_layer'
 ENVIRONMENT = 'dev'
 CONFIGURATION_NAME = 'my_conf'
 CONFIGURATION_MAX_AGE_MINUTES = '5'  # time to store app config conf in the cache before refetching it
-
-
-def get_stack_name() -> str:
-    return SERVICE_NAME
