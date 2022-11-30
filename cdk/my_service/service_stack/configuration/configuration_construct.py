@@ -41,20 +41,20 @@ class ConfigurationStore(Construct):
         )
         self.config_env = appconfig.CfnEnvironment(
             self,
-            id='env',
+            id=f'{id_}env',
             application_id=self.config_app.ref,
             name=environment,
         )
         self.config_profile = appconfig.CfnConfigurationProfile(
             self,
-            id='profile',
+            id=f'{id_}profile',
             application_id=self.config_app.ref,
             location_uri='hosted',
             name=configuration_name,
         )
         self.hosted_cfg_version = appconfig.CfnHostedConfigurationVersion(
             self,
-            'version',
+            f'{id_}version',
             application_id=self.config_app.ref,
             configuration_profile_id=self.config_profile.ref,
             content=configuration_str,
@@ -63,7 +63,7 @@ class ConfigurationStore(Construct):
 
         self.cfn_deployment_strategy = appconfig.CfnDeploymentStrategy(
             self,
-            CUSTOM_ZERO_TIME_STRATEGY,
+            f'{id_}{CUSTOM_ZERO_TIME_STRATEGY}',
             deployment_duration_in_minutes=0,
             growth_factor=100,
             name=CUSTOM_ZERO_TIME_STRATEGY,
@@ -74,7 +74,7 @@ class ConfigurationStore(Construct):
 
         self.app_config_deployment = appconfig.CfnDeployment(
             self,
-            id='deploy',
+            id=f'{id_}deploy',
             application_id=self.config_app.ref,
             configuration_profile_id=self.config_profile.ref,
             configuration_version=self.hosted_cfg_version.ref,
