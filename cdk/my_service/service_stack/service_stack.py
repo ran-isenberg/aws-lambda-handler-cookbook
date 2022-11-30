@@ -11,7 +11,10 @@ from my_service.service_stack.service_construct import ApiConstruct
 
 def get_stack_name() -> str:
     repo = Repo(Path.cwd())
-    username = os.getlogin().replace('.', '-')
+    try:
+        username = os.getlogin().replace('.', '-')
+    except Exception:
+        username = 'main'
     print(f'username={username}')
     try:
         return f'{username}-{repo.active_branch}-{SERVICE_NAME}'
