@@ -7,33 +7,16 @@ from aws_lambda_powertools.utilities.parser import ValidationError, parse
 from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from service.handlers.schemas.dynamic_configuration import FeatureFlagsNames, MyConfiguration
+from service.handlers.schemas.dynamic_configuration import MyConfiguration
 from service.handlers.schemas.env_vars import MyHandlerEnvVars
 from service.handlers.schemas.input import Input
-from service.handlers.schemas.output import Output
-from service.handlers.utils.dynamic_configuration import get_dynamic_configuration_store, parse_configuration
+from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.env_vars_parser import get_environment_variables, init_environment_variables
 from service.handlers.utils.http_responses import build_response
 from service.handlers.utils.observability import logger, metrics, tracer
-
-
-@tracer.capture_method(capture_response=False)
-def inner_function_example(my_name: str, order_item_count: int) -> Output:
-    # process input, etc. return output
-    config_store = get_dynamic_configuration_store()
-    campaign: bool = config_store.evaluate(
-        name=FeatureFlagsNames.TEN_PERCENT_CAMPAIGN.value,
-        context={},
-        default=False,
-    )
-    logger.debug('campaign feature flag value', extra={'campaign': campaign})
-    premium: bool = config_store.evaluate(
-        name=FeatureFlagsNames.PREMIUM.value,
-        context={'customer_name': my_name},
-        default=False,
-    )
-    logger.debug('premium feature flag value', extra={'premium': premium})
-    return Output(success=True, order_item_count=order_item_count)
+from service.logic.handle_create_request import create_request
+from service.schemas.exceptions import InternalServerException
+from service.schemas.output import Output
 
 
 @init_environment_variables(model=MyHandlerEnvVars)
@@ -61,7 +44,10 @@ def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         logger.error('event failed input validation', extra={'error': str(exc)})
         return build_response(http_status=HTTPStatus.BAD_REQUEST, body={})
 
-    response: Output = inner_function_example(input.my_name, input.order_item_count)
-    logger.info('inner_function_example finished successfully')
     metrics.add_metric(name='ValidEvents', unit=MetricUnit.Count, value=1)
+    try:
+        response: Output = create_request(customer_name=input.customer_name, order_item_count=input.order_item_count, table_name=env_vars.TABLE_NAME)
+    except InternalServerException:
+        return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})
+
     return build_response(http_status=HTTPStatus.OK, body=response.dict())

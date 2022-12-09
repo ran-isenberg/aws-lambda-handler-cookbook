@@ -5,6 +5,7 @@ from typing import Any, Dict
 
 import pytest
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
+from botocore.exceptions import ClientError
 
 from cdk.my_service.service_stack.constants import (
     CONFIGURATION_NAME,
@@ -67,14 +68,27 @@ def init():
 
 
 def test_handler_200_ok(mocker):
-
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    body = Input(my_name='RanTheBuilder', order_item_count=5, tier='premium')
+    customer_name = 'RanTheBuilder'
+    body = Input(customer_name=customer_name, order_item_count=5, tier='premium')
     response = my_handler(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
-    assert body_dict['success']
+    assert body_dict['order_id']
+    assert body_dict['customer_name'] == customer_name
     assert body_dict['order_item_count'] == 5
+
+
+def test_internal_server_error(mocker):
+
+    def db_mock_function(table_name: str):
+        raise ClientError(error_response={}, operation_name='put_item')
+
+    db_mock = mocker.patch('service.logic.handle_create_request._get_db_handler')
+    db_mock.side_effect = db_mock_function
+    body = Input(customer_name='RanTheBuilder', order_item_count=5, tier='premium')
+    response = my_handler(generate_api_gw_event(body.dict()), generate_context())
+    assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 def test_handler_bad_request(mocker):

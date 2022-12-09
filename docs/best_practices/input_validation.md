@@ -46,14 +46,14 @@ Define type and value constraints.
     from pydantic import BaseModel, PositiveInt, constr
 
     class Input(BaseModel):
-        my_name: constr(min_length=1, max_length=20)
+        customer_name: constr(min_length=1, max_length=20)
         order_item_count: PositiveInt
     ```
 
 The schema defines:
 
-1. 'my_name' - customer name, a non-empty string with up to 20 characters.
-2. 'order_item_count' - a positive integer representing the number of ordered items that 'my_name' placed.
+1. 'customer_name' - customer name, a non-empty string with up to 20 characters.
+2. 'order_item_count' - a positive integer representing the number of ordered items that 'customer_name' placed.
 
 Learn about models [**here**](https://pydantic-docs.helpmanual.io/usage/models/) and about advanced parsing [**here**](https://pydantic-docs.helpmanual.io/usage/validators/).
 

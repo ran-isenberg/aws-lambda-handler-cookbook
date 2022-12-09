@@ -24,7 +24,7 @@ for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
 
 ### **Features**
 
-- This project provides a working, open source based, AWS Lambda handler skeleton Python code including DEPLOYMENT code with CDK.
+- This project provides a working orders service where customers can create orders of items.
 
 - The project deploys an API GW with an AWS Lambda integration under the path POST /api/service/ and stores data in a DynamoDB table.
 
@@ -32,7 +32,9 @@ for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
 
 - CI/CD pipelines based on Github actions that deploys to AWS.
 
-- CDK infrastructure tests and security tests.
+- Unit/integration and E2E tests.
+
+- CDK infrastructure with infrastructure tests and security tests.
 
 The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
