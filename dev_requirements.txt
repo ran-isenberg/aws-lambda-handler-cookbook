@@ -9,7 +9,7 @@ aws-cdk.aws-lambda-python-alpha==2.50.0a0 ; python_version ~= '3.7'
 boto3==1.26.19
 botocore==1.29.19 ; python_version >= '3.7'
 cattrs==22.2.0 ; python_version >= '3.7'
-cdk-nag==2.21.17 ; python_version ~= '3.7'
+cdk-nag==2.21.26 ; python_version ~= '3.7'
 certifi==2022.9.24 ; python_version >= '3.6'
 cfgv==3.3.1 ; python_full_version >= '3.6.1'
 charset-normalizer==2.1.1 ; python_full_version >= '3.6.0'
