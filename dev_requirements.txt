@@ -7,7 +7,7 @@ aws-cdk.asset-node-proxy-agent-v5==2.0.29 ; python_version ~= '3.7'
 aws-cdk.aws-lambda-python-alpha==2.50.0a0 ; python_version ~= '3.7'
 -e ./cdk
 boto3==1.26.19
-botocore==1.29.19 ; python_version >= '3.7'
+botocore==1.29.27 ; python_version >= '3.7'
 cattrs==22.2.0 ; python_version >= '3.7'
 cdk-nag==2.21.17 ; python_version ~= '3.7'
 certifi==2022.9.24 ; python_version >= '3.6'
