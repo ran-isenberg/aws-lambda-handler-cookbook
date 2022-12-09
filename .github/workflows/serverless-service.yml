@@ -35,7 +35,7 @@ jobs:
           pip install -r lambda_requirements.txt
           npm install -g aws-cdk
       - name: Configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@1.6.1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
@@ -53,7 +53,12 @@ jobs:
         run: |
           make complex
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: Unit and Integration tests
+      - name: Unit tests
+        run: |
+          make unit
+      - name: Deploy to AWS
+        run: make deploy
+      - name: Integration tests
         run: |
           make pipeline-tests
       - name: Codecov
@@ -64,8 +69,6 @@ jobs:
           fail_ci_if_error: true # optional (default = false)
           verbose: false # optional (default = false)
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Deploy to AWS
-        run: make deploy
       - name: Run E2E tests
         run: make e2e
       - name: Destroy stack

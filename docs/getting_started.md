@@ -7,11 +7,13 @@ description: AWS Lambda Cookbook Project Getting started
 * **Docker** - install [Docker](https://www.docker.com/){target="_blank"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack.
 * Python 3.9
+* [pipenv](https://pypi.org/project/pipenv/){target="_blank"} - Make sure to set your terminal environment variable 'PIPENV_VENV_IN_PROJECT' to true, so all dependencies are installed in the project '.venv' folder.
 * For Windows based machines, use the Makefile_windows version (rename to Makefile). Default Makefile is for Mac/Linux.
 
-## **Creating a Virtual Python Environment**
+## **Creating a Developer Environment**
 
-Run ``make dev``
+1. Run ``pipenv shell``
+1. Run ``make dev``
 
 ## **Deploy CDK**
 
@@ -55,7 +57,7 @@ The command auto fixes errors in the code for you.
 
 If there's an error in the pre-commit stage, it gets auto fixed. However, are required to run ``make pr`` again so it continues to the next stages.
 
-Be sure to commit all the changes that ``make pr`` does.
+Be sure to commit all the changes that ``make pr`` does for you.
 
 ## **GitHub Pages Documentation**
 

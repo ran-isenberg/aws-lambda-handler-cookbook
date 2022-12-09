@@ -22,7 +22,7 @@ def get_dynamic_configuration_store() -> DynamicConfiguration:
     """
     global _DYNAMIC_CONFIGURATION
     if _DYNAMIC_CONFIGURATION is None:
-        # init singelton
+        # init singleton
         env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
         conf_store = AppConfigStore(
             environment=env_vars.CONFIGURATION_ENV,

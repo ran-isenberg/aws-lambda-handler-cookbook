@@ -18,3 +18,4 @@ class DynamicConfiguration(BaseModel):
 class MyHandlerEnvVars(Observability, DynamicConfiguration):
     REST_API: HttpUrl
     ROLE_ARN: constr(min_length=20, max_length=2048)
+    TABLE_NAME: constr(min_length=1)

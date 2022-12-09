@@ -6,10 +6,17 @@ from typing import Any, Dict
 import pytest
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 
-from cdk.my_service.service_stack.constants import CONFIGURATION_NAME, ENVIRONMENT, POWER_TOOLS_LOG_LEVEL, POWERTOOLS_SERVICE_NAME, SERVICE_NAME
+from cdk.my_service.service_stack.constants import (
+    CONFIGURATION_NAME,
+    ENVIRONMENT,
+    POWER_TOOLS_LOG_LEVEL,
+    POWERTOOLS_SERVICE_NAME,
+    SERVICE_NAME,
+    TABLE_NAME_OUTPUT,
+)
 from service.handlers.my_handler import my_handler
 from service.handlers.schemas.input import Input
-from tests.utils import generate_api_gw_event, generate_context
+from tests.utils import generate_api_gw_event, generate_context, get_stack_output
 
 MOCKED_SCHEMA = {
     'features': {
@@ -56,6 +63,7 @@ def init():
     os.environ['CONFIGURATION_NAME'] = CONFIGURATION_NAME
     os.environ['CONFIGURATION_MAX_AGE_MINUTES'] = '5'
     os.environ['AWS_DEFAULT_REGION'] = 'us-east-1'  # used for appconfig mocked boto calls
+    os.environ['TABLE_NAME'] = get_stack_output(TABLE_NAME_OUTPUT)
 
 
 def test_handler_200_ok(mocker):

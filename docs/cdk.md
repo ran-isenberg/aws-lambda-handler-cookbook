@@ -5,12 +5,12 @@ description: AWS Lambda Cookbook CDK Project
 ## **Prerequisites**
 
 - Follow this [getting started with CDK guide](https://docs.aws.amazon.com/cdk/v1/guide/getting_started.html){:target="_blank" rel="noopener"}
-- You must make sure your AWS account and machine can deploy an AWS Cloudformation stack and have all the tokens and configuration as described in the page above.
+- Make sure your AWS account and machine can deploy an AWS Cloudformation stack and have all the tokens and configuration as described in the page above.
 - CDK Best practices [blog](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
 
 ## **CDK Deployment**
 
-<img alt="alt_text" src="../media/cdk.png" />
+<img alt="alt_text" src="../media/design.png" />
 
 All CDK project files can be found under the CDK folder.
 
@@ -41,6 +41,7 @@ All ASW Lambda function configurations are saved as constants at the `cdk.my_ser
     - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     - **Lambda Role** - The role of the Lambda function.
     - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/service that triggers the Lambda function.
+    - **AWS DynamoDB table** - stores request data
 
 ### **CDK Tests**
 

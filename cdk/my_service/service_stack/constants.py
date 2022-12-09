@@ -1,7 +1,8 @@
 SERVICE_ROLE_ARN = 'ServiceRoleArn'
 LAMBDA_BASIC_EXECUTION_ROLE = 'AWSLambdaBasicExecutionRole'
 SERVICE_ROLE = 'ServiceRole'
-
+TABLE_NAME = 'users'
+TABLE_NAME_OUTPUT = 'DbOutput'
 APIGATEWAY = 'Apigateway'
 GW_RESOURCE = 'service'
 LAMBDA_LAYER_NAME = 'common'

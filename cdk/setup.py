@@ -25,6 +25,6 @@ setup(
         'aws-cdk-lib>=2.0.0',
         'constructs>=10.0.0',
         'cdk-nag>2.0.0',
-        'aws-cdk.aws-lambda-python-alpha==2.50.0-alpha.0',
+        'aws-cdk.aws-lambda-python-alpha==2.54.0-alpha.0',
     ],
 )
