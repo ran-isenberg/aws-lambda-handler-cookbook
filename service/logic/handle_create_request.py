@@ -34,7 +34,7 @@ def create_request(customer_name: str, order_item_count: int, table_name: str) -
 # can be cached for better performance, use @cachetools
 def _get_db_handler(table_name: str) -> Table:
     dynamodb: DynamoDBServiceResource = boto3.resource('dynamodb')
-    logger.info('opening connection to dynamodb table', extra={'table_name': table_name})
+    logger.info(f'opening connection to dynamodb table {table_name}', extra={'table_name': table_name})
     return dynamodb.Table(table_name)
 
 
