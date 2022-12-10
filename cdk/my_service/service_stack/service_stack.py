@@ -31,4 +31,4 @@ class ServiceStack(Stack):
         # from running the service pipeline and without redeploying the service lambdas. For the sake of this template
         # example, it is deployed as part of the service stack
         self.dynamic_configuration = ConfigurationStore(self, f'{id}dynamic_conf'[0:64], ENVIRONMENT, SERVICE_NAME, CONFIGURATION_NAME)
-        self.lambdas = ApiConstruct(self, f'{id}Service'[0:64])
+        self.lambdas = ApiConstruct(self, f'{id}Service'[0:64], self.dynamic_configuration.config_app.name)
