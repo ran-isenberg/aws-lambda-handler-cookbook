@@ -1,29 +1,28 @@
 from typing import Any, Dict, TypeVar
 
-from aws_lambda_powertools.utilities.feature_flags import AppConfigStore
-from aws_lambda_powertools.utilities.feature_flags import FeatureFlags as DynamicConfiguration
+from aws_lambda_powertools.utilities.feature_flags import AppConfigStore, FeatureFlags
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 from pydantic import BaseModel, ValidationError
 
-from service.handlers.schemas.env_vars import MyHandlerEnvVars
+from service.handlers.schemas.env_vars import DynamicConfiguration
 from service.handlers.utils.env_vars_parser import get_environment_variables
 
 Model = TypeVar('Model', bound=BaseModel)
 
-_DYNAMIC_CONFIGURATION: DynamicConfiguration = None
+_DYNAMIC_CONFIGURATION: FeatureFlags = None
 _DEFAULT_FEATURE_FLAGS_ROOT = 'features'  # all feature flags reside in the JSON under this key
 
 
-def get_dynamic_configuration_store() -> DynamicConfiguration:
+def get_dynamic_configuration_store() -> FeatureFlags:
     """ getter for singleton dynamic configuration getter API
 
     Returns:
-        DynamicConfiguration: see https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/
+        FeatureFlags: see https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/
     """
     global _DYNAMIC_CONFIGURATION
     if _DYNAMIC_CONFIGURATION is None:
         # init singleton
-        env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
+        env_vars: DynamicConfiguration = get_environment_variables(model=DynamicConfiguration)
         conf_store = AppConfigStore(
             environment=env_vars.CONFIGURATION_ENV,
             application=env_vars.CONFIGURATION_APP,
@@ -31,7 +30,7 @@ def get_dynamic_configuration_store() -> DynamicConfiguration:
             max_age=env_vars.CONFIGURATION_MAX_AGE_MINUTES,
             envelope=_DEFAULT_FEATURE_FLAGS_ROOT,
         )
-        _DYNAMIC_CONFIGURATION = DynamicConfiguration(store=conf_store)
+        _DYNAMIC_CONFIGURATION = FeatureFlags(store=conf_store)
 
     return _DYNAMIC_CONFIGURATION
 
