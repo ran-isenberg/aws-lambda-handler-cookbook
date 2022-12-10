@@ -22,9 +22,8 @@ from service.schemas.output import Output
 @init_environment_variables(model=MyHandlerEnvVars)
 @metrics.log_metrics
 @tracer.capture_lambda_handler(capture_response=False)
-def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
+def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     logger.set_correlation_id(context.aws_request_id)
-    logger.info('my_handler is called, calling inner_function_example')
 
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', extra=env_vars.dict())
@@ -39,7 +38,7 @@ def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     try:
         # we want to extract and parse the HTTP body from the api gw envelope
         input: Input = parse(event=event, model=Input, envelope=ApiGatewayEnvelope)
-        logger.info('got create request', extra={'order_item_count': input.order_item_count})
+        logger.info('got create order request', extra={'order_item_count': input.order_item_count})
     except (ValidationError, TypeError) as exc:
         logger.error('event failed input validation', extra={'error': str(exc)})
         return build_response(http_status=HTTPStatus.BAD_REQUEST, body={})
@@ -51,4 +50,5 @@ def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     except InternalServerException:
         return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})
 
+    logger.info('finished handling create order request')
     return build_response(http_status=HTTPStatus.OK, body=response.dict())

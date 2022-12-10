@@ -28,7 +28,7 @@ def _build_lambda_function(self, api_name: aws_apigateway.Resource, role: iam.Ro
         'ServicePost',
         runtime=_lambda.Runtime.PYTHON_3_8,
         code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
-        handler='service.handlers.my_handler.my_handler',
+        handler='service.handlers.create_order.create_order',
         environment={
             constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,  # for logger, tracer and metrics
             constants.POWER_TOOLS_LOG_LEVEL: 'DEBUG',  # for logger

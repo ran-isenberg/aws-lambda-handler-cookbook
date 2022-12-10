@@ -14,7 +14,7 @@ description: AWS Lambda Cookbook CDK Project
 
 All CDK project files can be found under the CDK folder.
 
-The CDK code create an API GW with a path of /api/service which triggers the lambda on 'POST' requests.
+The CDK code create an API GW with a path of /api/orders which triggers the lambda on 'POST' requests.
 
 The AWS Lambda handler uses a Lambda layer optimization which takes all the packages under the [packages] section in the Pipfile and downloads them in via a Docker instance.
 
@@ -40,7 +40,7 @@ All ASW Lambda function configurations are saved as constants at the `cdk.my_ser
     - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more about it in Yan - Cui's [blog](https://medium.com/theburningmonk-com/lambda-layer-not-a-package-manager-but-a-deployment-optimization-85ddcae40a96){:target="_blank" rel="noopener"}
     - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     - **Lambda Role** - The role of the Lambda function.
-    - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/service that triggers the Lambda function.
+    - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/orders that triggers the Lambda function.
     - **AWS DynamoDB table** - stores request data
 
 ### **CDK Tests**

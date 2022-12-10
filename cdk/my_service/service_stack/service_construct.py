@@ -39,7 +39,7 @@ class ApiConstruct(Construct):
             self,
             'service-rest-api',
             rest_api_name='Service Rest API',
-            description='This service handles /api/service requests',
+            description='This service handles /api/orders requests',
             deploy_options=aws_apigateway.StageOptions(throttling_rate_limit=2, throttling_burst_limit=10),
         )
 
@@ -84,7 +84,7 @@ class ApiConstruct(Construct):
             'ServicePost',
             runtime=_lambda.Runtime.PYTHON_3_9,
             code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
-            handler='service.handlers.my_handler.my_handler',
+            handler='service.handlers.create_order.create_order',
             environment={
                 constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,  # for logger, tracer and metrics
                 constants.POWER_TOOLS_LOG_LEVEL: 'DEBUG',  # for logger
@@ -105,5 +105,5 @@ class ApiConstruct(Construct):
             log_retention=aws_logs.RetentionDays.ONE_DAY,
         )
 
-        # POST /api/service/
+        # POST /api/orders/
         api_name.add_method(http_method='POST', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))

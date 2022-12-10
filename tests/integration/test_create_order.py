@@ -15,7 +15,7 @@ from cdk.my_service.service_stack.constants import (
     SERVICE_NAME,
     TABLE_NAME_OUTPUT,
 )
-from service.handlers.my_handler import my_handler
+from service.handlers.create_order import create_order
 from service.handlers.schemas.input import Input
 from tests.utils import generate_api_gw_event, generate_context, get_stack_output
 
@@ -71,7 +71,7 @@ def test_handler_200_ok(mocker):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = 'RanTheBuilder'
     body = Input(customer_name=customer_name, order_item_count=5, tier='premium')
-    response = my_handler(generate_api_gw_event(body.dict()), generate_context())
+    response = create_order(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
     assert body_dict['order_id']
@@ -87,13 +87,13 @@ def test_internal_server_error(mocker):
     db_mock = mocker.patch('service.logic.handle_create_request._get_db_handler')
     db_mock.side_effect = db_mock_function
     body = Input(customer_name='RanTheBuilder', order_item_count=5, tier='premium')
-    response = my_handler(generate_api_gw_event(body.dict()), generate_context())
+    response = create_order(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 def test_handler_bad_request(mocker):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    response = my_handler(generate_api_gw_event({'order_item_count': 5}), generate_context())
+    response = create_order(generate_api_gw_event({'order_item_count': 5}), generate_context())
     assert response['statusCode'] == HTTPStatus.BAD_REQUEST
     body_dict = json.loads(response['body'])
     assert body_dict == {}
@@ -101,7 +101,7 @@ def test_handler_bad_request(mocker):
 
 def test_handler_failed_appconfig_fetch(mocker):
     mock_exception_dynamic_configuration(mocker)
-    response = my_handler(generate_api_gw_event({'order_item_count': 5}), generate_context())
+    response = create_order(generate_api_gw_event({'order_item_count': 5}), generate_context())
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
     body_dict = json.loads(response['body'])
     assert body_dict == {}
