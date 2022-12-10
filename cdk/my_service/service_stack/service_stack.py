@@ -30,5 +30,5 @@ class ServiceStack(Stack):
         # This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled
         # from running the service pipeline and without redeploying the service lambdas. For the sake of this template
         # example, it is deployed as part of the service stack
-        self.dynamic_configuration = ConfigurationStore(self, 'dynamic_conf'[0:64], ENVIRONMENT, SERVICE_NAME, CONFIGURATION_NAME)
+        self.dynamic_configuration = ConfigurationStore(self, f'{id}dynamic_conf'[0:64], ENVIRONMENT, SERVICE_NAME, CONFIGURATION_NAME)
         self.lambdas = ApiConstruct(self, f'{id}Service'[0:64])
