@@ -24,7 +24,7 @@ that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in 
 
 ### Serverless Service - The Order service
 
-<img alt="alt_text" src="../media/design.png" />
+<img alt="alt_text" src="./media/design.png" />
 
 - This project provides a working orders service where customers can create orders of items.
 
