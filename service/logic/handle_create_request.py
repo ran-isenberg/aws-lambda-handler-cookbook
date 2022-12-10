@@ -10,11 +10,14 @@ from service.handlers.utils.dynamic_configuration import get_dynamic_configurati
 from service.handlers.utils.observability import logger, tracer
 from service.schemas.exceptions import InternalServerException
 from service.schemas.output import Output
+from cachetools import cached, TTLCache
 
 
 @tracer.capture_method(capture_response=False)
 def handle_create_request(customer_name: str, order_item_count: int, table_name: str) -> Output:
     logger.info('starting to handle create request', extra={'order_item_count': order_item_count, 'customer_name': customer_name})
+
+    # feature flags example
     config_store = get_dynamic_configuration_store()
     campaign: bool = config_store.evaluate(
         name=FeatureFlagsNames.TEN_PERCENT_CAMPAIGN.value,
@@ -28,10 +31,12 @@ def handle_create_request(customer_name: str, order_item_count: int, table_name:
         default=False,
     )
     logger.debug('premium feature flag value', extra={'premium': premium})
+
     return _create_order_in_db(table_name, customer_name, order_item_count)
 
 
-# can be cached for better performance, use @cachetools
+# cache dynamodb connection data for no longer than 5 minutes
+@cached(cache=TTLCache(maxsize=1, ttl=300))
 def _get_db_handler(table_name: str) -> Table:
     dynamodb: DynamoDBServiceResource = boto3.resource('dynamodb')
     logger.info('opening connection to dynamodb table', extra={'table_name': table_name})
