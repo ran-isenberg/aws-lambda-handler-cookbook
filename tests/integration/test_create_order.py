@@ -5,11 +5,19 @@ from typing import Any, Dict
 
 import pytest
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
+from botocore.exceptions import ClientError
 
-from cdk.my_service.service_stack.constants import CONFIGURATION_NAME, ENVIRONMENT, POWER_TOOLS_LOG_LEVEL, POWERTOOLS_SERVICE_NAME, SERVICE_NAME
-from service.handlers.my_handler import my_handler
+from cdk.my_service.service_stack.constants import (
+    CONFIGURATION_NAME,
+    ENVIRONMENT,
+    POWER_TOOLS_LOG_LEVEL,
+    POWERTOOLS_SERVICE_NAME,
+    SERVICE_NAME,
+    TABLE_NAME_OUTPUT,
+)
+from service.handlers.create_order import create_order
 from service.handlers.schemas.input import Input
-from tests.utils import generate_api_gw_event, generate_context
+from tests.utils import generate_api_gw_event, generate_context, get_stack_output
 
 MOCKED_SCHEMA = {
     'features': {
@@ -56,22 +64,37 @@ def init():
     os.environ['CONFIGURATION_NAME'] = CONFIGURATION_NAME
     os.environ['CONFIGURATION_MAX_AGE_MINUTES'] = '5'
     os.environ['AWS_DEFAULT_REGION'] = 'us-east-1'  # used for appconfig mocked boto calls
+    os.environ['TABLE_NAME'] = get_stack_output(TABLE_NAME_OUTPUT)
 
 
 def test_handler_200_ok(mocker):
-
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    body = Input(my_name='RanTheBuilder', order_item_count=5, tier='premium')
-    response = my_handler(generate_api_gw_event(body.dict()), generate_context())
+    customer_name = 'RanTheBuilder'
+    body = Input(customer_name=customer_name, order_item_count=5, tier='premium')
+    response = create_order(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
-    assert body_dict['success']
+    assert body_dict['order_id']
+    assert body_dict['customer_name'] == customer_name
     assert body_dict['order_item_count'] == 5
+
+
+def test_internal_server_error(mocker):
+
+    def db_mock_function(table_name: str):
+        raise ClientError(error_response={}, operation_name='put_item')
+
+    db_mock = mocker.patch('service.logic.handle_create_request._get_db_handler')
+    db_mock.side_effect = db_mock_function
+    body = Input(customer_name='RanTheBuilder', order_item_count=5, tier='premium')
+    response = create_order(generate_api_gw_event(body.dict()), generate_context())
+    assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+    db_mock.assert_called
 
 
 def test_handler_bad_request(mocker):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    response = my_handler(generate_api_gw_event({'order_item_count': 5}), generate_context())
+    response = create_order(generate_api_gw_event({'order_item_count': 5}), generate_context())
     assert response['statusCode'] == HTTPStatus.BAD_REQUEST
     body_dict = json.loads(response['body'])
     assert body_dict == {}
@@ -79,7 +102,7 @@ def test_handler_bad_request(mocker):
 
 def test_handler_failed_appconfig_fetch(mocker):
     mock_exception_dynamic_configuration(mocker)
-    response = my_handler(generate_api_gw_event({'order_item_count': 5}), generate_context())
+    response = create_order(generate_api_gw_event({'order_item_count': 5}), generate_context())
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
     body_dict = json.loads(response['body'])
     assert body_dict == {}

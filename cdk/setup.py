@@ -7,7 +7,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='aws-lambda-handler-cookbook',
-    version='1.0',
+    version='2.2',
     description='CDK code for deploying an AWS Lambda handler that implements the best practices described at https://www.ranthebuilder.cloud',
     classifiers=[
         'Intended Audience :: Developers',
@@ -25,6 +25,6 @@ setup(
         'aws-cdk-lib>=2.0.0',
         'constructs>=10.0.0',
         'cdk-nag>2.0.0',
-        'aws-cdk.aws-lambda-python-alpha==2.50.0-alpha.0',
+        'aws-cdk.aws-lambda-python-alpha==2.54.0-alpha.0',
     ],
 )

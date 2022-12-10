@@ -36,8 +36,8 @@ class ConfigurationStore(Construct):
 
         self.config_app = appconfig.CfnApplication(
             self,
-            id=service_name,
-            name=service_name,
+            id=f'{id_}{service_name}',
+            name=f'{id_}{service_name}',
         )
         self.config_env = appconfig.CfnEnvironment(
             self,

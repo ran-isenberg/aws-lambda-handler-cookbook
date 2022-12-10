@@ -2,36 +2,43 @@
 title: Homepage
 description: AWS Lambda Cookbook - Elevate Your Handler's Code for Python
 ---
-## **AWS Lambda Cookbook - Elevate Your Handler's Code**
+## **AWS Lambda Handler Cookbook - A Serverless Service Template**
 
 [<img alt="alt_text" src="./media/banner.png" />](https://www.ranthebuilder.cloud/)
 
-What makes an AWS Lambda handler resilient, traceable and easy to maintain? How do you write such a code?
+## **The Problem**
 
-The project is a template project that is based on my AWS Lambda handler cookbook blog series that I publish in [ranthebuilder.cloud](https://www.ranthebuilder.cloud){:target="_blank" rel="noopener"} and attempt to answer those questions.
+Starting a Serverless service can be overwhelming. You need to figure out many questions and challenges that have nothing to do with your business domain:
 
-The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
+- How to deploy to the cloud? What IAC framework do you choose?
+- How to write a SaaS-oriented CI/CD pipeline? What does it need to contain?
+- How do you handle observability. Logging, tracing, metrics
+- How do you handle testing?
+- What makes an AWS Lambda handler resilient, traceable, and easy to maintain? How do you write such a code?
 
-- This project provides a working, open source based, AWS Lambda handler skeleton Python code including DEPLOYMENT code with CDK.
+## **The Solution**
 
-- The project deploys an API GW with an AWS Lambda integration under the path POST /api/service/.
+This project aims to reduce cognitive load and answer these questions for you by providing a skeleton Python Serverless service template
 
+that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
+
+### Serverless Service - The Order service
+
+<img alt="alt_text" src="../media/design.png" />
+
+- This project provides a working orders service where customers can create orders of items.
+
+- The project deploys an API GW with an AWS Lambda integration under the path POST /api/orders/ and stores data in a DynamoDB table.
+
+### **Features**
+
+- Python Serverless service with a recommended file structure.
+- CDK infrastructure with infrastructure tests and security tests.
+- CI/CD pipelines based on Github actions that deploys to AWS.
+- Unit/integration and E2E tests.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 
-- This project can serve as a template for new Serverless services - CDK deployment code, pipeline and handler are covered.
-
-- The CDK project has infrastructure tests and security tests and follows the AWS CDK best practices.
-
-## **The Blog Series**
-
-- First blog post   - [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}
-- Second blog post  - [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}
-- Third blog post   - [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
-- Fourth blog post  - [Environment Variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
-- Fifth blog post   - [Input Validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation){:target="_blank" rel="noopener"}
-- Sixth blog post   - [Dynamic Configuration & feature flags](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}
-- Seventh blog post - [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project){:target="_blank" rel="noopener"}
-- CDK  post         - [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
+The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
 ## **Serverless Best Practices**
 
@@ -48,9 +55,20 @@ The utilities cover multiple aspects of a production-ready service, including:
 - [**Input Validation**](best_practices/input_validation.md)
 - [**Dynamic configuration & features flags**](best_practices/dynamic_configuration.md)
 
-I've written 3 of the mentioned utilities (parser, feature flags and environment variables) and donated two of them, the [parser](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/parser/) and [feature flags](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/) to [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/latest/).
-
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
+
+## **The Blog Series**
+
+The template is based on my AWS Lambda handler cookbook blog series that I published at [ranthebuilder.cloud](https://www.ranthebuilder.cloud).
+
+- [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}
+- [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}
+- [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
+- [Environment Variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
+- [Input Validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation){:target="_blank" rel="noopener"}
+- [Dynamic Configuration & feature flags](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}
+- [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project){:target="_blank" rel="noopener"}
+- [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
 
 ## **License**
 

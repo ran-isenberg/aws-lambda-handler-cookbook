@@ -26,6 +26,8 @@ setuptools = ">=65.5.1"
 
 [packages]
 aws-lambda-powertools= {extras = ["all"],version = "*"}
+mypy-boto3-dynamodb = "*"
+cachetools = "*"
 
 [requires]
 python_version = "3.9"
