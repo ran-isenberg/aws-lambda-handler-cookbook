@@ -14,7 +14,7 @@ def get_stack_name() -> str:
     try:
         username = os.getlogin().replace('.', '-')
     except Exception:
-        username = 'main'
+        username = 'github'
     print(f'username={username}')
     try:
         return f'{username}-{repo.active_branch}-{SERVICE_NAME}'
@@ -31,4 +31,4 @@ class ServiceStack(Stack):
         # from running the service pipeline and without redeploying the service lambdas. For the sake of this template
         # example, it is deployed as part of the service stack
         self.dynamic_configuration = ConfigurationStore(self, 'dynamic_conf'[0:64], ENVIRONMENT, SERVICE_NAME, CONFIGURATION_NAME)
-        self.lambdas = ApiConstruct(self, 'Service'[0:64])
+        self.lambdas = ApiConstruct(self, f'{id}Service'[0:64])

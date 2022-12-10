@@ -21,10 +21,11 @@ class ApiConstruct(Construct):
         self.__add_post_lambda_integration(api_resource, self.lambda_role, self.db)
 
     def _build_db(self, id_prefix: str) -> dynamodb.Table:
+        table_id = f'{id_prefix}{constants.TABLE_NAME}'
         table = dynamodb.Table(
             self,
-            f'{id_prefix}{constants.TABLE_NAME}',
-            table_name=constants.TABLE_NAME,
+            table_id,
+            table_name=table_id,
             partition_key=dynamodb.Attribute(name='order_id', type=dynamodb.AttributeType.STRING),
             billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
             point_in_time_recovery=True,
