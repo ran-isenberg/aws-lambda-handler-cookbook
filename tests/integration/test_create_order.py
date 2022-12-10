@@ -89,6 +89,7 @@ def test_internal_server_error(mocker):
     body = Input(customer_name='RanTheBuilder', order_item_count=5, tier='premium')
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+    db_mock.assert_called
 
 
 def test_handler_bad_request(mocker):

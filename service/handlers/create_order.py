@@ -45,9 +45,13 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
 
     metrics.add_metric(name='ValidEvents', unit=MetricUnit.Count, value=1)
     try:
-        response: Output = handle_create_request(customer_name=input.customer_name, order_item_count=input.order_item_count,
-                                                 table_name=env_vars.TABLE_NAME)
-    except InternalServerException:
+        response: Output = handle_create_request(
+            customer_name=input.customer_name,
+            order_item_count=input.order_item_count,
+            table_name=env_vars.TABLE_NAME,
+        )
+    except InternalServerException:  # pragma: no cover
+        logger.error('finished handling create order request with internal error')
         return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})
 
     logger.info('finished handling create order request')
