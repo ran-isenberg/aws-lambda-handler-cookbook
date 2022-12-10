@@ -14,7 +14,7 @@ from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.env_vars_parser import get_environment_variables, init_environment_variables
 from service.handlers.utils.http_responses import build_response
 from service.handlers.utils.observability import logger, metrics, tracer
-from service.logic.handle_create_request import create_request
+from service.logic.handle_create_request import handle_create_request
 from service.schemas.exceptions import InternalServerException
 from service.schemas.output import Output
 
@@ -46,7 +46,8 @@ def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
 
     metrics.add_metric(name='ValidEvents', unit=MetricUnit.Count, value=1)
     try:
-        response: Output = create_request(customer_name=input.customer_name, order_item_count=input.order_item_count, table_name=env_vars.TABLE_NAME)
+        response: Output = handle_create_request(customer_name=input.customer_name, order_item_count=input.order_item_count,
+                                                 table_name=env_vars.TABLE_NAME)
     except InternalServerException:
         return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})
 

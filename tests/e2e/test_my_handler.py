@@ -11,7 +11,7 @@ from tests.utils import get_stack_output
 
 @pytest.fixture(scope='module', autouse=True)
 def api_gw_url():
-    return f'{get_stack_output(APIGATEWAY)}/api/{GW_RESOURCE}'
+    return f'{get_stack_output(APIGATEWAY)}api/{GW_RESOURCE}'
 
 
 def test_handler_200_ok(api_gw_url):
@@ -27,7 +27,6 @@ def test_handler_200_ok(api_gw_url):
 
 def test_handler_bad_request(api_gw_url):
     body_str = json.dumps({'order_item_count': 5})
-    api_gw_url = get_stack_output(APIGATEWAY)
     response = requests.post(api_gw_url, data=body_str)
     assert response.status_code == HTTPStatus.BAD_REQUEST
     body_dict = json.loads(response.text)

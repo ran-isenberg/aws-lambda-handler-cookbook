@@ -13,17 +13,17 @@ class ApiConstruct(Construct):
     def __init__(self, scope: Construct, id_: str) -> None:
         super().__init__(scope, id_)
 
-        self.db = self._build_db()
+        self.db = self._build_db(id_)
         self.lambda_role = self._build_lambda_role(self.db)
         self.common_layer = self._build_common_layer()
         self.rest_api = self._build_api_gw()
         api_resource: aws_apigateway.Resource = self.rest_api.root.add_resource('api').add_resource(constants.GW_RESOURCE)
         self.__add_post_lambda_integration(api_resource, self.lambda_role, self.db)
 
-    def _build_db(self) -> dynamodb.Table:
+    def _build_db(self, id_prefix: str) -> dynamodb.Table:
         table = dynamodb.Table(
             self,
-            constants.TABLE_NAME,
+            f'{id_prefix}{constants.TABLE_NAME}',
             table_name=constants.TABLE_NAME,
             partition_key=dynamodb.Attribute(name='order_id', type=dynamodb.AttributeType.STRING),
             billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,

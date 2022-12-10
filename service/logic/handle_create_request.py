@@ -13,7 +13,7 @@ from service.schemas.output import Output
 
 
 @tracer.capture_method(capture_response=False)
-def create_request(customer_name: str, order_item_count: int, table_name: str) -> Output:
+def handle_create_request(customer_name: str, order_item_count: int, table_name: str) -> Output:
     logger.info('starting to handle create request', extra={'order_item_count': order_item_count, 'customer_name': customer_name})
     config_store = get_dynamic_configuration_store()
     campaign: bool = config_store.evaluate(
@@ -34,7 +34,7 @@ def create_request(customer_name: str, order_item_count: int, table_name: str) -
 # can be cached for better performance, use @cachetools
 def _get_db_handler(table_name: str) -> Table:
     dynamodb: DynamoDBServiceResource = boto3.resource('dynamodb')
-    logger.info(f'opening connection to dynamodb table {table_name}', extra={'table_name': table_name})
+    logger.info('opening connection to dynamodb table', extra={'table_name': table_name})
     return dynamodb.Table(table_name)
 
 
