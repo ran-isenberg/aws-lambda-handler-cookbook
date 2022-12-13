@@ -34,9 +34,10 @@ that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in 
 
 - Python Serverless service with a recommended file structure.
 - CDK infrastructure with infrastructure tests and security tests.
-- CI/CD pipelines based on Github actions that deploys to AWS.
-- Unit/integration and E2E tests.
+- CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
+- AWS Lambda handler uses [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/){:target="_blank" rel="noopener"}.
+- Unit, integration and E2E tests.
 
 The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
