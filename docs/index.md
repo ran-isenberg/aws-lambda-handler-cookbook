@@ -1,6 +1,6 @@
 ---
 title: Homepage
-description: AWS Lambda Cookbook - Elevate Your Handler's Code for Python
+description: AWS Lambda Handler Cookbook - a Serverless Service Template
 ---
 ## **AWS Lambda Handler Cookbook - A Serverless Service Template**
 
@@ -12,7 +12,7 @@ Starting a Serverless service can be overwhelming. You need to figure out many q
 
 - How to deploy to the cloud? What IAC framework do you choose?
 - How to write a SaaS-oriented CI/CD pipeline? What does it need to contain?
-- How do you handle observability. Logging, tracing, metrics
+- How do you handle observability, logging, tracing, metrics?
 - How do you handle testing?
 - What makes an AWS Lambda handler resilient, traceable, and easy to maintain? How do you write such a code?
 
@@ -28,7 +28,7 @@ that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in 
 
 - This project provides a working orders service where customers can create orders of items.
 
-- The project deploys an API GW with an AWS Lambda integration under the path POST /api/orders/ and stores data in a DynamoDB table.
+- The project deploys an API GW with an AWS Lambda integration under the path POST /api/orders/ and stores orders data in a DynamoDB table.
 
 ### **Features**
 

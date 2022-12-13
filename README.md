@@ -24,16 +24,14 @@ Starting a Serverless service can be overwhelming. You need to figure out many q
 
 - How to deploy to the cloud? What IAC framework do you choose?
 - How to write a SaaS-oriented CI/CD pipeline? What does it need to contain?
-- How do you handle observability. Logging, tracing, metrics
+- How do you handle observability, logging, tracing, metrics?
 - How do you handle testing?
 - What makes an AWS Lambda handler resilient, traceable, and easy to maintain? How do you write such a code?
 
 
 ## **The Solution**
 
-This project aims to reduce cognitive load and answer these questions for you by providing a skeleton Python Serverless service template
-
-that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
+This project aims to reduce cognitive load and answer these questions for you by providing a skeleton Python Serverless service template that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
 
 ### Serverless Service - The Order service
 
@@ -48,8 +46,6 @@ that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in 
 - CI/CD pipelines based on Github actions that deploys to AWS.
 - Unit/integration and E2E tests.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
-
-The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook).
 
 
 ## CDK Deployment
@@ -74,15 +70,6 @@ The utilities cover multiple aspect of a production-ready service, including:
 - [Dynamic Configuration & feature flags](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices)
 - [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project)
 - [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook)
-
-
-I've written 3 of the mentioned utilities (parser, feature flags and environment variables) and donated two of them, the [parser](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/parser/) and [feature flags](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/) to [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/latest/).
-
-While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
-
-This repository is the complementary code examples of my blog series "AWS Lambda Cookbook - Elevate your handler's code"
-
-
 
 ## Getting started
 Head over to the complete project documentation pages at GitHub pages at [https://ran-isenberg.github.io/aws-lambda-handler-cookbook](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)
