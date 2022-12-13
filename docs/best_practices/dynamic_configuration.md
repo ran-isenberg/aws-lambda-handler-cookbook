@@ -91,7 +91,7 @@ You need to add two new settings in order to use this utility:
 
 === "cdk_lambda.py"
 
-```python hl_lines="12-17 36-39"
+```python hl_lines="12-17 37-40"
 --8<-- "docs/examples/best_practices/dynamic_configuration/lambda_cdk.py"
 ```
 
@@ -123,7 +123,7 @@ The function fetch the JSON file from AWS AppConfig and return a parsed instance
 
 === "my_handler.py"
 
-```python hl_lines="18 23"
+```python hl_lines="15 18 23"
 --8<-- "docs/examples/best_practices/dynamic_configuration/parse_configuration.py"
 ```
 
@@ -228,7 +228,7 @@ You can read more about the rules, conditions, logic, and supported actions [her
 
 ## **How To Locally Test Your Lambda In IDE**
 
-You can and should mock the values that AWS AppConfing returns in order to check different types of configurations values and feature flags.
+You can and should mock the values that AWS AppConfig returns in order to check different types of configurations values and feature flags.
 
 Make sure to always test your feature flags with all its possible values scope (enabled/disabled etc.)
 
