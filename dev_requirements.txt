@@ -9,7 +9,7 @@ boto3==1.26.28
 botocore==1.29.28; python_version >= '3.7'
 cattrs==22.2.0; python_version >= '3.7'
 -e ./cdk
-cdk-nag==2.21.30; python_version ~= '3.7'
+cdk-nag==2.21.31; python_version ~= '3.7'
 certifi==2022.12.7; python_version >= '3.6'
 cfgv==3.3.1; python_full_version >= '3.6.1'
 charset-normalizer==2.1.1; python_version >= '3.6'
