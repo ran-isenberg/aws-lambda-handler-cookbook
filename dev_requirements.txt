@@ -1,6 +1,6 @@
 -i https://pypi.org/simple
 attrs==22.1.0; python_version >= '3.5'
-aws-cdk-lib==2.54.0; python_version ~= '3.7'
+aws-cdk-lib==2.56.0; python_version ~= '3.7'
 aws-cdk.asset-awscli-v1==2.2.30; python_version ~= '3.7'
 aws-cdk.asset-kubectl-v20==2.1.1; python_version ~= '3.7'
 aws-cdk.asset-node-proxy-agent-v5==2.0.36; python_version ~= '3.7'
