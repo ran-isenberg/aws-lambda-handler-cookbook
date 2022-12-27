@@ -1,2 +1,6 @@
 [run]
-omit = ["tests/*", "cdk/*"]
+omit =
+    # omit everything in /tests
+    tests/*
+    # omit everything in /cdk
+    "cdk/*"
