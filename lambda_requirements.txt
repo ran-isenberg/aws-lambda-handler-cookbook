@@ -1,7 +1,7 @@
 -i https://pypi.org/simple
 aws-lambda-powertools[all]==2.5.0
 aws-xray-sdk==2.11.0
-botocore==1.29.37; python_version >= '3.7'
+botocore==1.29.40; python_version >= '3.7'
 cachetools==5.2.0
 fastjsonschema==2.16.2
 jmespath==1.0.1; python_version >= '3.7'
