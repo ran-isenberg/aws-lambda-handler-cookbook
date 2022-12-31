@@ -15,7 +15,7 @@ from service.handlers.utils.observability import logger
 @init_environment_variables(model=MyHandlerEnvVars)
 def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     try:
-        my_configuration: MyConfiguration = parse_configuration(model=MyConfiguration)
+        my_configuration: MyConfiguration = parse_configuration(model=MyConfiguration)  # type: ignore
     except (SchemaValidationError, ConfigurationStoreError) as exc:
         logger.exception(f'dynamic configuration error, error={str(exc)}')
         return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})

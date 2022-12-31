@@ -1,23 +1,13 @@
 import json
-import os
 from http import HTTPStatus
 from typing import Any, Dict
 
-import pytest
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 from botocore.exceptions import ClientError
 
-from cdk.my_service.service_stack.constants import (
-    CONFIGURATION_NAME,
-    ENVIRONMENT,
-    POWER_TOOLS_LOG_LEVEL,
-    POWERTOOLS_SERVICE_NAME,
-    SERVICE_NAME,
-    TABLE_NAME_OUTPUT,
-)
 from service.handlers.create_order import create_order
 from service.handlers.schemas.input import Input
-from tests.utils import generate_api_gw_event, generate_context, get_stack_output
+from tests.utils import generate_api_gw_event, generate_context
 
 MOCKED_SCHEMA = {
     'features': {
@@ -51,20 +41,6 @@ def mock_dynamic_configuration(mocker, mock_schema: Dict[str, Any]) -> None:
 def mock_exception_dynamic_configuration(mocker) -> None:
     """Mock AppConfig Store get_configuration method to use mock schema instead"""
     mocker.patch('aws_lambda_powertools.utilities.parameters.AppConfigProvider.get', side_effect=SchemaValidationError('error'))
-
-
-@pytest.fixture(scope='module', autouse=True)
-def init():
-    os.environ[POWERTOOLS_SERVICE_NAME] = SERVICE_NAME
-    os.environ[POWER_TOOLS_LOG_LEVEL] = 'DEBUG'
-    os.environ['REST_API'] = 'https://www.ranthebuilder.cloud/api'
-    os.environ['ROLE_ARN'] = 'arn:partition:service:region:account-id:resource-type:resource-id'
-    os.environ['CONFIGURATION_APP'] = SERVICE_NAME
-    os.environ['CONFIGURATION_ENV'] = ENVIRONMENT
-    os.environ['CONFIGURATION_NAME'] = CONFIGURATION_NAME
-    os.environ['CONFIGURATION_MAX_AGE_MINUTES'] = '5'
-    os.environ['AWS_DEFAULT_REGION'] = 'us-east-1'  # used for appconfig mocked boto calls
-    os.environ['TABLE_NAME'] = get_stack_output(TABLE_NAME_OUTPUT)
 
 
 def test_handler_200_ok(mocker):
