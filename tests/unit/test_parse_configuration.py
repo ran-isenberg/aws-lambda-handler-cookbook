@@ -5,7 +5,7 @@ import pytest
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 from pydantic import BaseModel
 
-from cdk.my_service.service_stack.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
+from cdk.my_service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
 from service.handlers.utils.dynamic_configuration import parse_configuration
 
 MOCKED_SCHEMA = {'region': 'us-east-1'}

@@ -43,7 +43,7 @@ jobs:
       - name: pre commit
         run: |
           make pre-commit
-      - name: Lint with flake8
+      - name: Lint with flake8 and mypy
         run: |
           make lint
       - name: file format

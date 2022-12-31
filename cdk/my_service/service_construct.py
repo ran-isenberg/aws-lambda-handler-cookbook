@@ -1,4 +1,3 @@
-import my_service.service_stack.constants as constants
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
@@ -6,6 +5,8 @@ from aws_cdk import aws_lambda as _lambda
 from aws_cdk import aws_logs
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
+
+import cdk.my_service.constants as constants
 
 
 class ApiConstruct(Construct):
@@ -34,8 +35,8 @@ class ApiConstruct(Construct):
         CfnOutput(self, id=constants.TABLE_NAME_OUTPUT, value=table.table_name).override_logical_id(constants.TABLE_NAME_OUTPUT)
         return table
 
-    def _build_api_gw(self) -> aws_apigateway.LambdaRestApi:
-        rest_api: aws_apigateway.LambdaRestApi = aws_apigateway.RestApi(
+    def _build_api_gw(self) -> aws_apigateway.RestApi:
+        rest_api: aws_apigateway.RestApi = aws_apigateway.RestApi(
             self,
             'service-rest-api',
             rest_api_name='Service Rest API',

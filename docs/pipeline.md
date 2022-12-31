@@ -13,6 +13,7 @@ All steps can be run locally using the makefile. See details below:
 - Install dev dependencies
 - Run pre-commit checks as defined in `.pre-commit-config.yaml`
 - Lint with flake8 as defined in `.flake8` - run `make lint` in the IDE
+- Static type check with mypy as defined in `.mypy.ini` - run `make mypy-lint` in the IDE
 - Verify that Python imports are sorted according to standard - run `make sort` in the IDE
 - Python formatter Yapf as defined in `.style`  - run `make yapf` in the IDE
 - Python complexity checks: radon and xenon  - run `make complex` in the IDE

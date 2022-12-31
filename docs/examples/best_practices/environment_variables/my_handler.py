@@ -10,5 +10,5 @@ from service.handlers.utils.env_vars_parser import get_environment_variables, in
 
 @init_environment_variables(model=MyHandlerEnvVars)
 def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
-    env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)  # noqa: F841
+    env_vars = get_environment_variables(model=MyHandlerEnvVars)  # noqa: F841
     return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}

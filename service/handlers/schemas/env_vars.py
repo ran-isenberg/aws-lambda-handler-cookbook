@@ -1,21 +1,21 @@
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, HttpUrl, PositiveInt, constr
+from pydantic import BaseModel, Field, HttpUrl, PositiveInt
 
 
 class Observability(BaseModel):
-    POWERTOOLS_SERVICE_NAME: constr(min_length=1)
+    POWERTOOLS_SERVICE_NAME: Annotated[str, Field(min_length=1)]
     LOG_LEVEL: Literal['DEBUG', 'INFO', 'ERROR', 'CRITICAL', 'WARNING', 'EXCEPTION']
 
 
 class DynamicConfiguration(BaseModel):
-    CONFIGURATION_APP: constr(min_length=1)
-    CONFIGURATION_ENV: constr(min_length=1)
-    CONFIGURATION_NAME: constr(min_length=1)
+    CONFIGURATION_APP: Annotated[str, Field(min_length=1)]
+    CONFIGURATION_ENV: Annotated[str, Field(min_length=1)]
+    CONFIGURATION_NAME: Annotated[str, Field(min_length=1)]
     CONFIGURATION_MAX_AGE_MINUTES: PositiveInt
 
 
 class MyHandlerEnvVars(Observability, DynamicConfiguration):
     REST_API: HttpUrl
-    ROLE_ARN: constr(min_length=20, max_length=2048)
-    TABLE_NAME: constr(min_length=1)
+    ROLE_ARN: Annotated[str, Field(min_length=20, max_length=2048)]
+    TABLE_NAME: Annotated[str, Field(min_length=1)]

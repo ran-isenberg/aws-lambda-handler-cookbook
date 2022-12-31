@@ -29,7 +29,7 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
     logger.debug('environment variables', extra=env_vars.dict())
 
     try:
-        my_configuration: MyConfiguration = parse_configuration(model=MyConfiguration)
+        my_configuration: MyConfiguration = parse_configuration(model=MyConfiguration)  # type: ignore
         logger.debug('fetched dynamic configuration', extra={'configuration': my_configuration.dict()})
     except (SchemaValidationError, ConfigurationStoreError) as exc:
         logger.exception(f'dynamic configuration error, error={str(exc)}')
