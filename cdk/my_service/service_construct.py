@@ -1,4 +1,3 @@
-import my_service.constants as constants
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
@@ -6,6 +5,8 @@ from aws_cdk import aws_lambda as _lambda
 from aws_cdk import aws_logs
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
+
+import cdk.my_service.constants as constants
 
 
 class ApiConstruct(Construct):

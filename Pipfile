@@ -25,6 +25,7 @@ mkdocs-git-revision-date-plugin = "*"
 setuptools = ">=65.5.1"
 types-cachetools = "*"
 mypy = "*"
+types-requests = "*"
 
 [packages]
 aws-lambda-powertools= {extras = ["all"],version = "*"}

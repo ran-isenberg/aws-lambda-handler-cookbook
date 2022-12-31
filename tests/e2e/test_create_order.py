@@ -4,7 +4,7 @@ from http import HTTPStatus
 import pytest
 import requests
 
-from cdk.my_service.service_stack.constants import APIGATEWAY, GW_RESOURCE
+from cdk.my_service.constants import APIGATEWAY, GW_RESOURCE
 from service.handlers.schemas.input import Input
 from tests.utils import get_stack_output
 
