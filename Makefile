@@ -30,7 +30,7 @@ mypy-lint:
 	mypy --pretty service docs/examples cdk tests
 
 deps:
-	poetry export --only=dev --without-hashes --format=requirements.txt > dev_requirements.txt
+	poetry export --with=dev --without-hashes --format=requirements.txt > dev_requirements.txt
 	poetry export --without=dev --without-hashes --format=requirements.txt > lambda_requirements.txt
 
 unit:
