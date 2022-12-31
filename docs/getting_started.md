@@ -67,15 +67,9 @@ Be sure to commit all the changes that ``make pr`` does for you.
 
 ### lambda_requirements.txt
 
-This command is used during ``make pr`` to generate a requirements.txt files for CDK Lambda layer creation (lambda_requirements.txt).
+CDK requires a requirements.txt in order to create a zip file with the Lambda layer dependencies. It's based on the project's poetry.lock file.
 
-CDK requires a requirements.txt in order to create a zip file with the Lambda layer dependencies. It's based on the project's Pipfile.lock file.
-
-Due to a bug in CDK zip creation, it doesn't work with Pipfile.lock file but only with lambda_requirements.txt.
-
-This command will generate the required file out of the Pipfile.lock file. It's important to commit this file when you update your Pipfile.
-
-Make sure to run  ``make pr`` or ``make deploy`` or so the file is updated.
+``make deploy` command will generate it automatically for you.
 
 ### dev_requirements.txt
 
@@ -83,4 +77,4 @@ This file is used during GitHub CI to install all the required Python libraries 
 
 File contents are created out of the Pipfile.lock.
 
-Make sure to run  ``make pr`` or ``make deploy`` so the file is updated.
+``make deploy`` ``make deps`` commands generate it automatically.
