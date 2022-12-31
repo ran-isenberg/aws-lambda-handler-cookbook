@@ -7,12 +7,12 @@ description: AWS Lambda Cookbook Project Getting started
 * **Docker** - install [Docker](https://www.docker.com/){target="_blank"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack.
 * Python 3.9
-* [pipenv](https://pypi.org/project/pipenv/){target="_blank"} - Make sure to set your terminal environment variable 'PIPENV_VENV_IN_PROJECT' to true, so all dependencies are installed in the project '.venv' folder.
+* [poetry](https://pypi.org/project/poetry/){target="_blank"} - Make sure to run ``poetry config --local virtualenvs.in-project true`` so all dependencies are installed in the project '.venv' folder.
 * For Windows based machines, use the Makefile_windows version (rename to Makefile). Default Makefile is for Mac/Linux.
 
 ## **Creating a Developer Environment**
 
-1. Run ``pipenv shell``
+1. Run ``poetry shell`
 1. Run ``make dev``
 
 ## **Deploy CDK**
@@ -79,7 +79,7 @@ Make sure to run  ``make pr`` or ``make deploy`` or so the file is updated.
 
 ### dev_requirements.txt
 
-This file is used during GitHub CI to install all the required Python libraries without using pipenv.
+This file is used during GitHub CI to install all the required Python libraries without using poetry.
 
 File contents are created out of the Pipfile.lock.
 
