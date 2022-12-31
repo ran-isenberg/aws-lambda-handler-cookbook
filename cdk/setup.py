@@ -7,7 +7,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='service-cdk',
-    version='2.2',
+    version='3.0',
     description='CDK code for deploying an AWS Lambda handler that implements the best practices described at https://www.ranthebuilder.cloud',
     classifiers=[
         'Intended Audience :: Developers',
