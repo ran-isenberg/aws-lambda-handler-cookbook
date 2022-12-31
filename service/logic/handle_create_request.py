@@ -19,13 +19,13 @@ def handle_create_request(customer_name: str, order_item_count: int, table_name:
 
     # feature flags example
     config_store = get_dynamic_configuration_store()
-    campaign: bool = config_store.evaluate(
+    campaign = config_store.evaluate(
         name=FeatureFlagsNames.TEN_PERCENT_CAMPAIGN.value,
         context={},
         default=False,
     )
     logger.debug('campaign feature flag value', extra={'campaign': campaign})
-    premium: bool = config_store.evaluate(
+    premium = config_store.evaluate(
         name=FeatureFlagsNames.PREMIUM.value,
         context={'customer_name': customer_name},
         default=False,
@@ -43,7 +43,7 @@ def _get_db_handler(table_name: str) -> Table:
     return dynamodb.Table(table_name)
 
 
-def _create_order_in_db(table_name: str, customer_name: str, order_item_count: str):
+def _create_order_in_db(table_name: str, customer_name: str, order_item_count: int):
     order_id = str(uuid.uuid4())
     try:
         table: Table = _get_db_handler(table_name)

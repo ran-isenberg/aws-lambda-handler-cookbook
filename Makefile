@@ -9,6 +9,8 @@ dev:
 lint:
 	@echo "Running flake8"
 	flake8 service/* cdk/* tests/* docs/examples/* --exclude patterns='build,cdk.json,cdk.context.json,.yaml'
+	@echo "Running mypy"
+	make mypy-lint
 
 complex:
 	@echo "Running Radon"
@@ -21,6 +23,9 @@ sort:
 
 pre-commit:
 	pre-commit run -a --show-diff-on-failure
+
+mypy-lint:
+	mypy --pretty service docs/examples cdk
 
 deps:
 	pipenv requirements --dev > dev_requirements.txt
@@ -47,10 +52,10 @@ deploy:
 	make deps
 	mkdir -p .build/lambdas ; cp -r service .build/lambdas
 	mkdir -p .build/common_layer ; pipenv requirements > .build/common_layer/requirements.txt
-	cdk deploy --app="python3 ${PWD}/cdk/my_service/app.py" --require-approval=never
+	cdk deploy --app="python3 ${PWD}/cdk/app.py" --require-approval=never
 
 destroy:
-	cdk destroy --app="python3 ${PWD}/cdk/my_service/app.py" --force
+	cdk destroy --app="python3 ${PWD}/cdk/app.py" --force
 
 docs:
 	mkdocs serve

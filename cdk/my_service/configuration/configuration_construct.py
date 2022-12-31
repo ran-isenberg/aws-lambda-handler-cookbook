@@ -3,7 +3,7 @@ from typing import Optional
 
 import aws_cdk.aws_appconfig as appconfig
 from constructs import Construct
-from my_service.service_stack.configuration.schema import FeatureFlagsConfiguration
+from my_service.configuration.schema import FeatureFlagsConfiguration
 
 DEFAULT_DEPLOYMENT_STRATEGY = 'AppConfig.AllAtOnce'
 

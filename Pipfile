@@ -23,6 +23,8 @@ boto3 = "*"
 mkdocs-material = "*"
 mkdocs-git-revision-date-plugin = "*"
 setuptools = ">=65.5.1"
+types-cachetools = "*"
+mypy = "*"
 
 [packages]
 aws-lambda-powertools= {extras = ["all"],version = "*"}

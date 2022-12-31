@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from cdk.my_service.service_stack.service_stack import get_stack_name
+from cdk.my_service.service_stack import get_stack_name
 
 
 def generate_context() -> LambdaContext:

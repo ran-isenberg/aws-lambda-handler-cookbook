@@ -15,20 +15,20 @@ from service.handlers.utils.observability import logger
 @init_environment_variables(model=MyHandlerEnvVars)
 def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     try:
-        my_configuration: MyConfiguration = parse_configuration(model=MyConfiguration)
+        my_configuration: MyConfiguration = parse_configuration(model=MyConfiguration)  # type: ignore
         logger.debug('fetched dynamic configuration', extra={'configuration': my_configuration.dict()})
     except (SchemaValidationError, ConfigurationStoreError) as exc:
         logger.exception(f'dynamic configuration error, error={str(exc)}')
         return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})
 
-    campaign: bool = get_dynamic_configuration_store().evaluate(
+    campaign = get_dynamic_configuration_store().evaluate(
         name='ten_percent_off_campaign',
         context={},
         default=False,
     )
     logger.debug('campaign feature flag value', extra={'campaign': campaign})
 
-    premium: bool = get_dynamic_configuration_store().evaluate(
+    premium = get_dynamic_configuration_store().evaluate(
         name='premium_features',
         context={'customer_name': 'RanTheBuilder'},
         default=False,
