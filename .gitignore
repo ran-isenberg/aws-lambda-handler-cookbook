@@ -246,3 +246,5 @@ $RECYCLE.BIN/
 cdk.out
 .build
 .vscode
+dev_requirements.txt
+lambda_requirements.txt
