@@ -3,8 +3,10 @@
 
 
 dev:
-	pipenv install -d
+	pip install --upgrade pip pre-commit poetry
 	make deps
+	pre-commit install
+	poetry shell
 
 lint:
 	@echo "Running flake8"
@@ -28,8 +30,8 @@ mypy-lint:
 	mypy --pretty service docs/examples cdk tests
 
 deps:
-	pipenv requirements --dev > dev_requirements.txt
-	pipenv requirements  > lambda_requirements.txt
+	poetry export --only=dev --without-hashes --format=requirements.txt > dev_requirements.txt
+	poetry export --without=dev --without-hashes --format=requirements.txt > lambda_requirements.txt
 
 unit:
 	pytest tests/unit  --cov-config=.coveragerc --cov=service --cov-report xml
@@ -51,7 +53,7 @@ pipeline-tests:
 deploy:
 	make deps
 	mkdir -p .build/lambdas ; cp -r service .build/lambdas
-	mkdir -p .build/common_layer ; pipenv requirements > .build/common_layer/requirements.txt
+	mkdir -p .build/common_layer ; poetry export --without=dev --without-hashes --format=requirements.txt > .build/common_layer/requirements.txt
 	cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
 
 destroy:

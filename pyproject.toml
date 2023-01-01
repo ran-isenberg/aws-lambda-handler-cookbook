@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "aws_lambda_handler_cookbook"
+version = "3.0.0"
+description = "This repository provides a working, deployable, open source based, AWS Lambda handler and CDK Python code. This handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler"
+authors = ["Ran Isenberg"]
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.9",
+]
+repository="https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
+readme = "README.md"
+keywords = ["aws lambda cookbook", "guide to aws lambda", "cdk template", "best practices", "serverless service template"]
+license = "MIT-0"
+
+[tool.poetry.dependencies]
+python = "^3.9.13"
+pydantic = {version = "^1.9.0"}
+email-validator = {version = "*"}
+aws-lambda-powertools =  {extras = ["all"],version = "*"}
+mypy-boto3-dynamodb = "*"
+cachetools = "*"
+
+
+[tool.poetry.dev-dependencies]
+service-cdk = {path = "cdk", develop = true}
+pytest = "*"
+pytest-mock = "*"
+pycodestyle = "*"
+pytest-cov = "*"
+pytest-html = "*"
+python-dateutil = "*"
+python-dotenv = "*"
+GitPython = "*"
+yapf = "*"
+radon = "*"
+xenon = "*"
+pre-commit = "*"
+flake8 = "*"
+isort = "*"
+boto3 = "*"
+mkdocs-material = "*"
+mkdocs-git-revision-date-plugin = "*"
+types-cachetools = "*"
+mypy = "*"
+types-requests = "*"
+toml = "*"
