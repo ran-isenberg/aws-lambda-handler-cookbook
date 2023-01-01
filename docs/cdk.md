@@ -20,7 +20,9 @@ The AWS Lambda handler uses a Lambda layer optimization which takes all the pack
 
 This allows you to package any custom dependencies you might have.
 
-In order to add a new dependency, add it to the Pipfile under the [packages] section and run ``poetry update -vvv`` and then ``make deps``.
+In order to add a new dev dependency, add it to the Pipfile under the [tool.poetry.dependencies] section and run ``poetry update -vvv``.
+
+In order to add a new Lambda runtime dependency, add it to the Pipfile under the [tool.poetry.dependencies] section and run ``poetry update -vvv``.
 
 ### **CDK Constants**
 
