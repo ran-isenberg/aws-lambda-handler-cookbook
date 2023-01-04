@@ -83,3 +83,14 @@ extra:
   analytics:
     provider: google
     property: G-VN803S5YZ3
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/ran-isenberg/aws-lambda-handler-cookbook
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/IsenbergRan
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/ranisenberg/
+    - icon: fontawesome/brands/medium
+      link: https://medium.com/@isenberg-ran
+    - icon: fontawesome/solid/globe
+      link: https://www.ranthebuilder.cloud
