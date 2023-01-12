@@ -38,12 +38,12 @@ All ASW Lambda function configurations are saved as constants at the `cdk.my_ser
 ### **Deployed Resources**
 
 - AWS Cloudformation stack: **cdk.my_service.service_stack.py** which is consisted of one construct
-- Construct: **cdk.my_service.service_construct.py** which includes:
+- Construct: **cdk.my_service.api_construct.py** which includes:
     - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more about it in Yan - Cui's [blog](https://medium.com/theburningmonk-com/lambda-layer-not-a-package-manager-but-a-deployment-optimization-85ddcae40a96){:target="_blank" rel="noopener"}
     - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     - **Lambda Role** - The role of the Lambda function.
     - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/orders that triggers the Lambda function.
-    - **AWS DynamoDB table** - stores request data
+    - **AWS DynamoDB table** - stores request data. Created in its own construct: api_db_construct.py
 
 ### **CDK Tests**
 

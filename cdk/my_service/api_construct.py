@@ -7,6 +7,7 @@ from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
 
 import cdk.my_service.constants as constants
+from my_service.api_db_construct import ApiDbConstruct
 
 
 class ApiConstruct(Construct):
@@ -14,26 +15,12 @@ class ApiConstruct(Construct):
     def __init__(self, scope: Construct, id_: str, appconfig_app_name: str) -> None:
         super().__init__(scope, id_)
 
-        self.db = self._build_db(id_)
-        self.lambda_role = self._build_lambda_role(self.db)
+        self.api_db = ApiDbConstruct(self, f'{id_}db')
+        self.lambda_role = self._build_lambda_role(self.api_db.db)
         self.common_layer = self._build_common_layer()
         self.rest_api = self._build_api_gw()
         api_resource: aws_apigateway.Resource = self.rest_api.root.add_resource('api').add_resource(constants.GW_RESOURCE)
-        self.__add_post_lambda_integration(api_resource, self.lambda_role, self.db, appconfig_app_name)
-
-    def _build_db(self, id_prefix: str) -> dynamodb.Table:
-        table_id = f'{id_prefix}{constants.TABLE_NAME}'
-        table = dynamodb.Table(
-            self,
-            table_id,
-            table_name=table_id,
-            partition_key=dynamodb.Attribute(name='order_id', type=dynamodb.AttributeType.STRING),
-            billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
-            point_in_time_recovery=True,
-            removal_policy=RemovalPolicy.DESTROY,
-        )
-        CfnOutput(self, id=constants.TABLE_NAME_OUTPUT, value=table.table_name).override_logical_id(constants.TABLE_NAME_OUTPUT)
-        return table
+        self._add_post_lambda_integration(api_resource, self.lambda_role, self.api_db.db, appconfig_app_name)
 
     def _build_api_gw(self) -> aws_apigateway.RestApi:
         rest_api: aws_apigateway.RestApi = aws_apigateway.RestApi(
@@ -50,7 +37,7 @@ class ApiConstruct(Construct):
     def _build_lambda_role(self, db: dynamodb.Table) -> iam.Role:
         return iam.Role(
             self,
-            constants.SERVICE_ROLE,
+            'ServiceRole',
             assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
             inline_policies={
                 'dynamic_configuration':
@@ -62,12 +49,10 @@ class ApiConstruct(Construct):
                         )
                     ]),
                 'dynamodb_db':
-                    iam.PolicyDocument(
-                        statements=[iam.PolicyStatement(actions=['dynamodb:PutItem'], resources=[db.table_arn], effect=iam.Effect.ALLOW)]),
+                    iam.PolicyDocument(statements=[
+                        iam.PolicyStatement(actions=['dynamodb:PutItem', 'dynamodb:GetItem'], resources=[db.table_arn], effect=iam.Effect.ALLOW)
+                    ]),
             },
-            managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name=(f'service-role/{constants.LAMBDA_BASIC_EXECUTION_ROLE}'))
-            ],
         )
 
     def _build_common_layer(self) -> PythonLayerVersion:
@@ -79,7 +64,7 @@ class ApiConstruct(Construct):
             removal_policy=RemovalPolicy.DESTROY,
         )
 
-    def __add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str):
+    def _add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str):
         lambda_function = _lambda.Function(
             self,
             'ServicePost',
