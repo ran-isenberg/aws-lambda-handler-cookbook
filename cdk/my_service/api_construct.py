@@ -5,9 +5,9 @@ from aws_cdk import aws_lambda as _lambda
 from aws_cdk import aws_logs
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from constructs import Construct
+from my_service.api_db_construct import ApiDbConstruct  # type: ignore
 
 import cdk.my_service.constants as constants
-from my_service.api_db_construct import ApiDbConstruct
 
 
 class ApiConstruct(Construct):
