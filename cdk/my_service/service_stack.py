@@ -4,10 +4,10 @@ from pathlib import Path
 from aws_cdk import Stack
 from constructs import Construct
 from git import Repo
+from my_service.api_construct import ApiConstruct  # type: ignore
 
 from cdk.my_service.configuration.configuration_construct import ConfigurationStore
 from cdk.my_service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
-from cdk.my_service.service_construct import ApiConstruct
 
 
 def get_stack_name() -> str:
