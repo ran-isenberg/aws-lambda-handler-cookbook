@@ -46,7 +46,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - CI/CD pipelines based on Github actions that deploys to AWS with python linters, static code analysis, complexity checks and style formatters.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 - AWS Lambda handler uses [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/).
-- Unit, integration and E2E tests.
+- Unit, integration, E2E tests, security tests and infra tests.
 
 
 ## CDK Deployment
