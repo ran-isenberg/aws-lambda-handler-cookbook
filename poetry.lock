@@ -842,14 +842,14 @@ mkdocs = ">=0.17"
 
 [[package]]
 name = "mkdocs-material"
-version = "9.0.3"
+version = "9.0.6"
 description = "Documentation that simply works"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "mkdocs_material-9.0.3-py3-none-any.whl", hash = "sha256:cedbbf84e156370489907d3c5b79999fcf6563f61a96965ec4c2513d303fa706"},
-    {file = "mkdocs_material-9.0.3.tar.gz", hash = "sha256:918fe38f504ca397b388b6c45445c22cb9acab61f00ade78d5f3edf299b6c9df"},
+    {file = "mkdocs_material-9.0.6-py3-none-any.whl", hash = "sha256:4a71195ddc100dddf07d4b23b53373f36c5f0f1010fa4ea301ca7a8e949dd9e7"},
+    {file = "mkdocs_material-9.0.6.tar.gz", hash = "sha256:6065b573e38746dc267d7fc84252be31b73da955b2ce553687806b6030e51ee0"},
 ]
 
 [package.dependencies]
@@ -859,7 +859,7 @@ markdown = ">=3.2"
 mkdocs = ">=1.4.2"
 mkdocs-material-extensions = ">=1.1"
 pygments = ">=2.14"
-pymdown-extensions = ">=9.9"
+pymdown-extensions = ">=9.9.1"
 regex = ">=2022.4.24"
 requests = ">=2.26"
 
