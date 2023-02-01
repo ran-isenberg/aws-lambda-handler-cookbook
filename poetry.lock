@@ -112,14 +112,14 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "2.7.0"
+version = "2.7.1"
 description = "A suite of utilities for AWS Lambda functions to ease adopting best practices such as tracing, structured logging, custom metrics, batching, idempotency, feature flags, and more."
 category = "main"
 optional = false
 python-versions = ">=3.7.4,<4.0.0"
 files = [
-    {file = "aws_lambda_powertools-2.7.0-py3-none-any.whl", hash = "sha256:bcdea36775351d7fed22596c855ef7d875c7c99c9b607c0922af208cf137665e"},
-    {file = "aws_lambda_powertools-2.7.0.tar.gz", hash = "sha256:6d5073835fa569c0cb50c792bc4501cf802badf13f08f394703c707cd4c937a5"},
+    {file = "aws_lambda_powertools-2.7.1-py3-none-any.whl", hash = "sha256:7d725bb9e35a08b6c419b3df46776f8944e19e1e17f8313c93110a4804f81fbf"},
+    {file = "aws_lambda_powertools-2.7.1.tar.gz", hash = "sha256:e4f4eb92ae1298ad34ae8b9738be4d089ca8413ae16189022aa8a4c8b36ea4c3"},
 ]
 
 [package.dependencies]
