@@ -4,7 +4,9 @@
         "Codecov",
         "getuid",
         "mkdocs",
+        "mypy",
         "ranisenberg",
-        "runtimes"
+        "runtimes",
+        "yapf"
     ]
 }
