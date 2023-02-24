@@ -18,6 +18,7 @@ All steps can be run locally using the makefile. See details below:
 - Python formatter Yapf as defined in `.style`  - run `make yapf` in the IDE
 - Python complexity checks: radon and xenon  - run `make complex` in the IDE
 - Unit tests. Run `make unit` to run unit tests in the IDE
+- Infrastructure test. Run `make infra-tests` to run the CDK & security infrastructure tests in the IDE
 - Code coverage by [codecov.io](https://about.codecov.io/)
 - Deploy CDK - not run in GitHub yet (add your own AWS secrets), can be run locally at this moment - run `make deploy` in the IDE
 - E2E tests  - not run in GitHub yet (add your own AWS secrets), can be run locally at this moment - run `make e2e` in the IDE

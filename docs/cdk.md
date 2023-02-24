@@ -6,7 +6,8 @@ description: AWS Lambda Cookbook CDK Project
 
 - Follow this [getting started with CDK guide](https://docs.aws.amazon.com/cdk/v1/guide/getting_started.html){:target="_blank" rel="noopener"}
 - Make sure your AWS account and machine can deploy an AWS Cloudformation stack and have all the tokens and configuration as described in the page above.
-- CDK Best practices [blog](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
+- CDK Best practices [blog](https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches){:target="_blank" rel="noopener"}
+- Lambda layers best practices [blog](https://www.ranthebuilder.cloud/post/aws-lambda-layers-best-practice){:target="_blank" rel="noopener"}
 
 ## **CDK Deployment**
 
@@ -39,16 +40,16 @@ All ASW Lambda function configurations are saved as constants at the `cdk.my_ser
 
 - AWS Cloudformation stack: **cdk.my_service.service_stack.py** which is consisted of one construct
 - Construct: **cdk.my_service.api_construct.py** which includes:
-    - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more about it in Yan - Cui's [blog](https://medium.com/theburningmonk-com/lambda-layer-not-a-package-manager-but-a-deployment-optimization-85ddcae40a96){:target="_blank" rel="noopener"}
+    - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more about it [here.](https://www.ranthebuilder.cloud/post/aws-lambda-layers-best-practice){:target="_blank" rel="noopener"}
     - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     - **Lambda Role** - The role of the Lambda function.
     - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/orders that triggers the Lambda function.
     - **AWS DynamoDB table** - stores request data. Created in its own construct: api_db_construct.py
 
-### **CDK Tests**
+### **Infrastructure CDK & Security Tests**
 
-Under E2E tests there is a folder `test_infra` for infrastructure tests.
+Under tests there is an `infrastructure` folder for CDK & security infrastructure tests.
 
-First test 'test_cdk' uses CDK's testing framework which asserts that required resources exists so the application will not break anything upon deployment.
+The first test, 'test_cdk' uses CDK's testing framework which asserts that required resources exists so the application will not break anything upon deployment.
 
-Second test 'test_cdk_nag' checks your cloudformation output for security best practices. For more information click [here](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/check-aws-cdk-applications-or-cloudformation-templates-for-best-practices-by-using-cdk-nag-rule-packs.html){:target="_blank" rel="noopener"}.
+The second test, 'test_cdk_nag' checks your cloudformation output for security best practices. For more information click [here](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/check-aws-cdk-applications-or-cloudformation-templates-for-best-practices-by-using-cdk-nag-rule-packs.html){:target="_blank" rel="noopener"}.

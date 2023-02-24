@@ -1,4 +1,4 @@
-.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit integration e2e pipeline-tests docs lint-docs
+.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit infra-tests integration e2e pipeline-tests docs lint-docs
 
 
 
@@ -35,6 +35,9 @@ deps:
 
 unit:
 	pytest tests/unit  --cov-config=.coveragerc --cov=service --cov-report xml
+
+infra-tests:
+	pytest tests/infrastructure
 
 integration:
 	pytest tests/integration  --cov-config=.coveragerc --cov=service --cov-report xml

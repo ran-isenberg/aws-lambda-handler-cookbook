@@ -2,6 +2,7 @@ import json
 from http import HTTPStatus
 from typing import Any, Dict
 
+import boto3
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 from botocore.exceptions import ClientError
 
@@ -43,16 +44,22 @@ def mock_exception_dynamic_configuration(mocker) -> None:
     mocker.patch('aws_lambda_powertools.utilities.parameters.AppConfigProvider.get', side_effect=SchemaValidationError('error'))
 
 
-def test_handler_200_ok(mocker):
+def test_handler_200_ok(mocker, table_name: str):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = 'RanTheBuilder'
     body = Input(customer_name=customer_name, order_item_count=5, tier='premium')
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
+    # assert response
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
     assert body_dict['order_id']
     assert body_dict['customer_name'] == customer_name
     assert body_dict['order_item_count'] == 5
+    # assert side effect - DynamoDB table
+    dynamodb_table = boto3.resource('dynamodb').Table(table_name)
+    response = dynamodb_table.get_item(Key={'order_id': body_dict['order_id']})
+    assert 'Item' in response  # order was found
+    assert response['Item']['customer_name'] == customer_name
 
 
 def test_internal_server_error(mocker):
