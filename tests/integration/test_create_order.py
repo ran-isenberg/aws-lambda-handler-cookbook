@@ -61,7 +61,7 @@ def test_handler_200_ok(mocker, table_name: str):
     response = dynamodb_table.get_item(Key={'order_id': body_dict['order_id']})
     assert 'Item' in response  # order was found
     assert response['Item']['customer_name'] == customer_name
-    assert response['Item']['order_item_count'] == order_item_count
+    assert response['Item']['count'] == order_item_count
 
 
 def test_internal_server_error(mocker):
