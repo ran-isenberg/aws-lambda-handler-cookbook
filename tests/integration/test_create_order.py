@@ -47,7 +47,8 @@ def mock_exception_dynamic_configuration(mocker) -> None:
 def test_handler_200_ok(mocker, table_name: str):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = 'RanTheBuilder'
-    body = Input(customer_name=customer_name, order_item_count=5, tier='premium')
+    order_item_count = 5
+    body = Input(customer_name=customer_name, order_item_count=order_item_count, tier='premium')
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
     # assert response
     assert response['statusCode'] == HTTPStatus.OK
@@ -60,6 +61,7 @@ def test_handler_200_ok(mocker, table_name: str):
     response = dynamodb_table.get_item(Key={'order_id': body_dict['order_id']})
     assert 'Item' in response  # order was found
     assert response['Item']['customer_name'] == customer_name
+    assert response['Item']['count'] == order_item_count
 
 
 def test_internal_server_error(mocker):
