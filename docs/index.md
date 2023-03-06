@@ -56,20 +56,6 @@ The utilities cover multiple aspects of a production-ready service, including:
 
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
 
-## **The Blog Series**
-
-The template is based on my AWS Lambda handler cookbook blog series that I published at [ranthebuilder.cloud](https://www.ranthebuilder.cloud).
-
-- [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}
-- [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}
-- [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
-- [Environment Variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
-- [Input Validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation){:target="_blank" rel="noopener"}
-- [Dynamic Configuration & feature flags](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}
-- [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project){:target="_blank" rel="noopener"}
-- [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
-- [Serverless Testing Best practices](https://www.ranthebuilder.cloud/post/guide-to-serverless-lambda-testing-best-practices-part-1){:target="_blank" rel="noopener"}
-
 ## **License**
 
 This library is licensed under the MIT License. See the [LICENSE](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/LICENSE) file.
