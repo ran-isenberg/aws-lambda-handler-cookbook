@@ -14,13 +14,10 @@ Starting a Serverless service can be overwhelming. You need to figure out many q
 - How to write a SaaS-oriented CI/CD pipeline? What does it need to contain?
 - How do you handle observability, logging, tracing, metrics?
 - How do you handle testing?
-- What makes an AWS Lambda handler resilient, traceable, and easy to maintain? How do you write such a code?
 
 ## **The Solution**
 
-This project aims to reduce cognitive load and answer these questions for you by providing a skeleton Python Serverless service template
-
-that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
+This project aims to reduce cognitive load and answer these questions for you by providing a skeleton Python Serverless service template that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
 
 ### Serverless Service - The Order service
 
@@ -35,9 +32,10 @@ that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in 
 - Python Serverless service with a recommended file structure.
 - CDK infrastructure with infrastructure tests and security tests.
 - CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
+- Makefile for simple developer experience.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 - AWS Lambda handler uses [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/){:target="_blank" rel="noopener"}.
-- Unit, integration and E2E tests.
+- Unit, infrastructure, integration and E2E tests.
 
 The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
@@ -70,6 +68,7 @@ The template is based on my AWS Lambda handler cookbook blog series that I publi
 - [Dynamic Configuration & feature flags](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}
 - [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project){:target="_blank" rel="noopener"}
 - [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}
+- [Serverless Testing Best practices](https://www.ranthebuilder.cloud/post/guide-to-serverless-lambda-testing-best-practices-part-1){:target="_blank" rel="noopener"}
 
 ## **License**
 
