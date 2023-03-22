@@ -48,7 +48,7 @@ def test_handler_200_ok(mocker, table_name: str):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = 'RanTheBuilder'
     order_item_count = 5
-    body = Input(customer_name=customer_name, order_item_count=order_item_count, tier='premium')
+    body = Input(customer_name=customer_name, order_item_count=order_item_count)
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
     # assert response
     assert response['statusCode'] == HTTPStatus.OK
@@ -71,7 +71,7 @@ def test_internal_server_error(mocker):
 
     db_mock = mocker.patch('service.logic.handle_create_request._get_db_handler')
     db_mock.side_effect = db_mock_function
-    body = Input(customer_name='RanTheBuilder', order_item_count=5, tier='premium')
+    body = Input(customer_name='RanTheBuilder', order_item_count=5)
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
     db_mock.assert_called
