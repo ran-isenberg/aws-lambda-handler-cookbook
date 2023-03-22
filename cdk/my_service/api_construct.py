@@ -29,6 +29,7 @@ class ApiConstruct(Construct):
             rest_api_name='Service Rest API',
             description='This service handles /api/orders requests',
             deploy_options=aws_apigateway.StageOptions(throttling_rate_limit=2, throttling_burst_limit=10),
+            cloud_watch_role=False,
         )
 
         CfnOutput(self, id=constants.APIGATEWAY, value=rest_api.url).override_logical_id(constants.APIGATEWAY)
