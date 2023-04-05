@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from aws_cdk import Stack
+from aws_cdk import Stack, Tags
 from constructs import Construct
 from git import Repo
 from my_service.api_construct import ApiConstruct  # type: ignore
@@ -27,6 +27,7 @@ class ServiceStack(Stack):
 
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
+        Tags.of(self).add('service_name', 'Order')
 
         # This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled
         # from running the service pipeline and without redeploying the service lambdas. For the sake of this template
