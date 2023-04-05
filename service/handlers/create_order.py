@@ -16,7 +16,7 @@ from service.handlers.utils.http_responses import build_response
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.logic.handle_create_request import handle_create_request
 from service.schemas.exceptions import InternalServerException
-from service.schemas.output import Output
+from service.schemas.output import CreateOrderOutput
 
 
 @init_environment_variables(model=MyHandlerEnvVars)
@@ -45,7 +45,7 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
 
     metrics.add_metric(name='ValidEvents', unit=MetricUnit.Count, value=1)
     try:
-        response: Output = handle_create_request(
+        response: CreateOrderOutput = handle_create_request(
             customer_name=input.customer_name,
             order_item_count=input.order_item_count,
             table_name=env_vars.TABLE_NAME,

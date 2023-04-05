@@ -61,7 +61,7 @@ def test_handler_200_ok(mocker, table_name: str):
     response = dynamodb_table.get_item(Key={'order_id': body_dict['order_id']})
     assert 'Item' in response  # order was found
     assert response['Item']['customer_name'] == customer_name
-    assert response['Item']['count'] == order_item_count
+    assert response['Item']['order_item_count'] == order_item_count
 
 
 def test_internal_server_error(mocker):
@@ -69,7 +69,7 @@ def test_internal_server_error(mocker):
     def db_mock_function(table_name: str):
         raise ClientError(error_response={}, operation_name='put_item')
 
-    db_mock = mocker.patch('service.logic.handle_create_request._get_db_handler')
+    db_mock = mocker.patch('service.dal.db_handler._get_db_handler')
     db_mock.side_effect = db_mock_function
     body = Input(customer_name='RanTheBuilder', order_item_count=5)
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
