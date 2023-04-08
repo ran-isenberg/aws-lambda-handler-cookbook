@@ -1,4 +1,4 @@
-.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit infra-tests integration e2e pipeline-tests docs lint-docs build
+.PHONY: dev lint complex coverage pre-commit synth yapf sort deploy destroy deps unit infra-tests integration e2e pipeline-tests docs lint-docs build
 
 
 
@@ -65,6 +65,10 @@ deploy:
 
 destroy:
 	cdk destroy --app="python3 ${PWD}/app.py" --force
+
+synth:
+	cdk synth --app="python3 ${PWD}/app.py"
+	find ${PWD}/cdk.out -name "*.template.json" -print -quit | xargs -I{} mv "{}" ${PWD}/iac.json
 
 docs:
 	mkdocs serve
