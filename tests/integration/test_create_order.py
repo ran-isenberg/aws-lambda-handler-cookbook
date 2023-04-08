@@ -4,8 +4,9 @@ from typing import Any, Dict
 
 import boto3
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
-from botocore.exceptions import ClientError
+from botocore.stub import Stubber
 
+from service.dal.dynamo_dal_handler import DynamoDalHandler
 from service.handlers.create_order import create_order
 from service.handlers.schemas.input import Input
 from tests.utils import generate_api_gw_event, generate_context
@@ -64,17 +65,15 @@ def test_handler_200_ok(mocker, table_name: str):
     assert response['Item']['order_item_count'] == order_item_count
 
 
-def test_internal_server_error(mocker):
-
-    def db_mock_function(table_name: str):
-        raise ClientError(error_response={}, operation_name='put_item')
-
-    db_mock = mocker.patch('service.dal.db_handler._get_db_handler')
-    db_mock.side_effect = db_mock_function
+def test_internal_server_error():
+    db_handler: DynamoDalHandler = DynamoDalHandler('table')
+    table = db_handler._get_db_handler()
+    stubber = Stubber(table.meta.client)
+    stubber.add_client_error(method='put_item', service_error_code='ValidationException')
+    stubber.activate()
     body = Input(customer_name='RanTheBuilder', order_item_count=5)
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
-    db_mock.assert_called
 
 
 def test_handler_bad_request(mocker):

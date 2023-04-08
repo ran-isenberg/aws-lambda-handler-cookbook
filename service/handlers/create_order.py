@@ -43,7 +43,7 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
         logger.error('event failed input validation', extra={'error': str(exc)})
         return build_response(http_status=HTTPStatus.BAD_REQUEST, body={})
 
-    metrics.add_metric(name='ValidEvents', unit=MetricUnit.Count, value=1)
+    metrics.add_metric(name='ValidCreateOrderEvents', unit=MetricUnit.Count, value=1)
     try:
         response: CreateOrderOutput = handle_create_request(
             customer_name=input.customer_name,
