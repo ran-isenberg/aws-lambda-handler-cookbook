@@ -1,17 +1,15 @@
 import pytest
-from botocore.exceptions import ClientError
+from botocore.stub import Stubber
 
-from service.dal.db_handler import create_order_in_db
+from service.dal.dynamo_dal_handler import DynamoDalHandler
 from service.schemas.exceptions import InternalServerException
 
 
-def test_raise_exception(mocker):
-
-    def db_mock_function(table_name: str):
-        raise ClientError(error_response={}, operation_name='put_item')
-
-    db_mock = mocker.patch('service.dal.db_handler._get_db_handler')
-    db_mock.side_effect = db_mock_function
+def test_raise_exception():
+    db_handler: DynamoDalHandler = DynamoDalHandler('table')
+    table = db_handler._get_db_handler()
+    stubber = Stubber(table.meta.client)
+    stubber.add_client_error(method='put_item', service_error_code='ValidationException')
+    stubber.activate()
     with pytest.raises(InternalServerException):
-        create_order_in_db(table_name='table', customer_name='customer', order_item_count=5)
-    db_mock.assert_called
+        db_handler.create_order_in_db(customer_name='customer', order_item_count=5)
