@@ -67,6 +67,7 @@ destroy:
 	cdk destroy --app="python3 ${PWD}/app.py" --force
 
 synth:
+	make build
 	cdk synth --app="python3 ${PWD}/app.py"
 	find ${PWD}/cdk.out -name "*.template.json" -print -quit | xargs -I{} mv "{}" ${PWD}/iac.json
 

@@ -58,7 +58,6 @@ jobs:
       - name: synth CloudFormation
         run: |
           make synth
-      - uses: actions/checkout@v3
       - name: Run Snyk to check configuration files for security issues
         # Snyk can be used to break the build when it detects security issues.
         # In this case we want to upload the issues to GitHub Code Scanning
