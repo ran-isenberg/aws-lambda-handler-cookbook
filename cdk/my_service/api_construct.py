@@ -54,6 +54,9 @@ class ApiConstruct(Construct):
                         iam.PolicyStatement(actions=['dynamodb:PutItem', 'dynamodb:GetItem'], resources=[db.table_arn], effect=iam.Effect.ALLOW)
                     ]),
             },
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name=(f'service-role/{constants.LAMBDA_BASIC_EXECUTION_ROLE}'))
+            ],
         )
 
     def _build_common_layer(self) -> PythonLayerVersion:
