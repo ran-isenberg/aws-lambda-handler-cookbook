@@ -38,7 +38,7 @@ class ApiConstruct(Construct):
     def _build_lambda_role(self, db: dynamodb.Table) -> iam.Role:
         return iam.Role(
             self,
-            'ServiceRole',
+            constants.SERVICE_ROLE_ARN,
             assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
             inline_policies={
                 'dynamic_configuration':
@@ -62,7 +62,7 @@ class ApiConstruct(Construct):
     def _build_common_layer(self) -> PythonLayerVersion:
         return PythonLayerVersion(
             self,
-            'CommonLayer',
+            constants.LAMBDA_LAYER_NAME,
             entry=constants.COMMON_LAYER_BUILD_FOLDER,
             compatible_runtimes=[_lambda.Runtime.PYTHON_3_9],
             removal_policy=RemovalPolicy.DESTROY,
@@ -71,7 +71,7 @@ class ApiConstruct(Construct):
     def _add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str):
         lambda_function = _lambda.Function(
             self,
-            'ServicePost',
+            constants.SERVICE_ROLE,
             runtime=_lambda.Runtime.PYTHON_3_9,
             code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
             handler='service.handlers.create_order.create_order',
