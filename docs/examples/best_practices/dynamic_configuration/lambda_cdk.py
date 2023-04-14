@@ -1,11 +1,12 @@
 from aws_cdk import Duration, aws_apigateway
+from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
 
 import cdk.my_service.constants as constants
 
 
-def _build_lambda_role(self) -> iam.Role:
+def _build_lambda_role(self, db: dynamodb.Table) -> iam.Role:
     return iam.Role(
         self,
         constants.SERVICE_ROLE,
@@ -13,8 +14,15 @@ def _build_lambda_role(self) -> iam.Role:
         inline_policies={
             'dynamic_configuration':
                 iam.PolicyDocument(statements=[
-                    iam.PolicyStatement(actions=['appconfig:GetLatestConfiguration', 'appconfig:StartConfigurationSession'], resources=['*'],
-                                        effect=iam.Effect.ALLOW),
+                    iam.PolicyStatement(
+                        actions=['appconfig:GetLatestConfiguration', 'appconfig:StartConfigurationSession'],
+                        resources=['*'],
+                        effect=iam.Effect.ALLOW,
+                    )
+                ]),
+            'dynamodb_db':
+                iam.PolicyDocument(statements=[
+                    iam.PolicyStatement(actions=['dynamodb:PutItem', 'dynamodb:GetItem'], resources=[db.table_arn], effect=iam.Effect.ALLOW)
                 ]),
         },
         managed_policies=[
@@ -23,7 +31,7 @@ def _build_lambda_role(self) -> iam.Role:
     )
 
 
-def _build_lambda_function(self, api_name: aws_apigateway.Resource, role: iam.Role) -> _lambda.Function:
+def _build_lambda_function(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str) -> _lambda.Function:
     return _lambda.Function(
         self,
         'ServicePost',
@@ -35,10 +43,11 @@ def _build_lambda_function(self, api_name: aws_apigateway.Resource, role: iam.Ro
             constants.POWER_TOOLS_LOG_LEVEL: 'DEBUG',  # for logger
             'REST_API': 'https://www.ranthebuilder.cloud/api',  # for env vars example
             'ROLE_ARN': 'arn:partition:service:region:account-id:resource-type:resource-id',  # for env vars example
-            'CONFIGURATION_APP': constants.SERVICE_NAME,
+            'CONFIGURATION_APP': appconfig_app_name,  # for feature flags
             'CONFIGURATION_ENV': constants.ENVIRONMENT,
             'CONFIGURATION_NAME': constants.CONFIGURATION_NAME,
             'CONFIGURATION_MAX_AGE_MINUTES': constants.CONFIGURATION_MAX_AGE_MINUTES,
+            'TABLE_NAME': db.table_name,
         },
         tracing=_lambda.Tracing.ACTIVE,
         retry_attempts=0,

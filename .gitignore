@@ -248,3 +248,4 @@ cdk.out
 .vscode
 dev_requirements.txt
 lambda_requirements.txt
+.dccache
