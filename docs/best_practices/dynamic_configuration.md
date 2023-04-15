@@ -91,7 +91,7 @@ You need to add two new settings in order to use this utility:
 
 === "cdk_lambda.py"
 
-```python hl_lines="12-17 37-40"
+```python hl_lines="15-22 46-49"
 --8<-- "docs/examples/best_practices/dynamic_configuration/lambda_cdk.py"
 ```
 

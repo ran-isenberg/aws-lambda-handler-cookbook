@@ -35,7 +35,9 @@ This project aims to reduce cognitive load and answer these questions for you by
 - Makefile for simple developer experience.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 - AWS Lambda handler uses [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/){:target="_blank" rel="noopener"}.
-- Unit, infrastructure, integration and E2E tests.
+- AWS Lambda handler 3 layer architecture: handler layer, logic layer and data access layer
+- Features flags and configuration based on AWS AppConfig
+- Unit, infrastructure, security, integration and E2E tests.
 
 The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 

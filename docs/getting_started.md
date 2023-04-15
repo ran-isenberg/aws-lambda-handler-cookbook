@@ -12,8 +12,8 @@ description: AWS Lambda Cookbook Project Getting started
 
 ## **Creating a Developer Environment**
 
-1. Run ``poetry shell`
 1. Run ``make dev``
+2. Run ``poetry install``
 
 ## **Deploy CDK**
 

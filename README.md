@@ -43,10 +43,13 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 - Python Serverless service with a recommended file structure.
 - CDK infrastructure with infrastructure tests and security tests.
-- CI/CD pipelines based on Github actions that deploys to AWS with python linters, static code analysis, complexity checks and style formatters.
+- CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
+- Makefile for simple developer experience.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
-- AWS Lambda handler uses [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/).
-- Unit, integration and E2E tests.
+- AWS Lambda handler uses [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/){:target="_blank" rel="noopener"}.
+- AWS Lambda handler 3 layer architecture: handler layer, logic layer and data access layer
+- Features flags and configuration based on AWS AppConfig
+- Unit, infrastructure, security, integration and E2E tests.
 
 
 ## CDK Deployment
