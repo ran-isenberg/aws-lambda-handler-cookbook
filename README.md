@@ -2,7 +2,7 @@
 # AWS Lambda Handler Cookbook (Python)
 
 [![license](https://img.shields.io/github/license/ran-isenberg/aws-lambda-handler-cookbook)](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/master/LICENSE)
-![PythonSupport](https://img.shields.io/static/v1?label=python&message=3.9&color=blue?style=flat-square&logo=python)
+![PythonSupport](https://img.shields.io/static/v1?label=python&message=3.10&color=blue?style=flat-square&logo=python)
 [![codecov](https://codecov.io/gh/ran-isenberg/aws-lambda-handler-cookbook/branch/main/graph/badge.svg?token=P2K7K4KICF)](https://codecov.io/gh/ran-isenberg/aws-lambda-handler-cookbook)
 ![version](https://img.shields.io/github/v/release/ran-isenberg/aws-lambda-handler-cookbook)
 ![github-star-badge](https://img.shields.io/github/stars/ran-isenberg/aws-lambda-handler-cookbook.svg?style=social)
