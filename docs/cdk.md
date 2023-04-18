@@ -46,7 +46,7 @@ All ASW Lambda function configurations are saved as constants at the `cdk.my_ser
     - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/orders that triggers the Lambda function.
     - **AWS DynamoDB table** - stores request data. Created in its own construct: api_db_construct.py
 - Construct: **cdk.my_service.configuration.configuration_construct.py** which includes:
-  - AWS AppConfig configuration with an environment, application, configuration and deployment strategy. You can read more about it [here.](best_practices/dynamic_configuration.md)
+    - AWS AppConfig configuration with an environment, application, configuration and deployment strategy. You can read more about it [here.](best_practices/dynamic_configuration.md)
 
 ### **Infrastructure CDK & Security Tests**
 
