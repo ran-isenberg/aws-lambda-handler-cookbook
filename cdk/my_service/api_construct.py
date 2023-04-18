@@ -64,7 +64,7 @@ class ApiConstruct(Construct):
             self,
             constants.LAMBDA_LAYER_NAME,
             entry=constants.COMMON_LAYER_BUILD_FOLDER,
-            compatible_runtimes=[_lambda.Runtime.PYTHON_3_10],
+            compatible_runtimes=[_lambda.Runtime.PYTHON_3_10, _lambda.Runtime.PYTHON_3_9],
             removal_policy=RemovalPolicy.DESTROY,
         )
 
@@ -72,7 +72,7 @@ class ApiConstruct(Construct):
         lambda_function = _lambda.Function(
             self,
             constants.SERVICE_ROLE,
-            runtime=_lambda.Runtime.PYTHON_3_10,
+            runtime=_lambda.Runtime.PYTHON_3_9,
             code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
             handler='service.handlers.create_order.create_order',
             environment={
