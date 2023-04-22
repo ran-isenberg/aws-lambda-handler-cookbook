@@ -1,5 +1,5 @@
 import uuid
-
+from functools import lru_cache
 import boto3
 from botocore.exceptions import ClientError
 from cachetools import TTLCache, cached
@@ -40,3 +40,8 @@ class DynamoDalHandler(DalHandler):
 
         logger.info('finished create order', extra={'order_id': order_id, 'order_item_count': order_item_count, 'customer_name': customer_name})
         return entry
+
+
+@lru_cache
+def get_dal_handler(table_name: str) -> DalHandler:
+    return DynamoDalHandler(table_name)
