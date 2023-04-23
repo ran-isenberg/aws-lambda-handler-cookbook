@@ -10,13 +10,16 @@ from cdk.my_service.configuration.configuration_construct import ConfigurationSt
 from cdk.my_service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
 
 
+def get_username() -> str:
+    try:
+        return os.getlogin().replace('.', '-')
+    except Exception:
+        return 'github'
+
+
 def get_stack_name() -> str:
     repo = Repo(Path.cwd())
-    try:
-        username = os.getlogin().replace('.', '-')
-    except Exception:
-        username = 'github'
-    print(f'username={username}')
+    username = get_username()
     try:
         return f'{username}-{repo.active_branch}-{SERVICE_NAME}'
     except TypeError:
