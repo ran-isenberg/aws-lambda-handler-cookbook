@@ -21,14 +21,14 @@ tests-no-zope = ["cloudpickle", "cloudpickle", "hypothesis", "hypothesis", "mypy
 
 [[package]]
 name = "aws-cdk-asset-awscli-v1"
-version = "2.2.147"
+version = "2.2.148"
 description = "A library that contains the AWS CLI for use in Lambda Layers"
 category = "dev"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk.asset-awscli-v1-2.2.147.tar.gz", hash = "sha256:f30e3eb131e69961be26c2fdf86c4560a16b31b9114405ffb1e7957c28ced999"},
-    {file = "aws_cdk.asset_awscli_v1-2.2.147-py3-none-any.whl", hash = "sha256:6ca95e520b336554f6761de92c370e27feac1f4798e6a4ef3bcc9b3e7ea285f5"},
+    {file = "aws-cdk.asset-awscli-v1-2.2.148.tar.gz", hash = "sha256:13138863a280f1c70edc698f18ed9f7451e298155aebdf1c05eb66dbdee02ab6"},
+    {file = "aws_cdk.asset_awscli_v1-2.2.148-py3-none-any.whl", hash = "sha256:403c685271f747193fd6357904deea0afa6b77975ccc2a3de93c4f4ff4325134"},
 ]
 
 [package.dependencies]
@@ -55,14 +55,14 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-asset-node-proxy-agent-v5"
-version = "2.0.124"
+version = "2.0.125"
 description = "@aws-cdk/asset-node-proxy-agent-v5"
 category = "dev"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk.asset-node-proxy-agent-v5-2.0.124.tar.gz", hash = "sha256:0e49d9bee334358dc4c0d43e1fec89cdd59cae4a31638c0e7973484eb94ec6f2"},
-    {file = "aws_cdk.asset_node_proxy_agent_v5-2.0.124-py3-none-any.whl", hash = "sha256:2e51e878520220dc03d7126df7ee198ee04618b32a869d5dd44e60d8b8fd16f0"},
+    {file = "aws-cdk.asset-node-proxy-agent-v5-2.0.125.tar.gz", hash = "sha256:4d3982ce3258691ab051ed9665d947185c277572139480384ce42bbd8c642e6d"},
+    {file = "aws_cdk.asset_node_proxy_agent_v5-2.0.125-py3-none-any.whl", hash = "sha256:0b212c8094e48db78000f15741a0806b4ab1014b30a618f6b00de18a08170a94"},
 ]
 
 [package.dependencies]
@@ -221,14 +221,14 @@ exceptiongroup = {version = "*", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "cdk-nag"
-version = "2.26.2"
+version = "2.26.3"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 category = "dev"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "cdk-nag-2.26.2.tar.gz", hash = "sha256:7640124f3d9d5178a01649ae350b2ac4a1f08dae4d2868efff7edee13a9d66e2"},
-    {file = "cdk_nag-2.26.2-py3-none-any.whl", hash = "sha256:4a63b9a43d564525fca036bf4f8fa14599cd82d7e79fcbf79bdf3889611cfed1"},
+    {file = "cdk-nag-2.26.3.tar.gz", hash = "sha256:e41dcc71a419ae8cef9d64c63aac7cb10079e6c5fbcf817bb5dac9803d584ada"},
+    {file = "cdk_nag-2.26.3-py3-none-any.whl", hash = "sha256:edcd78ff7a27254073e0999ed0941bf54acc87326c89fb7debf6be308f9f834a"},
 ]
 
 [package.dependencies]
@@ -376,14 +376,14 @@ files = [
 
 [[package]]
 name = "constructs"
-version = "10.2.3"
+version = "10.2.4"
 description = "A programming model for software-defined state"
 category = "dev"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "constructs-10.2.3-py3-none-any.whl", hash = "sha256:b7eefd83207f3ad2284d1b938cb3c2c4a59fe6ea1328489e89c3bc3b327d12a1"},
-    {file = "constructs-10.2.3.tar.gz", hash = "sha256:b1fa316d8f5235c8957fb7e3767109b122a895b0525c45ddcfb66436928f8c33"},
+    {file = "constructs-10.2.4-py3-none-any.whl", hash = "sha256:fd720f87c3c6f23b1fb2ddc1b309b5d378588bebc8365e85ea80a8968a72de3f"},
+    {file = "constructs-10.2.4.tar.gz", hash = "sha256:c8a4fd974a0b1f758c90fab6343cba94aa28644b3e15ce2b07662b208f12d07d"},
 ]
 
 [package.dependencies]
