@@ -1,5 +1,5 @@
 import uuid
-from functools import lru_cache
+
 import boto3
 from botocore.exceptions import ClientError
 from cachetools import TTLCache, cached
@@ -14,6 +14,14 @@ from service.schemas.exceptions import InternalServerException
 
 
 class DynamoDalHandler(DalHandler):
+
+    __instance = None
+
+    def __new__(cls, arg):
+        if DynamoDalHandler.__instance is None:
+            DynamoDalHandler.__instance = object.__new__(cls)
+            DynamoDalHandler.__instance.arg = arg
+        return DynamoDalHandler.__instance
 
     def __init__(self, table_name: str):
         self.table_name = table_name
@@ -42,6 +50,5 @@ class DynamoDalHandler(DalHandler):
         return entry
 
 
-@lru_cache
 def get_dal_handler(table_name: str) -> DalHandler:
     return DynamoDalHandler(table_name)
