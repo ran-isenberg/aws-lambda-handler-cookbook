@@ -1,5 +1,5 @@
 from aws_cdk import App, Aspects
-from cdk_nag import AwsSolutionsChecks, HIPAASecurityChecks
+from cdk_nag import AwsSolutionsChecks
 
 from cdk.my_service.service_stack import ServiceStack
 
