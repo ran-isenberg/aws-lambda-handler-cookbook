@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
 
-from aws_cdk import Stack, Tags
+from aws_cdk import Aspects, Stack, Tags
+from cdk_nag import AwsSolutionsChecks, NagSuppressions
 from constructs import Construct
 from git import Repo
 from my_service.api_construct import ApiConstruct  # type: ignore
@@ -36,4 +37,48 @@ class ServiceStack(Stack):
         # from running the service pipeline and without redeploying the service lambdas. For the sake of this template
         # example, it is deployed as part of the service stack
         self.dynamic_configuration = ConfigurationStore(self, f'{id}dynamic_conf'[0:64], ENVIRONMENT, SERVICE_NAME, CONFIGURATION_NAME)
-        self.lambdas = ApiConstruct(self, f'{id}Service'[0:64], self.dynamic_configuration.config_app.name)
+        self.api = ApiConstruct(self, f'{id}Service'[0:64], self.dynamic_configuration.config_app.name)
+
+        # add security check
+        self._add_security_tests()
+
+    def _add_security_tests(self) -> None:
+        Aspects.of(self).add(AwsSolutionsChecks(verbose=True))
+        # Suppress a specific rule for this resource
+        NagSuppressions.add_stack_suppressions(
+            self,
+            [
+                {
+                    'id': 'AwsSolutions-IAM4',
+                    'reason': 'policy for cloudwatch logs.'
+                },
+                {
+                    'id': 'AwsSolutions-IAM5',
+                    'reason': 'policy for cloudwatch logs.'
+                },
+                {
+                    'id': 'AwsSolutions-APIG2',
+                    'reason': 'lambda does input validation'
+                },
+                {
+                    'id': 'AwsSolutions-APIG1',
+                    'reason': 'not mandatory in a sample template'
+                },
+                {
+                    'id': 'AwsSolutions-APIG3',
+                    'reason': 'not mandatory in a sample template'
+                },
+                {
+                    'id': 'AwsSolutions-APIG6',
+                    'reason': 'not mandatory in a sample template'
+                },
+                {
+                    'id': 'AwsSolutions-APIG4',
+                    'reason': 'authorization not mandatory in a sample template'
+                },
+                {
+                    'id': 'AwsSolutions-COG4',
+                    'reason': 'not using cognito'
+                },
+            ],
+        )
