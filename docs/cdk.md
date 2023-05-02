@@ -50,8 +50,10 @@ All ASW Lambda function configurations are saved as constants at the `cdk.my_ser
 
 ### **Infrastructure CDK & Security Tests**
 
-Under tests there is an `infrastructure` folder for CDK & security infrastructure tests.
+Under tests there is an `infrastructure` folder for CDK infrastructure tests.
 
 The first test, 'test_cdk' uses CDK's testing framework which asserts that required resources exists so the application will not break anything upon deployment.
 
-The second test, 'test_cdk_nag' checks your cloudformation output for security best practices. For more information click [here](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/check-aws-cdk-applications-or-cloudformation-templates-for-best-practices-by-using-cdk-nag-rule-packs.html){:target="_blank" rel="noopener"}.
+The security tests are based on 'cdk_nag'. It checks your cloudformation output for security best practices. It can be found in the 'service_stack.py' as part of the stack definition. It will fail the deployment when there is a security issue.
+
+For more information click [here](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/check-aws-cdk-applications-or-cloudformation-templates-for-best-practices-by-using-cdk-nag-rule-packs.html){:target="_blank" rel="noopener"}.
