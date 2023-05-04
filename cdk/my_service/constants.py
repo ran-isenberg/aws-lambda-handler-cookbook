@@ -1,6 +1,7 @@
 SERVICE_ROLE_ARN = 'ServiceRoleArn'
 LAMBDA_BASIC_EXECUTION_ROLE = 'AWSLambdaBasicExecutionRole'
 SERVICE_ROLE = 'ServiceRole'
+CREATE_LAMBDA = 'CreateOrder'
 TABLE_NAME = 'orders'
 TABLE_NAME_OUTPUT = 'DbOutput'
 APIGATEWAY = 'Apigateway'
