@@ -1,9 +1,11 @@
+from datetime import datetime
+
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
-from aws_cdk import aws_logs
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
+from aws_cdk.aws_logs import LogGroup, RetentionDays
 from constructs import Construct
 from my_service.api_db_construct import ApiDbConstruct  # type: ignore
 
@@ -14,7 +16,7 @@ class ApiConstruct(Construct):
 
     def __init__(self, scope: Construct, id_: str, appconfig_app_name: str) -> None:
         super().__init__(scope, id_)
-
+        self.id_ = id_
         self.api_db = ApiDbConstruct(self, f'{id_}db')
         self.lambda_role = self._build_lambda_role(self.api_db.db)
         self.common_layer = self._build_common_layer()
@@ -71,7 +73,7 @@ class ApiConstruct(Construct):
     def _add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str):
         lambda_function = _lambda.Function(
             self,
-            constants.SERVICE_ROLE,
+            constants.CREATE_LAMBDA,
             runtime=_lambda.Runtime.PYTHON_3_9,
             code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
             handler='service.handlers.create_order.create_order',
@@ -92,7 +94,13 @@ class ApiConstruct(Construct):
             memory_size=constants.API_HANDLER_LAMBDA_MEMORY_SIZE,
             layers=[self.common_layer],
             role=role,
-            log_retention=aws_logs.RetentionDays.ONE_DAY,
+        )
+
+        LogGroup(
+            self,
+            f'{self.id_}constants.CREATE_LAMBDA-{datetime.now()}',
+            removal_policy=RemovalPolicy.DESTROY,
+            retention=RetentionDays.ONE_DAY,
         )
 
         # POST /api/orders/
