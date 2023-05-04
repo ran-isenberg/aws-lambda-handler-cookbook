@@ -1,11 +1,9 @@
-from datetime import datetime
-
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
-from aws_cdk.aws_logs import LogGroup, RetentionDays
+from aws_cdk.aws_logs import RetentionDays
 from constructs import Construct
 from my_service.api_db_construct import ApiDbConstruct  # type: ignore
 
@@ -94,13 +92,7 @@ class ApiConstruct(Construct):
             memory_size=constants.API_HANDLER_LAMBDA_MEMORY_SIZE,
             layers=[self.common_layer],
             role=role,
-        )
-
-        LogGroup(
-            self,
-            f'{self.id_}constants.CREATE_LAMBDA-{datetime.now()}',
-            removal_policy=RemovalPolicy.DESTROY,
-            retention=RetentionDays.ONE_DAY,
+            log_retention=RetentionDays.ONE_DAY,
         )
 
         # POST /api/orders/
