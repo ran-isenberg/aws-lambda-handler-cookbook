@@ -98,7 +98,7 @@ class ApiConstruct(Construct):
 
         LogGroup(
             self,
-            f'{self.id_}constants.CREATE_LAMBDA-{datetime.now()}',
+            f'{self.id_}log{constants.CREATE_LAMBDA}',
             removal_policy=RemovalPolicy.DESTROY,
             retention=RetentionDays.ONE_DAY,
         )
