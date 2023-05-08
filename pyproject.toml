@@ -22,7 +22,7 @@ email-validator = {version = "*"}
 aws-lambda-powertools =  {extras = ["all"],version = "*"}
 mypy-boto3-dynamodb = "*"
 cachetools = "*"
-
+boto3 = "^1.26.125"
 
 [tool.poetry.dev-dependencies]
 # CDK
@@ -46,7 +46,6 @@ xenon = "*"
 pre-commit = "*"
 flake8 = "*"
 isort = "*"
-boto3 = "*"
 mkdocs-material = "*"
 mkdocs-git-revision-date-plugin = "*"
 types-cachetools = "*"
