@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write # This is required for requesting the JWT
-      contents: write  # This is required for actions/checkout
+      contents: write # This is required for actions/checkout
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{  runner.os }} server hosted by GitHub!"
@@ -71,7 +71,7 @@ jobs:
         with:
           files: ./coverage.xml
           name: aws-lambda-handler-cookbook-codecov
-          fail_ci_if_error: true # optional (default = false)
+          fail_ci_if_error: false # optional (default = false)
           verbose: false # optional (default = false)
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Run E2E tests
