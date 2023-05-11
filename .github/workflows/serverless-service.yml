@@ -12,7 +12,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: write  # This is required for actions/checkout
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{  runner.os }} server hosted by GitHub!"
@@ -34,11 +36,11 @@ jobs:
           make deps
           pip install -r dev_requirements.txt
           pip install -r lambda_requirements.txt
-      - name: Configure AWS Credentials
+      - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: samplerolesession
           aws-region: us-east-1
       - name: pre commit
         run: |
