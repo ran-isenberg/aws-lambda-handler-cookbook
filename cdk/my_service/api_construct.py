@@ -62,7 +62,7 @@ class ApiConstruct(Construct):
     def _build_common_layer(self) -> PythonLayerVersion:
         return PythonLayerVersion(
             self,
-            constants.LAMBDA_LAYER_NAME,
+            f'{self.id_}{constants.LAMBDA_LAYER_NAME}',
             entry=constants.COMMON_LAYER_BUILD_FOLDER,
             compatible_runtimes=[_lambda.Runtime.PYTHON_3_10, _lambda.Runtime.PYTHON_3_9],
             removal_policy=RemovalPolicy.DESTROY,
