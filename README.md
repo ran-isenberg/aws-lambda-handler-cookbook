@@ -18,6 +18,30 @@ This project can serve as a template for new Serverless services - CDK deploymen
 > **Contact details | ran.isenberg@ranthebuilder.cloud**
 
 
+## Cookiecutter Option
+
+You can get a cleaner version of this repository without using the template button on GitHub with cookiecutter.
+
+* Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter`
+
+Then run:
+
+```
+cookiecutter gh:ran-isenberg/cookiecutter-serverless-python
+```
+
+Answer the questions to select repo name, service name, etc.:
+
+![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
+
+
+Add Git to the project:
+
+```
+cd {new repo folder}
+git init
+```
+
 ## **The Problem**
 
 Starting a Serverless service can be overwhelming. You need to figure out many questions and challenges that have nothing to do with your business domain:
