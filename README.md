@@ -35,12 +35,15 @@ Answer the questions to select repo name, service name, etc.:
 ![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
 
 
-Add Git to the project:
+**That's it, your developer environment has been set! you are ready to deploy the service:**
 
 ```
 cd {new repo folder}
-git init
+poetry shell
+make deploy
 ```
+
+You can also run 'make pr' will run all checks, synth, file formatters , unit tests, deploy to AWS and run integration and E2E tests.
 
 ## **The Problem**
 

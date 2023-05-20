@@ -4,9 +4,9 @@
 
 dev:
 	pip install --upgrade pip pre-commit poetry
-	make deps
 	pre-commit install
-	poetry shell
+	poetry config --local virtualenvs.in-project true
+	poetry install
 
 lint:
 	@echo "Running flake8"
