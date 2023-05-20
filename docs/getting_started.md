@@ -24,17 +24,17 @@ Answer the questions to select repo name, service name, etc.:
 
 ![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
 
-Add Git to the project:
+That's it! you are ready to go and deploy the service to AWS.
 
-``cd {new repo folder} ; git init``
+``cd {new repo folder}``
+``poetry shell``
+``make deploy``
 
-Now you can setup your developer environment and deploy to AWS
 <br></br>
 
-## **Creating a Developer Environment**
+## **Creating a Developer Environment without cookiecutter**
 
 1. Run ``make dev``
-2. Run ``poetry install``
 
 ## **Deploy CDK**
 
