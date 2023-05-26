@@ -66,6 +66,9 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 - The project deploys an API GW with an AWS Lambda integration under the path POST /api/orders/ and stores data in a DynamoDB table.
 
+![design](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/design.png?raw=true)
+<br></br>
+
 ### **Features**
 
 - Python Serverless service with a recommended file structure.
