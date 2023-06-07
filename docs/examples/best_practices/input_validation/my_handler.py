@@ -5,7 +5,7 @@ from aws_lambda_powertools.utilities.parser import ValidationError, parse
 from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from service.handlers.schemas.input import Input
+from .schema import Input
 
 
 def my_handler(event: Dict[str, Any], context: LambdaContext):

@@ -8,8 +8,8 @@ from botocore.stub import Stubber
 
 from service.dal.dynamo_dal_handler import DynamoDalHandler
 from service.handlers.create_order import create_order
-from service.handlers.schemas.input import Input
-from tests.utils import generate_api_gw_event, generate_context
+from service.schemas.input import CreateOrderRequest
+from tests.utils import generate_api_gw_event, generate_context, generate_random_string
 
 MOCKED_SCHEMA = {
     'features': {
@@ -47,9 +47,9 @@ def mock_exception_dynamic_configuration(mocker) -> None:
 
 def test_handler_200_ok(mocker, table_name: str):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    customer_name = 'RanTheBuilder'
+    customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
-    body = Input(customer_name=customer_name, order_item_count=order_item_count)
+    body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
     # assert response
     assert response['statusCode'] == HTTPStatus.OK
@@ -64,6 +64,13 @@ def test_handler_200_ok(mocker, table_name: str):
     assert response['Item']['customer_name'] == customer_name
     assert response['Item']['order_item_count'] == order_item_count
 
+    # check idempotency, send same request
+    original_order_id = body_dict['order_id']
+    response = create_order(generate_api_gw_event(body.dict()), generate_context())
+    assert response['statusCode'] == HTTPStatus.OK
+    body_dict = json.loads(response['body'])
+    assert body_dict['order_id'] == original_order_id
+
 
 def test_internal_server_error():
     db_handler: DynamoDalHandler = DynamoDalHandler('table')
@@ -71,7 +78,7 @@ def test_internal_server_error():
     stubber = Stubber(table.meta.client)
     stubber.add_client_error(method='put_item', service_error_code='ValidationException')
     stubber.activate()
-    body = Input(customer_name='RanTheBuilder', order_item_count=5)
+    body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
     response = create_order(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -86,7 +93,10 @@ def test_handler_bad_request(mocker):
 
 def test_handler_failed_appconfig_fetch(mocker):
     mock_exception_dynamic_configuration(mocker)
-    response = create_order(generate_api_gw_event({'order_item_count': 5}), generate_context())
+    customer_name = f'{generate_random_string()}-RanTheBuilder'
+    order_item_count = 5
+    body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
+    response = create_order(generate_api_gw_event(body.dict()), generate_context())
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
     body_dict = json.loads(response['body'])
     assert body_dict == {}

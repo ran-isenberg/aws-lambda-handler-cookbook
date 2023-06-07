@@ -11,6 +11,21 @@ class ApiDbConstruct(Construct):
         super().__init__(scope, id_)
 
         self.db: dynamodb.Table = self._build_db(id_)
+        self.idempotency_db: dynamodb.Table = self._build_idempotency_table()
+
+    def _build_idempotency_table(self) -> dynamodb.Table:
+        table_id = constants.IDEMPOTENCY_TABLE_NAME
+        table = dynamodb.Table(
+            self,
+            table_id,
+            table_name=table_id,
+            partition_key=dynamodb.Attribute(name='id', type=dynamodb.AttributeType.STRING),
+            billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
+            removal_policy=RemovalPolicy.DESTROY,
+            time_to_live_attribute='expiration',
+            point_in_time_recovery=True,
+        )
+        return table
 
     def _build_db(self, id_prefix: str) -> dynamodb.Table:
         table_id = f'{id_prefix}{constants.TABLE_NAME}'

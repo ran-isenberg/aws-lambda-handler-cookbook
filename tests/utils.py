@@ -1,10 +1,18 @@
 import json
+import random
+import string
 from typing import Any, Dict, Optional
 
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from cdk.my_service.service_stack import get_stack_name
+
+
+def generate_random_string(length: int = 3):
+    letters = string.ascii_letters
+    random_string = ''.join(random.choice(letters) for _ in range(length))
+    return random_string
 
 
 def generate_context() -> LambdaContext:
