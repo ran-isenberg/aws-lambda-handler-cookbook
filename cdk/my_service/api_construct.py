@@ -80,7 +80,8 @@ class ApiConstruct(Construct):
             removal_policy=RemovalPolicy.DESTROY,
         )
 
-    def _add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str):
+    def _add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str,
+                                     idempotency_table: dynamodb.Table):
         lambda_function = _lambda.Function(
             self,
             constants.CREATE_LAMBDA,
@@ -97,7 +98,7 @@ class ApiConstruct(Construct):
                 'REST_API': 'https://www.ranthebuilder.cloud/api',  # for env vars example
                 'ROLE_ARN': 'arn:partition:service:region:account-id:resource-type:resource-id',  # for env vars example
                 'TABLE_NAME': db.table_name,
-                'POWERTOOLS_IDEMPOTENCY_DISABLED': 'False',
+                'IDEMPOTENCY_TABLE_NAME': idempotency_table.table_name,
             },
             tracing=_lambda.Tracing.ACTIVE,
             retry_attempts=0,

@@ -8,6 +8,10 @@ class Observability(BaseModel):
     LOG_LEVEL: Literal['DEBUG', 'INFO', 'ERROR', 'CRITICAL', 'WARNING', 'EXCEPTION']
 
 
+class Idempotency(BaseModel):
+    IDEMPOTENCY_TABLE_NAME: Annotated[str, Field(min_length=1)]
+
+
 class DynamicConfiguration(BaseModel):
     CONFIGURATION_APP: Annotated[str, Field(min_length=1)]
     CONFIGURATION_ENV: Annotated[str, Field(min_length=1)]
