@@ -24,6 +24,13 @@ def test_handler_200_ok(api_gw_url):
     assert body_dict['customer_name'] == customer_name
     assert body_dict['order_item_count'] == 5
 
+    # check idempotency, send same request
+    original_order_id = body_dict['order_id']
+    response = requests.post(api_gw_url, data=body.json())
+    assert response.status_code == HTTPStatus.OK
+    body_dict = json.loads(response.text)
+    assert body_dict['order_id'] == original_order_id
+
 
 def test_handler_bad_request(api_gw_url):
     body_str = json.dumps({'order_item_count': 5})

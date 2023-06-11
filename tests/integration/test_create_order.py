@@ -7,7 +7,6 @@ from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValid
 from botocore.stub import Stubber
 
 from service.dal.dynamo_dal_handler import DynamoDalHandler
-from service.handlers.create_order import create_order
 from service.schemas.input import CreateOrderRequest
 from tests.utils import generate_api_gw_event, generate_context, generate_random_string
 
@@ -45,12 +44,20 @@ def mock_exception_dynamic_configuration(mocker) -> None:
     mocker.patch('aws_lambda_powertools.utilities.parameters.AppConfigProvider.get', side_effect=SchemaValidationError('error'))
 
 
+def call_create_order(body: Dict[str, Any]) -> Dict[str, Any]:
+    # important is done here since idempotency decorator requires an env. variable during import time
+    # conf.test sets that env. variable (table name) but it runs after imports
+    # this way, idempotency import runs after conftest sets the values already
+    from service.handlers.create_order import create_order
+    return create_order(body, generate_context())
+
+
 def test_handler_200_ok(mocker, table_name: str):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
-    response = create_order(generate_api_gw_event(body.dict()), generate_context())
+    response = call_create_order(generate_api_gw_event(body.dict()))
     # assert response
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
@@ -64,13 +71,6 @@ def test_handler_200_ok(mocker, table_name: str):
     assert response['Item']['customer_name'] == customer_name
     assert response['Item']['order_item_count'] == order_item_count
 
-    # check idempotency, send same request
-    original_order_id = body_dict['order_id']
-    response = create_order(generate_api_gw_event(body.dict()), generate_context())
-    assert response['statusCode'] == HTTPStatus.OK
-    body_dict = json.loads(response['body'])
-    assert body_dict['order_id'] == original_order_id
-
 
 def test_internal_server_error():
     db_handler: DynamoDalHandler = DynamoDalHandler('table')
@@ -79,13 +79,13 @@ def test_internal_server_error():
     stubber.add_client_error(method='put_item', service_error_code='ValidationException')
     stubber.activate()
     body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
-    response = create_order(generate_api_gw_event(body.dict()), generate_context())
+    response = call_create_order(generate_api_gw_event(body.dict()))
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 def test_handler_bad_request(mocker):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    response = create_order(generate_api_gw_event({'order_item_count': 5}), generate_context())
+    response = call_create_order(generate_api_gw_event({'order_item_count': 5}))
     assert response['statusCode'] == HTTPStatus.BAD_REQUEST
     body_dict = json.loads(response['body'])
     assert body_dict == {}
@@ -96,7 +96,7 @@ def test_handler_failed_appconfig_fetch(mocker):
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
-    response = create_order(generate_api_gw_event(body.dict()), generate_context())
+    response = call_create_order(generate_api_gw_event(body.dict()))
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
     body_dict = json.loads(response['body'])
     assert body_dict == {}

@@ -20,7 +20,7 @@ class ApiConstruct(Construct):
         self.common_layer = self._build_common_layer()
         self.rest_api = self._build_api_gw()
         api_resource: aws_apigateway.Resource = self.rest_api.root.add_resource('api').add_resource(constants.GW_RESOURCE)
-        self._add_post_lambda_integration(api_resource, self.lambda_role, self.api_db.db, appconfig_app_name)
+        self._add_post_lambda_integration(api_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db)
 
     def _build_api_gw(self) -> aws_apigateway.RestApi:
         rest_api: aws_apigateway.RestApi = aws_apigateway.RestApi(

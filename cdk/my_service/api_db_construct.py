@@ -11,7 +11,7 @@ class ApiDbConstruct(Construct):
         super().__init__(scope, id_)
 
         self.db: dynamodb.Table = self._build_db(id_)
-        self.idempotency_db: dynamodb.Table = self._build_idempotency_table()
+        self.idempotency_db: dynamodb.Table = self._build_idempotency_table(id_)
 
     def _build_idempotency_table(self, id_: str) -> dynamodb.Table:
         table_id = f'{id_}{constants.IDEMPOTENCY_TABLE_NAME}'
