@@ -44,16 +44,17 @@ All ASW Lambda function configurations are saved as constants at the `cdk.my_ser
     - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     - **Lambda Role** - The role of the Lambda function.
     - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/orders that triggers the Lambda function.
-    - **AWS DynamoDB table** - stores request data. Created in its own construct: api_db_construct.py
+    - **AWS DynamoDB table** - stores request data. Created in the `api_db_construct.py` construct.
+    - **AWS DynamoDB table** - stores idempotency data. Created in the `api_db_construct.py` construct.
 - Construct: **cdk.my_service.configuration.configuration_construct.py** which includes:
-    - AWS AppConfig configuration with an environment, application, configuration and deployment strategy. You can read more about it [here.](best_practices/dynamic_configuration.md)
+    - AWS AppConfig configuration with an environment, application, configuration and deployment strategy. You can read more about it [here](best_practices/dynamic_configuration.md).
 
 ### **Infrastructure CDK & Security Tests**
 
 Under tests there is an `infrastructure` folder for CDK infrastructure tests.
 
-The first test, 'test_cdk' uses CDK's testing framework which asserts that required resources exists so the application will not break anything upon deployment.
+The first test, `test_cdk` uses CDK's testing framework which asserts that required resources exists so the application will not break anything upon deployment.
 
-The security tests are based on 'cdk_nag'. It checks your cloudformation output for security best practices. It can be found in the 'service_stack.py' as part of the stack definition. It will fail the deployment when there is a security issue.
+The security tests are based on `cdk_nag`. It checks your cloudformation output for security best practices. It can be found in the `service_stack.py` as part of the stack definition. It will fail the deployment when there is a security issue.
 
 For more information click [here](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/check-aws-cdk-applications-or-cloudformation-templates-for-best-practices-by-using-cdk-nag-rule-packs.html){:target="_blank" rel="noopener"}.
