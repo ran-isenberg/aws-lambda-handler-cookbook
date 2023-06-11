@@ -37,6 +37,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - AWS Lambda handler uses [AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/){:target="_blank" rel="noopener"}.
 - AWS Lambda handler 3 layer architecture: handler layer, logic layer and data access layer
 - Features flags and configuration based on AWS AppConfig
+- Idempotent API
 - Unit, infrastructure, security, integration and E2E tests.
 
 The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.

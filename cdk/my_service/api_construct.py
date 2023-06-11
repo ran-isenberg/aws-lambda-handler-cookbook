@@ -16,11 +16,11 @@ class ApiConstruct(Construct):
         super().__init__(scope, id_)
         self.id_ = id_
         self.api_db = ApiDbConstruct(self, f'{id_}db')
-        self.lambda_role = self._build_lambda_role(self.api_db.db)
+        self.lambda_role = self._build_lambda_role(self.api_db.db, self.api_db.idempotency_db)
         self.common_layer = self._build_common_layer()
         self.rest_api = self._build_api_gw()
         api_resource: aws_apigateway.Resource = self.rest_api.root.add_resource('api').add_resource(constants.GW_RESOURCE)
-        self._add_post_lambda_integration(api_resource, self.lambda_role, self.api_db.db, appconfig_app_name)
+        self._add_post_lambda_integration(api_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db)
 
     def _build_api_gw(self) -> aws_apigateway.RestApi:
         rest_api: aws_apigateway.RestApi = aws_apigateway.RestApi(
@@ -35,7 +35,7 @@ class ApiConstruct(Construct):
         CfnOutput(self, id=constants.APIGATEWAY, value=rest_api.url).override_logical_id(constants.APIGATEWAY)
         return rest_api
 
-    def _build_lambda_role(self, db: dynamodb.Table) -> iam.Role:
+    def _build_lambda_role(self, db: dynamodb.Table, idempotency_table: dynamodb.Table) -> iam.Role:
         return iam.Role(
             self,
             constants.SERVICE_ROLE_ARN,
@@ -51,7 +51,19 @@ class ApiConstruct(Construct):
                     ]),
                 'dynamodb_db':
                     iam.PolicyDocument(statements=[
-                        iam.PolicyStatement(actions=['dynamodb:PutItem', 'dynamodb:GetItem'], resources=[db.table_arn], effect=iam.Effect.ALLOW)
+                        iam.PolicyStatement(
+                            actions=['dynamodb:PutItem', 'dynamodb:GetItem'],
+                            resources=[db.table_arn],
+                            effect=iam.Effect.ALLOW,
+                        )
+                    ]),
+                'idempotency_table':
+                    iam.PolicyDocument(statements=[
+                        iam.PolicyStatement(
+                            actions=['dynamodb:PutItem', 'dynamodb:GetItem', 'dynamodb:UpdateItem', 'dynamodb:DeleteItem'],
+                            resources=[idempotency_table.table_arn],
+                            effect=iam.Effect.ALLOW,
+                        )
                     ]),
             },
             managed_policies=[
@@ -68,7 +80,8 @@ class ApiConstruct(Construct):
             removal_policy=RemovalPolicy.DESTROY,
         )
 
-    def _add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str):
+    def _add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str,
+                                     idempotency_table: dynamodb.Table):
         lambda_function = _lambda.Function(
             self,
             constants.CREATE_LAMBDA,
@@ -85,6 +98,7 @@ class ApiConstruct(Construct):
                 'REST_API': 'https://www.ranthebuilder.cloud/api',  # for env vars example
                 'ROLE_ARN': 'arn:partition:service:region:account-id:resource-type:resource-id',  # for env vars example
                 'TABLE_NAME': db.table_name,
+                'IDEMPOTENCY_TABLE_NAME': idempotency_table.table_name,
             },
             tracing=_lambda.Tracing.ACTIVE,
             retry_attempts=0,
