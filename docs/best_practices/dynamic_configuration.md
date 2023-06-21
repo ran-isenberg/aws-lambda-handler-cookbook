@@ -9,7 +9,7 @@ Feature flags are used to modify behavior without changing the application's cod
 
 This pages describes a utility for fetching dynamic configuration and evaluating smart feature flags stored in AWS AppConfig as a JSON file.
 
-This utility is based on the [Feature Flags utility of AWS Lambda Powertools](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/){:target="_blank" rel="noopener"} Github repository that I designed and developed.
+This utility is based on the [Feature Flags utility of AWS Lambda Powertools](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/){:target="_blank" rel="noopener"} Github repository that I designed and developed.
 
 ## **Blog Reference**
 
@@ -147,7 +147,7 @@ A smart feature flag will need to evaluate the customer name and decide whether 
 
 Smart feature flags are defined by rules, conditions, and actions determining the final value.
 
-Read more about them [here](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/#schema){:target="_blank" rel="noopener"}
+Read more about them [here](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#schema){:target="_blank" rel="noopener"}
 
 ### **Regular Feature Flags**
 
@@ -224,7 +224,7 @@ Line 31 will return a value of ``True`` for the context ``{'customer_name': 'Ran
 
 There are several actions for conditions such as ``STARTSWITH``, ``ENDSWITH``, ``EQUALS``, etc.
 
-You can read more about the rules, conditions, logic, and supported actions [here.](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/#rules){:target="_blank" rel="noopener"}
+You can read more about the rules, conditions, logic, and supported actions [here.](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#rules){:target="_blank" rel="noopener"}
 
 ## **How To Locally Test Your Lambda In IDE**
 
@@ -242,7 +242,7 @@ However, I'd do that in the E2E tests.
 --8<-- "docs/examples/best_practices/dynamic_configuration/mock.py"
 ```
 
-Click [here](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/#testing-your-code) for more details.
+Click [here](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#testing-your-code) for more details.
 
 ## **Extra Documentation**
 

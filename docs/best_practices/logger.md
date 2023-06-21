@@ -26,4 +26,4 @@ Read more about the importance of the logger and how to use AWS CloudWatch logs 
 
 You can find more information at the official documentation.
 
-Go to [https://awslabs.github.io/aws-lambda-powertools-python/latest/core/logger/](https://awslabs.github.io/aws-lambda-powertools-python/latest/core/logger/){:target="_blank" rel="noopener"}
+Go to [https://docs.powertools.aws.dev/lambda-python/latest/core/logger/](https://docs.powertools.aws.dev/lambda-python/latest/core/logger/){:target="_blank" rel="noopener"}

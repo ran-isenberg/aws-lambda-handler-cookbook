@@ -17,7 +17,7 @@ def get_dynamic_configuration_store() -> FeatureFlags:
     """ getter for singleton dynamic configuration getter API
 
     Returns:
-        FeatureFlags: see https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/feature_flags/
+        FeatureFlags: see https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/
     """
     global _DYNAMIC_CONFIGURATION
     if _DYNAMIC_CONFIGURATION is None:
