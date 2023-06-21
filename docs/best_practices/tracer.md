@@ -26,4 +26,4 @@ Read more about the importance of observability and traces in my blog. Click [**
 
 You can find more information at the official documentation.
 
-Go to [https://awslabs.github.io/aws-lambda-powertools-python/latest/core/tracer/](https://awslabs.github.io/aws-lambda-powertools-python/latest/core/tracer/){:target="_blank" rel="noopener"}
+Go to [https://docs.powertools.aws.dev/lambda-python/latest/core/tracer/](https://docs.powertools.aws.dev/lambda-python/latest/core/tracer/){:target="_blank" rel="noopener"}

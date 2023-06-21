@@ -32,7 +32,7 @@ Each AWS service has its envelope structure and may encapsulate the business log
 
 ## **Supported AWS Services**
 
-For a complete list click [**here**](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/parser/#built-in-envelopes).
+For a complete list click [**here**](https://docs.powertools.aws.dev/lambda-python/latest/utilities/parser/#built-in-envelopes).
 
 ## **Define Business Logic Schema**
 
@@ -71,7 +71,7 @@ Use the envelope class that matches the AWS service that triggers your AWS Lambd
 
 You can access the metadata parameters by extending the model class and parsing the input without the envelope class.
 
-Read more about it [**here**](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/parser/#extending-built-in-models).
+Read more about it [**here**](https://docs.powertools.aws.dev/lambda-python/latest/utilities/parser/#extending-built-in-models).
 
 ## **Blog Reference**
 
@@ -81,4 +81,4 @@ Read more about the importance of input validation and the potential pitfalls it
 
 You can find more information at the official documentation.
 
-Go to [https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/parser/](https://awslabs.github.io/aws-lambda-powertools-python/latest/utilities/parser/){:target="_blank" rel="noopener"}
+Go to [https://docs.powertools.aws.dev/lambda-python/latest/utilities/parser/](https://docs.powertools.aws.dev/lambda-python/latest/utilities/parser/){:target="_blank" rel="noopener"}
