@@ -8,6 +8,7 @@
 ![github-star-badge](https://img.shields.io/github/stars/ran-isenberg/aws-lambda-handler-cookbook.svg?style=social)
 ![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ran-isenberg/aws-lambda-handler-cookbook/badge)
 ![issues](https://img.shields.io/github/issues/ran-isenberg/aws-lambda-handler-cookbook)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/7499/badge)](https://bestpractices.coreinfrastructure.org/projects/7499)
 
 ![alt text](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/banner.png?raw=true)
 
