@@ -1,7 +1,12 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: Serverless Service CI/CD
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  issues: write
+  checks: read
+  contents: read
 
 on:
   push:
@@ -12,9 +17,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write # This is required for requesting the JWT
-      contents: write # This is required for actions/checkout
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{  runner.os }} server hosted by GitHub!"
@@ -94,8 +96,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip poetry
+          make deps
+          pip install -r dev_requirements.txt
       - name: Generate docs
         run: |
-          python -m pip install --upgrade pip
-          pip install mkdocs-material mkdocs-git-revision-date-plugin
           mkdocs gh-deploy --force
