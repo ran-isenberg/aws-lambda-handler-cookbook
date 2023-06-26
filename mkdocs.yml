@@ -16,7 +16,7 @@ nav:
       - best_practices/environment_variables.md
       - best_practices/input_validation.md
       - best_practices/dynamic_configuration.md
-      - Idempotency: https://docs.powertools.aws.dev/lambda-python/latest/utilities/idempotency/" target="_blank"
+      - Idempotency: https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk" target="_blank"
       - CDK Best practices: https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches" target="_blank"
       - Testing Best practices: https://www.ranthebuilder.cloud/post/guide-to-serverless-lambda-testing-best-practices-part-1" target="_blank"
 
