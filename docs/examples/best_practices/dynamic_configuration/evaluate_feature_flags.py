@@ -16,7 +16,7 @@ from service.handlers.utils.observability import logger
 def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     try:
         my_configuration: MyConfiguration = parse_configuration(model=MyConfiguration)  # type: ignore
-        logger.debug('fetched dynamic configuration', extra={'configuration': my_configuration.dict()})
+        logger.debug('fetched dynamic configuration', extra={'configuration': my_configuration.model_dump()})
     except (SchemaValidationError, ConfigurationStoreError) as exc:
         logger.exception(f'dynamic configuration error, error={str(exc)}')
         return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})

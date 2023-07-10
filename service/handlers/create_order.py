@@ -29,11 +29,11 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
     logger.set_correlation_id(context.aws_request_id)
 
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
-    logger.debug('environment variables', extra=env_vars.dict())
+    logger.debug('environment variables', extra=env_vars.model_dump())
 
     try:
         my_configuration: MyConfiguration = parse_configuration(model=MyConfiguration)  # type: ignore
-        logger.debug('fetched dynamic configuration', extra={'configuration': my_configuration.dict()})
+        logger.debug('fetched dynamic configuration', extra={'configuration': my_configuration.model_dump()})
     except (SchemaValidationError, ConfigurationStoreError) as exc:
         logger.exception(f'dynamic configuration error, error={str(exc)}')
         return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})
@@ -57,4 +57,4 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
         return build_response(http_status=HTTPStatus.INTERNAL_SERVER_ERROR, body={})
 
     logger.info('finished handling create order request')
-    return build_response(http_status=HTTPStatus.OK, body=response.dict())
+    return build_response(http_status=HTTPStatus.OK, body=response.model_dump())

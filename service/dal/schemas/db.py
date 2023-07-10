@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from pydantic import BaseModel, Field, PositiveInt, validator
+from pydantic import BaseModel, Field, PositiveInt, field_validator
 
 
 class OrderEntry(BaseModel):
@@ -9,7 +9,10 @@ class OrderEntry(BaseModel):
     customer_name: Annotated[str, Field(min_length=1, max_length=20)]
     order_id: str  # primary key
 
-    @validator('order_id')
+    @field_validator('order_id')
     def valid_uuid(cls, v):
-        UUID(v, version=4)
+        try:
+            UUID(v, version=4)
+        except Exception as exc:
+            raise ValueError(str(exc))
         return v

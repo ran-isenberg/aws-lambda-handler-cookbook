@@ -46,6 +46,6 @@ def parse_configuration(model: Type[Model]) -> Type[BaseModel]:
     """
     try:
         conf_json: Dict[str, Any] = get_dynamic_configuration_store().store.get_raw_configuration
-        return model.parse_obj(conf_json)  # type: ignore
+        return model.model_validate(conf_json)  # type: ignore
     except (ValidationError, TypeError) as exc:
         raise SchemaValidationError(f'appconfig schema failed pydantic validation, exception={str(exc)}') from exc

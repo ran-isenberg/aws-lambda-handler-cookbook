@@ -11,7 +11,7 @@ Model = TypeVar('Model', bound=BaseModel)
 @lru_cache
 def __parse_model(model: Type[Model]) -> Model:
     try:
-        return model.parse_obj(os.environ)
+        return model.model_validate(os.environ)
     except (ValidationError, TypeError) as exc:
         raise ValueError(f'failed to load environment variables, exception={str(exc)}') from exc
 
