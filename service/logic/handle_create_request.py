@@ -52,4 +52,5 @@ def handle_campaign():
 
 
 def apply_premium_user_discount():
+    logger.debug('premium user detected')
     return
