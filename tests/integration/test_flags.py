@@ -109,8 +109,10 @@ def test_handler_campaign_off_200_ok(mocker):
     assert campaign_logic_spy.call_count == 0
 
 
-def test_handler_premium_on_200_ok(mocker):
+def test_handler_premium_on_200_ok(mocker, monkeypatch):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_ON)
+    # Set POWERTOOLS_IDEMPOTENCY_DISABLED before calling decorated functions
+    monkeypatch.setenv('POWERTOOLS_IDEMPOTENCY_DISABLED', 1)
     premium_logic_spy = spy_on_premium_logic(mocker)
     customer_name = 'RanTheBuilder'
     order_item_count = 6
