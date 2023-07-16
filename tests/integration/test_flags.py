@@ -78,6 +78,11 @@ def spy_on_campaign_logic(mocker):
     return mocker.spy(cr, 'handle_campaign')
 
 
+def spy_on_premium_logic(mocker):
+    import service.logic.handle_create_request as cr
+    return mocker.spy(cr, 'apply_premium_user_discount')
+
+
 def test_handler_campaign_on_200_ok(mocker):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_ON)
     campaign_logic_spy = spy_on_campaign_logic(mocker)
@@ -102,3 +107,29 @@ def test_handler_campaign_off_200_ok(mocker):
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
     # assert campaign code did NOT ran
     assert campaign_logic_spy.call_count == 0
+
+
+def test_handler_premium_on_200_ok(mocker):
+    mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_ON)
+    premium_logic_spy = spy_on_premium_logic(mocker)
+    customer_name = 'RanTheBuilder'
+    order_item_count = 6
+    body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
+    response = call_create_order(generate_api_gw_event(body.dict()))
+    # assert response
+    assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
+    # assert campaign code ran and its side effects
+    assert premium_logic_spy.call_count == 1
+
+
+def test_handler_premium_off_200_ok(mocker):
+    mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_ON)
+    premium_logic_spy = spy_on_premium_logic(mocker)
+    customer_name = f'{generate_random_string()}-NoCampaignForYou'
+    order_item_count = 5
+    body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
+    response = call_create_order(generate_api_gw_event(body.dict()))
+    # assert response
+    assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
+    # assert campaign code ran and its side effects
+    assert premium_logic_spy.call_count == 0
