@@ -17,19 +17,39 @@ def handle_create_request(order_request: CreateOrderRequest, table_name: str) ->
 
     # feature flags example
     config_store = get_dynamic_configuration_store()
+
+    # discount campaign flag
     campaign = config_store.evaluate(
         name=FeatureFlagsNames.TEN_PERCENT_CAMPAIGN.value,
         context={},
         default=False,
     )
-    logger.debug('campaign feature flag value', extra={'campaign': campaign})
+    if campaign:
+        handle_campaign()
+    else:
+        logger.debug('campaign is off')
+
+    # premium users flag - changes according to customer name
     premium = config_store.evaluate(
         name=FeatureFlagsNames.PREMIUM.value,
         context={'customer_name': order_request.customer_name},
         default=False,
     )
+
     logger.debug('premium feature flag value', extra={'premium': premium})
+    if premium:
+        apply_premium_user_discount()
+
     dal_handler: DalHandler = get_dal_handler(table_name)
     order: OrderEntry = dal_handler.create_order_in_db(order_request.customer_name, order_request.order_item_count)
     # convert from db entry to output, they won't always be the same
     return CreateOrderOutput(customer_name=order.customer_name, order_item_count=order.order_item_count, order_id=order.order_id)
+
+
+def handle_campaign():
+    logger.debug('campaign feature flag is on')
+    return
+
+
+def apply_premium_user_discount():
+    return
