@@ -23,6 +23,7 @@ aws-lambda-powertools =  {git = "https://github.com/aws-powertools/powertools-la
 mypy-boto3-dynamodb = "*"
 cachetools = "*"
 boto3 = "^1.26.125"
+aws-lambda-env-modeler = "*"
 
 [tool.poetry.dev-dependencies]
 # CDK

@@ -2,10 +2,10 @@ import json
 from http import HTTPStatus
 from typing import Any, Dict
 
+from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.schemas.env_vars import MyHandlerEnvVars
-from service.handlers.utils.env_vars_parser import get_environment_variables, init_environment_variables
 
 
 @init_environment_variables(model=MyHandlerEnvVars)

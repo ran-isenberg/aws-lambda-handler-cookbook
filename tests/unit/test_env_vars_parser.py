@@ -3,10 +3,10 @@ from typing import Any, Dict, Literal
 from unittest import mock
 
 import pytest
+from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
 from pydantic import BaseModel, HttpUrl
 
 from cdk.my_service.constants import POWER_TOOLS_LOG_LEVEL, POWERTOOLS_SERVICE_NAME, SERVICE_NAME
-from service.handlers.utils.env_vars_parser import get_environment_variables, init_environment_variables
 from tests.utils import generate_context
 
 

@@ -1,11 +1,11 @@
 from typing import Any, Dict, Type, TypeVar, Union
 
+from aws_lambda_env_modeler import get_environment_variables
 from aws_lambda_powertools.utilities.feature_flags import AppConfigStore, FeatureFlags
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 from pydantic import BaseModel, ValidationError
 
 from service.handlers.schemas.env_vars import DynamicConfiguration
-from service.handlers.utils.env_vars_parser import get_environment_variables
 
 Model = TypeVar('Model', bound=BaseModel)
 

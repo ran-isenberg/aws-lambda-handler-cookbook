@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from typing import Any, Dict
 
+from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
 from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.feature_flags.exceptions import ConfigurationStoreError, SchemaValidationError
 from aws_lambda_powertools.utilities.idempotency import idempotent
@@ -11,7 +12,6 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 from service.handlers.schemas.dynamic_configuration import MyConfiguration
 from service.handlers.schemas.env_vars import MyHandlerEnvVars
 from service.handlers.utils.dynamic_configuration import parse_configuration
-from service.handlers.utils.env_vars_parser import get_environment_variables, init_environment_variables
 from service.handlers.utils.http_responses import build_response
 from service.handlers.utils.idempotency import IDEMPOTENCY_CONFIG, IDEMPOTENCY_LAYER
 from service.handlers.utils.observability import logger, metrics, tracer
