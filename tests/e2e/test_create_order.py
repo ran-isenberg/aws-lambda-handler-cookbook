@@ -17,7 +17,7 @@ def api_gw_url():
 def test_handler_200_ok(api_gw_url):
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=5)
-    response = requests.post(api_gw_url, data=body.json())
+    response = requests.post(api_gw_url, data=body.model_dump_json())
     assert response.status_code == HTTPStatus.OK
     body_dict = json.loads(response.text)
     assert body_dict['order_id']
@@ -26,7 +26,7 @@ def test_handler_200_ok(api_gw_url):
 
     # check idempotency, send same request
     original_order_id = body_dict['order_id']
-    response = requests.post(api_gw_url, data=body.json())
+    response = requests.post(api_gw_url, data=body.model_dump_json())
     assert response.status_code == HTTPStatus.OK
     body_dict = json.loads(response.text)
     assert body_dict['order_id'] == original_order_id

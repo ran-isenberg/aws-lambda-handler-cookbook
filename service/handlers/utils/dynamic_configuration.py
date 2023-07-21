@@ -1,11 +1,11 @@
 from typing import Any, Dict, Type, TypeVar, Union
 
+from aws_lambda_env_modeler import get_environment_variables
 from aws_lambda_powertools.utilities.feature_flags import AppConfigStore, FeatureFlags
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
 from pydantic import BaseModel, ValidationError
 
 from service.handlers.schemas.env_vars import DynamicConfiguration
-from service.handlers.utils.env_vars_parser import get_environment_variables
 
 Model = TypeVar('Model', bound=BaseModel)
 
@@ -46,6 +46,6 @@ def parse_configuration(model: Type[Model]) -> Type[BaseModel]:
     """
     try:
         conf_json: Dict[str, Any] = get_dynamic_configuration_store().store.get_raw_configuration
-        return model.parse_obj(conf_json)  # type: ignore
+        return model.model_validate(conf_json)  # type: ignore
     except (ValidationError, TypeError) as exc:
         raise SchemaValidationError(f'appconfig schema failed pydantic validation, exception={str(exc)}') from exc

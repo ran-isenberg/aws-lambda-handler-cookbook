@@ -89,7 +89,7 @@ def test_handler_campaign_on_200_ok(mocker):
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
-    response = call_create_order(generate_api_gw_event(body.dict()))
+    response = call_create_order(generate_api_gw_event(body.model_dump()))
     # assert response
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
     # assert campaign code ran and its side effects
@@ -102,7 +102,7 @@ def test_handler_campaign_off_200_ok(mocker):
     customer_name = f'{generate_random_string()}-NoCampaignForYou'
     order_item_count = 5
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
-    response = call_create_order(generate_api_gw_event(body.dict()))
+    response = call_create_order(generate_api_gw_event(body.model_dump()))
     # assert response
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
     # assert campaign code did NOT ran
@@ -117,7 +117,7 @@ def test_handler_premium_on_200_ok(mocker, monkeypatch):
     customer_name = 'RanTheBuilder'
     order_item_count = 6
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
-    response = call_create_order(generate_api_gw_event(body.dict()))
+    response = call_create_order(generate_api_gw_event(body.model_dump()))
     # assert response
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
     # assert campaign code ran and its side effects
@@ -130,7 +130,7 @@ def test_handler_premium_off_200_ok(mocker):
     customer_name = f'{generate_random_string()}-NoCampaignForYou'
     order_item_count = 5
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
-    response = call_create_order(generate_api_gw_event(body.dict()))
+    response = call_create_order(generate_api_gw_event(body.model_dump()))
     # assert response
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
     # assert campaign code ran and its side effects

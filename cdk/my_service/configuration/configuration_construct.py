@@ -88,5 +88,5 @@ class ConfigurationStore(Construct):
         conf_filepath = current / (f'json/{environment}_configuration.json')
         configuration_str = conf_filepath.read_text()
         # validate configuration (check feature flags schema structure if exists)
-        FeatureFlagsConfiguration.parse_raw(configuration_str)
+        FeatureFlagsConfiguration.model_validate_json(configuration_str)
         return configuration_str

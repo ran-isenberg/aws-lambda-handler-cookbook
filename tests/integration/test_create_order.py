@@ -57,7 +57,7 @@ def test_handler_200_ok(mocker, table_name: str):
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
-    response = call_create_order(generate_api_gw_event(body.dict()))
+    response = call_create_order(generate_api_gw_event(body.model_dump()))
     # assert response
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
@@ -79,7 +79,7 @@ def test_internal_server_error():
     stubber.add_client_error(method='put_item', service_error_code='ValidationException')
     stubber.activate()
     body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
-    response = call_create_order(generate_api_gw_event(body.dict()))
+    response = call_create_order(generate_api_gw_event(body.model_dump()))
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
@@ -96,7 +96,7 @@ def test_handler_failed_appconfig_fetch(mocker):
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
-    response = call_create_order(generate_api_gw_event(body.dict()))
+    response = call_create_order(generate_api_gw_event(body.model_dump()))
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
     body_dict = json.loads(response['body'])
     assert body_dict == {}

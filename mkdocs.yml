@@ -73,7 +73,7 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
 
-copyright: Copyright &copy; 2022 Ran Isenberg
+copyright: Copyright &copy; 2023 Ran Isenberg
 
 plugins:
   - git-revision-date
