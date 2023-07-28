@@ -80,9 +80,5 @@ class ServiceStack(Stack):
                     'id': 'AwsSolutions-COG4',
                     'reason': 'not using cognito'
                 },
-                {
-                    'id': 'AwsSolutions-L1',
-                    'reason': 'https://github.com/aws/aws-cdk/issues/26451'
-                },
             ],
         )
