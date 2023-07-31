@@ -979,13 +979,13 @@ reports = ["lxml"]
 
 [[package]]
 name = "mypy-boto3-dynamodb"
-version = "1.28.12"
-description = "Type annotations for boto3.DynamoDB 1.28.12 service generated with mypy-boto3-builder 7.15.2"
+version = "1.28.15.post2"
+description = "Type annotations for boto3.DynamoDB 1.28.15 service generated with mypy-boto3-builder 7.16.2"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "mypy-boto3-dynamodb-1.28.12.tar.gz", hash = "sha256:a201c983a36b336561558d5116bd32dd3e20888cf51ccdb4dae81fc203d34bef"},
-    {file = "mypy_boto3_dynamodb-1.28.12-py3-none-any.whl", hash = "sha256:67862ae79d2304298d4730edd264d2b0b4dd2bf246eca9fec1e9bccecd3cca90"},
+    {file = "mypy-boto3-dynamodb-1.28.15.post2.tar.gz", hash = "sha256:54508d8b39ccd11f474d9b94ce753ce5395fc972293d6fb68797d549574670e4"},
+    {file = "mypy_boto3_dynamodb-1.28.15.post2-py3-none-any.whl", hash = "sha256:798822426c826187a182cb6a561a43be4f94cd8d654ce34a40a2b6ee566a017e"},
 ]
 
 [[package]]
