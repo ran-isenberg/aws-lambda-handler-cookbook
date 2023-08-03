@@ -72,7 +72,8 @@ def test_handler_200_ok(mocker, table_name: str):
     assert response['Item']['order_item_count'] == order_item_count
 
 
-def test_internal_server_error():
+def test_internal_server_error(mocker):
+    mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     db_handler: DynamoDalHandler = DynamoDalHandler('table')
     table = db_handler._get_db_handler()
     stubber = Stubber(table.meta.client)
@@ -81,6 +82,8 @@ def test_internal_server_error():
     body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
     response = call_create_order(generate_api_gw_event(body.model_dump()))
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+    stubber.deactivate()
+    DynamoDalHandler._instances = {}
 
 
 def test_handler_bad_request(mocker):
