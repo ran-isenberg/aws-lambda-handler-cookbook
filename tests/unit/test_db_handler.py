@@ -13,3 +13,4 @@ def test_raise_exception():
     stubber.activate()
     with pytest.raises(InternalServerException):
         db_handler.create_order_in_db(customer_name='customer', order_item_count=5)
+    stubber.deactivate()
