@@ -5,9 +5,9 @@ from aws_cdk import aws_lambda as _lambda
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
 from aws_cdk.aws_logs import RetentionDays
 from constructs import Construct
-from my_service.api_db_construct import ApiDbConstruct  # type: ignore
 
 import cdk.my_service.constants as constants
+from cdk.my_service.api_db_construct import ApiDbConstruct  # type: ignore
 
 
 class ApiConstruct(Construct):
