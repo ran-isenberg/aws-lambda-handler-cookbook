@@ -83,6 +83,7 @@ def test_internal_server_error(mocker):
     response = call_create_order(generate_api_gw_event(body.model_dump()))
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
     stubber.deactivate()
+    DynamoDalHandler._instances = {}
 
 
 def test_handler_bad_request(mocker):
