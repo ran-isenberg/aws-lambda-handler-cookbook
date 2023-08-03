@@ -72,7 +72,8 @@ def test_handler_200_ok(mocker, table_name: str):
     assert response['Item']['order_item_count'] == order_item_count
 
 
-def test_internal_server_error():
+def test_internal_server_error(mocker):
+    mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     db_handler: DynamoDalHandler = DynamoDalHandler('table')
     table = db_handler._get_db_handler()
     stubber = Stubber(table.meta.client)
