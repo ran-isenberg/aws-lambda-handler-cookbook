@@ -82,6 +82,7 @@ def test_internal_server_error(mocker):
     body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
     response = call_create_order(generate_api_gw_event(body.model_dump()))
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+    stubber.deactivate()
 
 
 def test_handler_bad_request(mocker):

@@ -42,7 +42,7 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
         # we want to extract and parse the HTTP body from the api gw envelope
         create_input: CreateOrderRequest = parse(event=event, model=CreateOrderRequest, envelope=ApiGatewayEnvelope)
         logger.info('got create order request', extra={'order_item_count': create_input.order_item_count})
-    except (ValidationError, TypeError) as exc:
+    except (ValidationError, TypeError) as exc:  # pragma: no cover
         logger.error('event failed input validation', extra={'error': str(exc)})
         return build_response(http_status=HTTPStatus.BAD_REQUEST, body={})
 
