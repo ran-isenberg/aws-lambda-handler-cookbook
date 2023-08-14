@@ -240,19 +240,19 @@ ujson = ["ujson (>=5.4.0,<6.0.0)"]
 
 [[package]]
 name = "cdk-nag"
-version = "2.27.89"
+version = "2.27.100"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "cdk-nag-2.27.89.tar.gz", hash = "sha256:ea60100dac663f24c280347e73fdc2365c14d29f6d020437311ac6a87c87cb7f"},
-    {file = "cdk_nag-2.27.89-py3-none-any.whl", hash = "sha256:8099a5cc3a5264a9c9d20a1ddde73775947ea88a0648ab3dc6c2585d3212dcf9"},
+    {file = "cdk-nag-2.27.100.tar.gz", hash = "sha256:04465713b71d1c6c2816e10d032d995e38f27aea90c8be3a78b73a94ac8a2aab"},
+    {file = "cdk_nag-2.27.100-py3-none-any.whl", hash = "sha256:ad258ec4e9c81683a973b64d7159f86c8dd3f97e266ea12eb876a4510c25825d"},
 ]
 
 [package.dependencies]
 aws-cdk-lib = ">=2.78.0,<3.0.0"
 constructs = ">=10.0.5,<11.0.0"
-jsii = ">=1.86.1,<2.0.0"
+jsii = ">=1.87.0,<2.0.0"
 publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
@@ -723,13 +723,13 @@ files = [
 
 [[package]]
 name = "jsii"
-version = "1.86.1"
+version = "1.87.0"
 description = "Python client for jsii runtime"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "jsii-1.86.1-py3-none-any.whl", hash = "sha256:32eb46ed4c9a35bc92b892ef049ed1996f13be38ffef964d607e8fe930471b3e"},
-    {file = "jsii-1.86.1.tar.gz", hash = "sha256:44f9a820eea92c9508693f72d3129b5a080421c949c32303f4f7b2cc98a81f59"},
+    {file = "jsii-1.87.0-py3-none-any.whl", hash = "sha256:4b7c1331e950af10ba7b71d1c9d2e634b17716b3d1b2bf61e0382ff524d8aafb"},
+    {file = "jsii-1.87.0.tar.gz", hash = "sha256:ba6860c827551901a8c43c7b09a9bb901d5f1231fc4693f2f4bf87b3db200064"},
 ]
 
 [package.dependencies]
