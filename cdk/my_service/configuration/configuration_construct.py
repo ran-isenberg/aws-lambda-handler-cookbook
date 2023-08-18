@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional
 
 import aws_cdk.aws_appconfig_alpha as appconfig
 from aws_cdk import Duration
@@ -14,8 +13,7 @@ CUSTOM_ZERO_TIME_STRATEGY = 'zero'
 
 class ConfigurationStore(Construct):
 
-    def __init__(self, scope: Construct, id_: str, environment: str, service_name: str, configuration_name: str,
-                 deployment_strategy_id: Optional[str] = None) -> None:
+    def __init__(self, scope: Construct, id_: str, environment: str, service_name: str, configuration_name: str) -> None:
         """
         This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled from
         running the service pipeline and without redeploying the service lambdas.
@@ -28,9 +26,6 @@ class ConfigurationStore(Construct):
                                'configuration/json/{environment}_configuration.json'
             service_name (str): application name.
             configuration_name (str): configuration name
-            deployment_strategy_id (str, optional): AWS AppConfig deployment strategy.
-                                                See https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
-                                                    Defaults to DEFAULT_DEPLOYMENT_STRATEGY.
         """
         super().__init__(scope, id_)
 
