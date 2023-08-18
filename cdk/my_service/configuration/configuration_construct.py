@@ -6,10 +6,6 @@ from constructs import Construct
 
 from cdk.my_service.configuration.schema import FeatureFlagsConfiguration
 
-DEFAULT_DEPLOYMENT_STRATEGY = 'AppConfig.AllAtOnce'
-
-CUSTOM_ZERO_TIME_STRATEGY = 'zero'
-
 
 class ConfigurationStore(Construct):
 
@@ -47,7 +43,7 @@ class ConfigurationStore(Construct):
         # zero minutes, zero bake, 100 growth all at once
         self.config_dep_strategy = appconfig.DeploymentStrategy(
             self,
-            f'{id_}{CUSTOM_ZERO_TIME_STRATEGY}',
+            f'{id_}zero',
             rollout_strategy=appconfig.RolloutStrategy.linear(
                 growth_factor=100,
                 deployment_duration=Duration.minutes(0),
