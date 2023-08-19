@@ -22,6 +22,7 @@ All steps can be run locally using the makefile. See details below:
 - Code coverage by [codecov.io](https://about.codecov.io/)
 - Deploy CDK - run `make deploy` in the IDE, will also run security tests based on cdk_nag
 - E2E tests  - run `make e2e` in the IDE
+- Code coverage tests  - run `make coverage-tests` in the IDE after CDK dep
 - Update GitHub documentation branch
 
 ### Other Capabilities

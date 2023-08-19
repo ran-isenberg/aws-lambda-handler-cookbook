@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from cdk.my_service.constants import (
+from cdk.service.constants import (
     CONFIGURATION_NAME,
     ENVIRONMENT,
     IDEMPOTENCY_TABLE_NAME_OUTPUT,

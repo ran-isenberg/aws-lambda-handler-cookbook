@@ -1,20 +1,14 @@
 from pathlib import Path
-from typing import Optional
 
 import aws_cdk.aws_appconfig as appconfig
 from constructs import Construct
 
-from cdk.my_service.configuration.schema import FeatureFlagsConfiguration
-
-DEFAULT_DEPLOYMENT_STRATEGY = 'AppConfig.AllAtOnce'
-
-CUSTOM_ZERO_TIME_STRATEGY = 'zero'
+from cdk.service.configuration.schema import FeatureFlagsConfiguration
 
 
 class ConfigurationStore(Construct):
 
-    def __init__(self, scope: Construct, id_: str, environment: str, service_name: str, configuration_name: str,
-                 deployment_strategy_id: Optional[str] = None) -> None:
+    def __init__(self, scope: Construct, id_: str, environment: str, service_name: str, configuration_name: str) -> None:
         """
         This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled from
         running the service pipeline and without redeploying the service lambdas.
@@ -27,9 +21,6 @@ class ConfigurationStore(Construct):
                                'configuration/json/{environment}_configuration.json'
             service_name (str): application name.
             configuration_name (str): configuration name
-            deployment_strategy_id (str, optional): AWS AppConfig deployment strategy.
-                                                See https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
-                                                    Defaults to DEFAULT_DEPLOYMENT_STRATEGY.
         """
         super().__init__(scope, id_)
 
@@ -64,10 +55,10 @@ class ConfigurationStore(Construct):
 
         self.cfn_deployment_strategy = appconfig.CfnDeploymentStrategy(
             self,
-            f'{id_}{CUSTOM_ZERO_TIME_STRATEGY}',
+            f'{id_}zero',
             deployment_duration_in_minutes=0,
             growth_factor=100,
-            name=CUSTOM_ZERO_TIME_STRATEGY,
+            name='zero',
             replicate_to='NONE',
             description='zero minutes, zero bake, 100 growth all at once',
             final_bake_time_in_minutes=0,

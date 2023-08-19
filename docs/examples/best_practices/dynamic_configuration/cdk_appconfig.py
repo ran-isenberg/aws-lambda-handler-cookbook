@@ -1,8 +1,8 @@
 from aws_cdk import Stack
 from constructs import Construct
 
-from cdk.my_service.configuration.configuration_construct import ConfigurationStore
-from cdk.my_service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
+from cdk.service.configuration.configuration_construct import ConfigurationStore
+from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
 
 
 class DynamicConfigurationStack(Stack):

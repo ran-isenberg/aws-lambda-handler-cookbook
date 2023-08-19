@@ -2,7 +2,7 @@ from aws_cdk import CfnOutput, RemovalPolicy
 from aws_cdk import aws_dynamodb as dynamodb
 from constructs import Construct
 
-import cdk.my_service.constants as constants
+import cdk.service.constants as constants
 
 
 class ApiDbConstruct(Construct):
