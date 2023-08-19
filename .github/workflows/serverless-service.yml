@@ -3,87 +3,119 @@
 name: Serverless Service CI/CD
 
 permissions:
-  id-token: write # This is required for requesting the JWT
-  issues: write
-  checks: read
   contents: read
+
+env:
+  NODE_VERSION: "18"
+  PYTHON_VERSION: "3.11"
+  AWS_REGION: "us-east-1"
 
 on:
   push:
     branches: [main]
+    paths:
+      - "service/**" # source code
+      - "cdk/**" # CDK source code
+      - "docs/**" # docs source code
+      - "tests/**"
+      - "pyproject.toml" # deps
+      - "poetry.lock" # deps
+      - "mypy.ini"
+      - "app.py" # CDK entrypoint
+      - ".flake8" # linter settings
+      - ".isort.cfg" # formatter settings
   pull_request:
     branches: [main]
+    paths:
+      - "service/**" # source code
+      - "cdk/**" # CDK source code
+      - "docs/**" # docs source code
+      - "tests/**"
+      - "pyproject.toml" # deps
+      - "poetry.lock" # deps
+      - "mypy.ini"
+      - "app.py" # CDK entrypoint
+      - ".flake8" # linter settings
+      - ".isort.cfg" # formatter settings
 
 jobs:
-  build:
+  quality_standards:
     runs-on: ubuntu-latest
-    environment: dev
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event.\n" >> $GITHUB_STEP_SUMMARY
-      - run: echo "🐧 This job is now running on a ${{  runner.os }} server hosted by GitHub!\n" >> $GITHUB_STEP_SUMMARY
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}.\n" >> $GITHUB_STEP_SUMMARY
+      - run: |
+          echo "🎉 The job was automatically triggered by a ${{ env.EVENT_NAME }} event.\n" >> $GITHUB_STEP_SUMMARY
+          echo "🐧 This job is now running on a ${{ env.OS_NAME }} ${{env.OS_ARCH}} server hosted by GitHub!\n" >> $GITHUB_STEP_SUMMARY
+          echo "🔎 The name of your branch is ${{ env.BRANCH_NAME }} and your repository is ${{ env.REPO_NAME }}.\n" >> $GITHUB_STEP_SUMMARY
+        env:
+          EVENT_NAME: ${{ github.event_name}}
+          OS_NAME: ${{ runner.os }}
+          OS_ARCH: ${{runner.arch }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          REPO_NAME: ${{ github.repository }}
       - name: Check out repository code
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-      - name: Set up Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@61a6322f88396a6271a6ee3565807d608ecaddd1 # v4.7.0
         with:
-          python-version: "3.11"
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: make dev
+      - name: pre commit
+        run: make pre-commit
+      - name: Formatting and Linting
+        run: make lint
+      - name: Complexity scan
+        run: make complex
+  tests:
+    needs: quality_standards
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      id-token: write # required for requesting the JWT (GitHub OIDC)
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+      - name: Set up Python
+        uses: actions/setup-python@61a6322f88396a6271a6ee3565807d608ecaddd1 # v4.7.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
       - name: Set up Node
         uses: actions/setup-node@bea5baf987ba7aa777a8a0b4ace377a21c45c381 # v3.8.0
         with:
-          node-version: "18"
+          node-version: ${{ env.NODE_VERSION }}
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip pre-commit poetry
-          npm install -g aws-cdk
-          make deps
-          pip install -r dev_requirements.txt
-          pip install -r lambda_requirements.txt
-      - name: configure aws credentials
+        run: make dev
+      - name: Unit tests
+        run: make unit
+      - name: Infrastructure tests
+        run: make infra-tests
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
-          role-session-name: samplerolesession
-          aws-region: us-east-1
-      - name: pre commit
-        run: |
-          make pre-commit
-      - name: Lint with flake8 and mypy
-        run: |
-          make lint
-      - name: file format
-        run: |
-          yapf -d -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .
-      - name: Complexity scan
-        run: |
-          make complex
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: Unit tests
-        run: |
-          make unit
-      - name: Infrastructure tests
-        run: |
-          make infra-tests
+          role-session-name: ${{ env.SESSION_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
+        env:
+          SESSION_NAME: "${{github.repository}}-at-${{github.sha}}"
       - name: Deploy to AWS
         run: make deploy
-      - name: Integration tests
-        run: |
-          make coverage-tests
+      # NOTE: these run unit and integration tests
+      # we can look into coverage collection only later to make it faster and less brittle (--collect-only)
+      - name: Code coverage tests
+        run: make coverage-tests
       - name: Codecov
         uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
         with:
           files: ./coverage.xml
-          name: aws-lambda-handler-cookbook-template-codecov
           fail_ci_if_error: false # optional (default = false)
           verbose: false # optional (default = false)
-          token: ${{ secrets.CODECOV_TOKEN }}
       - name: Run E2E tests
         run: make e2e
       - name: Destroy stack
         if: always()
         run: make destroy
-
-  generate_docs_on_main:
+  publish_github_pages:
     name: generate_docs_on_main
     runs-on: ubuntu-latest
     needs: [build]
@@ -93,10 +125,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-      - name: Set up Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@61a6322f88396a6271a6ee3565807d608ecaddd1 # v4.7.0
         with:
-          python-version: "3.11"
+          python-version: ${{ env.PYTHON_VERSION }}
       - name: Install dependencies
         run: |
           pip install --upgrade pip poetry
