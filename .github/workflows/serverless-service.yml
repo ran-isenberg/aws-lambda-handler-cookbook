@@ -24,6 +24,7 @@ on:
       - "app.py" # CDK entrypoint
       - ".flake8" # linter settings
       - ".isort.cfg" # formatter settings
+      - .github # CI/CD
   pull_request:
     branches: [main]
     paths:
@@ -37,6 +38,7 @@ on:
       - "app.py" # CDK entrypoint
       - ".flake8" # linter settings
       - ".isort.cfg" # formatter settings
+      - .github # CI/CD
 
 jobs:
   quality_standards:
