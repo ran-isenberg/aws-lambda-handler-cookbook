@@ -3,7 +3,7 @@ from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
 
-import cdk.my_service.constants as constants
+import cdk.service.constants as constants
 
 
 def _build_lambda_role(self, db: dynamodb.Table) -> iam.Role:

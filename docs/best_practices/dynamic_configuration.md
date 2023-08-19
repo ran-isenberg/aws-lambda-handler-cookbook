@@ -47,7 +47,7 @@ Let's review its advantages:
 1. Application (service)
 2. Environment
 3. Custom deployment strategy - immediate deploy, 0 minutes wait, no validations or AWS CloudWatch alerts
-4. The JSON configuration. It uploads the files ‘cdk/my_service/configuration/json/{environment}_configuration.json’, where environment is a construct argument (default is 'dev')
+4. The JSON configuration. It uploads the files ‘cdk/service/configuration/json/{environment}_configuration.json’, where environment is a construct argument (default is 'dev')
 
 The construct **validates** the JSON file and verifies that feature flags syntax is valid and exists under the 'features' key. Feature flags are optional.
 
@@ -72,7 +72,7 @@ Args:
 --8<-- "docs/examples/best_practices/dynamic_configuration/cdk_appconfig.py"
 ```
 
-The JSON configuration that is uploaded to AWS AppConfig resides under ``cdk/my_service/configuration/json/dev_configuration.json``
+The JSON configuration that is uploaded to AWS AppConfig resides under ``cdk/service/configuration/json/dev_configuration.json``
 
 ``dev`` represents the default environment. You can add multiple configurations for different environments.
 

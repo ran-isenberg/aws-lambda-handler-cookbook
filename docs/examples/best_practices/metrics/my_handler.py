@@ -5,7 +5,7 @@ from typing import Any, Dict
 from aws_lambda_powertools.metrics import Metrics, MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-SERVICE_NAME = 'my_service'
+SERVICE_NAME = 'service'
 
 # namespace and service name can be set by environment variable "POWERTOOLS_METRICS_NAMESPACE" and "POWERTOOLS_SERVICE_NAME" accordingly
 metrics = Metrics(namespace='my_product_kpi', service=SERVICE_NAME)

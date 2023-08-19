@@ -17,10 +17,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{  runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event.\n" >> $GITHUB_STEP_SUMMARY
+      - run: echo "🐧 This job is now running on a ${{  runner.os }} server hosted by GitHub!\n" >> $GITHUB_STEP_SUMMARY
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}.\n" >> $GITHUB_STEP_SUMMARY
       - name: Check out repository code
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
       - name: Set up Python 3.11
@@ -67,12 +68,12 @@ jobs:
         run: make deploy
       - name: Integration tests
         run: |
-          make pipeline-tests
+          make coverage-tests
       - name: Codecov
         uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
         with:
           files: ./coverage.xml
-          name: aws-lambda-handler-cookbook-codecov
+          name: aws-lambda-handler-cookbook-template-codecov
           fail_ci_if_error: false # optional (default = false)
           verbose: false # optional (default = false)
           token: ${{ secrets.CODECOV_TOKEN }}

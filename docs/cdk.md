@@ -27,7 +27,7 @@ In order to add a new Lambda runtime dependency, add it to the Pipfile under the
 
 ### **CDK Constants**
 
-All ASW Lambda function configurations are saved as constants at the `cdk.my_service.constants.py` file and can easily be changed.
+All ASW Lambda function configurations are saved as constants at the `cdk.service.constants.py` file and can easily be changed.
 
 - Memory size
 - Timeout in seconds
@@ -38,15 +38,15 @@ All ASW Lambda function configurations are saved as constants at the `cdk.my_ser
 
 ### **Deployed Resources**
 
-- AWS Cloudformation stack: **cdk.my_service.service_stack.py** which is consisted of one construct
-- Construct: **cdk.my_service.api_construct.py** which includes:
+- AWS Cloudformation stack: **cdk.service.service_stack.py** which is consisted of one construct
+- Construct: **cdk.service.api_construct.py** which includes:
     - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more about it [here.](https://www.ranthebuilder.cloud/post/aws-lambda-layers-best-practice){:target="_blank" rel="noopener"}
     - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     - **Lambda Role** - The role of the Lambda function.
     - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/orders that triggers the Lambda function.
     - **AWS DynamoDB table** - stores request data. Created in the `api_db_construct.py` construct.
     - **AWS DynamoDB table** - stores idempotency data. Created in the `api_db_construct.py` construct.
-- Construct: **cdk.my_service.configuration.configuration_construct.py** which includes:
+- Construct: **cdk.service.configuration.configuration_construct.py** which includes:
     - AWS AppConfig configuration with an environment, application, configuration and deployment strategy. You can read more about it [here](best_practices/dynamic_configuration.md).
 
 ### **Infrastructure CDK & Security Tests**

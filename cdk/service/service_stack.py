@@ -6,9 +6,9 @@ from cdk_nag import AwsSolutionsChecks, NagSuppressions
 from constructs import Construct
 from git import Repo
 
-from cdk.my_service.api_construct import ApiConstruct
-from cdk.my_service.configuration.configuration_construct import ConfigurationStore
-from cdk.my_service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
+from cdk.service.api_construct import ApiConstruct
+from cdk.service.configuration.configuration_construct import ConfigurationStore
+from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
 
 
 def get_username() -> str:

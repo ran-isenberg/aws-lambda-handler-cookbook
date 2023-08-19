@@ -4,7 +4,7 @@ import os
 from aws_cdk import App, Environment
 from boto3 import client, session
 
-from cdk.my_service.service_stack import ServiceStack, get_stack_name
+from cdk.service.service_stack import ServiceStack, get_stack_name
 
 account = client('sts').get_caller_identity()['Account']
 region = session.Session().region_name

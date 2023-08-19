@@ -7,6 +7,15 @@ description: AWS Lambda Cookbook - Elevate Your Handler's Code Python pipeline
 
 The GitHub CI/CD pipeline includes the following steps.
 
+The pipelines uses environment secrets (under the defined environment dev) for code coverage and for the role to deploy to AWS.
+
+When you clone this repository or use the [cookiecutter variation](https://github.com/ran-isenberg/cookiecutter-serverless-python), be sure to define an environment in your [repo settings](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) and add two environment secrets:
+
+1. AWS_ROLE - to role to assume for your GitHub worker as defined [here](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services) .
+2. CODECOV_TOKEN - for [code coverage integration](https://app.codecov.io/).
+
+### Makefile Commands
+
 All steps can be run locally using the makefile. See details below:
 
 - Create Python environment
@@ -22,6 +31,7 @@ All steps can be run locally using the makefile. See details below:
 - Code coverage by [codecov.io](https://about.codecov.io/)
 - Deploy CDK - run `make deploy` in the IDE, will also run security tests based on cdk_nag
 - E2E tests  - run `make e2e` in the IDE
+- Code coverage tests  - run `make coverage-tests` in the IDE after CDK dep
 - Update GitHub documentation branch
 
 ### Other Capabilities
