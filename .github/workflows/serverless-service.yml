@@ -13,32 +13,8 @@ env:
 on:
   push:
     branches: [main]
-    paths:
-      - "service/**" # source code
-      - "cdk/**" # CDK source code
-      - "docs/**" # docs source code
-      - "tests/**"
-      - "pyproject.toml" # deps
-      - "poetry.lock" # deps
-      - "mypy.ini"
-      - "app.py" # CDK entrypoint
-      - ".flake8" # linter settings
-      - ".isort.cfg" # formatter settings
-      - ".github" # CI/CD
   pull_request:
     branches: [main]
-    paths:
-      - "service/**" # source code
-      - "cdk/**" # CDK source code
-      - "docs/**" # docs source code
-      - "tests/**"
-      - "pyproject.toml" # deps
-      - "poetry.lock" # deps
-      - "mypy.ini"
-      - "app.py" # CDK entrypoint
-      - ".flake8" # linter settings
-      - ".isort.cfg" # formatter settings
-      - ".github" # CI/CD
 
 jobs:
   quality_standards:
