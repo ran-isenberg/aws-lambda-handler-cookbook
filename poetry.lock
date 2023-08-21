@@ -240,13 +240,13 @@ ujson = ["ujson (>=5.4.0,<6.0.0)"]
 
 [[package]]
 name = "cdk-nag"
-version = "2.27.105"
+version = "2.27.107"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "cdk-nag-2.27.105.tar.gz", hash = "sha256:c82150706524b9bf924e65634c3987b4cf1b36473594053cdee1cc69bc18a200"},
-    {file = "cdk_nag-2.27.105-py3-none-any.whl", hash = "sha256:c2c5556f7a5abbb0ed51d6942c0bbc9a2603281db80fb08dd29312dcf43562a0"},
+    {file = "cdk-nag-2.27.107.tar.gz", hash = "sha256:8c8358e78195748556520cc1f13cac6ff2d705bada5717172668982850495dff"},
+    {file = "cdk_nag-2.27.107-py3-none-any.whl", hash = "sha256:0a8145a0d6b5c84af58930b3b09ce239096169754886085d0c59774dc1aae4bd"},
 ]
 
 [package.dependencies]
