@@ -23,7 +23,7 @@ jobs:
       - run: echo "🐧 This job is now running on a ${{  runner.os }} server hosted by GitHub!\n" >> $GITHUB_STEP_SUMMARY
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}.\n" >> $GITHUB_STEP_SUMMARY
       - name: Check out repository code
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - name: Set up Python 3.11
         uses: actions/setup-python@61a6322f88396a6271a6ee3565807d608ecaddd1 # v4.7.0
         with:
@@ -92,7 +92,7 @@ jobs:
     if: contains('refs/heads/main', github.ref)
     steps:
       - name: Check out repository code
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - name: Set up Python 3.11
         uses: actions/setup-python@61a6322f88396a6271a6ee3565807d608ecaddd1 # v4.7.0
         with:
