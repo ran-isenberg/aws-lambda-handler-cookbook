@@ -44,7 +44,7 @@ build: deps
 	mkdir -p .build/common_layer ; poetry export --without=dev --format=requirements.txt > .build/common_layer/requirements.txt
 
 infra-tests: build
-	poetry run pytest tests/cdk
+	poetry run pytest tests/infrastructure
 
 integration:
 	poetry run pytest tests/integration  --cov-config=.coveragerc --cov=service --cov-report xml
