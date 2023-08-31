@@ -1,70 +1,73 @@
-.PHONY: dev lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format
-PYTHON := ".venv/bin/python3"
+.PHONY: dev lint complex coverage pre-commit yapf sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build
 
-.ONESHELL:  # run all commands in a single shell, ensuring it runs within a local virtual env
+
+
 dev:
 	pip install --upgrade pip pre-commit poetry
 	pre-commit install
-# ensures poetry creates a local virtualenv (.venv)
 	poetry config --local virtualenvs.in-project true
 	poetry install
-	npm ci
 
-format:
-	poetry run isort .
-	poetry run yapf -d -vv --style=./.style -r .
-
-lint: format
+lint:
 	@echo "Running flake8"
-	poetry run flake8 service/* cdk/* tests/*
+	flake8 service/* cdk/* tests/* docs/examples/* --exclude patterns='build,cdk.json,cdk.context.json,.yaml'
 	@echo "Running mypy"
-	$(MAKE) mypy-lint
+	make mypy-lint
 
 complex:
 	@echo "Running Radon"
-	poetry run radon cc -e 'tests/*,cdk.out/*,node_modules/*' .
+	radon cc -e 'tests/*,cdk.out/*' .
 	@echo "Running xenon"
-	poetry run xenon --max-absolute B --max-modules A --max-average A -e 'tests/*,.venv/*,cdk.out/*,node_modules/*' .
+	xenon --max-absolute B --max-modules A --max-average A -e 'tests/*,.venv/*,cdk.out/*' .
+
+sort:
+	isort ${PWD}
 
 pre-commit:
-	poetry run pre-commit run -a --show-diff-on-failure
+	pre-commit run -a --show-diff-on-failure
 
 mypy-lint:
-	poetry run mypy --pretty service cdk tests
+	mypy --pretty service docs/examples cdk tests
 
 deps:
-	poetry export --only=dev --format=requirements.txt > dev_requirements.txt
-	poetry export --without=dev --format=requirements.txt > lambda_requirements.txt
+	poetry export --only=dev --without-hashes --format=requirements.txt > dev_requirements.txt
+	poetry export --without=dev --without-hashes --format=requirements.txt > lambda_requirements.txt
 
 unit:
-	poetry run pytest tests/unit  --cov-config=.coveragerc --cov=service --cov-report xml
+	pytest tests/unit  --cov-config=.coveragerc --cov=service --cov-report xml
 
-build: deps
+build:
+	make deps
 	mkdir -p .build/lambdas ; cp -r service .build/lambdas
-	mkdir -p .build/common_layer ; poetry export --without=dev --format=requirements.txt > .build/common_layer/requirements.txt
+	mkdir -p .build/common_layer ; poetry export --without=dev --without-hashes --format=requirements.txt > .build/common_layer/requirements.txt
 
-infra-tests: build
-	poetry run pytest tests/infrastructure
+infra-tests:
+	make build
+	pytest tests/infrastructure
 
 integration:
-	poetry run pytest tests/integration  --cov-config=.coveragerc --cov=service --cov-report xml
+	pytest tests/integration  --cov-config=.coveragerc --cov=service --cov-report xml
 
 e2e:
-	poetry run pytest tests/e2e  --cov-config=.coveragerc --cov=service --cov-report xml
+	pytest tests/e2e  --cov-config=.coveragerc --cov=service --cov-report xml
 
-pr: deps pre-commit complex lint unit deploy integration e2e
+pr: deps yapf sort pre-commit complex lint lint-docs unit deploy integration e2e
+
+yapf:
+	yapf -i -vv --style=./.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git --exclude=node_modules  -r .
 
 coverage-tests:
-	poetry run pytest tests/unit tests/integration  --cov-config=.coveragerc --cov=service --cov-report xml
+	pytest tests/unit tests/integration  --cov-config=.coveragerc --cov=service --cov-report xml
 
-deploy: build
-	npx cdk deploy --app="${PYTHON} ${PWD}/app.py" --require-approval=never
+deploy:
+	make build
+	cdk deploy --app="python3 ${PWD}/app.py" --require-approval=never
 
 destroy:
-	npx cdk destroy --app="${PYTHON} ${PWD}/app.py" --force
+	cdk destroy --app="python3 ${PWD}/app.py" --force
 
 docs:
-	poetry run mkdocs serve
+	mkdocs serve
 
 lint-docs:
 	docker run -v ${PWD}:/markdown 06kellyjac/markdownlint-cli --fix "docs"

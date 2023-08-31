@@ -1,6 +1,7 @@
 from pathlib import Path
 
-import aws_cdk.aws_appconfig as appconfig
+import aws_cdk.aws_appconfig_alpha as appconfig
+from aws_cdk import Duration, RemovalPolicy
 from constructs import Construct
 
 from cdk.service.configuration.schema import FeatureFlagsConfiguration
@@ -25,54 +26,49 @@ class ConfigurationStore(Construct):
         super().__init__(scope, id_)
 
         configuration_str = self._get_and_validate_configuration(environment)
-
-        self.config_app = appconfig.CfnApplication(
+        self.app_name = f'{id_}{service_name}'
+        self.config_app = appconfig.Application(
             self,
-            id=f'{id_}{service_name}',
-            name=f'{id_}{service_name}',
+            id=self.app_name,
+            name=self.app_name,
         )
-        self.config_env = appconfig.CfnEnvironment(
+
+        self.config_app.apply_removal_policy(RemovalPolicy.DESTROY)
+
+        self.config_env = appconfig.Environment(
             self,
             id=f'{id_}env',
-            application_id=self.config_app.ref,
+            application=self.config_app,
             name=environment,
         )
-        self.config_profile = appconfig.CfnConfigurationProfile(
-            self,
-            id=f'{id_}profile',
-            application_id=self.config_app.ref,
-            location_uri='hosted',
-            name=configuration_name,
-        )
-        self.hosted_cfg_version = appconfig.CfnHostedConfigurationVersion(
-            self,
-            f'{id_}version',
-            application_id=self.config_app.ref,
-            configuration_profile_id=self.config_profile.ref,
-            content=configuration_str,
-            content_type='application/json',
-        )
 
-        self.cfn_deployment_strategy = appconfig.CfnDeploymentStrategy(
+        self.config_env.apply_removal_policy(RemovalPolicy.DESTROY)
+
+        # zero minutes, zero bake, 100 growth all at once
+        self.config_dep_strategy = appconfig.DeploymentStrategy(
             self,
             f'{id_}zero',
-            deployment_duration_in_minutes=0,
-            growth_factor=100,
-            name='zero',
-            replicate_to='NONE',
-            description='zero minutes, zero bake, 100 growth all at once',
-            final_bake_time_in_minutes=0,
+            rollout_strategy=appconfig.RolloutStrategy.linear(
+                growth_factor=100,
+                deployment_duration=Duration.minutes(0),
+                final_bake_time=Duration.minutes(0),
+            ),
         )
 
-        self.app_config_deployment = appconfig.CfnDeployment(
+        self.config_dep_strategy.apply_removal_policy(RemovalPolicy.DESTROY)
+
+        self.config = appconfig.HostedConfiguration(
             self,
-            id=f'{id_}deploy',
-            application_id=self.config_app.ref,
-            configuration_profile_id=self.config_profile.ref,
-            configuration_version=self.hosted_cfg_version.ref,
-            deployment_strategy_id=self.cfn_deployment_strategy.ref,
-            environment_id=self.config_env.ref,
+            f'{id_}version',
+            application=self.config_app,
+            name=configuration_name,
+            content=appconfig.ConfigurationContent.from_inline(configuration_str),
+            type=appconfig.ConfigurationType.FREEFORM,
+            deployment_strategy=self.config_dep_strategy,
+            deploy_to=[self.config_env],
         )
+
+        # self.config.node.children[0].apply_removal_policy(RemovalPolicy.DESTROY)
 
     def _get_and_validate_configuration(self, environment: str) -> str:
         current = Path(__file__).parent
