@@ -249,3 +249,4 @@ cdk.out
 dev_requirements.txt
 lambda_requirements.txt
 .dccache
+node_modules/

@@ -43,7 +43,7 @@ e2e:
 pr: deps yapf sort pre-commit complex lint lint-docs unit integration e2e
 
 yapf:
-	yapf -i -vv --style=.\.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git  -r .
+	yapf -i -vv --style=.\.style --exclude=.venv --exclude=.build --exclude=cdk.out --exclude=.git --exclude=node_modules -r .
 
 coverage-tests:
 	pytest tests\unit tests\integration  --cov-config=.coveragerc --cov=service --cov-report xml
