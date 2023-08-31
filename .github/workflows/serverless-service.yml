@@ -121,7 +121,10 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install dependencies
-        run: make dev
+        run: |
+          pip install --upgrade pip poetry
+          make deps
+          pip install -r dev_requirements.txt
       - name: Generate docs
         run: |
           mkdocs gh-deploy --force
