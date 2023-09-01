@@ -216,17 +216,17 @@ lxml = ["lxml"]
 
 [[package]]
 name = "boto3"
-version = "1.28.38"
+version = "1.28.39"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.28.38-py3-none-any.whl", hash = "sha256:dae0bc5548b39d8dfcf4167d9a238ab899a0491c11c5e77934db71b3ecf34752"},
-    {file = "boto3-1.28.38.tar.gz", hash = "sha256:cdb466e51ebe4c99640269d88d5450328271437d58e6ce089690d0485bef6174"},
+    {file = "boto3-1.28.39-py3-none-any.whl", hash = "sha256:48d1ea0918088df0e59a37a88ce53de7f4500108638c81255f5b1cb8edea28f4"},
+    {file = "boto3-1.28.39.tar.gz", hash = "sha256:3ac38ad8afafc6ed6c8dd6cc58ddd22b6352c6a413b969aef928c6aacf555c56"},
 ]
 
 [package.dependencies]
-botocore = ">=1.31.38,<1.32.0"
+botocore = ">=1.31.39,<1.32.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -235,13 +235,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.31.38"
+version = "1.31.39"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.31.38-py3-none-any.whl", hash = "sha256:86a4c253bba046f775e07f6585ff6c3d75c21a21c171e5bfcf68bc59f29d7b4c"},
-    {file = "botocore-1.31.38.tar.gz", hash = "sha256:b02de7898f0a7de0f6569be1c87046035a974006c31fd641f4b97a8dba1fad21"},
+    {file = "botocore-1.31.39-py3-none-any.whl", hash = "sha256:8ce716925284c1c0d04c796016a1e0e9c29ca3e196afefacacc16bc4e80c978f"},
+    {file = "botocore-1.31.39.tar.gz", hash = "sha256:61aefac8b44f86a4581d4128cce30806f633357e8d8efc4f73367a8e62009e70"},
 ]
 
 [package.dependencies]
@@ -288,13 +288,13 @@ ujson = ["ujson (>=5.4.0,<6.0.0)"]
 
 [[package]]
 name = "cdk-nag"
-version = "2.27.117"
+version = "2.27.118"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "cdk-nag-2.27.117.tar.gz", hash = "sha256:bcdcea86ce7cc38fe5c031baa348d93d995b47fc2db2505c8865558d96cb73c6"},
-    {file = "cdk_nag-2.27.117-py3-none-any.whl", hash = "sha256:c0798b47956ff2670305ab939a134fff6a2e7857284d412ba5641b36afd0915b"},
+    {file = "cdk-nag-2.27.118.tar.gz", hash = "sha256:282ff9793b4d5e92f0cc0a668056e87242a9803da66ae18d397217f1b0cf459b"},
+    {file = "cdk_nag-2.27.118-py3-none-any.whl", hash = "sha256:405f3adf403a6b022e6b833e7dc96b9f7135f63bda5cb90c1279da05e0b8f28d"},
 ]
 
 [package.dependencies]
@@ -635,13 +635,13 @@ smmap = ">=3.0.1,<6"
 
 [[package]]
 name = "gitpython"
-version = "3.1.32"
+version = "3.1.33"
 description = "GitPython is a Python library used to interact with Git repositories"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "GitPython-3.1.32-py3-none-any.whl", hash = "sha256:e3d59b1c2c6ebb9dfa7a184daf3b6dd4914237e7488a1730a6d8f6f5d0b4187f"},
-    {file = "GitPython-3.1.32.tar.gz", hash = "sha256:8d9b8cb1e80b9735e8717c9362079d3ce4c6e5ddeebedd0361b228c3a67a62f6"},
+    {file = "GitPython-3.1.33-py3-none-any.whl", hash = "sha256:11f22466f982211ad8f3bdb456c03be8466c71d4da8774f3a9f68344e89559cb"},
+    {file = "GitPython-3.1.33.tar.gz", hash = "sha256:13aaa3dff88a23afec2d00eb3da3f2e040e2282e41de484c5791669b31146084"},
 ]
 
 [package.dependencies]
@@ -2197,4 +2197,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11.0"
-content-hash = "cb2d8607aa8a11d20197ea1b52c857d7b9731ac0266e293941c42b69e020f959"
+content-hash = "d67589faa17e9abc97ea30d2e863bb3481d36fbe6f1546938a2b88fba2e365fd"
