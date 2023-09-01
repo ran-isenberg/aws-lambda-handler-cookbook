@@ -16,9 +16,9 @@ lint:
 
 complex:
 	@echo "Running Radon"
-	radon cc -e 'tests/*,cdk.out/*' .
+	radon cc -e 'tests/*,cdk.out/*,node_modules/*' .
 	@echo "Running xenon"
-	xenon --max-absolute B --max-modules A --max-average A -e 'tests/*,.venv/*,cdk.out/*' .
+	xenon --max-absolute B --max-modules A --max-average A -e 'tests/*,.venv/*,cdk.out/*,node_modules/*' .
 
 sort:
 	isort ${PWD}

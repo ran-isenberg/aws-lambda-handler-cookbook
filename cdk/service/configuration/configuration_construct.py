@@ -68,7 +68,8 @@ class ConfigurationStore(Construct):
             deploy_to=[self.config_env],
         )
 
-        # self.config.node.children[0].apply_removal_policy(RemovalPolicy.DESTROY)
+        # workaround until https://github.com/aws/aws-cdk/issues/26804 is resolved
+        self.config.node.default_child.apply_removal_policy(RemovalPolicy.DESTROY)  # type: ignore
 
     def _get_and_validate_configuration(self, environment: str) -> str:
         current = Path(__file__).parent
