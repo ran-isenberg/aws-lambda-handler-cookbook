@@ -18,6 +18,9 @@ This project can serve as a template for new Serverless services - CDK deploymen
 **[📜Documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)** | **[Blogs website](https://www.ranthebuilder.cloud)**
 > **Contact details | ran.isenberg@ranthebuilder.cloud**
 
+[![Twitter Follow](https://img.shields.io/twitter/follow/IsenbergRan?label=Follow&style=social)](https://twitter.com/IsenbergRan)
+[![Website](https://img.shields.io/badge/Website-www.ranthebuilder.cloud-blue)](https://www.ranthebuilder.cloud/)
+
 
 ## Cookiecutter Option
 
