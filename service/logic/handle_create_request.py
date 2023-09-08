@@ -1,5 +1,6 @@
 from aws_lambda_powertools.utilities.idempotency import idempotent_function
 from aws_lambda_powertools.utilities.idempotency.serialization.pydantic import PydanticSerializer
+from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.dal.db_handler import DalHandler
 from service.dal.dynamo_dal_handler import get_dal_handler
