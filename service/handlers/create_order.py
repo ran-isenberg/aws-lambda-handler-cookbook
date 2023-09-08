@@ -4,7 +4,6 @@ from typing import Any, Dict
 from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
 from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.feature_flags.exceptions import ConfigurationStoreError, SchemaValidationError
-from aws_lambda_powertools.utilities.idempotency import idempotent
 from aws_lambda_powertools.utilities.parser import ValidationError, parse
 from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
 from aws_lambda_powertools.utilities.typing import LambdaContext
@@ -13,7 +12,6 @@ from service.handlers.schemas.dynamic_configuration import MyConfiguration
 from service.handlers.schemas.env_vars import MyHandlerEnvVars
 from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.http_responses import build_response
-from service.handlers.utils.idempotency import IDEMPOTENCY_CONFIG, IDEMPOTENCY_LAYER
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.logic.handle_create_request import handle_create_request
 from service.schemas.exceptions import InternalServerException
@@ -23,7 +21,6 @@ from service.schemas.output import CreateOrderOutput
 
 @init_environment_variables(model=MyHandlerEnvVars)
 @metrics.log_metrics
-@idempotent(persistence_store=IDEMPOTENCY_LAYER, config=IDEMPOTENCY_CONFIG)
 @tracer.capture_lambda_handler(capture_response=False)
 def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     logger.set_correlation_id(context.aws_request_id)
