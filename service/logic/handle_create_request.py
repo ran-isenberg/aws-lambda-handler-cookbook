@@ -1,15 +1,28 @@
+from aws_lambda_powertools.utilities.idempotency import idempotent_function
+from aws_lambda_powertools.utilities.idempotency.serialization.pydantic import PydanticSerializer
+from aws_lambda_powertools.utilities.typing import LambdaContext
+
 from service.dal.db_handler import DalHandler
 from service.dal.dynamo_dal_handler import get_dal_handler
 from service.dal.schemas.db import OrderEntry
 from service.handlers.schemas.dynamic_configuration import FeatureFlagsNames
 from service.handlers.utils.dynamic_configuration import get_dynamic_configuration_store
 from service.handlers.utils.observability import logger, tracer
+from service.logic.utils.idempotency import IDEMPOTENCY_CONFIG, IDEMPOTENCY_LAYER
 from service.schemas.input import CreateOrderRequest
 from service.schemas.output import CreateOrderOutput
 
 
+@idempotent_function(
+    data_keyword_argument='order_request',
+    config=IDEMPOTENCY_CONFIG,
+    persistence_store=IDEMPOTENCY_LAYER,
+    output_serializer=PydanticSerializer,
+)
 @tracer.capture_method(capture_response=False)
-def handle_create_request(order_request: CreateOrderRequest, table_name: str) -> CreateOrderOutput:
+def handle_create_request(order_request: CreateOrderRequest, table_name: str, context: LambdaContext) -> CreateOrderOutput:
+    IDEMPOTENCY_CONFIG.register_lambda_context(context)  # see Lambda timeouts section
+
     logger.info('starting to handle create request', extra={
         'order_item_count': order_request.order_item_count,
         'customer_name': order_request.customer_name
