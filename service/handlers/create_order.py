@@ -48,6 +48,7 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
         response: CreateOrderOutput = handle_create_request(
             order_request=create_input,
             table_name=env_vars.TABLE_NAME,
+            context=context,
         )
     except InternalServerException:  # pragma: no cover
         logger.error('finished handling create order request with internal error')

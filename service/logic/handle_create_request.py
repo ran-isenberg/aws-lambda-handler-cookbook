@@ -19,7 +19,9 @@ from service.schemas.output import CreateOrderOutput
     output_serializer=PydanticSerializer,
 )
 @tracer.capture_method(capture_response=False)
-def handle_create_request(order_request: CreateOrderRequest, table_name: str) -> CreateOrderOutput:
+def handle_create_request(order_request: CreateOrderRequest, table_name: str, context: LambdaContext) -> CreateOrderOutput:
+    IDEMPOTENCY_CONFIG.register_lambda_context(context)  # see Lambda timeouts section
+
     logger.info('starting to handle create request', extra={
         'order_item_count': order_request.order_item_count,
         'customer_name': order_request.customer_name
