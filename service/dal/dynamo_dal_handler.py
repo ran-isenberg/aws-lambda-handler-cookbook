@@ -34,7 +34,7 @@ class DynamoDalHandler(DalHandler):
             logger.info('opening connection to dynamodb table', extra={'table_name': self.table_name})
             table: Table = self._get_db_handler(self.table_name)
             table.put_item(Item=entry.model_dump())
-        except (ClientError, ValidationError) as exc:
+        except (ClientError, ValidationError) as exc:  # pragma: no cover
             error_msg = 'failed to create order'
             logger.exception(error_msg, extra={'exception': str(exc), 'customer_name': customer_name})
             raise InternalServerException(error_msg) from exc
