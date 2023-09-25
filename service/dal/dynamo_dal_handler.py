@@ -21,9 +21,9 @@ class DynamoDalHandler(DalHandler):
 
     # cache dynamodb connection data for no longer than 5 minutes
     @cached(cache=TTLCache(maxsize=1, ttl=300))
-    def _get_db_handler(self) -> Table:
+    def _get_db_handler(self, table_name: str) -> Table:
         dynamodb: DynamoDBServiceResource = boto3.resource('dynamodb')
-        return dynamodb.Table(self.table_name)
+        return dynamodb.Table(table_name)
 
     @tracer.capture_method(capture_response=False)
     def create_order_in_db(self, customer_name: str, order_item_count: int) -> OrderEntry:
@@ -32,7 +32,7 @@ class DynamoDalHandler(DalHandler):
         try:
             entry = OrderEntry(order_id=order_id, customer_name=customer_name, order_item_count=order_item_count)
             logger.info('opening connection to dynamodb table', extra={'table_name': self.table_name})
-            table: Table = self._get_db_handler()
+            table: Table = self._get_db_handler(self.table_name)
             table.put_item(Item=entry.model_dump())
         except (ClientError, ValidationError) as exc:
             error_msg = 'failed to create order'

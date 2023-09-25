@@ -72,18 +72,15 @@ def test_handler_200_ok(mocker, table_name: str):
     assert response['Item']['order_item_count'] == order_item_count
 
 
-def test_internal_server_error(mocker):
+def test_internal_server_error(mocker, table_name: str):
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    db_handler: DynamoDalHandler = DynamoDalHandler('table')
-    table = db_handler._get_db_handler()
-    stubber = Stubber(table.meta.client)
-    stubber.add_client_error(method='put_item', service_error_code='ValidationException')
-    stubber.activate()
-    body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
-    response = call_create_order(generate_api_gw_event(body.model_dump()))
-    assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
-    stubber.deactivate()
-    DynamoDalHandler._instances = {}
+    db_handler: DynamoDalHandler = DynamoDalHandler(table_name)
+    table = db_handler._get_db_handler(table_name)
+    with Stubber(table.meta.client) as stubber:
+        stubber.add_client_error(method='put_item', service_error_code='ValidationException')
+        body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
+        response = call_create_order(generate_api_gw_event(body.model_dump()))
+        assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 def test_handler_bad_request(mocker):
