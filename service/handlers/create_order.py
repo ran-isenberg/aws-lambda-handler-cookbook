@@ -22,7 +22,7 @@ from service.schemas.output import CreateOrderOutput
 @init_environment_variables(model=MyHandlerEnvVars)
 @metrics.log_metrics
 @tracer.capture_lambda_handler(capture_response=False)
-def handle_create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
+def lambda_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     logger.set_correlation_id(context.aws_request_id)
 
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
