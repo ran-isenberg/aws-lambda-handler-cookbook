@@ -1,4 +1,4 @@
-import os
+import getpass
 from pathlib import Path
 
 from aws_cdk import Aspects, Stack, Tags
@@ -13,7 +13,7 @@ from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
 
 def get_username() -> str:
     try:
-        return os.getlogin().replace('.', '-')
+        return getpass.getuser().replace('.', '-')
     except Exception:
         return 'github'
 
@@ -22,8 +22,11 @@ def get_stack_name() -> str:
     repo = Repo(Path.cwd())
     username = get_username()
     try:
-        return f'{username}-{repo.active_branch}-{SERVICE_NAME}'
+        branch_name = f'{repo.active_branch}'.replace('/', '-').replace('_', '-')
+        return f'{username}-{branch_name}-{SERVICE_NAME}'
     except TypeError:
+        # we're running in detached mode (HEAD)
+        # see https://github.com/gitpython-developers/GitPython/issues/633
         return f'{username}-{SERVICE_NAME}'
 
 
