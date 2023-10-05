@@ -77,7 +77,7 @@ jobs:
       #       once that's discussed we can move unit and infra tests as part of the fast quality standards
       #       see https://github.com/ran-isenberg/serverless-python-demo/pull/38#discussion_r1299372169
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@04b98b3f9e85f563fb061be8751a0352327246b0 # v3.0.1
+        uses: aws-actions/configure-aws-credentials@8c3f20df09ac63af7b3ae3d7c91f105f857d8497 # v4.0.0
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           role-session-name: ${{ env.SESSION_NAME }}
