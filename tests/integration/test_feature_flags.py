@@ -60,8 +60,8 @@ def call_create_order(body: Dict[str, Any]) -> Dict[str, Any]:
     # important is done here since idempotency decorator requires an env. variable during import time
     # conf.test sets that env. variable (table name) but it runs after imports
     # this way, idempotency import runs after conftest sets the values already
-    from service.handlers.create_order import create_order
-    return create_order(body, generate_context())
+    from service.handlers.create_order import handle_create_order
+    return handle_create_order(body, generate_context())
 
 
 def assert_response(response: Dict[str, Any], expected_response_code: HTTPStatus, expected_customer_name: str, expected_order_item_count: int):
@@ -74,12 +74,12 @@ def assert_response(response: Dict[str, Any], expected_response_code: HTTPStatus
 
 
 def spy_on_campaign_logic(mocker):
-    import service.logic.handle_create_request as cr
+    import service.logic.create_order as cr
     return mocker.spy(cr, 'handle_campaign')
 
 
 def spy_on_premium_logic(mocker):
-    import service.logic.handle_create_request as cr
+    import service.logic.create_order as cr
     return mocker.spy(cr, 'apply_premium_user_discount')
 
 

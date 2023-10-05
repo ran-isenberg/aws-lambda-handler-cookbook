@@ -30,11 +30,17 @@ def init():
 
 
 def test_invalid_schema(mocker):
+    # Given: Mocked dynamic configuration with an empty schema
     mock_dynamic_configuration(mocker, {})
+
+    # When and Then: Parsing this configuration with our model, it should raise a SchemaValidationError
     with pytest.raises(SchemaValidationError):
         parse_configuration(model=MockedSchemaModel)
 
 
 def test_valid_schema(mocker):
+    # Given: Mocked dynamic configuration with a valid schema
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
+
+    # When and Then: Parsing this configuration with our model, it should not raise any exception
     parse_configuration(model=MockedSchemaModel)

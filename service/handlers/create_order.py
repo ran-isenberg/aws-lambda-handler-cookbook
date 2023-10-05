@@ -13,7 +13,7 @@ from service.handlers.schemas.env_vars import MyHandlerEnvVars
 from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.http_responses import build_response
 from service.handlers.utils.observability import logger, metrics, tracer
-from service.logic.handle_create_request import handle_create_request
+from service.logic.create_order import create_order
 from service.schemas.exceptions import InternalServerException
 from service.schemas.input import CreateOrderRequest
 from service.schemas.output import CreateOrderOutput
@@ -22,7 +22,7 @@ from service.schemas.output import CreateOrderOutput
 @init_environment_variables(model=MyHandlerEnvVars)
 @metrics.log_metrics
 @tracer.capture_lambda_handler(capture_response=False)
-def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
+def handle_create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     logger.set_correlation_id(context.aws_request_id)
 
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
@@ -45,7 +45,7 @@ def create_order(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any
 
     metrics.add_metric(name='ValidCreateOrderEvents', unit=MetricUnit.Count, value=1)
     try:
-        response: CreateOrderOutput = handle_create_request(
+        response: CreateOrderOutput = create_order(
             order_request=create_input,
             table_name=env_vars.TABLE_NAME,
             context=context,

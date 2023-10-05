@@ -10,6 +10,10 @@ dev:
 	poetry install
 	npm ci
 
+format-fix:
+	poetry run isort .
+	poetry run yapf -vv --style=./.style -r --in-place .
+
 format:
 	poetry run isort .
 	poetry run yapf -d -vv --style=./.style -r .
@@ -68,3 +72,7 @@ docs:
 
 lint-docs:
 	docker run -v ${PWD}:/markdown 06kellyjac/markdownlint-cli --fix "docs"
+
+
+watch:
+	npx cdk watch
