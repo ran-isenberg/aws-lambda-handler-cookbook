@@ -12,11 +12,11 @@ tracer: Tracer = Tracer(service=SERVICE_NAME)
 
 
 @tracer.capture_method(capture_response=False)
-def inner_function_example(event: Dict[str, Any]) -> Dict[str, Any]:
+def inner_function_example(event: dict[str, Any]) -> dict[str, Any]:
     return {}
 
 
 @tracer.capture_lambda_handler(capture_response=False)
-def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
+def my_handler(event: dict[str, Any], context: LambdaContext) -> dict[str, Any]:
     inner_function_example(event)
     return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}

@@ -1,11 +1,11 @@
-from typing import Any, Dict, Type, TypeVar, Union
+from typing import TypeVar, Union
 
 from aws_lambda_env_modeler import get_environment_variables
 from aws_lambda_powertools.utilities.feature_flags import AppConfigStore, FeatureFlags
-from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 
 from service.handlers.schemas.env_vars import DynamicConfiguration
+from service.schemas.exceptions import DynamicConfigurationException
 
 Model = TypeVar('Model', bound=BaseModel)
 
@@ -13,7 +13,7 @@ _DYNAMIC_CONFIGURATION: Union[FeatureFlags, None] = None
 _DEFAULT_FEATURE_FLAGS_ROOT = 'features'  # all feature flags reside in the JSON under this key
 
 
-def get_dynamic_configuration_store() -> FeatureFlags:
+def get_configuration_store() -> FeatureFlags:
     """ getter for singleton dynamic configuration getter API
 
     Returns:
@@ -35,17 +35,17 @@ def get_dynamic_configuration_store() -> FeatureFlags:
     return _DYNAMIC_CONFIGURATION
 
 
-def parse_configuration(model: Type[Model]) -> Type[BaseModel]:
+def parse_configuration(model: type[Model]) -> Model:
     """ Get configuration JSON from AWS AppConfig and parse it into a pydantic data-class instance.
         Args:
             model (Model): pydantic schema to load the JSON into
         Raises:
-            ConfigurationStoreError, SchemaValidationError, StoreClientError: Any validation error or appconfig error that can occur
+            DynamicConfigurationException: Any validation error or appconfig error that can occur
         Returns:
             BaseModel: parsed data class instance of type model
     """
     try:
-        conf_json: Dict[str, Any] = get_dynamic_configuration_store().store.get_raw_configuration
-        return model.model_validate(conf_json)  # type: ignore
-    except (ValidationError, TypeError) as exc:
-        raise SchemaValidationError(f'appconfig schema failed pydantic validation, exception={str(exc)}') from exc
+        conf_json = get_configuration_store().store.get_raw_configuration
+        return model.model_validate(conf_json)
+    except Exception as exc:
+        raise DynamicConfigurationException(f'appconfig schema failed pydantic validation, exception={str(exc)}') from exc

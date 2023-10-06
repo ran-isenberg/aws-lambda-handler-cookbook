@@ -12,6 +12,6 @@ metrics = Metrics(namespace='my_product_kpi', service=SERVICE_NAME)
 
 
 @metrics.log_metrics
-def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
+def my_handler(event: dict[str, Any], context: LambdaContext) -> dict[str, Any]:
     metrics.add_metric(name='ValidEvents', unit=MetricUnit.Count, value=1)
     return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}

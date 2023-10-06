@@ -8,7 +8,7 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 logger: Logger = Logger(service='service')  # JSON output format, service name can be set by environment variable "POWERTOOLS_SERVICE_NAME"
 
 
-def my_handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
+def my_handler(event: dict[str, Any], context: LambdaContext) -> dict[str, Any]:
     logger.set_correlation_id(context.aws_request_id)
     logger.debug('my_handler is called')
     return {'statusCode': HTTPStatus.OK, 'headers': {'Content-Type': 'application/json'}, 'body': json.dumps({'message': 'success'})}

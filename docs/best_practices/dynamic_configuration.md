@@ -123,7 +123,7 @@ The function fetch the JSON file from AWS AppConfig and return a parsed instance
 
 === "my_handler.py"
 
-```python hl_lines="15 18 23"
+```python hl_lines="19 21 26"
 --8<-- "docs/examples/best_practices/dynamic_configuration/parse_configuration.py"
 ```
 
@@ -210,7 +210,7 @@ The combined JSON configuration look like this:
 
 === "my_handler.py"
 
-```python hl_lines="24-29 31-36"
+```python hl_lines="17 23-28 30-35"
 --8<-- "docs/examples/best_practices/dynamic_configuration/evaluate_feature_flags.py"
 ```
 
@@ -220,7 +220,7 @@ In this example, we evaluate both feature flags' value and provide a context.
 
 The rule for ``premium_features`` is matched (which returns a ``True`` value for the flag) when the context dictionary has a key ``customer_name`` with a value of ``RanTheBuilder`` EQUALS ``RanTheBuilder``.
 
-Line 31 will return a value of ``True`` for the context ``{'customer_name': 'RanTheBuilder'}`` and ``False`` for any other input.
+Line 30 will return a value of ``True`` for the context ``{'customer_name': 'RanTheBuilder'}`` and ``False`` for any other input.
 
 There are several actions for conditions such as ``STARTSWITH``, ``ENDSWITH``, ``EQUALS``, etc.
 

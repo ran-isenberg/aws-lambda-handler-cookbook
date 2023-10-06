@@ -1,4 +1,4 @@
-from aws_cdk import Duration, aws_apigateway
+from aws_cdk import Duration
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
@@ -31,11 +31,11 @@ def _build_lambda_role(self, db: dynamodb.Table) -> iam.Role:
     )
 
 
-def _build_lambda_function(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str) -> _lambda.Function:
+def _build_lambda_function(self, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str) -> _lambda.Function:
     return _lambda.Function(
         self,
         'ServicePost',
-        runtime=_lambda.Runtime.PYTHON_3_8,
+        runtime=_lambda.Runtime.PYTHON_3_11,
         code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
         handler='service.handlers.create_order.create_order',
         environment={
