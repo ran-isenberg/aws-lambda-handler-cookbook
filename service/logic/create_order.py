@@ -2,11 +2,11 @@ from aws_lambda_powertools.utilities.idempotency import idempotent_function
 from aws_lambda_powertools.utilities.idempotency.serialization.pydantic import PydanticSerializer
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
+from service.dal import get_dal_handler
 from service.dal.db_handler import DalHandler
-from service.dal.dynamo_dal_handler import get_dal_handler
 from service.dal.schemas.db import OrderEntry
 from service.handlers.schemas.dynamic_configuration import FeatureFlagsNames
-from service.handlers.utils.dynamic_configuration import get_dynamic_configuration_store
+from service.handlers.utils.dynamic_configuration import get_configuration_store
 from service.handlers.utils.observability import logger, tracer
 from service.logic.utils.idempotency import IDEMPOTENCY_CONFIG, IDEMPOTENCY_LAYER
 from service.schemas.input import CreateOrderRequest
@@ -23,13 +23,10 @@ from service.schemas.output import CreateOrderOutput
 def create_order(order_request: CreateOrderRequest, table_name: str, context: LambdaContext) -> CreateOrderOutput:
     IDEMPOTENCY_CONFIG.register_lambda_context(context)  # see Lambda timeouts section
 
-    logger.info('starting to handle create request', extra={
-        'order_item_count': order_request.order_item_count,
-        'customer_name': order_request.customer_name
-    })
+    logger.info('starting to handle create request', order_item_count=order_request.order_item_count, customer_name=order_request.customer_name)
 
     # feature flags example
-    config_store = get_dynamic_configuration_store()
+    config_store = get_configuration_store()
 
     # discount campaign flag
     campaign = config_store.evaluate(
@@ -49,7 +46,7 @@ def create_order(order_request: CreateOrderRequest, table_name: str, context: La
         default=False,
     )
 
-    logger.debug('premium feature flag value', extra={'premium': premium})
+    logger.debug('premium feature flag value', premium=premium)
     if premium:
         apply_premium_user_discount()
 

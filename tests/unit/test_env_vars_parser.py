@@ -1,5 +1,5 @@
 import os
-from typing import Any, Dict, Literal
+from typing import Any, Literal
 from unittest import mock
 
 import pytest
@@ -19,7 +19,7 @@ class MySchema(BaseModel):
 def test_handler_missing_env_var():
     # Given: A handler that requires certain environment variables
     @init_environment_variables(model=MySchema)
-    def my_handler1(event, context) -> Dict[str, Any]:
+    def my_handler1(event, context) -> dict[str, Any]:
         return {}
 
     # When & Then: Handler is invoked without the required environment variables, expect a ValueError
@@ -31,7 +31,7 @@ def test_handler_missing_env_var():
 def test_handler_invalid_env_var_value():
     # Given: A handler that requires certain environment variables with valid values
     @init_environment_variables(model=MySchema)
-    def my_handler2(event, context) -> Dict[str, Any]:
+    def my_handler2(event, context) -> dict[str, Any]:
         return {}
 
     # When & Then: Handler is invoked with invalid environment variable values, expect a ValueError
@@ -47,7 +47,7 @@ def test_handler_invalid_env_var_value():
 def test_handler_schema_ok():
     # Given: A handler that requires certain environment variables with valid values
     @init_environment_variables(model=MySchema)
-    def my_handler(event, context) -> Dict[str, Any]:
+    def my_handler(event, context) -> dict[str, Any]:
         # When: Environment variables are retrieved
         env_vars: MySchema = get_environment_variables(model=MySchema)
 

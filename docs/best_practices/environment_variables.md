@@ -16,6 +16,12 @@ The best practice for handling environment variables is to validate & parse them
 
 In case of misconfiguration, a validation exception is raised with all the relevant exception details.
 
+## **Open source**
+The code in this post has been moved to an open source project you can use:
+
+The [AWS Lambda environment variables modeler](https://github.com/ran-isenberg/aws-lambda-env-modeler){:target="_blank" rel="noopener"}
+
+
 ## **Blog Reference**
 
 Read more about the importance of validating environment variables and how this utility works. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}

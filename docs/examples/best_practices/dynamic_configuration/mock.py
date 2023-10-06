@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 MOCKED_SCHEMA = {
     'features': {
@@ -23,7 +23,7 @@ MOCKED_SCHEMA = {
 }
 
 
-def mock_dynamic_configuration(mocker, mock_schema: Dict[str, Any]) -> None:
+def mock_dynamic_configuration(mocker, mock_schema: dict[str, Any]) -> None:
     """Mock AppConfig Store get_configuration method to use mock schema instead"""
     mocked_get_conf = mocker.patch('aws_lambda_powertools.utilities.parameters.AppConfigProvider.get')
     mocked_get_conf.return_value = mock_schema

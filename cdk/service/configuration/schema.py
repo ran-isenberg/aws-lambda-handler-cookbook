@@ -1,11 +1,11 @@
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from aws_lambda_powertools.utilities.feature_flags import SchemaValidator
 from pydantic import BaseModel, field_validator
 
 
 class FeatureFlagsConfiguration(BaseModel):
-    features: Optional[Dict[str, Any]]
+    features: Optional[dict[str, Any]]
 
     @field_validator('features', mode='before')
     def validate_features(cls, value):
