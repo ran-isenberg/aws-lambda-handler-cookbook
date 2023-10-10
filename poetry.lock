@@ -2,13 +2,13 @@
 
 [[package]]
 name = "annotated-types"
-version = "0.5.0"
+version = "0.6.0"
 description = "Reusable constraint types to use with typing.Annotated"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "annotated_types-0.5.0-py3-none-any.whl", hash = "sha256:58da39888f92c276ad970249761ebea80ba544b77acddaa1a4d6cf78287d45fd"},
-    {file = "annotated_types-0.5.0.tar.gz", hash = "sha256:47cdc3490d9ac1506ce92c7aaa76c579dc3509ff11e098fc867e5130ab7be802"},
+    {file = "annotated_types-0.6.0-py3-none-any.whl", hash = "sha256:0641064de18ba7a25dee8f96403ebc39113d0cb953a01429249d5c7564666a43"},
+    {file = "annotated_types-0.6.0.tar.gz", hash = "sha256:563339e807e53ffd9c267e99fc6d9ea23eb8443c08f112651963e24e22f84a5d"},
 ]
 
 [[package]]
@@ -79,49 +79,49 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-aws-appconfig-alpha"
-version = "2.99.1a0"
+version = "2.100.0a0"
 description = "An experimental construct library for AWS AppConfig."
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk.aws-appconfig-alpha-2.99.1a0.tar.gz", hash = "sha256:9755e052f6f76b9734c6cdba071841f49bf2671d2b36e3b57a9827a0a0ff69d4"},
-    {file = "aws_cdk.aws_appconfig_alpha-2.99.1a0-py3-none-any.whl", hash = "sha256:831cf6df82133c3ed5884eebf399aa536c1d78b5aec5f1a21a355a5eedbd09a7"},
+    {file = "aws-cdk.aws-appconfig-alpha-2.100.0a0.tar.gz", hash = "sha256:9ad0527585c59ba8553be48a341a8534197b134bbedaaaaea09915da98fce1b9"},
+    {file = "aws_cdk.aws_appconfig_alpha-2.100.0a0-py3-none-any.whl", hash = "sha256:274f7f0b7abf4f07a4e9975329d920b61a70ccc5b9c146d50ce80b38e30c28a1"},
 ]
 
 [package.dependencies]
-aws-cdk-lib = "2.99.1"
+aws-cdk-lib = ">=2.100.0,<3.0.0"
 constructs = ">=10.0.0,<11.0.0"
-jsii = ">=1.88.0,<2.0.0"
+jsii = ">=1.89.0,<2.0.0"
 publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-aws-lambda-python-alpha"
-version = "2.99.1a0"
+version = "2.100.0a0"
 description = "The CDK Construct Library for AWS Lambda in Python"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk.aws-lambda-python-alpha-2.99.1a0.tar.gz", hash = "sha256:9644f5874d564109d477edd992b9cbac881247d1e252b47521833f0064e076ea"},
-    {file = "aws_cdk.aws_lambda_python_alpha-2.99.1a0-py3-none-any.whl", hash = "sha256:7434931ea808221cd851ad5efd293996518b60c59a62e0a7bf32fd9451098fe9"},
+    {file = "aws-cdk.aws-lambda-python-alpha-2.100.0a0.tar.gz", hash = "sha256:b4c0dfee9a105f76a5cc7dcdea8464068ab3de3f79717bd9e0a68cd3671261c2"},
+    {file = "aws_cdk.aws_lambda_python_alpha-2.100.0a0-py3-none-any.whl", hash = "sha256:0baaea3a82048d7440cc09ef200b9c6b0d3da08ed553995fe5440cec68211bbe"},
 ]
 
 [package.dependencies]
-aws-cdk-lib = "2.99.1"
+aws-cdk-lib = ">=2.100.0,<3.0.0"
 constructs = ">=10.0.0,<11.0.0"
-jsii = ">=1.88.0,<2.0.0"
+jsii = ">=1.89.0,<2.0.0"
 publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-lib"
-version = "2.99.1"
+version = "2.100.0"
 description = "Version 2 of the AWS Cloud Development Kit library"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk-lib-2.99.1.tar.gz", hash = "sha256:eb57eb88a57320c5068b62bebb2eecb8f913ecfe7561d868b8f8da28d482419c"},
-    {file = "aws_cdk_lib-2.99.1-py3-none-any.whl", hash = "sha256:983f4da93af93b0d1e350938db55fe90465bf38c81ad831b4035d258ddf52174"},
+    {file = "aws-cdk-lib-2.100.0.tar.gz", hash = "sha256:39d6ab3ffcd87b60a541b4714f0ecefd169055a647376521728d64786393680a"},
+    {file = "aws_cdk_lib-2.100.0-py3-none-any.whl", hash = "sha256:8c43fe03e1e9e7dc9a4f8003d1c4e04c5ac5fe2ec4a44928695785dff6d086ee"},
 ]
 
 [package.dependencies]
@@ -129,7 +129,7 @@ files = [
 "aws-cdk.asset-kubectl-v20" = ">=2.1.2,<3.0.0"
 "aws-cdk.asset-node-proxy-agent-v6" = ">=2.0.1,<3.0.0"
 constructs = ">=10.0.0,<11.0.0"
-jsii = ">=1.88.0,<2.0.0"
+jsii = ">=1.89.0,<2.0.0"
 publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
@@ -201,17 +201,17 @@ dev = ["freezegun (>=1.0,<2.0)", "pytest (>=6.0)", "pytest-cov"]
 
 [[package]]
 name = "boto3"
-version = "1.28.60"
+version = "1.28.62"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.28.60-py3-none-any.whl", hash = "sha256:d5f270c2c9a051f78c308cbba4268458e8df441057b73ba140742707ac1bc7ea"},
-    {file = "boto3-1.28.60.tar.gz", hash = "sha256:dccb49cc10b31314b8553c6c9614c44b2249e0d0285d73f608a5d2010f6e1d82"},
+    {file = "boto3-1.28.62-py3-none-any.whl", hash = "sha256:0dfa2fc96ccafce4feb23044d6cba8b25075ad428a0c450d369d099c6a1059d2"},
+    {file = "boto3-1.28.62.tar.gz", hash = "sha256:148eeba0f1867b3db5b3e5ae2997d75a94d03fad46171374a0819168c36f7ed0"},
 ]
 
 [package.dependencies]
-botocore = ">=1.31.60,<1.32.0"
+botocore = ">=1.31.62,<1.32.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.7.0,<0.8.0"
 
@@ -220,19 +220,19 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.31.60"
+version = "1.31.62"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.31.60-py3-none-any.whl", hash = "sha256:b6de7a6a03ca3da18b78615a2cb5221c9fdb9483d3f50cb4281ae038b3f22d9f"},
-    {file = "botocore-1.31.60.tar.gz", hash = "sha256:578470a15a5bd64f67437a81f23feccba85084167acf63c56acada2c1c1d95d8"},
+    {file = "botocore-1.31.62-py3-none-any.whl", hash = "sha256:be792d806afc064694a2d0b9b25779f3ca0c1584b29a35ac32e67f0064ddb8b7"},
+    {file = "botocore-1.31.62.tar.gz", hash = "sha256:272b78ac65256b6294cb9cdb0ac484d447ad3a85642e33cb6a3b1b8afee15a4c"},
 ]
 
 [package.dependencies]
 jmespath = ">=0.7.1,<2.0.0"
 python-dateutil = ">=2.1,<3.0.0"
-urllib3 = ">=1.25.4,<1.27"
+urllib3 = {version = ">=1.25.4,<2.1", markers = "python_version >= \"3.10\""}
 
 [package.extras]
 crt = ["awscrt (==0.16.26)"]
@@ -273,19 +273,19 @@ ujson = ["ujson (>=5.4.0,<6.0.0)"]
 
 [[package]]
 name = "cdk-nag"
-version = "2.27.152"
+version = "2.27.157"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "cdk-nag-2.27.152.tar.gz", hash = "sha256:b5afb1a92c9d8b45ba9200f4dfe2b07a93c7ce20f95095a837d21e8515399ecc"},
-    {file = "cdk_nag-2.27.152-py3-none-any.whl", hash = "sha256:0cab98adbdffb45d343bf62d1f17338b5c375e93f9adb8e3d130b7e343ebc292"},
+    {file = "cdk-nag-2.27.157.tar.gz", hash = "sha256:660083060c5bd47afe89a70330f28000560018018920fa6b0b7d306dfecfa635"},
+    {file = "cdk_nag-2.27.157-py3-none-any.whl", hash = "sha256:7739b587db2c783820fdc78cb5b64f695d2c18d289d6faa4cae6bf70f45eb3f8"},
 ]
 
 [package.dependencies]
 aws-cdk-lib = ">=2.78.0,<3.0.0"
 constructs = ">=10.0.5,<11.0.0"
-jsii = ">=1.89.0,<2.0.0"
+jsii = ">=1.90.0,<2.0.0"
 publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
@@ -437,17 +437,17 @@ files = [
 
 [[package]]
 name = "constructs"
-version = "10.2.70"
+version = "10.3.0"
 description = "A programming model for software-defined state"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "constructs-10.2.70-py3-none-any.whl", hash = "sha256:ade1b5224830e78724ed50ce91ec2e6ce437c9983713c2b8ca541272283c5d37"},
-    {file = "constructs-10.2.70.tar.gz", hash = "sha256:f4ae2e0705baff188519e0233ad2129537c8eca40d68242873ca444a659549f8"},
+    {file = "constructs-10.3.0-py3-none-any.whl", hash = "sha256:2972f514837565ff5b09171cfba50c0159dfa75ee86a42921ea8c86f2941b3d2"},
+    {file = "constructs-10.3.0.tar.gz", hash = "sha256:518551135ec236f9cc6b86500f4fbbe83b803ccdc6c2cb7684e0b7c4d234e7b1"},
 ]
 
 [package.dependencies]
-jsii = ">=1.88.0,<2.0.0"
+jsii = ">=1.90.0,<2.0.0"
 publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
@@ -757,13 +757,13 @@ files = [
 
 [[package]]
 name = "jsii"
-version = "1.89.0"
+version = "1.90.0"
 description = "Python client for jsii runtime"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "jsii-1.89.0-py3-none-any.whl", hash = "sha256:20a463e8533eded656b285f532e5468a414c48ab083cf0cf93a86d593f0c36b8"},
-    {file = "jsii-1.89.0.tar.gz", hash = "sha256:6edbb79afc0b7407cb64e9dd0f27b512279201307c16dd9ae72462b3cbd09970"},
+    {file = "jsii-1.90.0-py3-none-any.whl", hash = "sha256:e8a9a94c5116da96f11e79f16d4a290e1e7e1652b4addb8cce5c56f8ef570479"},
+    {file = "jsii-1.90.0.tar.gz", hash = "sha256:2fcc68d8cf88260bc8e502789d43ab46e7672b6f82d498ed62a52a4366fbccc5"},
 ]
 
 [package.dependencies]
@@ -794,17 +794,17 @@ restructuredtext = ["rst2ansi"]
 
 [[package]]
 name = "markdown"
-version = "3.4.4"
+version = "3.5"
 description = "Python implementation of John Gruber's Markdown."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "Markdown-3.4.4-py3-none-any.whl", hash = "sha256:a4c1b65c0957b4bd9e7d86ddc7b3c9868fb9670660f6f99f6d1bca8954d5a941"},
-    {file = "Markdown-3.4.4.tar.gz", hash = "sha256:225c6123522495d4119a90b3a3ba31a1e87a70369e03f14799ea9c0d7183a3d6"},
+    {file = "Markdown-3.5-py3-none-any.whl", hash = "sha256:4afb124395ce5fc34e6d9886dab977fd9ae987fc6e85689f08278cf0c69d4bf3"},
+    {file = "Markdown-3.5.tar.gz", hash = "sha256:a807eb2e4778d9156c8f07876c6e4d50b5494c5665c4834f67b06459dfd877b3"},
 ]
 
 [package.extras]
-docs = ["mdx-gh-links (>=0.2)", "mkdocs (>=1.0)", "mkdocs-nature (>=0.4)"]
+docs = ["mdx-gh-links (>=0.2)", "mkdocs (>=1.5)", "mkdocs-gen-files", "mkdocs-literate-nav", "mkdocs-nature (>=0.6)", "mkdocs-section-index", "mkdocstrings[python]"]
 testing = ["coverage", "pyyaml"]
 
 [[package]]
@@ -935,13 +935,13 @@ mkdocs = ">=0.17"
 
 [[package]]
 name = "mkdocs-material"
-version = "9.4.3"
+version = "9.4.4"
 description = "Documentation that simply works"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mkdocs_material-9.4.3-py3-none-any.whl", hash = "sha256:3274a47a4e55a541b25bd8fa4937cf3f3c82a51763453511661e0052062758b9"},
-    {file = "mkdocs_material-9.4.3.tar.gz", hash = "sha256:5c9abc3f6ba8f88be1f9f13df23d695ca4dddbdd8a3538e4e6279c055c3936bc"},
+    {file = "mkdocs_material-9.4.4-py3-none-any.whl", hash = "sha256:86fe79253afccc7f085f89a2d8e9e3300f82c4813d9b910d9081ce57a7e68380"},
+    {file = "mkdocs_material-9.4.4.tar.gz", hash = "sha256:ab84a7cfaf009c47cd2926cdd7e6040b8cc12c3806cc533e8b16d57bd16d9c47"},
 ]
 
 [package.dependencies]
@@ -1776,28 +1776,17 @@ files = [
 
 [[package]]
 name = "types-requests"
-version = "2.31.0.6"
+version = "2.31.0.8"
 description = "Typing stubs for requests"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "types-requests-2.31.0.6.tar.gz", hash = "sha256:cd74ce3b53c461f1228a9b783929ac73a666658f223e28ed29753771477b3bd0"},
-    {file = "types_requests-2.31.0.6-py3-none-any.whl", hash = "sha256:a2db9cb228a81da8348b49ad6db3f5519452dd20a9c1e1a868c83c5fe88fd1a9"},
+    {file = "types-requests-2.31.0.8.tar.gz", hash = "sha256:e1b325c687b3494a2f528ab06e411d7092cc546cc9245c000bacc2fca5ae96d4"},
+    {file = "types_requests-2.31.0.8-py3-none-any.whl", hash = "sha256:39894cbca3fb3d032ed8bdd02275b4273471aa5668564617cc1734b0a65ffdf8"},
 ]
 
 [package.dependencies]
-types-urllib3 = "*"
-
-[[package]]
-name = "types-urllib3"
-version = "1.26.25.14"
-description = "Typing stubs for urllib3"
-optional = false
-python-versions = "*"
-files = [
-    {file = "types-urllib3-1.26.25.14.tar.gz", hash = "sha256:229b7f577c951b8c1b92c1bc2b2fdb0b49847bd2af6d1cc2a2e3dd340f3bda8f"},
-    {file = "types_urllib3-1.26.25.14-py3-none-any.whl", hash = "sha256:9683bbb7fb72e32bfe9d2be6e04875fbe1b3eeec3cbb4ea231435aa7fd6b4f0e"},
-]
+urllib3 = ">=2"
 
 [[package]]
 name = "typing-extensions"
@@ -1812,19 +1801,20 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "1.26.17"
+version = "2.0.6"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
+python-versions = ">=3.7"
 files = [
-    {file = "urllib3-1.26.17-py2.py3-none-any.whl", hash = "sha256:94a757d178c9be92ef5539b8840d48dc9cf1b2709c9d6b588232a055c524458b"},
-    {file = "urllib3-1.26.17.tar.gz", hash = "sha256:24d6a242c28d29af46c3fae832c36db3bbebcc533dd1bb549172cd739c82df21"},
+    {file = "urllib3-2.0.6-py3-none-any.whl", hash = "sha256:7a7c7003b000adf9e7ca2a377c9688bbc54ed41b985789ed576570342a375cd2"},
+    {file = "urllib3-2.0.6.tar.gz", hash = "sha256:b19e1a85d206b56d7df1d5e683df4a7725252a964e3993648dd0fb5a1c157564"},
 ]
 
 [package.extras]
-brotli = ["brotli (==1.0.9)", "brotli (>=1.0.9)", "brotlicffi (>=0.8.0)", "brotlipy (>=0.6.0)"]
-secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "ipaddress", "pyOpenSSL (>=0.14)", "urllib3-secure-extra"]
-socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
+brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
+secure = ["certifi", "cryptography (>=1.9)", "idna (>=2.0.0)", "pyopenssl (>=17.1.0)", "urllib3-secure-extra"]
+socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
+zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "virtualenv"
