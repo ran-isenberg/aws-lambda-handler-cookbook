@@ -37,6 +37,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - AWS Lambda handler uses [AWS Lambda Powertools](https://docs.powertools.aws.dev/lambda-python/){:target="_blank" rel="noopener"}.
 - AWS Lambda handler 3 layer architecture: handler layer, logic layer and data access layer
 - Features flags and configuration based on AWS AppConfig
+- CloudWatch dashboards - High level and low level including CloudWatch alarms
 - Idempotent API
 - Unit, infrastructure, security, integration and E2E tests.
 
