@@ -1,4 +1,3 @@
-from http import HTTPMethod
 from typing import Any
 
 from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
@@ -18,7 +17,7 @@ from service.schemas.input import CreateOrderRequest
 from service.schemas.output import CreateOrderOutput
 
 
-@app.route(ORDERS_PATH, method=HTTPMethod.POST)
+@app.post(ORDERS_PATH)
 def handle_create_order() -> dict[str, Any]:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
