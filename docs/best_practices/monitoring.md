@@ -78,6 +78,10 @@ For P90, P50 metrics, follow this [explanation.](https://www.dnv.com/article/ter
 For internal server errors rate, we define the following alarm:
 ![5xx](../media/monitoring/alarm_5xx.png)
 
+#### Actions
+
+Alarms are of no use unless they have an action. We have configured the alarms to send an SNS notification to a new SNS topic.
+From there, you can connect any subscription - HTTPS/SMS/Email, etc. to notify your teams with the alarm details.
 
 ## **CDK Reference**
 
