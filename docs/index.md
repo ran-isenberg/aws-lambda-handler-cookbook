@@ -57,6 +57,7 @@ The utilities cover multiple aspects of a production-ready service, including:
 - [**Environment Variables**](best_practices/environment_variables.md)
 - [**Input Validation**](best_practices/input_validation.md)
 - [**Dynamic configuration & features flags**](best_practices/dynamic_configuration.md)
+- [**Serverless Monitoring**](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one)
 - [**API Idempotency**](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk){:target="_blank" rel="noopener"}
 
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.

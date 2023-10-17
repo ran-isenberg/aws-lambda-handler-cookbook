@@ -92,6 +92,4 @@ You can view find the monitoring CDK construct [here](https://github.com/ran-ise
 
 ## **Further Reading**
 
-If you wish to learn more about this concept and go over details on the CDK code, check out my blog post.
-
-Blog post - WIP, soon!
+If you wish to learn more about this concept and go over details on the CDK code, check out my [blog post](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one).

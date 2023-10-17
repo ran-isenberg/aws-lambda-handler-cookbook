@@ -79,17 +79,17 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-aws-apigatewayv2-alpha"
-version = "2.100.0a0"
+version = "2.101.1a0"
 description = "The CDK Construct Library for AWS::APIGatewayv2"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk.aws-apigatewayv2-alpha-2.100.0a0.tar.gz", hash = "sha256:80ae7d1ca69d009bf1d1eac664937452faff46ab5a450703d1598a434ec1b0b6"},
-    {file = "aws_cdk.aws_apigatewayv2_alpha-2.100.0a0-py3-none-any.whl", hash = "sha256:5693a062808c16eac66c4b3a61f338ab16226455c254c93cce477c05da1cd11d"},
+    {file = "aws-cdk.aws-apigatewayv2-alpha-2.101.1a0.tar.gz", hash = "sha256:b8e127c3c24a970256f035d2ba6c9a1ca90754009f16647d5e495e646d31b620"},
+    {file = "aws_cdk.aws_apigatewayv2_alpha-2.101.1a0-py3-none-any.whl", hash = "sha256:54dde8188aa688fe680483b92ce4df1bffbe772ada40589e6b8f3e4e1e919a13"},
 ]
 
 [package.dependencies]
-aws-cdk-lib = ">=2.100.0,<3.0.0"
+aws-cdk-lib = ">=2.101.1,<3.0.0"
 constructs = ">=10.0.0,<11.0.0"
 jsii = ">=1.89.0,<2.0.0"
 publication = ">=0.0.3"
@@ -97,17 +97,17 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-aws-appconfig-alpha"
-version = "2.100.0a0"
+version = "2.101.1a0"
 description = "An experimental construct library for AWS AppConfig."
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk.aws-appconfig-alpha-2.100.0a0.tar.gz", hash = "sha256:9ad0527585c59ba8553be48a341a8534197b134bbedaaaaea09915da98fce1b9"},
-    {file = "aws_cdk.aws_appconfig_alpha-2.100.0a0-py3-none-any.whl", hash = "sha256:274f7f0b7abf4f07a4e9975329d920b61a70ccc5b9c146d50ce80b38e30c28a1"},
+    {file = "aws-cdk.aws-appconfig-alpha-2.101.1a0.tar.gz", hash = "sha256:0cf405f6c0fcdf7d6e7bab35baf6ad478e95c47c559e0a951946d979575c5a8a"},
+    {file = "aws_cdk.aws_appconfig_alpha-2.101.1a0-py3-none-any.whl", hash = "sha256:1e4b7bda9aabd54419eb47715a3e096ebf3bd8b56d981b24e9e9e37869066e97"},
 ]
 
 [package.dependencies]
-aws-cdk-lib = ">=2.100.0,<3.0.0"
+aws-cdk-lib = ">=2.101.1,<3.0.0"
 constructs = ">=10.0.0,<11.0.0"
 jsii = ">=1.89.0,<2.0.0"
 publication = ">=0.0.3"
@@ -115,17 +115,17 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-aws-lambda-python-alpha"
-version = "2.100.0a0"
+version = "2.101.1a0"
 description = "The CDK Construct Library for AWS Lambda in Python"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk.aws-lambda-python-alpha-2.100.0a0.tar.gz", hash = "sha256:b4c0dfee9a105f76a5cc7dcdea8464068ab3de3f79717bd9e0a68cd3671261c2"},
-    {file = "aws_cdk.aws_lambda_python_alpha-2.100.0a0-py3-none-any.whl", hash = "sha256:0baaea3a82048d7440cc09ef200b9c6b0d3da08ed553995fe5440cec68211bbe"},
+    {file = "aws-cdk.aws-lambda-python-alpha-2.101.1a0.tar.gz", hash = "sha256:87d261cf07ef1e5d5342dd226b171c19dade5ef681d1ef4f2d14f27bfcaad640"},
+    {file = "aws_cdk.aws_lambda_python_alpha-2.101.1a0-py3-none-any.whl", hash = "sha256:599339c4eb8d6f8922bf0ebdd25bc58abd9016f6c8aa02ddfbf653592589e6a7"},
 ]
 
 [package.dependencies]
-aws-cdk-lib = ">=2.100.0,<3.0.0"
+aws-cdk-lib = ">=2.101.1,<3.0.0"
 constructs = ">=10.0.0,<11.0.0"
 jsii = ">=1.89.0,<2.0.0"
 publication = ">=0.0.3"
@@ -133,17 +133,17 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-aws-redshift-alpha"
-version = "2.100.0a0"
+version = "2.101.1a0"
 description = "The CDK Construct Library for AWS::Redshift"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk.aws-redshift-alpha-2.100.0a0.tar.gz", hash = "sha256:be609ce19d8bdd5ec42c48b844a8367f78771ef867b5516dde2935dfb0b4870a"},
-    {file = "aws_cdk.aws_redshift_alpha-2.100.0a0-py3-none-any.whl", hash = "sha256:958aa4b9f2e364bcde310615b93cae8adaf54d064282b9b567d576de5d5df4ab"},
+    {file = "aws-cdk.aws-redshift-alpha-2.101.1a0.tar.gz", hash = "sha256:b7383b5c670472d2c2185081169770ef486f4bfdf482b53590064b6a63d8ec5d"},
+    {file = "aws_cdk.aws_redshift_alpha-2.101.1a0-py3-none-any.whl", hash = "sha256:3b7c54e033aba44400616a6451712d9316b9967825fe88d47cd274bc16d04d01"},
 ]
 
 [package.dependencies]
-aws-cdk-lib = ">=2.100.0,<3.0.0"
+aws-cdk-lib = ">=2.101.1,<3.0.0"
 constructs = ">=10.0.0,<11.0.0"
 jsii = ">=1.89.0,<2.0.0"
 publication = ">=0.0.3"
@@ -151,13 +151,13 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "aws-cdk-lib"
-version = "2.100.0"
+version = "2.101.1"
 description = "Version 2 of the AWS Cloud Development Kit library"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "aws-cdk-lib-2.100.0.tar.gz", hash = "sha256:39d6ab3ffcd87b60a541b4714f0ecefd169055a647376521728d64786393680a"},
-    {file = "aws_cdk_lib-2.100.0-py3-none-any.whl", hash = "sha256:8c43fe03e1e9e7dc9a4f8003d1c4e04c5ac5fe2ec4a44928695785dff6d086ee"},
+    {file = "aws-cdk-lib-2.101.1.tar.gz", hash = "sha256:8f806e7d98d54f9c563d199f608b70989ab7e2cd8d0335b6a21af0b022f34d39"},
+    {file = "aws_cdk_lib-2.101.1-py3-none-any.whl", hash = "sha256:ccd71da043868292c06ef592dd1729fd77c83188240639eec88e561fd2f112b8"},
 ]
 
 [package.dependencies]
@@ -185,13 +185,13 @@ pydantic = ">=2.0.0,<3.0.0"
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "2.25.1"
+version = "2.26.0"
 description = "Powertools for AWS Lambda (Python) is a developer toolkit to implement Serverless best practices and increase developer velocity."
 optional = false
 python-versions = ">=3.7.4,<4.0.0"
 files = [
-    {file = "aws_lambda_powertools-2.25.1-py3-none-any.whl", hash = "sha256:e241eb74163cd4b066762359fcdf9cd5e709641669655afaa6c99e970509c07c"},
-    {file = "aws_lambda_powertools-2.25.1.tar.gz", hash = "sha256:35f117005c4853829b905b57507200c08df998f1ad35f9e7d01d9361b239cca4"},
+    {file = "aws_lambda_powertools-2.26.0-py3-none-any.whl", hash = "sha256:dce14cb7aa7aaa34b790f7721ac2ef4525d684680b008bf8cb1b3e7a360ebfd0"},
+    {file = "aws_lambda_powertools-2.26.0.tar.gz", hash = "sha256:3860609ad279f9c00c0300d8d724b82e0555638351938292629367b229f3550a"},
 ]
 
 [package.dependencies]
@@ -202,19 +202,20 @@ typing-extensions = ">=4.6.2,<5.0.0"
 all = ["aws-xray-sdk (>=2.8.0,<3.0.0)", "fastjsonschema (>=2.14.5,<3.0.0)", "pydantic (>=1.8.2,<2.0.0)"]
 aws-sdk = ["boto3 (>=1.20.32,<2.0.0)"]
 datadog = ["datadog-lambda (>=4.77.0,<5.0.0)"]
+datamasking-aws-sdk = ["aws-encryption-sdk (>=3.1.1,<4.0.0)"]
 parser = ["pydantic (>=1.8.2,<2.0.0)"]
 tracer = ["aws-xray-sdk (>=2.8.0,<3.0.0)"]
 validation = ["fastjsonschema (>=2.14.5,<3.0.0)"]
 
 [[package]]
 name = "aws-xray-sdk"
-version = "2.12.0"
+version = "2.12.1"
 description = "The AWS X-Ray SDK for Python (the SDK) enables Python developers to record and emit information from within their applications to the AWS X-Ray service."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "aws-xray-sdk-2.12.0.tar.gz", hash = "sha256:295afc237073a80956d7d4f27c31830edcb9a8ccca9ef8aa44990badef15e5b7"},
-    {file = "aws_xray_sdk-2.12.0-py2.py3-none-any.whl", hash = "sha256:30886e23cc2daadc1c06a76f25b071205e84848419d1ddf097b62a565e156542"},
+    {file = "aws-xray-sdk-2.12.1.tar.gz", hash = "sha256:0bbfdbc773cfef4061062ac940b85e408297a2242f120bcdfee2593209b1e432"},
+    {file = "aws_xray_sdk-2.12.1-py2.py3-none-any.whl", hash = "sha256:f6803832dc08d18cc265e2327a69bfa9ee41c121fac195edc9745d04b7a566c3"},
 ]
 
 [package.dependencies]
@@ -237,17 +238,17 @@ dev = ["freezegun (>=1.0,<2.0)", "pytest (>=6.0)", "pytest-cov"]
 
 [[package]]
 name = "boto3"
-version = "1.28.62"
+version = "1.28.64"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.28.62-py3-none-any.whl", hash = "sha256:0dfa2fc96ccafce4feb23044d6cba8b25075ad428a0c450d369d099c6a1059d2"},
-    {file = "boto3-1.28.62.tar.gz", hash = "sha256:148eeba0f1867b3db5b3e5ae2997d75a94d03fad46171374a0819168c36f7ed0"},
+    {file = "boto3-1.28.64-py3-none-any.whl", hash = "sha256:a99150a30c038c73e89662836820a8cce914afab5ea377942a37c484b85f4438"},
+    {file = "boto3-1.28.64.tar.gz", hash = "sha256:a5cf93b202568e9d378afdc84be55a6dedf11d30156289fe829e23e6d7dccabb"},
 ]
 
 [package.dependencies]
-botocore = ">=1.31.62,<1.32.0"
+botocore = ">=1.31.64,<1.32.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.7.0,<0.8.0"
 
@@ -256,13 +257,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.31.62"
+version = "1.31.64"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.31.62-py3-none-any.whl", hash = "sha256:be792d806afc064694a2d0b9b25779f3ca0c1584b29a35ac32e67f0064ddb8b7"},
-    {file = "botocore-1.31.62.tar.gz", hash = "sha256:272b78ac65256b6294cb9cdb0ac484d447ad3a85642e33cb6a3b1b8afee15a4c"},
+    {file = "botocore-1.31.64-py3-none-any.whl", hash = "sha256:7b709310343a5b430ec9025b2e17c0bac6b16c05f1ac1d9521dece3f10c71bac"},
+    {file = "botocore-1.31.64.tar.gz", hash = "sha256:d8eb4b724ac437343359b318d73de0cfae0fecb24095827e56135b0ad6b44caf"},
 ]
 
 [package.dependencies]
@@ -309,13 +310,13 @@ ujson = ["ujson (>=5.4.0,<6.0.0)"]
 
 [[package]]
 name = "cdk-monitoring-constructs"
-version = "6.0.3"
+version = "6.0.4"
 description = "cdk-monitoring-constructs"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "cdk-monitoring-constructs-6.0.3.tar.gz", hash = "sha256:249d9a1ac02cb00b1c21ae06d154f03aaf83030a082a985eea06bff316eb5003"},
-    {file = "cdk_monitoring_constructs-6.0.3-py3-none-any.whl", hash = "sha256:631785e0ef2ccddf19f55c7eaf60f31e055b1ab885447e483b3086387cecae4c"},
+    {file = "cdk-monitoring-constructs-6.0.4.tar.gz", hash = "sha256:feadd4ac2764a6802df5b31b448a56268436dc10a2d677bc396c9621d9db7a7d"},
+    {file = "cdk_monitoring_constructs-6.0.4-py3-none-any.whl", hash = "sha256:61f16df345bb89c58f6444e632f9c7a3065d7f7a06d9ff10a073a945e0b1371f"},
 ]
 
 [package.dependencies]
@@ -329,13 +330,13 @@ typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "cdk-nag"
-version = "2.27.158"
+version = "2.27.164"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "cdk-nag-2.27.158.tar.gz", hash = "sha256:ff804aca6d7e81e865dcc8552fd54d9a1adf4e3eedf3607cccf5f31127682123"},
-    {file = "cdk_nag-2.27.158-py3-none-any.whl", hash = "sha256:cf171c3b35e64765ecad2a80ed308db95f3c948315cc438a4f1f8a6d6142c6ba"},
+    {file = "cdk-nag-2.27.164.tar.gz", hash = "sha256:f56bac12ae14522aede21af06fda5280767b25e6234a5368470af176f004d8f1"},
+    {file = "cdk_nag-2.27.164-py3-none-any.whl", hash = "sha256:c006c555b6cfdafdd49dc6b46da9515f887864ec493f5cf1bdef1a3c16d84d7b"},
 ]
 
 [package.dependencies]
@@ -681,20 +682,20 @@ smmap = ">=3.0.1,<6"
 
 [[package]]
 name = "gitpython"
-version = "3.1.37"
+version = "3.1.38"
 description = "GitPython is a Python library used to interact with Git repositories"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "GitPython-3.1.37-py3-none-any.whl", hash = "sha256:5f4c4187de49616d710a77e98ddf17b4782060a1788df441846bddefbb89ab33"},
-    {file = "GitPython-3.1.37.tar.gz", hash = "sha256:f9b9ddc0761c125d5780eab2d64be4873fc6817c2899cbcb34b02344bdc7bc54"},
+    {file = "GitPython-3.1.38-py3-none-any.whl", hash = "sha256:9e98b672ffcb081c2c8d5aa630d4251544fb040fb158863054242f24a2a2ba30"},
+    {file = "GitPython-3.1.38.tar.gz", hash = "sha256:4d683e8957c8998b58ddb937e3e6cd167215a180e1ffd4da769ab81c620a89fe"},
 ]
 
 [package.dependencies]
 gitdb = ">=4.0.1,<5"
 
 [package.extras]
-test = ["black", "coverage[toml]", "ddt (>=1.1.1,!=1.4.3)", "mypy", "pre-commit", "pytest", "pytest-cov", "pytest-sugar"]
+test = ["black", "coverage[toml]", "ddt (>=1.1.1,!=1.4.3)", "mock", "mypy", "pre-commit", "pytest", "pytest-cov", "pytest-instafail", "pytest-subtests", "pytest-sugar"]
 
 [[package]]
 name = "identify"
@@ -991,13 +992,13 @@ mkdocs = ">=0.17"
 
 [[package]]
 name = "mkdocs-material"
-version = "9.4.5"
+version = "9.4.6"
 description = "Documentation that simply works"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mkdocs_material-9.4.5-py3-none-any.whl", hash = "sha256:0922e3e34d95dbf3f0c84fc817a233e1cbd5874830c6fd821d525ba90e0ce077"},
-    {file = "mkdocs_material-9.4.5.tar.gz", hash = "sha256:efaa52843a8c64b99bcf5a97cf4ba57d410424828e3087b13c9b3954e8adb5ff"},
+    {file = "mkdocs_material-9.4.6-py3-none-any.whl", hash = "sha256:78802035d5768a78139c84ad7dce0c6493e8f7dc4861727d36ed91d1520a54da"},
+    {file = "mkdocs_material-9.4.6.tar.gz", hash = "sha256:09665e60df7ee9e5ff3a54af173f6d45be718b1ee7dd962bcff3102b81fb0c14"},
 ]
 
 [package.dependencies]
@@ -1020,13 +1021,13 @@ recommended = ["mkdocs-minify-plugin (>=0.7,<1.0)", "mkdocs-redirects (>=1.2,<2.
 
 [[package]]
 name = "mkdocs-material-extensions"
-version = "1.2"
+version = "1.3"
 description = "Extension pack for Python Markdown and MkDocs Material."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "mkdocs_material_extensions-1.2-py3-none-any.whl", hash = "sha256:c767bd6d6305f6420a50f0b541b0c9966d52068839af97029be14443849fb8a1"},
-    {file = "mkdocs_material_extensions-1.2.tar.gz", hash = "sha256:27e2d1ed2d031426a6e10d5ea06989d67e90bb02acd588bc5673106b5ee5eedf"},
+    {file = "mkdocs_material_extensions-1.3-py3-none-any.whl", hash = "sha256:0297cc48ba68a9fdd1ef3780a3b41b534b0d0df1d1181a44676fda5f464eeadc"},
+    {file = "mkdocs_material_extensions-1.3.tar.gz", hash = "sha256:f0446091503acb110a7cab9349cbc90eeac51b58d1caa92a704a81ca1e24ddbd"},
 ]
 
 [[package]]
@@ -1177,13 +1178,13 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
-version = "3.4.0"
+version = "3.5.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pre_commit-3.4.0-py2.py3-none-any.whl", hash = "sha256:96d529a951f8b677f730a7212442027e8ba53f9b04d217c4c67dc56c393ad945"},
-    {file = "pre_commit-3.4.0.tar.gz", hash = "sha256:6bbd5129a64cad4c0dfaeeb12cd8f7ea7e15b77028d985341478c8af3c759522"},
+    {file = "pre_commit-3.5.0-py2.py3-none-any.whl", hash = "sha256:841dc9aef25daba9a0238cd27984041fa0467b4199fc4852e27950664919f660"},
+    {file = "pre_commit-3.5.0.tar.gz", hash = "sha256:5804465c675b659b0862f07907f96295d490822a450c4c40e747d0b1c6ebcb32"},
 ]
 
 [package.dependencies]
@@ -1206,13 +1207,13 @@ files = [
 
 [[package]]
 name = "pycodestyle"
-version = "2.11.0"
+version = "2.11.1"
 description = "Python style guide checker"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pycodestyle-2.11.0-py2.py3-none-any.whl", hash = "sha256:5d1013ba8dc7895b548be5afb05740ca82454fd899971563d2ef625d090326f8"},
-    {file = "pycodestyle-2.11.0.tar.gz", hash = "sha256:259bcc17857d8a8b3b4a2327324b79e5f020a13c16074670f9c8c8f872ea76d0"},
+    {file = "pycodestyle-2.11.1-py2.py3-none-any.whl", hash = "sha256:44fe31000b2d866f2e41841b18528a505fbd7fef9017b04eff4e2648a0fadc67"},
+    {file = "pycodestyle-2.11.1.tar.gz", hash = "sha256:41ba0e7afc9752dfb53ced5489e89f8186be00e599e712660695b7a75ff2663f"},
 ]
 
 [[package]]
@@ -1832,13 +1833,13 @@ files = [
 
 [[package]]
 name = "types-requests"
-version = "2.31.0.8"
+version = "2.31.0.9"
 description = "Typing stubs for requests"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "types-requests-2.31.0.8.tar.gz", hash = "sha256:e1b325c687b3494a2f528ab06e411d7092cc546cc9245c000bacc2fca5ae96d4"},
-    {file = "types_requests-2.31.0.8-py3-none-any.whl", hash = "sha256:39894cbca3fb3d032ed8bdd02275b4273471aa5668564617cc1734b0a65ffdf8"},
+    {file = "types-requests-2.31.0.9.tar.gz", hash = "sha256:3bb11188795cc3aa39f9635032044ee771009370fb31c3a06ae952b267b6fcd7"},
+    {file = "types_requests-2.31.0.9-py3-none-any.whl", hash = "sha256:140e323da742a0cd0ff0a5a83669da9ffcebfaeb855d367186b2ec3985ba2742"},
 ]
 
 [package.dependencies]
