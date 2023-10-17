@@ -1,6 +1,8 @@
 import aws_cdk.aws_sns as sns
-from aws_cdk import Duration, aws_apigateway, CfnOutput
+from aws_cdk import CfnOutput, Duration, aws_apigateway
 from aws_cdk import aws_dynamodb as dynamodb
+from aws_cdk import aws_iam as iam
+from aws_cdk import aws_kms as kms
 from aws_cdk import aws_lambda as _lambda
 from cdk_monitoring_constructs import (
     AlarmFactoryDefaults,
@@ -11,9 +13,8 @@ from cdk_monitoring_constructs import (
     MonitoringFacade,
     SnsAlarmActionStrategy,
 )
-from aws_cdk import aws_kms as kms
 from constructs import Construct
-from aws_cdk import aws_iam as iam
+
 from cdk.service import constants
 
 
@@ -37,7 +38,7 @@ class CrudMonitoring(Construct):
     def _build_topic(self) -> sns.Topic:
         key = kms.Key(
             self,
-            'MyKey',
+            'MonitoringKey',
             description='KMS Key for SNS Topic Encryption',
             enable_key_rotation=True  # Enables automatic key rotation
         )
