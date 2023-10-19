@@ -32,6 +32,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - Python Serverless service with a recommended file structure.
 - CDK infrastructure with infrastructure tests and security tests.
 - CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
+- CI/CD pipeline deploys to dev/staging and production environment with different gates between each environment
 - Makefile for simple developer experience.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 - AWS Lambda handler uses [AWS Lambda Powertools](https://docs.powertools.aws.dev/lambda-python/){:target="_blank" rel="noopener"}.
@@ -59,6 +60,7 @@ The utilities cover multiple aspects of a production-ready service, including:
 - [**Dynamic configuration & features flags**](best_practices/dynamic_configuration.md)
 - [**Serverless Monitoring**](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one)
 - [**API Idempotency**](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk){:target="_blank" rel="noopener"}
+- [**Learn How to Write AWS Lambda Functions with Three Architecture Layers**](https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers){:target="_blank" rel="noopener"}
 
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
 

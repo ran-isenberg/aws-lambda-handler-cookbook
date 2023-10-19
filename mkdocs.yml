@@ -14,6 +14,7 @@ nav:
       - best_practices/tracer.md
       - best_practices/metrics.md
       - best_practices/environment_variables.md
+      - Architecture Layers: https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers" target="_blank"
       - best_practices/input_validation.md
       - best_practices/dynamic_configuration.md
       - best_practices/monitoring.md

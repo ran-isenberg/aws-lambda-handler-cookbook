@@ -10,7 +10,6 @@ description: AWS Lambda Cookbook Project Getting started
 * [poetry](https://pypi.org/project/poetry/){target="_blank"} - Make sure to run ``poetry config --local virtualenvs.in-project true`` so all dependencies are installed in the project '.venv' folder.
 * For Windows based machines, use the Makefile_windows version (rename to Makefile). Default Makefile is for Mac/Linux.
 
-
 ## **Creating a Developer Environment**
 
 1. Run ``make dev``

@@ -8,7 +8,8 @@ description: Monitoring
 
 ## **Key Concepts**
 
-Utilizing AWS CloudWatch dashboards enables centralized monitoring of API Gateway, Lambda functions, and DynamoDB, providing real-time insights into their performance and operational health. By aggregating metrics, logs, and alarms, CloudWatch facilitates swift issue diagnosis and analysis across your serverless applications. Additionally, setting up alarms ensures immediate alerts during anomalous activities, enabling proactive issue mitigation.
+Utilizing AWS CloudWatch dashboards enables centralized monitoring of API Gateway, Lambda functions, and DynamoDB, providing real-time insights into their performance and operational health.
+By aggregating metrics, logs, and alarms, CloudWatch facilitates swift issue diagnosis and analysis across your serverless applications. Additionally, setting up alarms ensures immediate alerts during anomalous activities, enabling proactive issue mitigation.
 
 ## **Service Architecture**
 
@@ -54,7 +55,6 @@ As for DynamoDB tables, we have the primary database and the idempotency table f
 
 Personas that use this dashboard: developers, SREs.
 
-
 ### **Alarms**
 
 Having visibility and information is one thing, but being proactive and knowing beforehand that a significant error is looming is another. A CloudWatch
@@ -74,7 +74,6 @@ For latency-related issues, we define the following alarm:
 
 For P90, P50 metrics, follow this [explanation.](https://www.dnv.com/article/terminology-explained-p10-p50-and-p90-202611#:~:text=Proved%20(P90)%3A%20The%20lowest,equal%20or%20exceed%20P10%20estimate.){:target="_blank" rel="noopener"}
 
-
 For internal server errors rate, we define the following alarm:
 ![5xx](../media/monitoring/alarm_5xx.png)
 
@@ -88,7 +87,6 @@ From there, you can connect any subscription - HTTPS/SMS/Email, etc. to notify y
 We use the open-source [cdk-monitoring-constructs](https://github.com/cdklabs/cdk-monitoring-constructs){:target="_blank" rel="noopener"}.
 
 You can view find the monitoring CDK construct [here](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/cdk/service/monitoring.py).
-
 
 ## **Further Reading**
 
