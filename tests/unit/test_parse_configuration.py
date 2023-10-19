@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
 from service.handlers.utils.dynamic_configuration import parse_configuration
-from service.schemas.exceptions import DynamicConfigurationException
+from service.models.exceptions import DynamicConfigurationException
 
 MOCKED_SCHEMA = {'region': 'us-east-1'}
 

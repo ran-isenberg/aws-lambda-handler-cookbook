@@ -1,49 +1,42 @@
-import getpass
-from pathlib import Path
-
 from aws_cdk import Aspects, Stack, Tags
 from cdk_nag import AwsSolutionsChecks, NagSuppressions
 from constructs import Construct
-from git import Repo
 
 from cdk.service.api_construct import ApiConstruct
 from cdk.service.configuration.configuration_construct import ConfigurationStore
-from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
-
-
-def get_username() -> str:
-    try:
-        return getpass.getuser().replace('.', '-')
-    except Exception:
-        return 'github'
-
-
-def get_stack_name() -> str:
-    repo = Repo(Path.cwd())
-    username = get_username()
-    try:
-        branch_name = f'{repo.active_branch}'.replace('/', '-').replace('_', '-')
-        return f'{username}-{branch_name}-{SERVICE_NAME}'
-    except TypeError:
-        # we're running in detached mode (HEAD)
-        # see https://github.com/gitpython-developers/GitPython/issues/633
-        return f'{username}-{SERVICE_NAME}'
+from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, OWNER_TAG, SERVICE_NAME, SERVICE_NAME_TAG
+from cdk.service.utils import get_construct_name, get_username
 
 
 class ServiceStack(Stack):
 
-    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, is_production_env: bool, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        Tags.of(self).add('service_name', 'Order')
+        self._add_stack_tags()
 
         # This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled
         # from running the service pipeline and without redeploying the service lambdas. For the sake of this template
         # example, it is deployed as part of the service stack
-        self.dynamic_configuration = ConfigurationStore(self, f'{id}dynamic_conf'[0:64], ENVIRONMENT, SERVICE_NAME, CONFIGURATION_NAME)
-        self.api = ApiConstruct(self, f'{id}Service'[0:64], self.dynamic_configuration.app_name)
+        self.dynamic_configuration = ConfigurationStore(
+            self,
+            get_construct_name(stack_prefix=id, construct_name='DynamicConf'),
+            ENVIRONMENT,
+            SERVICE_NAME,
+            CONFIGURATION_NAME,
+        )
+        self.api = ApiConstruct(
+            self,
+            get_construct_name(stack_prefix=id, construct_name='Crud'),
+            self.dynamic_configuration.app_name,
+        )
 
         # add security check
         self._add_security_tests()
+
+    def _add_stack_tags(self) -> None:
+        # best practice to help identify resources in the console
+        Tags.of(self).add(SERVICE_NAME_TAG, SERVICE_NAME)
+        Tags.of(self).add(OWNER_TAG, get_username())
 
     def _add_security_tests(self) -> None:
         Aspects.of(self).add(AwsSolutionsChecks(verbose=True))

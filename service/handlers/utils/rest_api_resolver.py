@@ -5,7 +5,7 @@ from aws_lambda_powertools.event_handler import APIGatewayRestResolver, Response
 from pydantic import ValidationError
 
 from service.handlers.utils.observability import logger
-from service.schemas.exceptions import DynamicConfigurationException, InternalServerException
+from service.models.exceptions import DynamicConfigurationException, InternalServerException
 
 ORDERS_PATH = '/api/orders/'
 

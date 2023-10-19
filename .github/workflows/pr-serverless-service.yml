@@ -1,0 +1,104 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+name: PR - Serverless Service CI/CD
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "18"
+  PYTHON_VERSION: "3.11"
+  AWS_REGION: "us-east-1"
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality_standards:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "🎉 The job was automatically triggered by a ${{ env.EVENT_NAME }} event." >> $GITHUB_STEP_SUMMARY
+          echo "🐧 This job is now running on a ${{ env.OS_NAME }} ${{env.OS_ARCH}} server hosted by GitHub!" >> $GITHUB_STEP_SUMMARY
+          echo "🔎 The name of your branch is ${{ env.BRANCH_NAME }} and your repository is ${{ env.REPO_NAME }}." >> $GITHUB_STEP_SUMMARY
+        env:
+          EVENT_NAME: ${{ github.event_name}}
+          OS_NAME: ${{ runner.os }}
+          OS_ARCH: ${{runner.arch }}
+          BRANCH_NAME: ${{ github.ref }}
+          REPO_NAME: ${{ github.repository }}
+      - name: Check out repository code
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Set up Python
+        uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # v4.7.1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry" # NOTE: poetry must be installed before this step, or else cache doesn't work
+      - name: Install dependencies
+        run: make dev
+      - name: pre commit
+        run: make pre-commit
+      - name: Formatting and Linting
+        run: make lint
+      - name: Complexity scan
+        run: make complex
+  tests:
+    needs: quality_standards
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      id-token: write # required for requesting the JWT (GitHub OIDC)
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Set up Python
+        uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # v4.7.1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry" # NOTE: poetry must be installed before this step, or else cache doesn't work
+      - name: Set up Node
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - name: Install dependencies
+        run: make dev
+      # NOTE: unit tests are connecting to AWS to instantiate boto3 clients/resources
+      #       once that's discussed we can move unit and infra tests as part of the fast quality standards
+      #       see https://github.com/ran-isenberg/serverless-python-demo/pull/38#discussion_r1299372169
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: ${{ env.SESSION_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
+        env:
+          SESSION_NAME: "github-${{github.sha}}-dev"
+      - name: Unit tests
+        run: make unit
+      - name: Infrastructure tests
+        run: make infra-tests
+      - name: Deploy to AWS
+        run: make deploy
+      # NOTE: these run unit and integration tests
+      # we can look into coverage collection only later to make it faster and less brittle (--collect-only)
+      - name: Code coverage tests
+        run: make coverage-tests
+      - name: Codecov
+        uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false # optional (default = false)
+          verbose: false # optional (default = false)
+      - name: Run E2E tests
+        run: make e2e
+      - name: Destroy stack
+        if: always()
+        run: make destroy

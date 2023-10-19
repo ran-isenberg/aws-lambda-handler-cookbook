@@ -5,7 +5,7 @@ import pytest
 import requests
 
 from cdk.service.constants import APIGATEWAY, GW_RESOURCE
-from service.schemas.input import CreateOrderRequest
+from service.models.input import CreateOrderRequest
 from tests.utils import generate_random_string, get_stack_output
 
 
@@ -26,12 +26,12 @@ def test_handler_200_ok(api_gw_url):
     # Then: Validate the response and its body with expected values
     assert response.status_code == HTTPStatus.OK
     body_dict = json.loads(response.text)
-    assert body_dict['order_id']
-    assert body_dict['customer_name'] == customer_name
-    assert body_dict['order_item_count'] == 5
+    assert body_dict['id']
+    assert body_dict['name'] == customer_name
+    assert body_dict['item_count'] == 5
 
     # Given: The ID of the original order
-    original_order_id = body_dict['order_id']
+    original_order_id = body_dict['id']
 
     # When: Sending the same request (testing idempotency)
     response = requests.post(api_gw_url, data=body.model_dump_json())
@@ -39,7 +39,7 @@ def test_handler_200_ok(api_gw_url):
     # Then: Validate that the new order ID is same as the original order ID
     assert response.status_code == HTTPStatus.OK
     body_dict = json.loads(response.text)
-    assert body_dict['order_id'] == original_order_id
+    assert body_dict['id'] == original_order_id
 
 
 def test_handler_bad_request(api_gw_url):
