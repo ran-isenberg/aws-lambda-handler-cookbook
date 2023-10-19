@@ -3,7 +3,7 @@ import uuid
 import pytest
 from aws_lambda_powertools.utilities.parser import ValidationError
 
-from service.dal.schemas.db import OrderEntry
+from service.dal.models.db import OrderEntry
 
 order_id = str(uuid.uuid4())
 
@@ -15,7 +15,7 @@ def test_invalid_items_type():
 
     # When & Then: OrderEntry is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
-        OrderEntry(order_id=order_id, customer_name=customer_name, order_item_count=order_item_count)
+        OrderEntry(id=order_id, name=customer_name, item_count=order_item_count)
 
 
 def test_invalid_items_negative():
@@ -25,7 +25,7 @@ def test_invalid_items_negative():
 
     # When & Then: OrderEntry is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
-        OrderEntry(order_id=order_id, customer_name=customer_name, order_item_count=order_item_count)
+        OrderEntry(id=order_id, name=customer_name, item_count=order_item_count)
 
 
 def test_invalid_items_zero():
@@ -35,7 +35,7 @@ def test_invalid_items_zero():
 
     # When & Then: OrderEntry is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
-        OrderEntry(order_id=order_id, customer_name=customer_name, order_item_count=order_item_count)
+        OrderEntry(id=order_id, name=customer_name, item_count=order_item_count)
 
 
 def test_invalid_order_id():
@@ -46,7 +46,7 @@ def test_invalid_order_id():
 
     # When & Then: OrderEntry is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
-        OrderEntry(order_id=order_id_invalid, customer_name=customer_name, order_item_count=order_item_count)
+        OrderEntry(id=order_id_invalid, name=customer_name, item_count=order_item_count)
 
 
 def test_valid_output():
@@ -56,4 +56,4 @@ def test_valid_output():
 
     # When: OrderEntry is initialized
     # Then: No exception should be raised
-    OrderEntry(order_id=order_id, customer_name=customer_name, order_item_count=order_item_count)
+    OrderEntry(id=order_id, name=customer_name, item_count=order_item_count)

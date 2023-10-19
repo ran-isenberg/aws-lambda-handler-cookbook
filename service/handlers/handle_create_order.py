@@ -7,14 +7,14 @@ from aws_lambda_powertools.utilities.parser import parse
 from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from service.handlers.schemas.dynamic_configuration import MyConfiguration
-from service.handlers.schemas.env_vars import MyHandlerEnvVars
+from service.handlers.models.dynamic_configuration import MyConfiguration
+from service.handlers.models.env_vars import MyHandlerEnvVars
 from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.create_order import create_order
-from service.schemas.input import CreateOrderRequest
-from service.schemas.output import CreateOrderOutput
+from service.models.input import CreateOrderRequest
+from service.models.output import CreateOrderOutput
 
 
 @app.post(ORDERS_PATH)

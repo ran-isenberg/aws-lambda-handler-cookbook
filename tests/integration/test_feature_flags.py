@@ -2,7 +2,7 @@ import json
 from http import HTTPStatus
 from typing import Any
 
-from service.schemas.input import CreateOrderRequest
+from service.models.input import CreateOrderRequest
 from tests.utils import generate_api_gw_event, generate_context, generate_random_string
 
 MOCKED_SCHEMA_CAMPAIGN_ON = {
@@ -68,9 +68,9 @@ def assert_response(response: dict[str, Any], expected_response_code: HTTPStatus
     # assert response
     assert response['statusCode'] == expected_response_code
     body_dict = json.loads(response['body'])
-    assert body_dict['order_id']
-    assert body_dict['customer_name'] == expected_customer_name
-    assert body_dict['order_item_count'] == expected_order_item_count
+    assert body_dict['id']
+    assert body_dict['name'] == expected_customer_name
+    assert body_dict['item_count'] == expected_order_item_count
 
 
 def spy_on_campaign_logic(mocker):

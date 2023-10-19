@@ -4,8 +4,8 @@ from aws_lambda_env_modeler import get_environment_variables
 from aws_lambda_powertools.utilities.feature_flags import AppConfigStore, FeatureFlags
 from pydantic import BaseModel
 
-from service.handlers.schemas.env_vars import DynamicConfiguration
-from service.schemas.exceptions import DynamicConfigurationException
+from service.handlers.models.env_vars import DynamicConfiguration
+from service.models.exceptions import DynamicConfigurationException
 
 Model = TypeVar('Model', bound=BaseModel)
 

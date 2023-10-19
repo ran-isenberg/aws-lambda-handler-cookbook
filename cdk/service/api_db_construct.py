@@ -35,7 +35,7 @@ class ApiDbConstruct(Construct):
             self,
             table_id,
             table_name=table_id,
-            partition_key=dynamodb.Attribute(name='order_id', type=dynamodb.AttributeType.STRING),
+            partition_key=dynamodb.Attribute(name='id', type=dynamodb.AttributeType.STRING),
             billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
             point_in_time_recovery=True,
             removal_policy=RemovalPolicy.DESTROY,

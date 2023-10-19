@@ -8,9 +8,10 @@ from mypy_boto3_dynamodb.service_resource import Table
 from pydantic import ValidationError
 
 from service.dal.db_handler import DalHandler
-from service.dal.schemas.db import OrderEntry
+from service.dal.models.db import OrderEntry
 from service.handlers.utils.observability import logger, tracer
-from service.schemas.exceptions import InternalServerException
+from service.models.exceptions import InternalServerException
+from service.models.order import Order
 
 
 class DynamoDalHandler(DalHandler):
@@ -26,12 +27,12 @@ class DynamoDalHandler(DalHandler):
         return dynamodb.Table(table_name)
 
     @tracer.capture_method(capture_response=False)
-    def create_order_in_db(self, customer_name: str, order_item_count: int) -> OrderEntry:
+    def create_order_in_db(self, customer_name: str, order_item_count: int) -> Order:
         order_id = str(uuid.uuid4())
         logger.append_keys(order_id=order_id)
         logger.info('trying to save order', customer_name=customer_name, order_item_count=order_item_count)
         try:
-            entry = OrderEntry(order_id=order_id, customer_name=customer_name, order_item_count=order_item_count)
+            entry = OrderEntry(id=order_id, name=customer_name, item_count=order_item_count)
             table: Table = self._get_db_handler(self.table_name)
             table.put_item(Item=entry.model_dump())
         except (ClientError, ValidationError) as exc:  # pragma: no cover
@@ -40,4 +41,4 @@ class DynamoDalHandler(DalHandler):
             raise InternalServerException(error_msg) from exc
 
         logger.info('finished create order successfully', order_item_count=order_item_count, customer_name=customer_name)
-        return entry
+        return Order(id=order_id, name=customer_name, item_count=order_item_count)

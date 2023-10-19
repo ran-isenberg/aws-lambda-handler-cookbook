@@ -1,7 +1,7 @@
 import pytest
 from aws_lambda_powertools.utilities.parser import ValidationError
 
-from service.schemas.input import CreateOrderRequest
+from service.models.input import CreateOrderRequest
 
 # ... potentially more imports based on your project ...
 

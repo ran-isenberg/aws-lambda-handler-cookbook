@@ -7,7 +7,7 @@ from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValid
 from botocore.stub import Stubber
 
 from service.dal.dynamo_dal_handler import DynamoDalHandler
-from service.schemas.input import CreateOrderRequest
+from service.models.input import CreateOrderRequest
 from tests.utils import generate_api_gw_event, generate_context, generate_random_string
 
 MOCKED_SCHEMA = {
@@ -65,15 +65,15 @@ def test_handler_200_ok(mocker, table_name: str):
     # Then: Validate the response and data in DynamoDB table
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
-    assert body_dict['order_id']
-    assert body_dict['customer_name'] == customer_name
-    assert body_dict['order_item_count'] == 5
+    assert body_dict['id']
+    assert body_dict['name'] == customer_name
+    assert body_dict['item_count'] == 5
 
     dynamodb_table = boto3.resource('dynamodb').Table(table_name)
-    response = dynamodb_table.get_item(Key={'order_id': body_dict['order_id']})
+    response = dynamodb_table.get_item(Key={'id': body_dict['id']})
     assert 'Item' in response
-    assert response['Item']['customer_name'] == customer_name
-    assert response['Item']['order_item_count'] == order_item_count
+    assert response['Item']['name'] == customer_name
+    assert response['Item']['item_count'] == order_item_count
 
 
 def test_internal_server_error(mocker, table_name: str):

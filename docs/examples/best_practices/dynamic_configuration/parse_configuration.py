@@ -5,8 +5,8 @@ from typing import Any
 from aws_lambda_env_modeler import init_environment_variables
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from service.handlers.schemas.dynamic_configuration import MyConfiguration
-from service.handlers.schemas.env_vars import MyHandlerEnvVars
+from service.handlers.models.dynamic_configuration import MyConfiguration
+from service.handlers.models.env_vars import MyHandlerEnvVars
 from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.observability import logger
 

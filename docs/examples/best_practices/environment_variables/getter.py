@@ -5,7 +5,7 @@ from typing import Any
 from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from service.handlers.schemas.env_vars import MyHandlerEnvVars
+from service.handlers.models.env_vars import MyHandlerEnvVars
 
 
 @init_environment_variables(model=MyHandlerEnvVars)
