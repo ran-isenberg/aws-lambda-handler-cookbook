@@ -10,29 +10,8 @@ description: AWS Lambda Cookbook Project Getting started
 * [poetry](https://pypi.org/project/poetry/){target="_blank"} - Make sure to run ``poetry config --local virtualenvs.in-project true`` so all dependencies are installed in the project '.venv' folder.
 * For Windows based machines, use the Makefile_windows version (rename to Makefile). Default Makefile is for Mac/Linux.
 
-## Cookiecutter Option
 
-You can get a cleaner version of this repository without using the template button on GitHub with cookiecutter.
-
-* Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter`
-
-Then run:
-
-``cookiecutter gh:ran-isenberg/cookiecutter-serverless-python``
-
-Answer the questions to select repo name, service name, etc.:
-
-![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
-
-That's it! you are ready to go and deploy the service to AWS.
-
-``cd {new repo folder}``
-``poetry shell``
-``make deploy``
-
-<br></br>
-
-## **Creating a Developer Environment without cookiecutter**
+## **Creating a Developer Environment**
 
 1. Run ``make dev``
 

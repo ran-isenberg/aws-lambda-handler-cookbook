@@ -22,30 +22,6 @@ This project can serve as a template for new Serverless services - CDK deploymen
 [![Website](https://img.shields.io/badge/Website-www.ranthebuilder.cloud-blue)](https://www.ranthebuilder.cloud/)
 
 
-## Cookiecutter Option
-
-You can get a cleaner version of this repository without using the template button on GitHub with cookiecutter.
-
-* Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter`
-
-Then run:
-
-```
-cookiecutter gh:ran-isenberg/cookiecutter-serverless-python
-```
-
-Answer the questions to select repo name, service name, etc.:
-
-![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
-
-
-**That's it, your developer environment has been set! you are ready to deploy the service:**
-
-```
-cd {new repo folder}
-poetry shell
-make deploy
-```
 
 You can also run 'make pr' will run all checks, synth, file formatters , unit tests, deploy to AWS and run integration and E2E tests.
 
