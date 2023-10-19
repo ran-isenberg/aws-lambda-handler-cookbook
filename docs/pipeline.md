@@ -7,9 +7,9 @@ description: AWS Lambda Cookbook - Elevate Your Handler's Code Python pipeline
 
 The GitHub CI/CD pipeline includes the following steps.
 
-The pipelines uses environment secrets (under the defined environment dev) for code coverage and for the role to deploy to AWS.
+The pipelines uses environment secrets (under the defined environment 'dev', 'staging' and 'production') for code coverage and for the role to deploy to AWS.
 
-When you clone this repository or use the [cookiecutter variation](https://github.com/ran-isenberg/cookiecutter-serverless-python), be sure to define an environment in your [repo settings](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) and add two environment secrets:
+When you clone this repository be sure to define the environments in your [repo settings](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) and add two environment secrets:
 
 1. AWS_ROLE - to role to assume for your GitHub worker as defined [here](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services) .
 2. CODECOV_TOKEN - for [code coverage integration](https://app.codecov.io/).
