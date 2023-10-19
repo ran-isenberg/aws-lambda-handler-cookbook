@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 import boto3
 from botocore.exceptions import ClientError
@@ -26,13 +27,21 @@ class DynamoDalHandler(DalHandler):
         dynamodb: DynamoDBServiceResource = boto3.resource('dynamodb')
         return dynamodb.Table(table_name)
 
+    def _get_unix_time(self) -> int:
+        return int(datetime.utcnow().timestamp())
+
     @tracer.capture_method(capture_response=False)
     def create_order_in_db(self, customer_name: str, order_item_count: int) -> Order:
         order_id = str(uuid.uuid4())
         logger.append_keys(order_id=order_id)
         logger.info('trying to save order', customer_name=customer_name, order_item_count=order_item_count)
         try:
-            entry = OrderEntry(id=order_id, name=customer_name, item_count=order_item_count)
+            entry = OrderEntry(
+                id=order_id,
+                name=customer_name,
+                item_count=order_item_count,
+                created_at=self._get_unix_time(),
+            )
             table: Table = self._get_db_handler(self.table_name)
             table.put_item(Item=entry.model_dump())
         except (ClientError, ValidationError) as exc:  # pragma: no cover
@@ -41,4 +50,4 @@ class DynamoDalHandler(DalHandler):
             raise InternalServerException(error_msg) from exc
 
         logger.info('finished create order successfully', order_item_count=order_item_count, customer_name=customer_name)
-        return Order(id=order_id, name=customer_name, item_count=order_item_count)
+        return Order(id=entry.id, name=entry.name, item_count=entry.item_count)
