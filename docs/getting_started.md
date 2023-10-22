@@ -10,7 +10,25 @@ description: AWS Lambda Cookbook Project Getting started
 * [poetry](https://pypi.org/project/poetry/){target="_blank"} - Make sure to run ``poetry config --local virtualenvs.in-project true`` so all dependencies are installed in the project '.venv' folder.
 * For Windows based machines, use the Makefile_windows version (rename to Makefile). Default Makefile is for Mac/Linux.
 
-## **Creating a Developer Environment**
+## Getting Started
+
+You can start with a clean service out of this template repository without using the 'Template' button on GitHub.
+
+You can use Cookiecutter.
+
+* Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter`
+
+Then run:
+
+**[`cookiecutter gh:ran-isenberg/cookiecutter-serverless-python`](#){: .copyMe}:clipboard:**
+
+Answer the questions to select repo name, service name, etc.:
+
+![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
+
+**That's it, your developer environment has been set! you are ready to deploy the service:**
+
+## **Creating a Developer Environment (without cookiecutter)**
 
 1. Run ``make dev``
 
@@ -68,7 +86,7 @@ Be sure to commit all the changes that ``make pr`` does for you.
 
 CDK requires a requirements.txt in order to create a zip file with the Lambda layer dependencies. It's based on the project's poetry.lock file.
 
-``make deploy` command will generate it automatically for you.
+``make deploy`` command will generate it automatically for you.
 
 ### dev_requirements.txt
 
@@ -76,4 +94,4 @@ This file is used during GitHub CI to install all the required Python libraries 
 
 File contents are created out of the Pipfile.lock.
 
-``make deploy`` ``make deps`` commands generate it automatically.
+``make deploy`` and ``make deps`` are commands generate it automatically.
