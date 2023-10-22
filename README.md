@@ -21,7 +21,32 @@ This project can serve as a template for new Serverless services - CDK deploymen
 [![Twitter Follow](https://img.shields.io/twitter/follow/IsenbergRan?label=Follow&style=social)](https://twitter.com/IsenbergRan)
 [![Website](https://img.shields.io/badge/Website-www.ranthebuilder.cloud-blue)](https://www.ranthebuilder.cloud/)
 
+## Getting Started
 
+You can start with a clean service out of this template repository without using the 'Template' button on GitHub.
+
+You can use Cookiecutter.
+
+* Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter`
+
+Then run:
+
+```
+cookiecutter gh:ran-isenberg/cookiecutter-serverless-python
+```
+
+Answer the questions to select repo name, service name, etc.:
+
+![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
+
+
+**That's it, your developer environment has been set! you are ready to deploy the service:**
+
+```
+cd {new repo folder}
+poetry shell
+make deploy
+```
 
 You can also run 'make pr' will run all checks, synth, file formatters , unit tests, deploy to AWS and run integration and E2E tests.
 
@@ -32,6 +57,7 @@ Starting a Serverless service can be overwhelming. You need to figure out many q
 - How to deploy to the cloud? What IAC framework do you choose?
 - How to write a SaaS-oriented CI/CD pipeline? What does it need to contain?
 - How do you handle observability, logging, tracing, metrics?
+- How do you write a Lambda function?
 - How do you handle testing?
 - What makes an AWS Lambda handler resilient, traceable, and easy to maintain? How do you write such a code?
 
@@ -49,12 +75,15 @@ This project aims to reduce cognitive load and answer these questions for you by
 ![design](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/design.png?raw=true)
 <br></br>
 
+#### **Monitoring Design**
+![monitoring_design](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/monitoring_design.png?raw=true)
+<br></br>
 ### **Features**
 
 - Python Serverless service with a recommended file structure.
 - CDK infrastructure with infrastructure tests and security tests.
 - CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
-- CI/CD pipeline deploys to dev/staging and production environment with different gates between each environment
+- CI/CD pipeline deploys to dev/staging and production environments with different gates between each environment
 - Makefile for simple developer experience.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 - AWS Lambda handler uses [AWS Lambda Powertools](https://docs.powertools.aws.dev/lambda-python/).

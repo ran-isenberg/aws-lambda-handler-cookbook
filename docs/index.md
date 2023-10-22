@@ -27,6 +27,10 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 - The project deploys an API GW with an AWS Lambda integration under the path POST /api/orders/ and stores orders data in a DynamoDB table.
 
+#### **Monitoring Design**
+
+[<img alt="alt_text" src="./media/monitoring_design.png" />](https://www.ranthebuilder.cloud/)
+
 ### **Features**
 
 - Python Serverless service with a recommended file structure.
