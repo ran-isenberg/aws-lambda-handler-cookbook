@@ -6,7 +6,6 @@ import cdk.service.constants as constants
 
 
 class ApiDbConstruct(Construct):
-
     def __init__(self, scope: Construct, id_: str) -> None:
         super().__init__(scope, id_)
 
@@ -25,8 +24,9 @@ class ApiDbConstruct(Construct):
             time_to_live_attribute='expiration',
             point_in_time_recovery=True,
         )
-        CfnOutput(self, id=constants.IDEMPOTENCY_TABLE_NAME_OUTPUT,
-                  value=table.table_name).override_logical_id(constants.IDEMPOTENCY_TABLE_NAME_OUTPUT)
+        CfnOutput(self, id=constants.IDEMPOTENCY_TABLE_NAME_OUTPUT, value=table.table_name).override_logical_id(
+            constants.IDEMPOTENCY_TABLE_NAME_OUTPUT
+        )
         return table
 
     def _build_db(self, id_prefix: str) -> dynamodb.Table:

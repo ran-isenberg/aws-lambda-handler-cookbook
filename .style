@@ -1,7 +1,0 @@
-[style]
-based_on_style = yapf
-indent_width = 4
-column_limit = 150
-SPLIT_BEFORE_NAMED_ASSIGNS =  False
-SPLIT_ALL_TOP_LEVEL_COMMA_SEPARATED_VALUES = False
-SPLIT_BEFORE_FIRST_ARGUMENT = False

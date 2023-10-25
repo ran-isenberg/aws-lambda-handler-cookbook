@@ -43,12 +43,10 @@ pytest-html = "*"
 python-dateutil = "*"
 python-dotenv = "*"
 GitPython = "*"
-yapf = "*"
+ruff = "*"
 radon = "*"
 xenon = "*"
 pre-commit = "*"
-flake8 = "*"
-isort = "*"
 mkdocs-material = "*"
 mkdocs-git-revision-date-plugin = "*"
 types-cachetools = "*"
@@ -56,25 +54,68 @@ mypy = "*"
 types-requests = "*"
 toml = "*"
 
-[tool.isort]
-py_version = 311
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-line_length = 150
-skip = [
-    ".gitignore",
-    ".dockerignore",
-    ".venv",
-    ".build",
-    "cdk.out",
-    ".git",
-    "node_modules",
-]
-
-[tool.yapfignore]
-ignore_patterns = [".git", ".venv", ".build", "cdk.out", "node_modules"]
-
 [tool.pytest.ini_options]
 testpaths = "tests"
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "cdk.out",
+    ".vscode",
+    ".pytest_cache",
+    ".build",
+    ".mypy_cache",
+    ".github"
+]
+
+# Same as Black.
+line-length = 150
+indent-width = 4
+
+# Assume Python 3.11
+target-version = "py311"
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = [ "E203", "E266", "E501", "W191"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.ruff.isort]
+known-third-party = ["pydantic", "aws_lambda_powertools"]

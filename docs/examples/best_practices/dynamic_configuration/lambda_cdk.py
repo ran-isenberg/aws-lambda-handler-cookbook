@@ -12,18 +12,18 @@ def _build_lambda_role(self, db: dynamodb.Table) -> iam.Role:
         constants.SERVICE_ROLE,
         assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
         inline_policies={
-            'dynamic_configuration':
-                iam.PolicyDocument(statements=[
+            'dynamic_configuration': iam.PolicyDocument(
+                statements=[
                     iam.PolicyStatement(
                         actions=['appconfig:GetLatestConfiguration', 'appconfig:StartConfigurationSession'],
                         resources=['*'],
                         effect=iam.Effect.ALLOW,
                     )
-                ]),
-            'dynamodb_db':
-                iam.PolicyDocument(statements=[
-                    iam.PolicyStatement(actions=['dynamodb:PutItem', 'dynamodb:GetItem'], resources=[db.table_arn], effect=iam.Effect.ALLOW)
-                ]),
+                ]
+            ),
+            'dynamodb_db': iam.PolicyDocument(
+                statements=[iam.PolicyStatement(actions=['dynamodb:PutItem', 'dynamodb:GetItem'], resources=[db.table_arn], effect=iam.Effect.ALLOW)]
+            ),
         },
         managed_policies=[
             iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name=(f'service-role/{constants.LAMBDA_BASIC_EXECUTION_ROLE}'))

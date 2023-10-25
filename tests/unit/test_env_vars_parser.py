@@ -39,11 +39,9 @@ def test_handler_invalid_env_var_value():
         my_handler2({}, generate_context())
 
 
-@mock.patch.dict(os.environ, {
-    POWERTOOLS_SERVICE_NAME: SERVICE_NAME,
-    POWER_TOOLS_LOG_LEVEL: 'DEBUG',
-    'REST_API': 'https://www.ranthebuilder.cloud/api'
-})
+@mock.patch.dict(
+    os.environ, {POWERTOOLS_SERVICE_NAME: SERVICE_NAME, POWER_TOOLS_LOG_LEVEL: 'DEBUG', 'REST_API': 'https://www.ranthebuilder.cloud/api'}
+)
 def test_handler_schema_ok():
     # Given: A handler that requires certain environment variables with valid values
     @init_environment_variables(model=MySchema)
