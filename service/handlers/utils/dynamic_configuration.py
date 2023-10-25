@@ -14,7 +14,7 @@ _DEFAULT_FEATURE_FLAGS_ROOT = 'features'  # all feature flags reside in the JSON
 
 
 def get_configuration_store() -> FeatureFlags:
-    """ getter for singleton dynamic configuration getter API
+    """getter for singleton dynamic configuration getter API
 
     Returns:
         FeatureFlags: see https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/
@@ -36,13 +36,13 @@ def get_configuration_store() -> FeatureFlags:
 
 
 def parse_configuration(model: type[Model]) -> Model:
-    """ Get configuration JSON from AWS AppConfig and parse it into a pydantic data-class instance.
-        Args:
-            model (Model): pydantic schema to load the JSON into
-        Raises:
-            DynamicConfigurationException: Any validation error or appconfig error that can occur
-        Returns:
-            BaseModel: parsed data class instance of type model
+    """Get configuration JSON from AWS AppConfig and parse it into a pydantic data-class instance.
+    Args:
+        model (Model): pydantic schema to load the JSON into
+    Raises:
+        DynamicConfigurationException: Any validation error or appconfig error that can occur
+    Returns:
+        BaseModel: parsed data class instance of type model
     """
     try:
         conf_json = get_configuration_store().store.get_raw_configuration

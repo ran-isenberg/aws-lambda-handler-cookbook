@@ -12,17 +12,11 @@ MOCKED_SCHEMA_CAMPAIGN_ON = {
             'rules': {
                 'enable premium features for this specific customer name"': {
                     'when_match': True,
-                    'conditions': [{
-                        'action': 'EQUALS',
-                        'key': 'customer_name',
-                        'value': 'RanTheBuilder'
-                    }]
+                    'conditions': [{'action': 'EQUALS', 'key': 'customer_name', 'value': 'RanTheBuilder'}],
                 }
-            }
+            },
         },
-        'ten_percent_off_campaign': {
-            'default': True
-        }
+        'ten_percent_off_campaign': {'default': True},
     },
     'countries': ['ISRAEL', 'USA'],
 }
@@ -34,17 +28,11 @@ MOCKED_SCHEMA_CAMPAIGN_OFF = {
             'rules': {
                 'enable premium features for this specific customer name"': {
                     'when_match': True,
-                    'conditions': [{
-                        'action': 'EQUALS',
-                        'key': 'customer_name',
-                        'value': 'RanTheBuilder'
-                    }]
+                    'conditions': [{'action': 'EQUALS', 'key': 'customer_name', 'value': 'RanTheBuilder'}],
                 }
-            }
+            },
         },
-        'ten_percent_off_campaign': {
-            'default': False
-        }
+        'ten_percent_off_campaign': {'default': False},
     },
     'countries': ['ISRAEL', 'USA'],
 }
@@ -61,6 +49,7 @@ def call_create_order(body: dict[str, Any]) -> dict[str, Any]:
     # conf.test sets that env. variable (table name) but it runs after imports
     # this way, idempotency import runs after conftest sets the values already
     from service.handlers.handle_create_order import lambda_handler
+
     return lambda_handler(body, generate_context())
 
 
@@ -75,11 +64,13 @@ def assert_response(response: dict[str, Any], expected_response_code: HTTPStatus
 
 def spy_on_campaign_logic(mocker):
     import service.logic.create_order as cr
+
     return mocker.spy(cr, 'handle_campaign')
 
 
 def spy_on_premium_logic(mocker):
     import service.logic.create_order as cr
+
     return mocker.spy(cr, 'apply_premium_user_discount')
 
 

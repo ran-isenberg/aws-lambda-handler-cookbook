@@ -6,7 +6,6 @@ from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, SERVICE_NAME
 
 
 class DynamicConfigurationStack(Stack):
-
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 

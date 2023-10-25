@@ -18,19 +18,13 @@ MOCKED_SCHEMA = {
             'rules': {
                 'enable premium features for this specific customer name"': {
                     'when_match': True,
-                    'conditions': [{
-                        'action': 'EQUALS',
-                        'key': 'customer_name',
-                        'value': 'RanTheBuilder'
-                    }]
+                    'conditions': [{'action': 'EQUALS', 'key': 'customer_name', 'value': 'RanTheBuilder'}],
                 }
-            }
+            },
         },
-        'ten_percent_off_campaign': {
-            'default': True
-        }
+        'ten_percent_off_campaign': {'default': True},
     },
-    'countries': ['ISRAEL', 'USA']
+    'countries': ['ISRAEL', 'USA'],
 }
 
 
@@ -50,6 +44,7 @@ def call_create_order(body: dict[str, Any]) -> dict[str, Any]:
     # conf.test sets that env. variable (table name) but it runs after imports
     # this way, idempotency import runs after conftest sets the values already
     from service.handlers.handle_create_order import lambda_handler
+
     return lambda_handler(body, generate_context())
 
 

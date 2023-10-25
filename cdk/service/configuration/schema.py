@@ -13,5 +13,5 @@ class FeatureFlagsConfiguration(BaseModel):
         try:
             validator.validate()
         except Exception as exc:
-            raise ValueError(str(exc))
+            raise ValueError(str(exc)) from exc
         return value

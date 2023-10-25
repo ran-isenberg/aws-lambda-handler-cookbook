@@ -24,3 +24,11 @@ repos:
         name: Tests should begin with test_
         args: ["--django"]
         exclude: "^(?!helpers/)"
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.1.2
+    hooks:
+      # Run the Ruff linter.
+      - id: ruff
+      # Run the Ruff formatter.
+      - id: ruff-format

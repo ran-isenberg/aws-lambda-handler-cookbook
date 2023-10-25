@@ -8,7 +8,6 @@ from cdk.service.configuration.schema import FeatureFlagsConfiguration
 
 
 class ConfigurationStore(Construct):
-
     def __init__(self, scope: Construct, id_: str, environment: str, service_name: str, configuration_name: str) -> None:
         """
         This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled from

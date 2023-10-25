@@ -10,17 +10,13 @@ dev:
 	poetry install
 	npm ci
 
-format-fix:
-	poetry run isort .
-	poetry run yapf -vv --style=./.style -r --in-place .
-
 format:
-	poetry run isort .
-	poetry run yapf -d -vv --style=./.style -r .
+	poetry run ruff check .
+
+format-fix:
+	poetry run ruff format .
 
 lint: format
-	@echo "Running flake8"
-	poetry run flake8 service/* cdk/* tests/*
 	@echo "Running mypy"
 	$(MAKE) mypy-lint
 

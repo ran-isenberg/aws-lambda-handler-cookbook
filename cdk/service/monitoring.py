@@ -19,7 +19,6 @@ from cdk.service import constants
 
 
 class CrudMonitoring(Construct):
-
     def __init__(
         self,
         scope: Construct,
@@ -40,7 +39,7 @@ class CrudMonitoring(Construct):
             self,
             'MonitoringKey',
             description='KMS Key for SNS Topic Encryption',
-            enable_key_rotation=True  # Enables automatic key rotation
+            enable_key_rotation=True,  # Enables automatic key rotation
         )
         topic = sns.Topic(self, f'{self.id_}alarms', display_name=f'{self.id_}alarms', master_key=key)
         # Grant CloudWatch permissions to publish to the SNS topic
@@ -50,7 +49,8 @@ class CrudMonitoring(Construct):
                 effect=iam.Effect.ALLOW,
                 principals=[iam.ServicePrincipal('cloudwatch.amazonaws.com')],
                 resources=[topic.topic_arn],
-            ))
+            )
+        )
         CfnOutput(self, id=constants.MONITORING_TOPIC, value=topic.topic_name).override_logical_id(constants.MONITORING_TOPIC)
         return topic
 

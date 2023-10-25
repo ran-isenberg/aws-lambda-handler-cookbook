@@ -7,19 +7,13 @@ MOCKED_SCHEMA = {
             'rules': {
                 'enable premium features for this specific customer name"': {
                     'when_match': True,
-                    'conditions': [{
-                        'action': 'EQUALS',
-                        'key': 'customer_name',
-                        'value': 'RanTheBuilder'
-                    }]
+                    'conditions': [{'action': 'EQUALS', 'key': 'customer_name', 'value': 'RanTheBuilder'}],
                 }
-            }
+            },
         },
-        'ten_percent_off_campaign': {
-            'default': True
-        }
+        'ten_percent_off_campaign': {'default': True},
     },
-    'countries': ['ISRAEL', 'USA']
+    'countries': ['ISRAEL', 'USA'],
 }
 
 

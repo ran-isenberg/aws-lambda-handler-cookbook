@@ -12,7 +12,6 @@ from cdk.service.monitoring import CrudMonitoring
 
 
 class ApiConstruct(Construct):
-
     def __init__(self, scope: Construct, id_: str, appconfig_app_name: str) -> None:
         super().__init__(scope, id_)
         self.id_ = id_
@@ -21,8 +20,9 @@ class ApiConstruct(Construct):
         self.common_layer = self._build_common_layer()
         self.rest_api = self._build_api_gw()
         api_resource: aws_apigateway.Resource = self.rest_api.root.add_resource('api').add_resource(constants.GW_RESOURCE)
-        self.create_order_func = self._add_post_lambda_integration(api_resource, self.lambda_role, self.api_db.db, appconfig_app_name,
-                                                                   self.api_db.idempotency_db)
+        self.create_order_func = self._add_post_lambda_integration(
+            api_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
+        )
         self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func])
 
     def _build_api_gw(self) -> aws_apigateway.RestApi:
@@ -44,30 +44,33 @@ class ApiConstruct(Construct):
             constants.SERVICE_ROLE_ARN,
             assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
             inline_policies={
-                'dynamic_configuration':
-                    iam.PolicyDocument(statements=[
+                'dynamic_configuration': iam.PolicyDocument(
+                    statements=[
                         iam.PolicyStatement(
                             actions=['appconfig:GetLatestConfiguration', 'appconfig:StartConfigurationSession'],
                             resources=['*'],
                             effect=iam.Effect.ALLOW,
                         )
-                    ]),
-                'dynamodb_db':
-                    iam.PolicyDocument(statements=[
+                    ]
+                ),
+                'dynamodb_db': iam.PolicyDocument(
+                    statements=[
                         iam.PolicyStatement(
                             actions=['dynamodb:PutItem', 'dynamodb:GetItem'],
                             resources=[db.table_arn],
                             effect=iam.Effect.ALLOW,
                         )
-                    ]),
-                'idempotency_table':
-                    iam.PolicyDocument(statements=[
+                    ]
+                ),
+                'idempotency_table': iam.PolicyDocument(
+                    statements=[
                         iam.PolicyStatement(
                             actions=['dynamodb:PutItem', 'dynamodb:GetItem', 'dynamodb:UpdateItem', 'dynamodb:DeleteItem'],
                             resources=[idempotency_table.table_arn],
                             effect=iam.Effect.ALLOW,
                         )
-                    ]),
+                    ]
+                ),
             },
             managed_policies=[
                 iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name=(f'service-role/{constants.LAMBDA_BASIC_EXECUTION_ROLE}'))
@@ -83,8 +86,9 @@ class ApiConstruct(Construct):
             removal_policy=RemovalPolicy.DESTROY,
         )
 
-    def _add_post_lambda_integration(self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str,
-                                     idempotency_table: dynamodb.Table) -> _lambda.Function:
+    def _add_post_lambda_integration(
+        self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str, idempotency_table: dynamodb.Table
+    ) -> _lambda.Function:
         lambda_function = _lambda.Function(
             self,
             constants.CREATE_LAMBDA,
