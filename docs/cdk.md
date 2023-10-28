@@ -27,7 +27,7 @@ In order to add a new Lambda runtime dependency, add it to the Pipfile under the
 
 ### **CDK Constants**
 
-All ASW Lambda function configurations are saved as constants at the `cdk.service.constants.py` file and can easily be changed.
+All AWS Lambda function configurations are saved as constants at the `cdk.service.constants.py` file and can easily be changed.
 
 - Memory size
 - Timeout in seconds
