@@ -11,7 +11,7 @@ dev:
 	npm ci
 
 format:
-	poetry run ruff check .
+	poetry run ruff check . --fix
 
 format-fix:
 	poetry run ruff format .

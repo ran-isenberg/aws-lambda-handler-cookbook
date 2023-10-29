@@ -1,5 +1,5 @@
 import aws_cdk.aws_sns as sns
-from aws_cdk import CfnOutput, Duration, aws_apigateway
+from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_kms as kms
@@ -40,6 +40,8 @@ class CrudMonitoring(Construct):
             'MonitoringKey',
             description='KMS Key for SNS Topic Encryption',
             enable_key_rotation=True,  # Enables automatic key rotation
+            removal_policy=RemovalPolicy.DESTROY,
+            pending_window=Duration.days(7),
         )
         topic = sns.Topic(self, f'{self.id_}alarms', display_name=f'{self.id_}alarms', master_key=key)
         # Grant CloudWatch permissions to publish to the SNS topic
