@@ -90,6 +90,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - AWS Lambda handler 3 layer architecture: handler layer, logic layer and data access layer
 - Features flags and configuration based on AWS AppConfig
 - Idempotent API
+- REST API protected by WAF with four AWS managed rules in production deployment
 - CloudWatch dashboards - High level and low level including CloudWatch alarms
 - Unit, infrastructure, security, integration and end to end tests.
 

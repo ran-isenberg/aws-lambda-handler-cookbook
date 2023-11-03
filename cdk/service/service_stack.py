@@ -27,6 +27,7 @@ class ServiceStack(Stack):
             self,
             get_construct_name(stack_prefix=id, construct_name='Crud'),
             self.dynamic_configuration.app_name,
+            is_production_env=is_production_env,
         )
 
         # add security check
