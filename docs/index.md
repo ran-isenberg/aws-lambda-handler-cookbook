@@ -44,6 +44,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - Features flags and configuration based on AWS AppConfig
 - CloudWatch dashboards - High level and low level including CloudWatch alarms
 - Idempotent API
+- REST API protected by WAF with four AWS managed rules in production deployment
 - Unit, infrastructure, security, integration and E2E tests.
 
 The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.

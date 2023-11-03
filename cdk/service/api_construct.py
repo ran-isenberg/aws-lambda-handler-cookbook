@@ -9,10 +9,11 @@ from constructs import Construct
 import cdk.service.constants as constants
 from cdk.service.api_db_construct import ApiDbConstruct
 from cdk.service.monitoring import CrudMonitoring
+from cdk.service.waf_construct import WafToApiGatewayConstruct
 
 
 class ApiConstruct(Construct):
-    def __init__(self, scope: Construct, id_: str, appconfig_app_name: str) -> None:
+    def __init__(self, scope: Construct, id_: str, appconfig_app_name: str, is_production_env: bool) -> None:
         super().__init__(scope, id_)
         self.id_ = id_
         self.api_db = ApiDbConstruct(self, f'{id_}db')
@@ -24,6 +25,10 @@ class ApiConstruct(Construct):
             api_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
         )
         self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func])
+
+        if is_production_env:
+            # add WAF
+            self.waf = WafToApiGatewayConstruct(self, f'{id_}waf', self.rest_api)
 
     def _build_api_gw(self) -> aws_apigateway.RestApi:
         rest_api: aws_apigateway.RestApi = aws_apigateway.RestApi(

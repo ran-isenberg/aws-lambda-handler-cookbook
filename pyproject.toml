@@ -53,6 +53,7 @@ types-cachetools = "*"
 mypy = "*"
 types-requests = "*"
 toml = "*"
+poetry-plugin-export = "*"
 
 [tool.pytest.ini_options]
 testpaths = "tests"
