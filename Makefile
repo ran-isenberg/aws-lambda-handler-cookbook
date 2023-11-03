@@ -74,4 +74,5 @@ watch:
 
 update-deps:
 	poetry update
+	pre-commit autoupdate
 	npm i --package-lock-only
