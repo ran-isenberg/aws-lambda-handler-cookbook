@@ -7,7 +7,7 @@ dev:
 	pre-commit install
 # ensures poetry creates a local virtualenv (.venv)
 	poetry config --local virtualenvs.in-project true
-	poetry install
+	poetry install --no-root
 	npm ci
 
 format:

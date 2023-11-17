@@ -4,7 +4,7 @@ dev:
 	pip install --upgrade pip pre-commit poetry
 	pre-commit install
 	poetry config --local virtualenvs.in-project true
-	poetry install
+	poetry install --no-root
 	npm ci
 
 format:
