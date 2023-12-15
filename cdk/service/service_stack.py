@@ -52,6 +52,6 @@ class ServiceStack(Stack):
                 {'id': 'AwsSolutions-APIG6', 'reason': 'not mandatory in a sample template'},
                 {'id': 'AwsSolutions-APIG4', 'reason': 'authorization not mandatory in a sample template'},
                 {'id': 'AwsSolutions-COG4', 'reason': 'not using cognito'},
-                {'id': 'AwsSolutions-L1', 'reason': 'Python 3.12 not out yet'},
+                {'id': 'AwsSolutions-L1', 'reason': 'False positive'},
             ],
         )
