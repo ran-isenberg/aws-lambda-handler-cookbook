@@ -43,7 +43,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: "poetry" # NOTE: poetry must be installed before this step, or else cache doesn't work
       - name: Set up Node
-        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+        uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
@@ -108,7 +108,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: "poetry" # NOTE: poetry must be installed before this step, or else cache doesn't work
       - name: Set up Node
-        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+        uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
@@ -144,7 +144,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Set up Node
-        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+        uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
