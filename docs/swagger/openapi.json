@@ -1,0 +1,117 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "AWS Lambda Handler Cookbook",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/prod"
+        }
+    ],
+    "paths": {
+        "/api/orders": {
+            "post": {
+                "tags": [
+                    "CRUD"
+                ],
+                "summary": "Create an order",
+                "description": "Create an order identified by the body payload`",
+                "operationId": "handle_create_order_api_orders_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "The created order",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateOrderOutput"
+                                }
+                            }
+                        }
+                    },
+                    "501": {
+                        "description": "internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "title": "Error",
+                                            "default": "internal server error"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "title": "InternalServerErrorOutput"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateOrderOutput": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 1,
+                        "title": "Name"
+                    },
+                    "item_count": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "title": "Item Count"
+                    },
+                    "id": {
+                        "type": "string",
+                        "maxLength": 36,
+                        "minLength": 36,
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "item_count",
+                    "id"
+                ],
+                "title": "CreateOrderOutput"
+            },
+            "CreateOrderRequest": {
+                "properties": {
+                    "customer_name": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 1,
+                        "title": "Customer Name"
+                    },
+                    "order_item_count": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "title": "Order Item Count"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "customer_name",
+                    "order_item_count"
+                ],
+                "title": "CreateOrderRequest"
+            }
+        }
+    }
+}

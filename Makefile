@@ -52,7 +52,7 @@ integration:
 e2e:
 	poetry run pytest tests/e2e  --cov-config=.coveragerc --cov=service --cov-report xml
 
-pr: deps pre-commit complex lint lint-docs unit deploy coverage-tests e2e
+pr: deps format pre-commit complex lint lint-docs unit deploy coverage-tests e2e
 
 coverage-tests:
 	poetry run pytest tests/unit tests/integration  --cov-config=.coveragerc --cov=service --cov-report xml

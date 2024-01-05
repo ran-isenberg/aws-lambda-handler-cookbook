@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+
 from service.models.order import Order
 
 
@@ -6,3 +8,7 @@ from service.models.order import Order
 # The output can be a subject of what order contains, i.e just the id
 class CreateOrderOutput(Order):
     pass
+
+
+class InternalServerErrorOutput(BaseModel):
+    error: str = 'internal server error'

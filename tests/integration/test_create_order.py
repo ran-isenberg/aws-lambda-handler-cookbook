@@ -89,6 +89,8 @@ def test_internal_server_error(mocker, table_name: str):
 
         # Then: Ensure the response reflects an internal server error
         assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+        body_dict = json.loads(response['body'])
+        assert body_dict == {'error': 'internal server error'}
 
 
 def test_handler_bad_request(mocker):

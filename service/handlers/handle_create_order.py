@@ -14,7 +14,7 @@ from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.create_order import create_order
 from service.models.input import CreateOrderRequest
-from service.models.output import CreateOrderOutput
+from service.models.output import CreateOrderOutput, InternalServerErrorOutput
 
 
 @app.post(
@@ -23,12 +23,18 @@ from service.models.output import CreateOrderOutput
     description='Create an order identified by the body payload`',
     response_description='The created order',
     responses={
-        200: CreateOrderOutput.model_json_schema(),
-        501: {'error': 'internal server error'},
+        200: {
+            'description': 'The created order',
+            'content': {'application/json': {'schema': {'$ref': '#/components/schemas/CreateOrderOutput'}}},
+        },
+        501: {
+            'description': 'Internal server error',
+            'content': {'application/json': {'schema': InternalServerErrorOutput.model_json_schema()}},
+        },
     },
-    tags=['CRUD'],
+    tags=['CRUD', 'Orders'],
 )
-def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> dict[str, Any]:
+def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> CreateOrderOutput:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
     logger.info('got create order request', order=create_input.model_dump())
@@ -44,7 +50,7 @@ def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=F
     )
 
     logger.info('finished handling create order request')
-    return response.model_dump()
+    return response
 
 
 @init_environment_variables(model=MyHandlerEnvVars)
