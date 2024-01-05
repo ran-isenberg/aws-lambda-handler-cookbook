@@ -20,10 +20,24 @@ class ApiConstruct(Construct):
         self.lambda_role = self._build_lambda_role(self.api_db.db, self.api_db.idempotency_db)
         self.common_layer = self._build_common_layer()
         self.rest_api = self._build_api_gw()
-        api_resource: aws_apigateway.Resource = self.rest_api.root.add_resource('api').add_resource(constants.GW_RESOURCE)
+        api_resource: aws_apigateway.Resource = self.rest_api.root.add_resource('api')
+        orders_resource = api_resource.add_resource(constants.GW_RESOURCE)
         self.create_order_func = self._add_post_lambda_integration(
-            api_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
+            orders_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
         )
+
+        # GET /swagger
+        swagger_resource: aws_apigateway.Resource = self.rest_api.root.add_resource(constants.SWAGGER_RESOURCE)
+        swagger_resource.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=self.create_order_func))
+        # GET /swagger.css
+        swagger_resource_css = self.rest_api.root.add_resource(constants.SWAGGER_CSS_RESOURCE)
+        swagger_resource_css.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=self.create_order_func))
+        # GET /swagger.js
+        swagger_resource_js = self.rest_api.root.add_resource(constants.SWAGGER_JS_RESOURCE)
+        swagger_resource_js.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=self.create_order_func))
+
+        CfnOutput(self, id=constants.SWAGGER_URL, value=f'{self.rest_api.url}swagger').override_logical_id(constants.SWAGGER_URL)
+
         self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func])
 
         if is_production_env:
@@ -92,7 +106,7 @@ class ApiConstruct(Construct):
         )
 
     def _add_post_lambda_integration(
-        self, api_name: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str, idempotency_table: dynamodb.Table
+        self, api_resource: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str, idempotency_table: dynamodb.Table
     ) -> _lambda.Function:
         lambda_function = _lambda.Function(
             self,
@@ -102,7 +116,7 @@ class ApiConstruct(Construct):
             handler='service.handlers.handle_create_order.lambda_handler',
             environment={
                 constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,  # for logger, tracer and metrics
-                constants.POWER_TOOLS_LOG_LEVEL: 'DEBUG',  # for logger
+                constants.POWER_TOOLS_LOG_LEVEL: 'INFO',  # for logger
                 'CONFIGURATION_APP': appconfig_app_name,  # for feature flags
                 'CONFIGURATION_ENV': constants.ENVIRONMENT,  # for feature flags
                 'CONFIGURATION_NAME': constants.CONFIGURATION_NAME,  # for feature flags
@@ -124,5 +138,5 @@ class ApiConstruct(Construct):
         )
 
         # POST /api/orders/
-        api_name.add_method(http_method='POST', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
+        api_resource.add_method(http_method='POST', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
         return lambda_function

@@ -1,10 +1,10 @@
 from typing import Any
 
 from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
+from aws_lambda_powertools.event_handler.openapi.params import Body
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.metrics import MetricUnit
-from aws_lambda_powertools.utilities.parser import parse
-from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
+from aws_lambda_powertools.shared.types import Annotated
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.dynamic_configuration import MyConfiguration
@@ -17,21 +17,24 @@ from service.models.input import CreateOrderRequest
 from service.models.output import CreateOrderOutput
 
 
-@app.post(ORDERS_PATH)
-def handle_create_order() -> dict[str, Any]:
+@app.post(
+    ORDERS_PATH,
+    summary='Retrieves a todo item',
+    description='Loads a todo item identified by the `todo_id`',
+    response_description='The todo object',
+    responses={
+        200: CreateOrderOutput.model_json_schema(),
+        501: {'error': 'internal server error'},
+    },
+    tags=['Crud'],
+)
+def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> dict[str, Any]:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
+    logger.info('got create order request', order=create_input.model_dump())
 
     my_configuration = parse_configuration(model=MyConfiguration)
     logger.debug('fetched dynamic configuration', configuration=my_configuration.model_dump())
-
-    # we want to extract and parse the HTTP body from the api gw envelope
-    create_input: CreateOrderRequest = parse(
-        event=app.current_event.raw_event,
-        model=CreateOrderRequest,
-        envelope=ApiGatewayEnvelope,
-    )
-    logger.info('got create order request', order=create_input.model_dump())
 
     metrics.add_metric(name='ValidCreateOrderEvents', unit=MetricUnit.Count, value=1)
     response: CreateOrderOutput = create_order(
