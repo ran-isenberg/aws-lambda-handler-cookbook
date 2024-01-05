@@ -19,14 +19,14 @@ from service.models.output import CreateOrderOutput
 
 @app.post(
     ORDERS_PATH,
-    summary='Retrieves a todo item',
-    description='Loads a todo item identified by the `todo_id`',
-    response_description='The todo object',
+    summary='Create an order',
+    description='Create an order identified by the body payload`',
+    response_description='The created order',
     responses={
         200: CreateOrderOutput.model_json_schema(),
         501: {'error': 'internal server error'},
     },
-    tags=['Crud'],
+    tags=['CRUD'],
 )
 def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> dict[str, Any]:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
