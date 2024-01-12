@@ -46,6 +46,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - Idempotent API
 - REST API protected by WAF with four AWS managed rules in production deployment
 - Unit, infrastructure, security, integration and E2E tests.
+- Automatically generated OpenAPI endpoint: /swagger with Pydnatic schemas for both requests and responses
 
 The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 

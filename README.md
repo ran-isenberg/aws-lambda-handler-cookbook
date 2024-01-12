@@ -93,6 +93,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - REST API protected by WAF with four AWS managed rules in production deployment
 - CloudWatch dashboards - High level and low level including CloudWatch alarms
 - Unit, infrastructure, security, integration and end to end tests.
+- Automatically generated OpenAPI endpoint: /swagger with Pydnatic schemas for both requests and responses
 
 
 ## CDK Deployment

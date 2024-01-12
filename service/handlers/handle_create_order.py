@@ -20,7 +20,7 @@ from service.models.output import CreateOrderOutput, InternalServerErrorOutput
 @app.post(
     ORDERS_PATH,
     summary='Create an order',
-    description='Create an order identified by the body payload`',
+    description='Create an order identified by the body payload',
     response_description='The created order',
     responses={
         200: {
@@ -32,7 +32,7 @@ from service.models.output import CreateOrderOutput, InternalServerErrorOutput
             'content': {'application/json': {'schema': InternalServerErrorOutput.model_json_schema()}},
         },
     },
-    tags=['CRUD', 'Orders'],
+    tags=['CRUD'],
 )
 def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> CreateOrderOutput:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)

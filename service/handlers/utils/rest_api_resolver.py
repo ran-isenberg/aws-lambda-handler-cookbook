@@ -9,7 +9,7 @@ from service.models.output import InternalServerErrorOutput
 ORDERS_PATH = '/api/orders/'
 
 app = APIGatewayRestResolver(enable_validation=True)
-app.enable_swagger(path='/swagger')
+app.enable_swagger(path='/swagger', title='AWS Lambda Handler Cookbook - Orders Service')
 
 
 @app.exception_handler(DynamicConfigurationException)
