@@ -70,7 +70,7 @@ def test_handler_200_ok(mocker, table_name: str):
     assert 'Item' in response
     assert response['Item']['name'] == customer_name
     assert response['Item']['item_count'] == order_item_count
-    now = int(datetime.datetime.now(datetime.UTC))
+    now = int(datetime.datetime.now(datetime.datetime.UTC))
     assert now - int(response['Item']['created_at']) <= 60  # assume item was created in last minute, check that utc time calc is correct
 
 
