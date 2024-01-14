@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 import boto3
 from botocore.exceptions import ClientError
@@ -27,7 +27,7 @@ class DynamoDalHandler(DalHandler):
         return dynamodb.Table(table_name)
 
     def _get_unix_time(self) -> int:
-        return int(datetime.datetime.now(datetime.datetime.UTC))
+        return int(datetime.now(timezone.utc).timestamp())
 
     @tracer.capture_method(capture_response=False)
     def create_order_in_db(self, customer_name: str, order_item_count: int) -> Order:
