@@ -3,8 +3,6 @@ from aws_lambda_powertools.utilities.parser import ValidationError
 
 from service.models.input import CreateOrderRequest
 
-# ... potentially more imports based on your project ...
-
 
 def test_invalid_name():
     # Given: An empty customer_name
