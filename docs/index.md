@@ -29,7 +29,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 #### **Monitoring Design**
 
-[<img alt="alt_text" src="./media/monitoring_design.png" />](https://www.ranthebuilder.cloud/)
+<img alt="alt_text" src="./media/monitoring_design.png" />
 
 ### **Features**
 

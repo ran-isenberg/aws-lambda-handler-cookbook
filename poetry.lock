@@ -221,17 +221,17 @@ dev = ["freezegun (>=1.0,<2.0)", "pytest (>=6.0)", "pytest-cov"]
 
 [[package]]
 name = "boto3"
-version = "1.34.18"
+version = "1.34.20"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "boto3-1.34.18-py3-none-any.whl", hash = "sha256:ae7cfdf45f4dfd33bd3e84e36afcfbf0517e64a32e647989a068f34d053572b8"},
-    {file = "boto3-1.34.18.tar.gz", hash = "sha256:5e38ca63007e903a7efe0a1751a0374d287b50d7bc148b9d3d495cdf74a0b712"},
+    {file = "boto3-1.34.20-py3-none-any.whl", hash = "sha256:a21da54634bd09dcad9e80d106512b6aabe493b1d4260688180156ef27afedc9"},
+    {file = "boto3-1.34.20.tar.gz", hash = "sha256:7f662b0c833e7a4d1272b7ec60ded3f14affd54d08620b708ba3abeb0e49d15e"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.18,<1.35.0"
+botocore = ">=1.34.20,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -240,13 +240,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.18"
+version = "1.34.20"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "botocore-1.34.18-py3-none-any.whl", hash = "sha256:2067d8385c11b7cf2d336227d8fa5aea632fe61afbadb3168dc169dcc13d8c3e"},
-    {file = "botocore-1.34.18.tar.gz", hash = "sha256:85a77e72560a45b0dfdad94f92f5e114c82be07a51bb2d19dd310dab8be158cf"},
+    {file = "botocore-1.34.20-py3-none-any.whl", hash = "sha256:f931f13d03e94b3350ad898b21ae2d40240f6571e8a8cdaa487951b51fe3a1fd"},
+    {file = "botocore-1.34.20.tar.gz", hash = "sha256:e944bc085222a13359933f4c0a1cce228bdd8aa90e1f2274e94bd55f561db307"},
 ]
 
 [package.dependencies]
@@ -336,32 +336,32 @@ ujson = ["ujson (>=5.7.0)"]
 
 [[package]]
 name = "cdk-monitoring-constructs"
-version = "7.3.1"
+version = "7.4.0"
 description = "cdk-monitoring-constructs"
 optional = false
 python-versions = "~=3.8"
 files = [
-    {file = "cdk-monitoring-constructs-7.3.1.tar.gz", hash = "sha256:48c942eec4c2cd7aefa9a13c7080f4928b42ea10317d53e5cff2fb6baad2b799"},
-    {file = "cdk_monitoring_constructs-7.3.1-py3-none-any.whl", hash = "sha256:cb2f74e089bb3fbfd0c4aebb8c14920fd29bdf54c1508f9d16494e79c426f5f8"},
+    {file = "cdk-monitoring-constructs-7.4.0.tar.gz", hash = "sha256:1588b016357ca5d2e3472bca4576ee794c2dd8f0740fa8f5d0a3e28f880635c0"},
+    {file = "cdk_monitoring_constructs-7.4.0-py3-none-any.whl", hash = "sha256:1853cc63920f160be6ba110e4486e4033124332a584d5d4d21abf5ea0c36d300"},
 ]
 
 [package.dependencies]
 "aws-cdk.aws-redshift-alpha" = ">=2.112.0.a0,<3.0.0"
 aws-cdk-lib = ">=2.112.0,<3.0.0"
 constructs = ">=10.0.5,<11.0.0"
-jsii = ">=1.93.0,<2.0.0"
+jsii = ">=1.94.0,<2.0.0"
 publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
 name = "cdk-nag"
-version = "2.28.8"
+version = "2.28.11"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 optional = false
 python-versions = "~=3.8"
 files = [
-    {file = "cdk-nag-2.28.8.tar.gz", hash = "sha256:9b63cd0c15ecf375854d999f47adb08f9bdca908de69b3fa43cb75c1b8652e74"},
-    {file = "cdk_nag-2.28.8-py3-none-any.whl", hash = "sha256:11442511d94b8ef409d09a4a25c12531514e5d77454277d38331b8cc1d248e26"},
+    {file = "cdk-nag-2.28.11.tar.gz", hash = "sha256:2e708e310f04ffc93e408a810e2927c260eb773ac86883c1f86867bcd53d142b"},
+    {file = "cdk_nag-2.28.11-py3-none-any.whl", hash = "sha256:ac2da2d1f341110f47b0e91639a5b9d035c7d2f4a48200ddc099973c276e4e7a"},
 ]
 
 [package.dependencies]
@@ -1255,14 +1255,25 @@ jinja2 = "*"
 mkdocs = ">=0.17"
 
 [[package]]
+name = "mkdocs-glightbox"
+version = "0.3.6"
+description = "MkDocs plugin supports image lightbox with GLightbox."
+optional = false
+python-versions = "*"
+files = [
+    {file = "mkdocs-glightbox-0.3.6.tar.gz", hash = "sha256:f46c675e20793d11c9fc29c9420dfb160ee1d8cfbf4782e82d006f953e19a14c"},
+    {file = "mkdocs_glightbox-0.3.6-py3-none-any.whl", hash = "sha256:15310edfa1cf25cf483068932588f87ceb875148994431df1ee2c5aa03632db1"},
+]
+
+[[package]]
 name = "mkdocs-material"
-version = "9.5.3"
+version = "9.5.4"
 description = "Documentation that simply works"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mkdocs_material-9.5.3-py3-none-any.whl", hash = "sha256:76c93a8525cceb0b395b9cedab3428bf518cf6439adef2b940f1c1574b775d89"},
-    {file = "mkdocs_material-9.5.3.tar.gz", hash = "sha256:5899219f422f0a6de784232d9d40374416302ffae3c160cacc72969fcc1ee372"},
+    {file = "mkdocs_material-9.5.4-py3-none-any.whl", hash = "sha256:efd7cc8ae03296d728da9bd38f4db8b07ab61f9738a0cbd0dfaf2a15a50e7343"},
+    {file = "mkdocs_material-9.5.4.tar.gz", hash = "sha256:3d196ee67fad16b2df1a458d650a8ac1890294eaae368d26cee71bc24ad41c40"},
 ]
 
 [package.dependencies]
@@ -2758,4 +2769,4 @@ requests = ">=2.0,<3.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12.0"
-content-hash = "f732b03a739ecd0d3d6446b075a3dfa0a4f606cfcfe330cf1365fa2da67f666d"
+content-hash = "31b8193264087917409dc07b9838e37bca51e87f7ddad5df00d0c88c8069616a"
