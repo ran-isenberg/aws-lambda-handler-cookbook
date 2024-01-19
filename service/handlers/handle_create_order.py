@@ -14,7 +14,7 @@ from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.create_order import create_order
 from service.models.input import CreateOrderRequest
-from service.models.output import CreateOrderOutput, InternalServerErrorOutput
+from service.models.output import CreateOrderOutput, InternalServerErrorOutput, InvalidRestApiRequest
 
 
 @app.post(
@@ -25,11 +25,15 @@ from service.models.output import CreateOrderOutput, InternalServerErrorOutput
     responses={
         200: {
             'description': 'The created order',
-            'content': {'application/json': {'schema': {'$ref': '#/components/schemas/CreateOrderOutput'}}},
+            'content': {'application/json': {'model': CreateOrderOutput}},
+        },
+        442: {
+            'description': 'Invalid create order request',
+            'content': {'application/json': {'model': InvalidRestApiRequest}},
         },
         501: {
             'description': 'Internal server error',
-            'content': {'application/json': {'schema': InternalServerErrorOutput.model_json_schema()}},
+            'content': {'application/json': {'model': InternalServerErrorOutput}},
         },
     },
     tags=['CRUD'],

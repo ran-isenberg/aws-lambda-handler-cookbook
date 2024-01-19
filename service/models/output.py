@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel
 
 from service.models.order import Order
@@ -12,3 +14,11 @@ class CreateOrderOutput(Order):
 
 class InternalServerErrorOutput(BaseModel):
     error: str = 'internal server error'
+
+
+class Error(BaseModel):
+    x: str
+
+
+class InvalidRestApiRequest(BaseModel):
+    details: List[Error]
