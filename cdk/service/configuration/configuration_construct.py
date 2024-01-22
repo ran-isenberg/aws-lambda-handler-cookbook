@@ -29,14 +29,14 @@ class ConfigurationStore(Construct):
         self.config_app = appconfig.Application(
             self,
             id=self.app_name,
-            name=self.app_name,
+            application_name=self.app_name,
         )
 
         self.config_env = appconfig.Environment(
             self,
             id=f'{id_}env',
             application=self.config_app,
-            name=environment,
+            environment_name=environment,
         )
 
         # zero minutes, zero bake, 100 growth all at once

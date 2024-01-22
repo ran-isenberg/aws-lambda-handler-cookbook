@@ -25,24 +25,25 @@ class ApiConstruct(Construct):
         self.create_order_func = self._add_post_lambda_integration(
             orders_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
         )
-
-        # GET /swagger
-        swagger_resource: aws_apigateway.Resource = self.rest_api.root.add_resource(constants.SWAGGER_RESOURCE)
-        swagger_resource.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=self.create_order_func))
-        # GET /swagger.css
-        swagger_resource_css = self.rest_api.root.add_resource(constants.SWAGGER_CSS_RESOURCE)
-        swagger_resource_css.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=self.create_order_func))
-        # GET /swagger.js
-        swagger_resource_js = self.rest_api.root.add_resource(constants.SWAGGER_JS_RESOURCE)
-        swagger_resource_js.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=self.create_order_func))
-
-        CfnOutput(self, id=constants.SWAGGER_URL, value=f'{self.rest_api.url}swagger').override_logical_id(constants.SWAGGER_URL)
-
+        self._build_swagger_endpoints(rest_api=self.rest_api, dest_func=self.create_order_func)
         self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func])
 
         if is_production_env:
             # add WAF
             self.waf = WafToApiGatewayConstruct(self, f'{id_}waf', self.rest_api)
+
+    def _build_swagger_endpoints(self, rest_api: aws_apigateway.RestApi, dest_func: _lambda.Function) -> None:
+        # GET /swagger
+        swagger_resource: aws_apigateway.Resource = rest_api.root.add_resource(constants.SWAGGER_RESOURCE)
+        swagger_resource.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=dest_func))
+        # GET /swagger.css
+        swagger_resource_css = rest_api.root.add_resource(constants.SWAGGER_CSS_RESOURCE)
+        swagger_resource_css.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=dest_func))
+        # GET /swagger.js
+        swagger_resource_js = rest_api.root.add_resource(constants.SWAGGER_JS_RESOURCE)
+        swagger_resource_js.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=dest_func))
+
+        CfnOutput(self, id=constants.SWAGGER_URL, value=f'{rest_api.url}swagger').override_logical_id(constants.SWAGGER_URL)
 
     def _build_api_gw(self) -> aws_apigateway.RestApi:
         rest_api: aws_apigateway.RestApi = aws_apigateway.RestApi(

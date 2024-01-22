@@ -1,6 +1,6 @@
-from typing import List
+from typing import Annotated, List, Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from service.models.order import Order
 
@@ -13,12 +13,14 @@ class CreateOrderOutput(Order):
 
 
 class InternalServerErrorOutput(BaseModel):
-    error: str = 'internal server error'
+    error: Annotated[str, Field(description='Error description')] = 'internal server error'
 
 
-class Error(BaseModel):
-    x: str
+class PydanticError(BaseModel):
+    loc: Annotated[List[Union[str, int]], Field(description='Error location')]
+    type: Annotated[str, Field(description='Error type')]
+    msg: Annotated[Optional[str], Field(description='Error message')]
 
 
 class InvalidRestApiRequest(BaseModel):
-    details: List[Error]
+    details: Annotated[List[PydanticError], Field(description='Error details')]
