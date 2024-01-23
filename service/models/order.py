@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from pydantic import BaseModel, Field, PositiveInt
+from pydantic import BaseModel, Field
 from pydantic.functional_validators import AfterValidator
 
 
@@ -30,11 +30,11 @@ def validate_product_id(product_id: str) -> str:
     return product_id
 
 
-OrderId = Annotated[str, Field(min_length=36, max_length=36), AfterValidator(validate_product_id)]
+OrderId = Annotated[str, Field(min_length=36, max_length=36, description='Order ID as UUID'), AfterValidator(validate_product_id)]
 """Unique Product ID, represented and validated as a UUID string."""
 
 
 class Order(BaseModel):
-    name: Annotated[str, Field(min_length=1, max_length=20)]
-    item_count: PositiveInt
+    name: Annotated[str, Field(min_length=1, max_length=20, description='Customer name')]
+    item_count: Annotated[int, Field(gt=0, description='Amount of items in order')]
     id: OrderId

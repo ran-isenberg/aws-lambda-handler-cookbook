@@ -9,6 +9,7 @@ nav:
   - Getting Started: getting_started.md
   - CDK: cdk.md
   - Pipeline: pipeline.md
+  - Swagger: swagger/swagger.md
   - Best Practices:
       - best_practices/logger.md
       - best_practices/tracer.md
@@ -80,19 +81,21 @@ copyright: Copyright &copy; 2023 Ran Isenberg
 plugins:
   - git-revision-date
   - search
+  - render_swagger
   - glightbox:
-       touchNavigation: true
-       loop: false
-       effect: zoom
-       slide_effect: slide
-       width: 100%
-       height: auto
-       zoomable: true
-       draggable: true
-       skip_classes:
-         - custom-skip-class-name
-       auto_caption: false
-       caption_position: bottom
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      slide_effect: slide
+      width: 100%
+      height: auto
+      zoomable: true
+      draggable: true
+      skip_classes:
+        - custom-skip-class-name
+      auto_caption: false
+      caption_position: bottom
+
 extra_css:
   - stylesheets/extra.css
 

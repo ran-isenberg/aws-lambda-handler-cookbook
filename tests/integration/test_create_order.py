@@ -89,6 +89,8 @@ def test_internal_server_error(mocker, table_name: str):
 
         # Then: Ensure the response reflects an internal server error
         assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+        body_dict = json.loads(response['body'])
+        assert body_dict == {'error': 'internal server error'}
 
 
 def test_handler_bad_request(mocker):
@@ -98,10 +100,10 @@ def test_handler_bad_request(mocker):
     # When: The order creation lambda_handler is called with invalid input
     response = call_create_order(generate_api_gw_event({'order_item_count': 5}))
 
-    # Then: Validate the response is a bad request and error message is correct
-    assert response['statusCode'] == HTTPStatus.BAD_REQUEST
+    # Then: Validate the response is a unprocessable entity and error message is correct
+    assert response['statusCode'] == HTTPStatus.UNPROCESSABLE_ENTITY
     body_dict = json.loads(response['body'])
-    assert body_dict == {'error': 'invalid input'}
+    assert body_dict.get('detail') == [{'loc': ['body', 'customer_name'], 'type': 'missing'}]
 
 
 def test_handler_failed_appconfig_fetch(mocker):

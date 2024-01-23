@@ -32,7 +32,7 @@ def generate_api_gw_event(body: Optional[dict[str, Any]]) -> dict[str, Any]:
         'resource': '/api/orders',
         'path': '/api/orders',
         'httpMethod': 'POST',
-        'headers': {'Header1': 'value1', 'Header2': 'value2'},
+        'headers': {'Content-Type': 'application/json', 'Header2': 'value2'},
         'multiValueHeaders': {'Header1': ['value1'], 'Header2': ['value1', 'value2']},
         'queryStringParameters': {'parameter1': 'value1', 'parameter2': 'value'},
         'multiValueQueryStringParameters': {'parameter1': ['value1', 'value2'], 'parameter2': ['value']},
@@ -76,8 +76,8 @@ def generate_api_gw_event(body: Optional[dict[str, Any]]) -> dict[str, Any]:
         },
         'pathParameters': None,
         'stageVariables': None,
-        'body': 'Hello from Lambda!' if body is None else json.dumps(body),
-        'isBase64Encoded': True,
+        'body': '' if body is None else json.dumps(body),
+        'isBase64Encoded': False,
     }
 
 

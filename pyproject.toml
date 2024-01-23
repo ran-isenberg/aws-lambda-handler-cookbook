@@ -55,6 +55,7 @@ mypy = "*"
 types-requests = "*"
 toml = "*"
 poetry-plugin-export = "*"
+mkdocs-render-swagger-plugin = "*"
 
 [tool.pytest.ini_options]
 testpaths = "tests"

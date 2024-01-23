@@ -1,10 +1,10 @@
 from typing import Any
 
 from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
+from aws_lambda_powertools.event_handler.openapi.params import Body
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.metrics import MetricUnit
-from aws_lambda_powertools.utilities.parser import parse
-from aws_lambda_powertools.utilities.parser.envelopes import ApiGatewayEnvelope
+from aws_lambda_powertools.shared.types import Annotated
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.dynamic_configuration import MyConfiguration
@@ -14,24 +14,37 @@ from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.create_order import create_order
 from service.models.input import CreateOrderRequest
-from service.models.output import CreateOrderOutput
+from service.models.output import CreateOrderOutput, InternalServerErrorOutput, InvalidRestApiRequest
 
 
-@app.post(ORDERS_PATH)
-def handle_create_order() -> dict[str, Any]:
+@app.post(
+    ORDERS_PATH,
+    summary='Create an order',
+    description='Create an order identified by the body payload',
+    response_description='The created order',
+    responses={
+        200: {
+            'description': 'The created order',
+            'content': {'application/json': {'model': CreateOrderOutput}},
+        },
+        442: {
+            'description': 'Invalid create order request',
+            'content': {'application/json': {'model': InvalidRestApiRequest}},
+        },
+        501: {
+            'description': 'Internal server error',
+            'content': {'application/json': {'model': InternalServerErrorOutput}},
+        },
+    },
+    tags=['CRUD'],
+)
+def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> CreateOrderOutput:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
+    logger.info('got create order request', order=create_input.model_dump())
 
     my_configuration = parse_configuration(model=MyConfiguration)
     logger.debug('fetched dynamic configuration', configuration=my_configuration.model_dump())
-
-    # we want to extract and parse the HTTP body from the api gw envelope
-    create_input: CreateOrderRequest = parse(
-        event=app.current_event.raw_event,
-        model=CreateOrderRequest,
-        envelope=ApiGatewayEnvelope,
-    )
-    logger.info('got create order request', order=create_input.model_dump())
 
     metrics.add_metric(name='ValidCreateOrderEvents', unit=MetricUnit.Count, value=1)
     response: CreateOrderOutput = create_order(
@@ -41,7 +54,7 @@ def handle_create_order() -> dict[str, Any]:
     )
 
     logger.info('finished handling create order request')
-    return response.model_dump()
+    return response
 
 
 @init_environment_variables(model=MyHandlerEnvVars)

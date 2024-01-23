@@ -49,7 +49,5 @@ def test_handler_bad_request(api_gw_url):
     # When: Making a POST request to the API Gateway URL
     response = requests.post(api_gw_url, data=body_str)
 
-    # Then: Validate the response status is 400 BAD REQUEST and body is empty
-    assert response.status_code == HTTPStatus.BAD_REQUEST
-    body_dict = json.loads(response.text)
-    assert body_dict == {'error': 'invalid input'}
+    # Then: Validate the response status is 422 UNPROCESSABLE_ENTITY
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
