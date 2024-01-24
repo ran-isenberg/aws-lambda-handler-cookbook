@@ -1,7 +1,12 @@
-.PHONY: dev lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format
+.PHONY: dev lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format compare-openapi openapi
 PYTHON := ".venv/bin/python3"
-
 .ONESHELL:  # run all commands in a single shell, ensuring it runs within a local virtual env
+
+OPENAPI_DIR := ./docs/swagger
+CURRENT_OPENAPI := $(OPENAPI_DIR)/openapi.json
+LATEST_OPENAPI := openapi_latest.json
+
+
 dev:
 	pip install --upgrade pip pre-commit poetry
 	pre-commit install
@@ -52,7 +57,7 @@ integration:
 e2e:
 	poetry run pytest tests/e2e  --cov-config=.coveragerc --cov=service --cov-report xml
 
-pr: deps format pre-commit complex lint lint-docs unit deploy coverage-tests e2e
+pr: deps format pre-commit complex lint lint-docs unit deploy coverage-tests e2e openapi
 
 coverage-tests:
 	poetry run pytest tests/unit tests/integration  --cov-config=.coveragerc --cov=service --cov-report xml
@@ -76,3 +81,17 @@ update-deps:
 	poetry update
 	pre-commit autoupdate
 	npm i --package-lock-only
+
+openapi:
+	poetry run python generate_openapi.py
+
+compare-openapi:
+	poetry run python generate_openapi.py --out-destination '.' --out-filename 'openapi_latest.json'
+	@if cmp --silent $(CURRENT_OPENAPI) $(LATEST_OPENAPI); then \
+		rm $(LATEST_OPENAPI); \
+		echo "Swagger file is up to date"; \
+	else \
+		echo "Swagger files are not equal, did you run 'make pr' or 'make openapi'?"; \
+		rm $(LATEST_OPENAPI); \
+		exit 1; \
+	fi
