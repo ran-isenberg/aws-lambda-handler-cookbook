@@ -63,5 +63,4 @@ For more information click [here](https://docs.aws.amazon.com/prescriptive-guida
 
 In the picture below you can see all the deployed resources ordered into domain groups. The image was created with the IDE plugin of AWS Application Composer.
 
-
 <img alt="alt_text" src="../media/application-composer-main-Orders-dev.template.json.png" />
