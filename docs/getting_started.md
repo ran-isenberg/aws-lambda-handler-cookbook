@@ -68,13 +68,17 @@ CDK destroy can be run with ``make destroy``.
 
 ## **Preparing Code for PR**
 
-Run ``make pr``. This command will run all the required checks, pre commit hooks, linters, code formatters, import sorting and tests, so you can be sure GitHub's pipeline will pass.
+Run ``make pr``. This command will run all the required checks, pre commit hooks, linters, code formatters, import sorting and tests, so you can be sure GitHub's pipeline will pass. It will also generate an updated swagger OpenAPI JSON file and place it at docs/swagger/openapi.json location.
 
 The command auto fixes errors in the code for you.
 
 If there's an error in the pre-commit stage, it gets auto fixed. However, are required to run ``make pr`` again so it continues to the next stages.
 
 Be sure to commit all the changes that ``make pr`` does for you.
+
+## **OpenAPI Swagger Generation**
+Run either ``make pr`` or ``make openopi`` to generate an updated swagger OpenAPI JSON file and place it at docs/swagger/openapi.json location.
+
 
 ## **GitHub Pages Documentation**
 
