@@ -94,6 +94,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 - CloudWatch dashboards - High level and low level including CloudWatch alarms
 - Unit, infrastructure, security, integration and end to end tests.
 - Automatically generated OpenAPI endpoint: /swagger with Pydnatic schemas for both requests and responses
+- CI swagger protection - fails the PR if your swagger JSON file (stored at docs/swagger/openapi.json) is out of date
 
 
 ## CDK Deployment

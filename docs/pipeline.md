@@ -28,8 +28,10 @@ All steps can be run locally using the makefile. See details below:
 - Infrastructure test. Run `make infra-tests` to run the CDK infrastructure tests in the IDE
 - Code coverage by [codecov.io](https://about.codecov.io/)
 - Deploy CDK - run `make deploy` in the IDE, will also run security tests based on cdk_nag
+- Integration tests - run `make integration` in the IDE.
 - E2E tests  - run `make e2e` in the IDE
 - Code coverage tests  - run `make coverage-tests` in the IDE after CDK dep
+- OpenAPI Swagger file - run
 - Update GitHub documentation branch
 
 ### **Other Capabilities**
@@ -49,11 +51,11 @@ The two most important ones are `pr-serverless-service`  and `main-serverless-se
 
 <img alt="alt_text" src="../media/cicd_pr.png" />
 
-`pr-serverless-service` runs for every pull request you open. It expects you defined a GitHub environment by the name `dev` and that it includes a secret by the name of `AWS_ROLE`.
+`pr-serverless-service` runs for every pull request you open. It expects you defined a GitHub environments by the name `dev`, `staging` and `production` and for each environments to have the following variables:  `CODECOV_TOKEN ` for CodeCov integration and `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
 
 It includes two jobs: 'quality_standards' and 'tests' where a failure in 'quality_standards' does not trigger 'tests'. Both jobs MUST pass in order to to be able to merge.
 
-'quality_standards' includes all linters, pre-commit checks and units tests and 'tests' deploys the service to AWS, runs code coverage checks, security checks and E2E tests. Stack is destroyed at the end. Stack has a 'dev' prefix as part of its name.
+'quality_standards' includes all linters, pre-commit checks and units tests and 'tests' deploys the service to AWS, runs code coverage checks, checks that your OpenAPI file is up to date and corresponds to the actual deployment (fails if it does not, hence your documentation is out of date), security checks and E2E tests. Stack is destroyed at the end. Stack has a 'dev' prefix as part of its name. Each environment has a pre-defined stack prefix.
 
 Once merged, `main-serverless-service` will run.
 
