@@ -77,8 +77,8 @@ If there's an error in the pre-commit stage, it gets auto fixed. However, are re
 Be sure to commit all the changes that ``make pr`` does for you.
 
 ## **OpenAPI Swagger Generation**
-Run either ``make pr`` or ``make openopi`` to generate an updated swagger OpenAPI JSON file and place it at docs/swagger/openapi.json location.
 
+Run either ``make pr`` or ``make openopi`` to generate an updated swagger OpenAPI JSON file and place it at docs/swagger/openapi.json location.
 
 ## **GitHub Pages Documentation**
 

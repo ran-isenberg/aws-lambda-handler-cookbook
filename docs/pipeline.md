@@ -55,7 +55,11 @@ The two most important ones are `pr-serverless-service`  and `main-serverless-se
 
 It includes two jobs: 'quality_standards' and 'tests' where a failure in 'quality_standards' does not trigger 'tests'. Both jobs MUST pass in order to to be able to merge.
 
-'quality_standards' includes all linters, pre-commit checks and units tests and 'tests' deploys the service to AWS, runs code coverage checks, checks that your OpenAPI file is up to date and corresponds to the actual deployment (fails if it does not, hence your documentation is out of date), security checks and E2E tests. Stack is destroyed at the end. Stack has a 'dev' prefix as part of its name. Each environment has a pre-defined stack prefix.
+'quality_standards' includes all linters, pre-commit checks and units tests and 'tests' deploys the service to AWS, runs code coverage checks,
+
+checks that your OpenAPI file is up to date and corresponds to the actual deployment (fails if it does not, hence your documentation is out of date), security checks and E2E tests. Stack is destroyed at the end. Stack has a 'dev'
+
+prefix as part of its name. Each environment has a pre-defined stack prefix.
 
 Once merged, `main-serverless-service` will run.
 

@@ -58,7 +58,7 @@ class ApiConstruct(Construct):
         CfnOutput(self, id=constants.APIGATEWAY, value=rest_api.url).override_logical_id(constants.APIGATEWAY)
         return rest_api
 
-    def _build_lambda_role(self, db: dynamodb.Table, idempotency_table: dynamodb.Table) -> iam.Role:
+    def _build_lambda_role(self, db: dynamodb.TableV2, idempotency_table: dynamodb.TableV2) -> iam.Role:
         return iam.Role(
             self,
             constants.SERVICE_ROLE_ARN,
@@ -107,7 +107,12 @@ class ApiConstruct(Construct):
         )
 
     def _add_post_lambda_integration(
-        self, api_resource: aws_apigateway.Resource, role: iam.Role, db: dynamodb.Table, appconfig_app_name: str, idempotency_table: dynamodb.Table
+        self,
+        api_resource: aws_apigateway.Resource,
+        role: iam.Role,
+        db: dynamodb.TableV2,
+        appconfig_app_name: str,
+        idempotency_table: dynamodb.TableV2,
     ) -> _lambda.Function:
         lambda_function = _lambda.Function(
             self,

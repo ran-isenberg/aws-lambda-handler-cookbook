@@ -24,8 +24,8 @@ class CrudMonitoring(Construct):
         scope: Construct,
         id_: str,
         crud_api: aws_apigateway.RestApi,
-        db: dynamodb.Table,
-        idempotency_table: dynamodb.Table,
+        db: dynamodb.TableV2,
+        idempotency_table: dynamodb.TableV2,
         functions: list[_lambda.Function],
     ) -> None:
         super().__init__(scope, id_)
@@ -84,7 +84,9 @@ class CrudMonitoring(Construct):
         group = CustomMetricGroup(metrics=[create_metric], title='Daily Order Requests')
         high_level_facade.monitor_custom(metric_groups=[group], human_readable_name='Daily KPIs', alarm_friendly_name='KPIs')
 
-    def _build_low_level_dashboard(self, db: dynamodb.Table, idempotency_table: dynamodb.Table, functions: list[_lambda.Function], topic: sns.Topic):
+    def _build_low_level_dashboard(
+        self, db: dynamodb.TableV2, idempotency_table: dynamodb.TableV2, functions: list[_lambda.Function], topic: sns.Topic
+    ):
         low_level_facade = MonitoringFacade(
             self,
             f'{self.id_}LowFacade',
