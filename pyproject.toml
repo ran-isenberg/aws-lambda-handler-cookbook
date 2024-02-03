@@ -120,5 +120,5 @@ indent-style = "space"
 # Like Black, automatically detect the appropriate line ending.
 line-ending = "auto"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-third-party = ["pydantic", "aws_lambda_powertools"]
