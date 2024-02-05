@@ -76,7 +76,6 @@
                     },
                     "item_count": {
                         "type": "integer",
-                        "exclusiveMinimum": 0.0,
                         "title": "Item Count",
                         "description": "Amount of items in order"
                     },
@@ -107,7 +106,6 @@
                     },
                     "order_item_count": {
                         "type": "integer",
-                        "exclusiveMinimum": 0.0,
                         "title": "Order Item Count",
                         "description": "Amount of items in order"
                     }
@@ -171,23 +169,16 @@
                         "description": "Error type"
                     },
                     "msg": {
-                        "anyOf": [
-                            {
-                                "type": "string"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ],
+                        "type": "string",
                         "title": "Msg",
-                        "description": "Error message"
+                        "description": "Error message",
+                        "default": ""
                     }
                 },
                 "type": "object",
                 "required": [
                     "loc",
-                    "type",
-                    "msg"
+                    "type"
                 ],
                 "title": "PydanticError"
             }

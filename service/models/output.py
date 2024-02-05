@@ -1,4 +1,4 @@
-from typing import Annotated, List, Optional, Union
+from typing import Annotated, List, Union
 
 from pydantic import BaseModel, Field
 
@@ -19,7 +19,7 @@ class InternalServerErrorOutput(BaseModel):
 class PydanticError(BaseModel):
     loc: Annotated[List[Union[str, int]], Field(description='Error location')]
     type: Annotated[str, Field(description='Error type')]
-    msg: Annotated[Optional[str], Field(description='Error message')]
+    msg: Annotated[str, Field(description='Error message')] = ''
 
 
 class InvalidRestApiRequest(BaseModel):

@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 from aws_lambda_powertools.utilities.parser import ValidationError
@@ -7,7 +7,7 @@ from aws_lambda_powertools.utilities.parser import ValidationError
 from service.dal.models.db import OrderEntry
 
 order_id = str(uuid.uuid4())
-created_at = int(datetime.utcnow().timestamp())
+created_at = int(datetime.now(timezone.utc).timestamp())
 
 
 def test_invalid_items_type():
