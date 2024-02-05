@@ -36,7 +36,17 @@ def test_missing_mandatory_fields():
 def test_invalid_order_number():
     # Given: An invalid negative order_item_count
     customer_name = 'a'
-    order_item_count = -1
+    order_item_count = 0
+
+    # When & Then: CreateOrderRequest is initialized, expect a ValidationError
+    with pytest.raises(ValidationError):
+        CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
+
+
+def test_invalid_order_number_float():
+    # Given: An invalid float number order_item_count
+    customer_name = 'a'
+    order_item_count = 3.14
 
     # When & Then: CreateOrderRequest is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
