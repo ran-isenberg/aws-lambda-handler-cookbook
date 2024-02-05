@@ -100,7 +100,7 @@ jobs:
           verbose: yes # optional (default = false)
       - name: Check OpenAPI Spec diff action
         id: breaking_changes
-        uses: oasdiff/oasdiff-action/check-breaking@main
+        uses: oasdiff/oasdiff-action/check-breaking
         with:
             base: https://raw.githubusercontent.com/ran-isenberg/aws-lambda-handler-cookbook/main/docs/swagger/openapi.json
             revision: ./docs/swagger/openapi.json
