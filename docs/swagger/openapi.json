@@ -108,18 +108,12 @@
                         "type": "integer",
                         "title": "Order Item Count",
                         "description": "Amount of items in order"
-                    },
-                    "new_order_item_count": {
-                        "type": "integer",
-                        "title": "Order Item Count",
-                        "description": "Amount of items in order"
                     }
                 },
                 "type": "object",
                 "required": [
                     "customer_name",
-                    "order_item_count",
-                    "new_order_item_count"
+                    "order_item_count"
                 ],
                 "title": "CreateOrderRequest"
             },
