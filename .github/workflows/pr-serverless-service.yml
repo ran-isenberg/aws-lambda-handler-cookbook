@@ -109,10 +109,10 @@ jobs:
         with:
             base: https://raw.githubusercontent.com/ran-isenberg/aws-lambda-handler-cookbook/main/docs/swagger/openapi.json
             revision: ./docs/swagger/openapi.json
-      - name: Run E2E tests
-        run: make e2e
       - name: Validate OpenAPI Documentation
         run: make compare-openapi
+      - name: Run E2E tests
+        run: make e2e
       - name: Destroy stack
         if: always()
         run: make destroy

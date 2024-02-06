@@ -108,6 +108,11 @@
                         "type": "integer",
                         "title": "Order Item Count",
                         "description": "Amount of items in order"
+                    },
+                    "new_order_item_count": {
+                        "type": "integer",
+                        "title": "Order Item Count",
+                        "description": "Amount of items in order"
                     }
                 },
                 "type": "object",
