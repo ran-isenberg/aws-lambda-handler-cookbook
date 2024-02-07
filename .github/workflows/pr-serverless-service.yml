@@ -89,6 +89,13 @@ jobs:
         run: make deploy
       # NOTE: these run unit and integration tests
       # we can look into coverage collection only later to make it faster and less brittle (--collect-only)
+      - name: Check OpenAPI Spec breaking action
+        uses: oasdiff/oasdiff-action/breaking@main
+        with:
+          base: https://raw.githubusercontent.com/ran-isenberg/aws-lambda-handler-cookbook/main/docs/swagger/openapi.json
+          revision: ./docs/swagger/openapi.json
+      - name: Validate OpenAPI Documentation
+        run: make compare-openapi
       - name: Code coverage tests
         run: make coverage-tests
       - name: Codecov
@@ -100,8 +107,6 @@ jobs:
           verbose: yes # optional (default = false)
       - name: Run E2E tests
         run: make e2e
-      - name: Validate OpenAPI Documentation
-        run: make compare-openapi
       - name: Destroy stack
         if: always()
         run: make destroy
