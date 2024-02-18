@@ -21,6 +21,13 @@ This project can serve as a template for new Serverless services - CDK deploymen
 [![Twitter Follow](https://img.shields.io/twitter/follow/IsenbergRan?label=Follow&style=social)](https://twitter.com/IsenbergRan)
 [![Website](https://img.shields.io/badge/Website-www.ranthebuilder.cloud-blue)](https://www.ranthebuilder.cloud/)
 
+## Concepts
+
+I spoke at AWS re:invent 2023 with Heitor Lessa, Chief Architect of Powertools for AWS Lambda about the concepts I implemented in this project.
+
+[![Watch the video](https://img.youtube.com/vi/52W3Qyg242Y/maxresdefault.jpg)](https://www.youtube.com/watch?v=52W3Qyg242Y)
+
+
 ## Getting Started
 
 You can start with a clean service out of this template repository without using the 'Template' button on GitHub.
