@@ -66,6 +66,12 @@ Starting a Serverless service can be overwhelming. You need to figure out many q
 
 This project aims to reduce cognitive load and answer these questions for you by providing a skeleton Python Serverless service template that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
 
+## Concepts
+
+I spoke at AWS re:invent 2023 with Heitor Lessa, Chief Architect of Powertools for AWS Lambda about the concepts I implemented in this project.
+
+[![Watch the video](https://img.youtube.com/vi/52W3Qyg242Y/maxresdefault.jpg)](https://www.youtube.com/watch?v=52W3Qyg242Y)
+
 ### Serverless Service - The Order service
 
 - This project provides a working orders service where customers can create orders of items.
@@ -93,8 +99,9 @@ This project aims to reduce cognitive load and answer these questions for you by
 - REST API protected by WAF with four AWS managed rules in production deployment
 - CloudWatch dashboards - High level and low level including CloudWatch alarms
 - Unit, infrastructure, security, integration and end to end tests.
-- Automatically generated OpenAPI endpoint: /swagger with Pydnatic schemas for both requests and responses
+- Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
 - CI swagger protection - fails the PR if your swagger JSON file (stored at docs/swagger/openapi.json) is out of date
+- Automated protection against API breaking changes
 
 
 ## CDK Deployment
@@ -121,6 +128,7 @@ The utilities cover multiple aspect of a production-ready service, including:
 - [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook)
 - [Serverless Monitoring](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one)
 - [API Idempotency](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk)
+- [Serverless OpenAPI Documentation with AWS Powertools](https://www.ranthebuilder.cloud/post/serverless-open-api-documentation-with-aws-powertools)
 
 ## Getting started
 Head over to the complete project documentation pages at GitHub pages at [https://ran-isenberg.github.io/aws-lambda-handler-cookbook](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)

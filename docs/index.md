@@ -31,6 +31,12 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 <img alt="alt_text" src="./media/monitoring_design.png" />
 
+## Concepts
+
+I spoke at AWS re:invent 2023 with Heitor Lessa, Chief Architect of Powertools for AWS Lambda about the concepts I implemented in this project.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/52W3Qyg242Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ### **Features**
 
 - Python Serverless service with a recommended file structure.
@@ -46,7 +52,8 @@ This project aims to reduce cognitive load and answer these questions for you by
 - Idempotent API
 - REST API protected by WAF with four AWS managed rules in production deployment
 - Unit, infrastructure, security, integration and E2E tests.
-- Automatically generated OpenAPI endpoint: /swagger with Pydnatic schemas for both requests and responses
+- Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
+- Automated protection against API breaking changes
 
 The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
@@ -67,6 +74,7 @@ The utilities cover multiple aspects of a production-ready service, including:
 - [**Serverless Monitoring**](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one)
 - [**API Idempotency**](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk){:target="_blank" rel="noopener"}
 - [**Learn How to Write AWS Lambda Functions with Three Architecture Layers**](https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers){:target="_blank" rel="noopener"}
+- [**Serverless OpenAPI Documentation with AWS Powertools**](https://www.ranthebuilder.cloud/post/serverless-open-api-documentation-with-aws-powertools){:target="_blank" rel="noopener"}
 
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
 
