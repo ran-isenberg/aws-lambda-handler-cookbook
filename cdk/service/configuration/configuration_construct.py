@@ -1,7 +1,7 @@
 from pathlib import Path
 
-import aws_cdk.aws_appconfig_alpha as appconfig
 from aws_cdk import Duration
+from aws_cdk import aws_appconfig as appconfig
 from constructs import Construct
 
 from cdk.service.configuration.schema import FeatureFlagsConfiguration
