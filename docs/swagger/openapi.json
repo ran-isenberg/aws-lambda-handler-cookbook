@@ -1,5 +1,5 @@
 {
-    "openapi": "3.0.0",
+    "openapi": "3.1.0",
     "info": {
         "title": "AWS Lambda Handler Cookbook - Orders Service",
         "version": "1.0.0"
@@ -29,22 +29,22 @@
                     "required": true
                 },
                 "responses": {
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    },
                     "200": {
                         "description": "The created order",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/CreateOrderOutput"
-                                }
-                            }
-                        }
-                    },
-                    "442": {
-                        "description": "Invalid create order request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/InvalidRestApiRequest"
                                 }
                             }
                         }
@@ -117,6 +117,19 @@
                 ],
                 "title": "CreateOrderRequest"
             },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
             "InternalServerErrorOutput": {
                 "properties": {
                     "error": {
@@ -129,24 +142,7 @@
                 "type": "object",
                 "title": "InternalServerErrorOutput"
             },
-            "InvalidRestApiRequest": {
-                "properties": {
-                    "details": {
-                        "items": {
-                            "$ref": "#/components/schemas/PydanticError"
-                        },
-                        "type": "array",
-                        "title": "Details",
-                        "description": "Error details"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "details"
-                ],
-                "title": "InvalidRestApiRequest"
-            },
-            "PydanticError": {
+            "ValidationError": {
                 "properties": {
                     "loc": {
                         "items": {
@@ -160,27 +156,20 @@
                             ]
                         },
                         "type": "array",
-                        "title": "Loc",
-                        "description": "Error location"
+                        "title": "Location"
                     },
                     "type": {
                         "type": "string",
-                        "title": "Type",
-                        "description": "Error type"
-                    },
-                    "msg": {
-                        "type": "string",
-                        "title": "Msg",
-                        "description": "Error message",
-                        "default": ""
+                        "title": "Error Type"
                     }
                 },
                 "type": "object",
                 "required": [
                     "loc",
+                    "msg",
                     "type"
                 ],
-                "title": "PydanticError"
+                "title": "ValidationError"
             }
         }
     }
