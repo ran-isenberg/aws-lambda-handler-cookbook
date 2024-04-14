@@ -27,7 +27,7 @@ You can start with a clean service out of this template repository without using
 
 You can use Cookiecutter.
 
-* Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter`
+* Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter``
 
 Then run:
 
