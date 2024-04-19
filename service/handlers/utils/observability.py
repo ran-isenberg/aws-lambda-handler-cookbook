@@ -1,6 +1,6 @@
-from aws_lambda_powertools.logging.logger import Logger
-from aws_lambda_powertools.metrics.metrics import Metrics
-from aws_lambda_powertools.tracing.tracer import Tracer
+from aws_lambda_powertools.logging import Logger
+from aws_lambda_powertools.metrics import Metrics
+from aws_lambda_powertools.tracing import Tracer
 
 METRICS_NAMESPACE = 'orders_kpi'
 
