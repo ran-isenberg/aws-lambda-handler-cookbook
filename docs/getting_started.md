@@ -6,7 +6,7 @@ description: AWS Lambda Cookbook Project Getting started
 
 * **Docker** - install [Docker](https://www.docker.com/){target="_blank"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack. Run CDK [Bootstrap](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html) on your AWS account and region.
-* Python 3.11
+* Python 3.12
 * [poetry](https://pypi.org/project/poetry/){target="_blank"} - Make sure to run ``poetry config --local virtualenvs.in-project true`` so all dependencies are installed in the project '.venv' folder.
 * For Windows based machines, use the Makefile_windows version (rename to Makefile). Default Makefile is for Mac/Linux.
 
