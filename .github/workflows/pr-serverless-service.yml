@@ -87,7 +87,7 @@ jobs:
       # NOTE: these run unit and integration tests
       # we can look into coverage collection only later to make it faster and less brittle (--collect-only)
       - name: Check OpenAPI Spec breaking action
-        uses: oasdiff/oasdiff-action/breaking@8239cae5fbb8bddfc511d784b78b84976ff3f120 # v0.0.16
+        uses: oasdiff/oasdiff-action/breaking@a2ff6682b27d175162a74c09ace8771bd3d512f8 # v0.0.16
         with:
           base: https://raw.githubusercontent.com/ran-isenberg/aws-lambda-handler-cookbook/main/docs/swagger/openapi.json
           revision: ./docs/swagger/openapi.json
