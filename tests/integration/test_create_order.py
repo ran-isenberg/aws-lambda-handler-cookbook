@@ -45,11 +45,40 @@ def call_create_order(body: dict[str, Any]) -> dict[str, Any]:
     # this way, idempotency import runs after conftest sets the values already
     from service.handlers.handle_create_order import lambda_handler
 
+    body = {
+        'messageVersion': '1.0',
+        'agent': {'alias': 'TSTALIASID', 'name': 'bedrock-agent-ranisgent-2cf4d1f0', 'version': 'DRAFT', 'id': 'NUVWFMWBGP'},
+        'sessionId': '390096245597294',
+        'sessionAttributes': {},
+        'promptSessionAttributes': {},
+        'inputText': 'create an order with order_item_count=2 and customer_name=Ran',
+        'apiPath': '/api/orders/',
+        'requestBody': {
+            'content': {
+                'application/json': {
+                    'properties': [
+                        {'name': 'customer_name', 'type': 'string', 'value': 'Ran'},
+                        {'name': 'order_item_count', 'type': 'integer', 'value': '2'},
+                    ]
+                }
+            }
+        },
+        'actionGroup': 'OrdersPlacement',
+        'httpMethod': 'POST',
+        'parameters': [],
+    }
     return lambda_handler(body, generate_context())
 
 
 def test_handler_200_ok(mocker, table_name: str):
     # Given: Dynamic configuration is mocked and a valid order creation request
+    # from service.handlers.handle_create_order import lambda_handler, handle_create_order
+    # from service.handlers.utils.rest_api_resolver import app
+
+    # fjson = json.loads(app.get_openapi_json_schema())
+    # file_path = 'data.json'
+    # with open(file_path, 'w') as json_file:
+    #    json.dump(fjson, json_file, indent=4)
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5

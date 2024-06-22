@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from aws_lambda_powertools.event_handler import APIGatewayRestResolver, Response, content_types
+from aws_lambda_powertools.event_handler import BedrockAgentResolver, Response, content_types
 
 from service.handlers.utils.observability import logger
 from service.models.exceptions import DynamicConfigurationException, InternalServerException
@@ -8,8 +8,7 @@ from service.models.output import InternalServerErrorOutput
 
 ORDERS_PATH = '/api/orders/'
 
-app = APIGatewayRestResolver(enable_validation=True)
-app.enable_swagger(path='/swagger', title='AWS Lambda Handler Cookbook - Orders Service')
+app = BedrockAgentResolver()
 
 
 @app.exception_handler(DynamicConfigurationException)
