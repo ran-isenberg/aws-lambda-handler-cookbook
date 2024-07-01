@@ -34,7 +34,7 @@ jobs:
           BRANCH_NAME: ${{ github.ref }}
           REPO_NAME: ${{ github.repository }}
       - name: Check out repository code
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Install poetry
         run: pipx install poetry
       - name: Set up Python
@@ -100,7 +100,7 @@ jobs:
           BRANCH_NAME: ${{ github.ref }}
           REPO_NAME: ${{ github.repository }}
       - name: Check out repository code
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Install poetry
         run: pipx install poetry
       - name: Set up Python
@@ -139,7 +139,7 @@ jobs:
     if: contains('refs/heads/main', github.ref)
     steps:
       - name: Check out repository code
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Set up Python
         uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
