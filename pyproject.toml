@@ -12,7 +12,7 @@ classifiers=[
 ]
 repository="https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
 readme = "README.md"
-keywords = ["aws lambda cookbook", "guide to aws lambda", "cdk template", "best practices", "serverless service template"]
+keywords = ["aws lambda cookbook", "guide to aws lambda", "cdk blueprint", "best practices", "serverless service blueprint"]
 license = "MIT-0"
 
 [tool.poetry.dependencies]
