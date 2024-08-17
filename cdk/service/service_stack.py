@@ -14,7 +14,7 @@ class ServiceStack(Stack):
         self._add_stack_tags()
 
         # This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled
-        # from running the service pipeline and without redeploying the service lambdas. For the sake of this template
+        # from running the service pipeline and without redeploying the service lambdas. For the sake of this blueprint
         # example, it is deployed as part of the service stack
         self.dynamic_configuration = ConfigurationStore(
             self,
@@ -47,10 +47,10 @@ class ServiceStack(Stack):
                 {'id': 'AwsSolutions-IAM4', 'reason': 'policy for cloudwatch logs.'},
                 {'id': 'AwsSolutions-IAM5', 'reason': 'policy for cloudwatch logs.'},
                 {'id': 'AwsSolutions-APIG2', 'reason': 'lambda does input validation'},
-                {'id': 'AwsSolutions-APIG1', 'reason': 'not mandatory in a sample template'},
-                {'id': 'AwsSolutions-APIG3', 'reason': 'not mandatory in a sample template'},
-                {'id': 'AwsSolutions-APIG6', 'reason': 'not mandatory in a sample template'},
-                {'id': 'AwsSolutions-APIG4', 'reason': 'authorization not mandatory in a sample template'},
+                {'id': 'AwsSolutions-APIG1', 'reason': 'not mandatory in a sample blueprint'},
+                {'id': 'AwsSolutions-APIG3', 'reason': 'not mandatory in a sample blueprint'},
+                {'id': 'AwsSolutions-APIG6', 'reason': 'not mandatory in a sample blueprint'},
+                {'id': 'AwsSolutions-APIG4', 'reason': 'authorization not mandatory in a sample blueprint'},
                 {'id': 'AwsSolutions-COG4', 'reason': 'not using cognito'},
                 {'id': 'AwsSolutions-L1', 'reason': 'False positive'},
             ],

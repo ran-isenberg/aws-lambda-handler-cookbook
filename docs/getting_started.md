@@ -12,7 +12,7 @@ description: AWS Lambda Cookbook Project Getting started
 
 ## Getting Started
 
-You can start with a clean service out of this template repository without using the 'Template' button on GitHub.
+You can start with a clean service out of this blueprint repository without using the 'Template' button on GitHub.
 
 You can use Cookiecutter.
 

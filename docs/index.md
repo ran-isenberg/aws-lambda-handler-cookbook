@@ -1,10 +1,22 @@
 ---
 title: Homepage
-description: AWS Lambda Handler Cookbook - a Serverless Service Template
+description: AWS Lambda Handler Cookbook - a Serverless Service Blueprint
 ---
-## **AWS Lambda Handler Cookbook - A Serverless Service Template**
+## **AWS Lambda Handler Cookbook - A Serverless Service Blueprint**
 
 [<img alt="alt_text" src="./media/banner.png" />](https://www.ranthebuilder.cloud/)
+
+## AWS Recommendation
+
+This repository was recommended in an AWS blog post [Best practices for accelerating development with serverless blueprints](https://aws.amazon.com/blogs/infrastructure-and-automation/best-practices-for-accelerating-development-with-serverless-blueprints/){:target="_blank" rel="noopener"}
+
+<img alt="aws article" src="./media/article.png" />
+
+## Concepts
+
+I spoke at AWS re:invent 2023 with Heitor Lessa, former Chief Architect of Powertools for AWS Lambda about the concepts I implemented in this project.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/52W3Qyg242Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## **The Problem**
 
@@ -17,11 +29,11 @@ Starting a Serverless service can be overwhelming. You need to figure out many q
 
 ## **The Solution**
 
-This project aims to reduce cognitive load and answer these questions for you by providing a skeleton Python Serverless service template that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in one template project.
+This project aims to reduce cognitive load and answer these questions for you by providing a skeleton Python Serverless service blueprint that implements best practices for AWS Lambda, Serverless CI/CD, and AWS CDK in one blueprint project.
 
 ### Serverless Service - The Order service
 
-<img alt="alt_text" src="./media/design.png" />
+<img alt="design" src="./media/design.png" />
 
 - This project provides a working orders service where customers can create orders of items.
 
@@ -29,13 +41,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 #### **Monitoring Design**
 
-<img alt="alt_text" src="./media/monitoring_design.png" />
-
-## Concepts
-
-I spoke at AWS re:invent 2023 with Heitor Lessa, Chief Architect of Powertools for AWS Lambda about the concepts I implemented in this project.
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/52W3Qyg242Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<img alt="monitoring" src="./media/monitoring_design.png" />
 
 ### **Features**
 
@@ -55,7 +61,7 @@ I spoke at AWS re:invent 2023 with Heitor Lessa, Chief Architect of Powertools f
 - Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
 - Automated protection against API breaking changes
 
-The GitHub template project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
+The GitHub blueprint project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
 ## **Serverless Best Practices**
 
