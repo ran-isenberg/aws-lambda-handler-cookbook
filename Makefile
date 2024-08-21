@@ -1,4 +1,4 @@
-.PHONY: dev lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format compare-openapi openapi
+.PHONY: dev lint mypy-lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format format-fix compare-openapi openapi pr watch update-deps
 PYTHON := ".venv/bin/python3"
 .ONESHELL:  # run all commands in a single shell, ensuring it runs within a local virtual env
 
