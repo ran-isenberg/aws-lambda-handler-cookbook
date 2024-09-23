@@ -1,10 +1,9 @@
-from typing import Any
+from typing import Annotated, Any
 
 from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
 from aws_lambda_powertools.event_handler.openapi.params import Body
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.metrics import MetricUnit
-from aws_lambda_powertools.shared.types import Annotated
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.dynamic_configuration import MyConfiguration
