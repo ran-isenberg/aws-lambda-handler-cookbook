@@ -139,8 +139,8 @@ class ApiConstruct(Construct):
             layers=[self.common_layer],
             role=role,
             log_retention=RetentionDays.ONE_DAY,
-            log_format=_lambda.LogFormat.JSON.value,
-            system_log_level=_lambda.SystemLogLevel.INFO.value,
+            logging_format=_lambda.LoggingFormat.JSON,
+            system_log_level_v2=_lambda.SystemLogLevel.INFO,
         )
 
         # POST /api/orders/
