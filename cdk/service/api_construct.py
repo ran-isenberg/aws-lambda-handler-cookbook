@@ -28,7 +28,7 @@ class ApiConstruct(Construct):
         self._build_swagger_endpoints(rest_api=self.rest_api, dest_func=self.create_order_func)
         self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func])
 
-        if is_production_env:
+        if not is_production_env:
             # add WAF
             self.waf = WafToApiGatewayConstruct(self, f'{id_}waf', self.rest_api)
 
