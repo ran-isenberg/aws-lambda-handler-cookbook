@@ -76,7 +76,7 @@ class ApiConstruct(Construct):
                 'dynamodb_db': iam.PolicyDocument(
                     statements=[
                         iam.PolicyStatement(
-                            actions=['dynamodb:PutItem', 'dynamodb:GetItem'],
+                            actions=['dynamodb:PutItem'],
                             resources=[db.table_arn],
                             effect=iam.Effect.ALLOW,
                         )
