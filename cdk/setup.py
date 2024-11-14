@@ -12,7 +12,7 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
-        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
     ],
     url='https://github.com/ran-isenberg/aws-lambda-handler-cookbook',
     author='Ran Isenberg',
@@ -20,6 +20,6 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     package_data={'': ['*.json']},
     include_package_data=True,
-    python_requires='>=3.12',
+    python_requires='>=3.13',
     install_requires=[],
 )

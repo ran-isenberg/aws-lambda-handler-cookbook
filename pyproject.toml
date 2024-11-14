@@ -8,7 +8,7 @@ classifiers=[
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
-    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.13",
 ]
 repository="https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
 readme = "README.md"
@@ -16,7 +16,7 @@ keywords = ["aws lambda cookbook", "guide to aws lambda", "cdk blueprint", "best
 license = "MIT-0"
 
 [tool.poetry.dependencies]
-python = "^3.12.0"
+python = "^3.13.0"
 pydantic = {version = "^2.0.3"}
 email-validator = {version = "*"}
 aws-lambda-powertools =  {extras = ["tracer"],version = "^3.0.0"}
@@ -95,8 +95,8 @@ exclude = [
 line-length = 150
 indent-width = 4
 
-# Assume Python 3.12
-target-version = "py312"
+# Assume Python 3.13
+target-version = "py313"
 
 [tool.ruff.lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
