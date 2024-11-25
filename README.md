@@ -150,10 +150,11 @@ Read our code of conduct [here.](https://github.com/ran-isenberg/aws-lambda-hand
 
 ## Connect
 
-* Email: [ran.isenberg@ranthebuilder.cloud](mailto:ran.isenberg@ranthebuilder.cloud)
-* Blog Website [RanTheBuilder](https://www.ranthebuilder.cloud)
-* LinkedIn: [ranisenberg](https://www.linkedin.com/in/ranisenberg/)
-* Twitter: [RanBuilder](https://twitter.com/RanBuilder)
+- Email: ran.isenberg@ranthebuilder.cloud
+- Blog: https://www.ranthebuilder.cloud
+- Bluesky: [@ranthebuilder.bsky.social](https://bsky.app/profile/ranthebuilder.bsky.social)
+- X:       [@RanBuilder](https://twitter.com/RanBuilder)
+- LinkedIn: https://www.linkedin.com/in/ranbuilder/
 
 ## Credits
 
