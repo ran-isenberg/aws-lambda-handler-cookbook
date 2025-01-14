@@ -1,3 +1,6 @@
+[build-system]
+requires = ["poetry>=2.0.1"]
+build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "aws_lambda_handler_cookbook"
 version = "3.0.0"
@@ -15,6 +18,7 @@ readme = "README.md"
 keywords = ["aws lambda cookbook", "guide to aws lambda", "cdk blueprint", "best practices", "serverless service blueprint"]
 license = "MIT-0"
 
+
 [tool.poetry.dependencies]
 python = "^3.13.0"
 pydantic = {version = "^2.0.3"}
@@ -25,7 +29,7 @@ cachetools = "*"
 boto3 = "^1.26.125"
 aws-lambda-env-modeler = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 # CDK
 service-cdk = {path = "cdk", develop = true}
 aws-cdk-lib = ">=2.130.0"
@@ -53,8 +57,10 @@ types-cachetools = "*"
 mypy = "*"
 types-requests = "*"
 toml = "*"
-poetry-plugin-export = "*"
 mkdocs-render-swagger-plugin = "*"
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.9"
 
 [tool.pytest.ini_options]
 testpaths = "tests"
