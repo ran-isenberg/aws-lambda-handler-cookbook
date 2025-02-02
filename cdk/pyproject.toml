@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "service-cdk"
+version = "1.0"
+description = "CDK service code"
+authors = [
+    { name = "Ran Isenberg", email = "ran.isenberg@ranthebuilder.cloud" }
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "Programming Language :: Python :: 3.12"
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["contrib", "docs", "tests"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
