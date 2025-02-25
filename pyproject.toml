@@ -23,7 +23,7 @@ license = "MIT-0"
 python = "^3.13.0"
 pydantic = {version = "^2.0.3"}
 email-validator = {version = "*"}
-aws-lambda-powertools =  {extras = ["tracer"],version = "^3.0.0"}
+aws-lambda-powertools =  {extras = ["tracer"],version = "^3.7.0"}
 mypy-boto3-dynamodb = "*"
 cachetools = "*"
 boto3 = "^1.26.125"
@@ -32,10 +32,10 @@ aws-lambda-env-modeler = "*"
 [tool.poetry.group.dev.dependencies]
 # CDK
 service-cdk = {path = "cdk", develop = true}
-aws-cdk-lib = ">=2.130.0"
+aws-cdk-lib = ">=2.180.0"
 constructs = ">=10.0.0"
 cdk-nag = ">2.0.0"
-"aws-cdk.aws-lambda-python-alpha" = "^2.130.0-alpha.0"
+"aws-cdk.aws-lambda-python-alpha" = "^2.180.0-alpha.0"
 cdk-monitoring-constructs = "*"
 # DEV
 pytest = "*"
