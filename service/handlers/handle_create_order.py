@@ -33,9 +33,7 @@ from service.models.output import CreateOrderOutput, InternalServerErrorOutput
     },
     tags=['CRUD'],
 )
-def handle_create_order(
-    create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')],
-) -> CreateOrderOutput:
+def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> CreateOrderOutput:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
     logger.info('got create order request', order=create_input.model_dump())
