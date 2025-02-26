@@ -1,7 +1,6 @@
 from typing import Annotated, Any
 
 from aws_lambda_env_modeler import get_environment_variables, init_environment_variables
-from aws_lambda_powertools.event_handler.openapi.models import Example
 from aws_lambda_powertools.event_handler.openapi.params import Body
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.metrics import MetricUnit
@@ -15,15 +14,6 @@ from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.create_order import create_order
 from service.models.input import CreateOrderRequest
 from service.models.output import CreateOrderOutput, InternalServerErrorOutput
-
-order_example = Example(
-    summary='Create Order Example',
-    description='Create Order Example',
-    value={
-        'order_item_count': 5,
-        'customer_name': 'John Doe',
-    },
-)
 
 
 @app.post(
@@ -44,7 +34,7 @@ order_example = Example(
     tags=['CRUD'],
 )
 def handle_create_order(
-    create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json', openapi_examples={'first example': order_example})],
+    create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')],
 ) -> CreateOrderOutput:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
