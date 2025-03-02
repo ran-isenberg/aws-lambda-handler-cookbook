@@ -1,0 +1,176 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "AWS Lambda Handler Cookbook - Orders Service",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/prod"
+        }
+    ],
+    "paths": {
+        "/api/orders": {
+            "post": {
+                "tags": [
+                    "CRUD"
+                ],
+                "summary": "Create an order",
+                "description": "Create an order identified by the body payload",
+                "operationId": "handle_create_order_api_orders_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateOrderRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "The created order",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateOrderOutput"
+                                }
+                            }
+                        }
+                    },
+                    "501": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerErrorOutput"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateOrderOutput": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 1,
+                        "title": "Name",
+                        "description": "Customer name"
+                    },
+                    "item_count": {
+                        "type": "integer",
+                        "title": "Item Count",
+                        "description": "Amount of items in order"
+                    },
+                    "id": {
+                        "type": "string",
+                        "maxLength": 36,
+                        "minLength": 36,
+                        "title": "Id",
+                        "description": "Order ID as UUID"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "name",
+                    "item_count",
+                    "id"
+                ],
+                "title": "CreateOrderOutput"
+            },
+            "CreateOrderRequest": {
+                "properties": {
+                    "customer_name": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 1,
+                        "title": "Customer Name",
+                        "description": "Customer name"
+                    },
+                    "order_item_count": {
+                        "type": "integer",
+                        "title": "Order Item Count",
+                        "description": "Amount of items in order"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "customer_name",
+                    "order_item_count"
+                ],
+                "title": "CreateOrderRequest"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "InternalServerErrorOutput": {
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "title": "Error",
+                        "description": "Error description",
+                        "default": "internal server error"
+                    }
+                },
+                "type": "object",
+                "title": "InternalServerErrorOutput"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}
