@@ -1,9 +1,11 @@
 [build-system]
 requires = ["poetry>=2.0.1"]
 build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "aws_lambda_handler_cookbook"
-version = "3.0.0"
+version = "7.0.2"
+pacakge-mode = false
 description = "This repository provides a working, deployable, open source based, AWS Lambda handler and CDK Python code. This handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler"
 authors = ["Ran Isenberg"]
 classifiers=[
