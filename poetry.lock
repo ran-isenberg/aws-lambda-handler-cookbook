@@ -313,14 +313,14 @@ typeguard = ">=2.13.3,<4.3.0"
 
 [[package]]
 name = "cdk-nag"
-version = "2.35.59"
+version = "2.35.60"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 optional = false
 python-versions = "~=3.9"
 groups = ["dev"]
 files = [
-    {file = "cdk_nag-2.35.59-py3-none-any.whl", hash = "sha256:241644cff65a0235f96c79a4d7bac957edd62967a43e1de7d34285e7d95345e1"},
-    {file = "cdk_nag-2.35.59.tar.gz", hash = "sha256:8f18a4ac54d5fbfe4f84bd29ae7173d10b4f25418a2dd5a87d76b601ec00a03a"},
+    {file = "cdk_nag-2.35.60-py3-none-any.whl", hash = "sha256:4c7a0ab359aa5c3fb1180a9f32401d630cc9005ff5a5123cae5b90e3e16175c1"},
+    {file = "cdk_nag-2.35.60.tar.gz", hash = "sha256:13f488703b4147c18371401d19fb6ab17c12d5d42ae5a32bfb8c2249536f401a"},
 ]
 
 [package.dependencies]
