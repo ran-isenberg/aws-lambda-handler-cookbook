@@ -294,14 +294,14 @@ ujson = ["ujson (>=5.7.0)"]
 
 [[package]]
 name = "cdk-monitoring-constructs"
-version = "9.5.0"
+version = "9.6.0"
 description = "cdk-monitoring-constructs"
 optional = false
 python-versions = "~=3.8"
 groups = ["dev"]
 files = [
-    {file = "cdk_monitoring_constructs-9.5.0-py3-none-any.whl", hash = "sha256:3b7572176be0134f79f075b76e6143d701216d6907a34050959ce986d174dc4f"},
-    {file = "cdk_monitoring_constructs-9.5.0.tar.gz", hash = "sha256:5a06759adaf3d806fbb6fcdb475def5560272caf2cce0352975002546f8cba18"},
+    {file = "cdk_monitoring_constructs-9.6.0-py3-none-any.whl", hash = "sha256:3eff28bc3f4d122c7b5c811a2a1a19177bd59440e848b2ee69872722e883067e"},
+    {file = "cdk_monitoring_constructs-9.6.0.tar.gz", hash = "sha256:5628cd8cbe8f0f8840eadca049eaed3095484d295e6a40268036f102d45eb01d"},
 ]
 
 [package.dependencies]
