@@ -1,17 +1,20 @@
-from aws_cdk import Aspects, Stack, Tags
-from cdk_nag import AwsSolutionsChecks, NagSuppressions
+from aws_cdk import (
+    Stack,
+    Tags,
+)
 from constructs import Construct
 
 from cdk.service.api_construct import ApiConstruct
 from cdk.service.configuration.configuration_construct import ConfigurationStore
 from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, OWNER_TAG, SERVICE_NAME, SERVICE_NAME_TAG
+from cdk.service.security.governance_scan import add_security_tests
 from cdk.service.utils import get_construct_name, get_username
 
 
 class ServiceStack(Stack):
     def __init__(self, scope: Construct, id: str, is_production_env: bool, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        self._add_stack_tags()
+        self._add_stack_tags(self.code_sign.config)
 
         # This construct should be deployed in a different repo and have its own pipeline so updates can be decoupled
         # from running the service pipeline and without redeploying the service lambdas. For the sake of this blueprint
@@ -23,6 +26,7 @@ class ServiceStack(Stack):
             SERVICE_NAME,
             CONFIGURATION_NAME,
         )
+
         self.api = ApiConstruct(
             self,
             get_construct_name(stack_prefix=id, construct_name='Crud'),
@@ -31,27 +35,9 @@ class ServiceStack(Stack):
         )
 
         # add security check
-        self._add_security_tests()
+        add_security_tests(stack=self)
 
     def _add_stack_tags(self) -> None:
         # best practice to help identify resources in the console
         Tags.of(self).add(SERVICE_NAME_TAG, SERVICE_NAME)
         Tags.of(self).add(OWNER_TAG, get_username())
-
-    def _add_security_tests(self) -> None:
-        Aspects.of(self).add(AwsSolutionsChecks(verbose=True))
-        # Suppress a specific rule for this resource
-        NagSuppressions.add_stack_suppressions(
-            self,
-            [
-                {'id': 'AwsSolutions-IAM4', 'reason': 'policy for cloudwatch logs.'},
-                {'id': 'AwsSolutions-IAM5', 'reason': 'policy for cloudwatch logs.'},
-                {'id': 'AwsSolutions-APIG2', 'reason': 'lambda does input validation'},
-                {'id': 'AwsSolutions-APIG1', 'reason': 'not mandatory in a sample blueprint'},
-                {'id': 'AwsSolutions-APIG3', 'reason': 'not mandatory in a sample blueprint'},
-                {'id': 'AwsSolutions-APIG6', 'reason': 'not mandatory in a sample blueprint'},
-                {'id': 'AwsSolutions-APIG4', 'reason': 'authorization not mandatory in a sample blueprint'},
-                {'id': 'AwsSolutions-COG4', 'reason': 'not using cognito'},
-                {'id': 'AwsSolutions-L1', 'reason': 'False positive'},
-            ],
-        )

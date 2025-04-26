@@ -9,7 +9,7 @@ from constructs import Construct
 import cdk.service.constants as constants
 from cdk.service.api_db_construct import ApiDbConstruct
 from cdk.service.monitoring import CrudMonitoring
-from cdk.service.waf_construct import WafToApiGatewayConstruct
+from cdk.service.security.waf_construct import WafToApiGatewayConstruct
 
 
 class ApiConstruct(Construct):
