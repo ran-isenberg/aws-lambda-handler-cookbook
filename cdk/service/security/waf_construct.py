@@ -11,7 +11,7 @@ class WafToApiGatewayConstruct(Construct):
         super().__init__(scope, id, **kwargs)
 
         # Create WAF WebACL with AWS Managed Rules
-        web_acl = waf.CfnWebACL(
+        self.web_acl = waf.CfnWebACL(
             self,
             'ProductApiGatewayWebAcl',
             scope='REGIONAL',  # Change to CLOUDFRONT if you're using edge-optimized API
@@ -88,7 +88,7 @@ class WafToApiGatewayConstruct(Construct):
         )
 
         # Associate WAF with API Gateway
-        waf.CfnWebACLAssociation(self, 'ApiGatewayWafAssociation', resource_arn=api.deployment_stage.stage_arn, web_acl_arn=web_acl.attr_arn)
+        # waf.CfnWebACLAssociation(self, 'ApiGatewayWafAssociation', resource_arn=api.deployment_stage.stage_arn, web_acl_arn=web_acl.attr_arn)
 
         # Enable logging for WAF, must start with 'aws-waf-logs-' prefix
         log_group_name = f'aws-waf-logs-{id}'
@@ -120,9 +120,9 @@ class WafToApiGatewayConstruct(Construct):
         enable_waf_logging = waf.CfnLoggingConfiguration(
             self,
             'WafLoggingConfiguration',
-            resource_arn=web_acl.attr_arn,
+            resource_arn=self.web_acl.attr_arn,
             log_destination_configs=[log_group_arn],
         )
 
-        web_acl.node.add_dependency(waf_log_group)
-        enable_waf_logging.node.add_dependency(web_acl)  # Ensure WebACL is created first
+        self.web_acl.node.add_dependency(waf_log_group)
+        enable_waf_logging.node.add_dependency(self.web_acl)  # Ensure WebACL is created first

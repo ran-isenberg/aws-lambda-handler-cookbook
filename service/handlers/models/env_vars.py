@@ -23,3 +23,7 @@ class MyHandlerEnvVars(Observability, DynamicConfiguration, Idempotency):
     REST_API: HttpUrl
     ROLE_ARN: Annotated[str, Field(min_length=20, max_length=2048)]
     TABLE_NAME: Annotated[str, Field(min_length=1)]
+
+
+class MyHandleVars(Observability):
+    TABLE_NAME: Annotated[str, Field(min_length=1)]

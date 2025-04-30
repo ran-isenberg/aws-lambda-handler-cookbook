@@ -25,6 +25,7 @@ class ApiConstruct(Construct):
         self.create_order_func = self._add_post_lambda_integration(
             orders_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
         )
+        self.appsync_lambda = self._add_appsync_lambda_integration(self.lambda_role, self.api_db.db)
         self._build_swagger_endpoints(rest_api=self.rest_api, dest_func=self.create_order_func)
         self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func])
 
@@ -145,4 +146,33 @@ class ApiConstruct(Construct):
 
         # POST /api/orders/
         api_resource.add_method(http_method='POST', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
+        return lambda_function
+
+    def _add_appsync_lambda_integration(
+        self,
+        role: iam.Role,
+        db: dynamodb.TableV2,
+    ) -> _lambda.Function:
+        lambda_function = _lambda.Function(
+            self,
+            'appsync-lambda',
+            runtime=_lambda.Runtime.PYTHON_3_13,
+            code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
+            handler='service.handlers.publish.lambda_handler',
+            environment={
+                constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,  # for logger, tracer and metrics
+                constants.POWER_TOOLS_LOG_LEVEL: 'INFO',  # for logger
+                'TABLE_NAME': db.table_name,
+            },
+            tracing=_lambda.Tracing.ACTIVE,
+            retry_attempts=0,
+            timeout=Duration.seconds(constants.API_HANDLER_LAMBDA_TIMEOUT),
+            memory_size=constants.API_HANDLER_LAMBDA_MEMORY_SIZE,
+            layers=[self.common_layer],
+            role=role,
+            log_retention=RetentionDays.ONE_DAY,
+            logging_format=_lambda.LoggingFormat.JSON,
+            system_log_level_v2=_lambda.SystemLogLevel.WARN,
+        )
+
         return lambda_function
