@@ -170,6 +170,19 @@
                     "type"
                 ],
                 "title": "ValidationError"
+            },
+            "ResponseValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "ResponseValidationError"
             }
         }
     }
