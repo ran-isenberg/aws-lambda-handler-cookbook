@@ -22,7 +22,10 @@ class ApiDbConstruct(Construct):
             billing=dynamodb.Billing.on_demand(),
             removal_policy=RemovalPolicy.DESTROY,
             time_to_live_attribute='expiration',
-            point_in_time_recovery=True,
+            point_in_time_recovery_specification=dynamodb.PointInTimeRecoverySpecification(
+                point_in_time_recovery_enabled=True,
+                recovery_period_in_days=35,
+            ),
         )
         CfnOutput(self, id=constants.IDEMPOTENCY_TABLE_NAME_OUTPUT, value=table.table_name).override_logical_id(
             constants.IDEMPOTENCY_TABLE_NAME_OUTPUT
@@ -37,7 +40,10 @@ class ApiDbConstruct(Construct):
             table_name=table_id,
             partition_key=dynamodb.Attribute(name='id', type=dynamodb.AttributeType.STRING),
             billing=dynamodb.Billing.on_demand(),
-            point_in_time_recovery=True,
+            point_in_time_recovery_specification=dynamodb.PointInTimeRecoverySpecification(
+                point_in_time_recovery_enabled=True,
+                recovery_period_in_days=1,
+            ),
             removal_policy=RemovalPolicy.DESTROY,
         )
         CfnOutput(self, id=constants.TABLE_NAME_OUTPUT, value=table.table_name).override_logical_id(constants.TABLE_NAME_OUTPUT)
