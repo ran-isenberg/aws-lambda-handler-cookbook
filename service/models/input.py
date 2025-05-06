@@ -2,6 +2,8 @@ from typing import Annotated
 
 from pydantic import BaseModel, Field, field_validator
 
+from service.models.order import OrderId
+
 
 class CreateOrderRequest(BaseModel):
     customer_name: Annotated[str, Field(min_length=1, max_length=20, description='Customer name')]
@@ -15,3 +17,7 @@ class CreateOrderRequest(BaseModel):
         if v <= 0:
             raise ValueError('order_item_count must be larger than 0')
         return v
+
+
+class DeleteOrderRequest(BaseModel):
+    order_id: OrderId
