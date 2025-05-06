@@ -2,8 +2,6 @@ from typing import Annotated
 
 from pydantic import BaseModel, Field, field_validator
 
-from service.models.order import OrderId
-
 
 class CreateOrderRequest(BaseModel):
     customer_name: Annotated[str, Field(min_length=1, max_length=20, description='Customer name')]
@@ -20,4 +18,4 @@ class CreateOrderRequest(BaseModel):
 
 
 class DeleteOrderRequest(BaseModel):
-    order_id: OrderId
+    order_id: Annotated[str, Field(min_length=36, max_length=36, description='Order ID as UUID')]

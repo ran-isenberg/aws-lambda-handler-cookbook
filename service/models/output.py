@@ -12,13 +12,10 @@ class CreateOrderOutput(Order):
     pass
 
 
-class InternalServerErrorOutput(BaseModel):
-    error: Annotated[str, Field(description='Error description')] = 'internal server error'
-
-
+# delete order handler returns this output model
 class DeleteOrderOutput(Order):
     pass
 
 
-class OrderNotFoundOutput(BaseModel):
-    error: Annotated[str, Field(description='Error description')] = 'order not found'
+class InternalServerErrorOutput(BaseModel):
+    error: Annotated[str, Field(description='Error description')] = 'internal server error'

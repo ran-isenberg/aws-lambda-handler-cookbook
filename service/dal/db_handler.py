@@ -1,6 +1,6 @@
 from abc import ABC, ABCMeta, abstractmethod
 
-from service.models.order import Order, OrderId
+from service.models.order import Order
 
 
 class _SingletonMeta(ABCMeta):
@@ -18,4 +18,4 @@ class DalHandler(ABC, metaclass=_SingletonMeta):
     def create_order_in_db(self, customer_name: str, order_item_count: int) -> Order: ...  # pragma: no cover
     
     @abstractmethod
-    def delete_order_in_db(self, order_id: OrderId) -> Order: ...  # pragma: no cover
+    def delete_order(self, order_id: str) -> Order | None: ...  # pragma: no cover
