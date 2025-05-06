@@ -12,9 +12,8 @@ class CreateOrderOutput(Order):
     pass
 
 
-# delete order handler returns this output model
 class DeleteOrderOutput(Order):
-    pass
+    """Output payload for delete order operation."""
 
 
 class InternalServerErrorOutput(BaseModel):

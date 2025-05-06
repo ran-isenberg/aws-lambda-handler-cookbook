@@ -6,9 +6,7 @@ from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from service.handlers.models.dynamic_configuration import MyConfiguration
 from service.handlers.models.env_vars import MyHandlerEnvVars
-from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.delete_order import delete_order
@@ -17,9 +15,9 @@ from service.models.output import DeleteOrderOutput, InternalServerErrorOutput
 
 
 @app.delete(
-    ORDERS_PATH + "{order_id}",
+    f"{ORDERS_PATH}{{order_id}}",
     summary='Delete an order',
-    description='Delete an order identified by the order_id path parameter',
+    description='Delete an order identified by the order_id',
     response_description='The deleted order',
     responses={
         200: {
@@ -33,18 +31,17 @@ from service.models.output import DeleteOrderOutput, InternalServerErrorOutput
     },
     tags=['CRUD'],
 )
-def handle_delete_order(order_id: Annotated[str, Path(description="The order ID to delete")]) -> DeleteOrderOutput:
+def handle_delete_order(order_id: Annotated[str, Path()]) -> DeleteOrderOutput:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
     logger.info('got delete order request', order_id=order_id)
 
-    my_configuration = parse_configuration(model=MyConfiguration)
-    logger.debug('fetched dynamic configuration', configuration=my_configuration.model_dump())
+    # Create request model
+    delete_input = DeleteOrderRequest(order_id=order_id)
 
-    delete_request = DeleteOrderRequest(order_id=order_id)
     metrics.add_metric(name='ValidDeleteOrderEvents', unit=MetricUnit.Count, value=1)
     response: DeleteOrderOutput = delete_order(
-        delete_request=delete_request,
+        order_request=delete_input,
         table_name=env_vars.TABLE_NAME,
         context=app.lambda_context,
     )
