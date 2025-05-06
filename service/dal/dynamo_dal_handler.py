@@ -11,8 +11,8 @@ from pydantic import ValidationError
 from service.dal.db_handler import DalHandler
 from service.dal.models.db import OrderEntry
 from service.handlers.utils.observability import logger, tracer
-from service.models.exceptions import InternalServerException
-from service.models.order import Order
+from service.models.exceptions import InternalServerException, OrderNotFoundException
+from service.models.order import Order, OrderId
 
 
 class DynamoDalHandler(DalHandler):
@@ -50,17 +50,29 @@ class DynamoDalHandler(DalHandler):
 
         logger.info('finished create order successfully', order_item_count=order_item_count, customer_name=customer_name)
         return Order(id=entry.id, name=entry.name, item_count=entry.item_count)
-        
+    
     @tracer.capture_method(capture_response=False)
-    def delete_order(self, order_id: str) -> None:
+    def delete_order_in_db(self, order_id: OrderId) -> Order:
         logger.append_keys(order_id=order_id)
         logger.info('trying to delete order')
+        
         try:
             table: Table = self._get_db_handler(self.table_name)
-            table.delete_item(Key={'PK': order_id})
-        except ClientError as exc:  # pragma: no cover
+            response = table.get_item(Key={'id': order_id})
+            
+            if 'Item' not in response:
+                error_msg = f'Order with id {order_id} not found'
+                logger.error(error_msg)
+                raise OrderNotFoundException(error_msg)
+                
+            order_item = response['Item']
+            order = Order(id=order_item['id'], name=order_item['name'], item_count=order_item['item_count'])
+            
+            table.delete_item(Key={'id': order_id})
+        except ClientError as exc:
             error_msg = 'failed to delete order'
-            logger.exception(error_msg, order_id=order_id)
+            logger.exception(error_msg)
             raise InternalServerException(error_msg) from exc
             
-        logger.info('successfully deleted order')
+        logger.info('finished delete order successfully')
+        return order

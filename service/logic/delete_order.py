@@ -6,7 +6,9 @@ from service.dal import get_dal_handler
 from service.dal.db_handler import DalHandler
 from service.handlers.utils.observability import logger, tracer
 from service.logic.utils.idempotency import IDEMPOTENCY_CONFIG, IDEMPOTENCY_LAYER
+from service.models.exceptions import OrderNotFoundException
 from service.models.input import DeleteOrderRequest
+from service.models.order import Order
 from service.models.output import DeleteOrderOutput
 
 
@@ -22,11 +24,11 @@ def delete_order(delete_request: DeleteOrderRequest, table_name: str, context: L
 
     logger.info('starting to handle delete request', order_id=delete_request.order_id)
 
-    dal_handler: DalHandler = get_dal_handler(table_name=table_name)
-    
-    # Delete the order from the database
-    dal_handler.delete_order(order_id=delete_request.order_id)
-    
-    logger.info('successfully deleted order', order_id=delete_request.order_id)
-
-    return DeleteOrderOutput(order_id=delete_request.order_id)
+    dal_handler: DalHandler = get_dal_handler(table_name)
+    try:
+        order: Order = dal_handler.delete_order_in_db(delete_request.order_id)
+        # convert from order object to output, they won't always be the same
+        return DeleteOrderOutput(name=order.name, item_count=order.item_count, id=order.id)
+    except OrderNotFoundException as exc:
+        logger.exception('order not found', order_id=delete_request.order_id)
+        raise exc
