@@ -15,3 +15,7 @@ class CreateOrderRequest(BaseModel):
         if v <= 0:
             raise ValueError('order_item_count must be larger than 0')
         return v
+
+
+class DeleteOrderRequest(BaseModel):
+    order_id: Annotated[str, Field(min_length=36, max_length=36, description='Order ID as UUID')]
