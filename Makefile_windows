@@ -1,14 +1,24 @@
-.PHONY: dev lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format
+.PHONY: dev lint mypy-lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format format-fix compare-openapi openapi pr watch update-deps
+PYTHON := ".venv\Scripts\python.exe"
+# Use CMD shell explicitly for Windows commands
+SHELL := cmd.exe
+.SHELLFLAGS := /D /C
+
+OPENAPI_DIR := .\docs\swagger
+CURRENT_OPENAPI := $(OPENAPI_DIR)\openapi.json
+LATEST_OPENAPI := openapi_latest.json
+
 
 dev:
 	pip install --upgrade pip pre-commit poetry
 	pre-commit install
+	REM ensures poetry creates a local virtualenv (.venv)
 	poetry config --local virtualenvs.in-project true
 	poetry install --no-root
 	npm ci
 
 format:
-	poetry run ruff check .
+	poetry run ruff check . --fix
 
 format-fix:
 	poetry run ruff format .
@@ -19,49 +29,86 @@ lint: format
 
 complex:
 	@echo "Running Radon"
-	poetry run radon cc -e 'tests\*,cdk.out\*,node_modules\*' .
+	poetry run radon cc -e "tests\*,cdk.out\*,node_modules\*" .
 	@echo "Running xenon"
-	poetry run xenon --max-absolute B --max-modules A --max-average A -e 'tests\*,.venv\*,cdk.out\*,node_modules\*' .
+	poetry run xenon --max-absolute B --max-modules A --max-average A -e "tests\*,.venv\*,cdk.out\*,node_modules\*" .
 
 pre-commit:
 	poetry run pre-commit run -a --show-diff-on-failure
+
+mypy-lint:
+	poetry run mypy --pretty service cdk tests
 
 deps:
 	poetry export --only=dev --format=requirements.txt > dev_requirements.txt
 	poetry export --without=dev --format=requirements.txt > lambda_requirements.txt
 
-build: deps
-	if not exist ".build\lambdas\service" mkdir ".build\lambdas\service"
-	rmdir /S /Q .build\lambdas\service
-	echo D | xcopy /f /y service. .build\lambdas\service /s
-	if not exist ".build\common_layer" mkdir ".build\common_layer"
-	poetry export --without=dev --format=requirements.txt > .build\common_layer\requirements.txt
-
-mypy-lint:
-	poetry run mypy --pretty service. docs\examples cdk tests
-
 unit:
-	poetry run pytest tests\unit  --cov-config=.coveragerc --cov=service --cov-report xml
+	poetry run pytest tests\unit --cov-config=.coveragerc --cov=service --cov-report xml
+
+build: deps
+	if not exist ".build\lambdas" mkdir ".build\lambdas"
+	if exist ".build\lambdas\service" rmdir /S /Q ".build\lambdas\service"
+	xcopy /E /I /Y service ".build\lambdas\service"
+	if not exist ".build\common_layer" mkdir ".build\common_layer"
+	poetry export --without=dev --format=requirements.txt > ".build\common_layer\requirements.txt"
+
+infra-tests: build
+	poetry run pytest tests\infrastructure
 
 integration:
-	poetry run pytest tests\integration  --cov-config=.coveragerc --cov=service --cov-report xml
+	poetry run pytest tests\integration --cov-config=.coveragerc --cov=service --cov-report xml
 
 e2e:
-	poetry run pytest tests\e2e  --cov-config=.coveragerc --cov=service --cov-report xml
+	poetry run pytest tests\e2e --cov-config=.coveragerc --cov=service --cov-report xml
 
-pr: deps pre-commit complex lint lint-docs unit integration e2e
+pr: deps format pre-commit complex lint lint-docs unit deploy coverage-tests e2e openapi
 
-pipeline-tests:
-	poetry run pytest tests\unit tests\integration  --cov-config=.coveragerc --cov=service --cov-report xml
+coverage-tests:
+	poetry run pytest tests\unit tests\integration --cov-config=.coveragerc --cov=service --cov-report xml
 
 deploy: build
-	npx cdk deploy --app=".venv\Scripts\python.exe app.py" --require-approval=never
+	npx cdk deploy --app="$(PYTHON) app.py" --require-approval=never
 
 destroy:
-	npx cdk destroy --app=".venv\Scripts\python.exe app.py" --force
+	npx cdk destroy --app="$(PYTHON) app.py" --force
 
 docs:
 	poetry run mkdocs serve
 
 lint-docs:
-	docker run -v \markdown 06kellyjac\markdownlint-cli --fix "docs"
+	@echo "Linting documentation with Docker. Make sure Docker is running."
+	docker run -v "%cd%:/markdown" 06kellyjac/markdownlint-cli --fix "docs"
+
+watch:
+	npx cdk watch
+
+update-deps:
+	@echo "Updating Poetry dependencies..."
+	poetry update
+	@echo "Updating pre-commit hooks..."
+	pre-commit autoupdate
+	@echo "Fetching latest CDK version from npm..."
+	for /f "tokens=*" %%i in ('npm view aws-cdk version') do set LATEST_CDK_VERSION=%%i
+	@echo "Found CDK version: %LATEST_CDK_VERSION%"
+	@echo "Updating package.json with latest CDK version..."
+	node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json')); pkg.dependencies['aws-cdk'] = process.env.LATEST_CDK_VERSION; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 4));"
+	npm i --package-lock-only
+	@echo "Installing npm dependencies..."
+	npm install
+	@echo "All dependencies updated successfully!"
+
+openapi:
+	poetry run python generate_openapi.py
+
+compare-openapi:
+	poetry run python generate_openapi.py --out-destination "." --out-filename "openapi_latest.json"
+	fc /B "$(CURRENT_OPENAPI)" "$(LATEST_OPENAPI)" >nul 2>&1
+	if errorlevel 1 (
+		del "$(LATEST_OPENAPI)"
+		echo "Swagger files are not equal, did you run 'make pr' or 'make openapi'?"
+		exit /b 1
+	) else (
+		del "$(LATEST_OPENAPI)"
+		echo "Swagger file is up to date"
+	)
