@@ -78,9 +78,19 @@ watch:
 	npx cdk watch
 
 update-deps:
+	@echo "Updating Poetry dependencies..."
 	poetry update
+	@echo "Updating pre-commit hooks..."
 	pre-commit autoupdate
+	@echo "Fetching latest CDK version from npm..."
+	$(eval LATEST_CDK_VERSION := $(shell npm view aws-cdk version))
+	@echo "Found CDK version: $(LATEST_CDK_VERSION)"
+	@echo "Updating package.json with latest CDK version..."
+	node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json')); pkg.dependencies['aws-cdk'] = '$(LATEST_CDK_VERSION)'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 4));"
 	npm i --package-lock-only
+	@echo "Installing npm dependencies..."
+	npm install
+	@echo "All dependencies updated successfully!"
 
 openapi:
 	poetry run python generate_openapi.py
