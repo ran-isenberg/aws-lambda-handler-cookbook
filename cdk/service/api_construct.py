@@ -104,6 +104,8 @@ class ApiConstruct(Construct):
             entry=constants.COMMON_LAYER_BUILD_FOLDER,
             compatible_runtimes=[_lambda.Runtime.PYTHON_3_13],
             removal_policy=RemovalPolicy.DESTROY,
+            description='Common layer for the service',
+            compatible_architectures=[_lambda.Architecture.ARM_64],
         )
 
     def _add_post_lambda_integration(
@@ -141,6 +143,7 @@ class ApiConstruct(Construct):
             log_retention=RetentionDays.ONE_DAY,
             logging_format=_lambda.LoggingFormat.JSON,
             system_log_level_v2=_lambda.SystemLogLevel.INFO,
+            architecture=_lambda.Architecture.ARM_64,
         )
 
         # POST /api/orders/
