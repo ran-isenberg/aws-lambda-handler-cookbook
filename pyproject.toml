@@ -26,7 +26,7 @@ email-validator = {version = "*"}
 aws-lambda-powertools =  {extras = ["tracer"],version = "^3.7.0"}
 mypy-boto3-dynamodb = "*"
 cachetools = "*"
-boto3 = "^1.26.125"
+boto3 = "^1.40.1"
 aws-lambda-env-modeler = "*"
 
 [tool.poetry.group.dev.dependencies]
