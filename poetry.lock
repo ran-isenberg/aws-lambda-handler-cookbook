@@ -87,14 +87,14 @@ typeguard = ">=2.13.3,<4.3.0"
 
 [[package]]
 name = "aws-cdk-cloud-assembly-schema"
-version = "48.7.0"
+version = "48.8.0"
 description = "Schema for the protocol between CDK framework and CDK CLI"
 optional = false
 python-versions = "~=3.9"
 groups = ["dev"]
 files = [
-    {file = "aws_cdk_cloud_assembly_schema-48.7.0-py3-none-any.whl", hash = "sha256:620a3851b6acd940454f9bca3186cc9b89041b592d7b6a48d125f2a4a545e1b7"},
-    {file = "aws_cdk_cloud_assembly_schema-48.7.0.tar.gz", hash = "sha256:d29ecc8b172581a1495a12f1e221014b70fdc9a51b6674069e9c1b6f10edf4be"},
+    {file = "aws_cdk_cloud_assembly_schema-48.8.0-py3-none-any.whl", hash = "sha256:9606c5fcecdcf734a25eea136c0b126a5c8af995f9c0a4078cad2173bf2eeeec"},
+    {file = "aws_cdk_cloud_assembly_schema-48.8.0.tar.gz", hash = "sha256:0421b17caa89973712e940abcbccf79c28bee490c81e0f4d79666f6032d7b0c3"},
 ]
 
 [package.dependencies]
@@ -125,18 +125,18 @@ typeguard = ">=2.13.3,<4.3.0"
 
 [[package]]
 name = "aws-lambda-env-modeler"
-version = "2.0.0"
+version = "2.0.1"
 description = "AWS-Lambda-Env-Modeler is a Python library designed to simplify the process of managing and validating environment variables in your AWS Lambda functions."
 optional = false
-python-versions = "<4.0.0,>=3.9.0"
+python-versions = "<4,>=3.9.0"
 groups = ["main"]
 files = [
-    {file = "aws_lambda_env_modeler-2.0.0-py3-none-any.whl", hash = "sha256:b587b2ac1f7c3bfa5ac95537d9a8a5dc58bfeacd472b86136f5235d479613b40"},
-    {file = "aws_lambda_env_modeler-2.0.0.tar.gz", hash = "sha256:46be66434b79753593c5882e99647ba8b87395867b8f4fcfcfb05bdb02bd6ce0"},
+    {file = "aws_lambda_env_modeler-2.0.1-py3-none-any.whl", hash = "sha256:f303a8b4aae18e64e8d14c6c32d7479ea97a02d0761a0fc25bd1a668b5727859"},
+    {file = "aws_lambda_env_modeler-2.0.1.tar.gz", hash = "sha256:71144f40fadad200e04f704813c632ddf2c487c7c7230bdf02ad7b999d47158a"},
 ]
 
 [package.dependencies]
-pydantic = ">=2.0.0,<3.0.0"
+pydantic = ">=2.0.0,<3"
 
 [[package]]
 name = "aws-lambda-powertools"
@@ -221,18 +221,18 @@ extras = ["regex"]
 
 [[package]]
 name = "boto3"
-version = "1.40.24"
+version = "1.40.25"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "boto3-1.40.24-py3-none-any.whl", hash = "sha256:24a19e275d33e918afc22a78c6a1e20c14d02cc00e2f786b05e2a4a32191457e"},
-    {file = "boto3-1.40.24.tar.gz", hash = "sha256:cc147ad13e8edf7ec69cbb4df8fe60f187f8b2c9ab8befa0fd1fbcfa4fc80b1f"},
+    {file = "boto3-1.40.25-py3-none-any.whl", hash = "sha256:d39bc3deb6780d910f00580837b720132055b0604769fd978780865ed3c019ea"},
+    {file = "boto3-1.40.25.tar.gz", hash = "sha256:debfa4b2c67492d53629a52c999d71cddc31041a8b62ca1a8b1fb60fb0712ee1"},
 ]
 
 [package.dependencies]
-botocore = ">=1.40.24,<1.41.0"
+botocore = ">=1.40.25,<1.41.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.13.0,<0.14.0"
 
@@ -241,14 +241,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.40.24"
+version = "1.40.25"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "botocore-1.40.24-py3-none-any.whl", hash = "sha256:d566840f2291bb5df1c0903ad385c61c865927d562d41dcf6468c9cee4cc313a"},
-    {file = "botocore-1.40.24.tar.gz", hash = "sha256:af2b49e52950a12229440d7c297aaad0a7b75fd1c4f8700b164948b207a08cf0"},
+    {file = "botocore-1.40.25-py3-none-any.whl", hash = "sha256:5603ea9955cd31974446f0b5688911a5dad71fbdfbf7457944cda8a83fcf2a9e"},
+    {file = "botocore-1.40.25.tar.gz", hash = "sha256:41fd186018a48dc517a4312a8d3085d548cb3fb1f463972134140bf7ee55a397"},
 ]
 
 [package.dependencies]
@@ -318,14 +318,14 @@ typeguard = ">=2.13.3,<4.3.0"
 
 [[package]]
 name = "cdk-nag"
-version = "2.37.17"
+version = "2.37.18"
 description = "Check CDK v2 applications for best practices using a combination on available rule packs."
 optional = false
 python-versions = "~=3.9"
 groups = ["dev"]
 files = [
-    {file = "cdk_nag-2.37.17-py3-none-any.whl", hash = "sha256:334fb3c26ddff8e806e6c2b6649e79da67eaecad79077c8c708f4c9827adb40e"},
-    {file = "cdk_nag-2.37.17.tar.gz", hash = "sha256:c6acc14c17315f617c47a14a6e3cc24a90e0c23eadcdc4052222c0de71a14222"},
+    {file = "cdk_nag-2.37.18-py3-none-any.whl", hash = "sha256:e68ee7cadfa82d4442424feda4cb37c8d93467dd2129106da12201de182149df"},
+    {file = "cdk_nag-2.37.18.tar.gz", hash = "sha256:3443ad107f6ec197c8e17cf96120ce83329292a9a418cfe811eb5f6440728c73"},
 ]
 
 [package.dependencies]
