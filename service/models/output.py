@@ -12,5 +12,9 @@ class CreateOrderOutput(Order):
     pass
 
 
+class DeleteOrderOutput(Order):
+    """Output payload for delete order operation."""
+
+
 class InternalServerErrorOutput(BaseModel):
     error: Annotated[str, Field(description='Error description')] = 'internal server error'
