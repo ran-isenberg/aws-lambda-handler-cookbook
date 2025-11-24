@@ -117,18 +117,18 @@ typeguard = ">=2.13.3,<4.3.0"
 
 [[package]]
 name = "aws-lambda-env-modeler"
-version = "2.0.1"
+version = "2.1.0"
 description = "AWS-Lambda-Env-Modeler is a Python library designed to simplify the process of managing and validating environment variables in your AWS Lambda functions."
 optional = false
 python-versions = "<4,>=3.9.0"
 groups = ["main"]
 files = [
-    {file = "aws_lambda_env_modeler-2.0.1-py3-none-any.whl", hash = "sha256:f303a8b4aae18e64e8d14c6c32d7479ea97a02d0761a0fc25bd1a668b5727859"},
-    {file = "aws_lambda_env_modeler-2.0.1.tar.gz", hash = "sha256:71144f40fadad200e04f704813c632ddf2c487c7c7230bdf02ad7b999d47158a"},
+    {file = "aws_lambda_env_modeler-2.1.0-py3-none-any.whl", hash = "sha256:2b7897224537de658819977f722ddbcc80e865e90c3a0533ea3c566b1364de7b"},
+    {file = "aws_lambda_env_modeler-2.1.0.tar.gz", hash = "sha256:ddca66d1d8170ccc9de96f7da3cef2d5f6da26621bfbf031338b428b50c622bf"},
 ]
 
 [package.dependencies]
-pydantic = ">=2.0.0,<3"
+pydantic = ">=2.12.0,<3"
 
 [[package]]
 name = "aws-lambda-powertools"
