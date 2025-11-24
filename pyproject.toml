@@ -11,7 +11,7 @@ classifiers=[
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 repository="https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
 readme = "README.md"
@@ -20,10 +20,10 @@ license = "MIT-0"
 
 
 [tool.poetry.dependencies]
-python = "^3.13.0"
-pydantic = {version = "^2.0.3"}
+python = "^3.14.0"
+pydantic = {version = "^2.12.0"}
 email-validator = {version = "*"}
-aws-lambda-powertools =  {extras = ["tracer"],version = "^3.7.0"}
+aws-lambda-powertools =  {extras = ["tracer"],version = "^3.22.1"}
 mypy-boto3-dynamodb = "*"
 cachetools = "*"
 boto3 = "^1.26.125"
@@ -101,8 +101,8 @@ exclude = [
 line-length = 150
 indent-width = 4
 
-# Assume Python 3.13
-target-version = "py313"
+# Assume Python 3.14
+target-version = "py314"
 
 [tool.ruff.lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
