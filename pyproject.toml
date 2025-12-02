@@ -21,7 +21,7 @@ license = "MIT-0"
 
 [tool.poetry.dependencies]
 python = "^3.14.0"
-pydantic = {version = "^2.12.0"}
+pydantic = {version = "^2.12.5"}
 email-validator = {version = "*"}
 aws-lambda-powertools =  {extras = ["tracer"],version = "^3.22.1"}
 mypy-boto3-dynamodb = "*"
