@@ -35,7 +35,7 @@ def _build_lambda_function(self, role: iam.Role, db: dynamodb.Table, appconfig_a
     return _lambda.Function(
         self,
         'ServicePost',
-        runtime=_lambda.Runtime.PYTHON_3_13,
+        runtime=_lambda.Runtime.PYTHON_3_14,
         code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
         handler='service.handlers.create_order.create_order',
         environment={
