@@ -49,19 +49,13 @@ jobs:
         run: make complex
   tests:
     needs: quality_standards
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm64 # Native ARM64 runner for faster builds
     environment: dev
     permissions:
       id-token: write # required for requesting the JWT (GitHub OIDC)
     steps:
       - name: Check out repository code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - name: Set up QEMU for multi-platform builds
-        uses: docker/setup-qemu-action@5927c834f5b4fdf503fca6f4c7eccda82949e1ee # v3.1.0
-        with:
-          platforms: arm64
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@f211e3e9ded2d9377c8cadc4489a4e38014bc4c9 # v3.7.1
       - name: Install poetry
         run: pipx install poetry
       - name: Set up Python
