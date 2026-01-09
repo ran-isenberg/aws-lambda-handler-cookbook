@@ -83,7 +83,7 @@ jobs:
           ENVIRONMENT: staging # Custom environment variable
 
   production:
-    runs-on: ubuntu-24.04-arm64 # Native ARM64 runner for faster builds
+    runs-on: macos-latest # Native ARM64 runner for faster builds
     needs: [staging]
     environment: production
     permissions:
