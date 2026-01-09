@@ -33,6 +33,7 @@ All steps can be run locally using the makefile. See details below:
 - Code coverage tests  - run `make coverage-tests` in the IDE after CDK dep
 - OpenAPI Swagger file - run
 - Update GitHub documentation branch
+- Update dependencies and CDK version automatically to the latest versions: run `make update-deps`.
 
 ### **Other Capabilities**
 

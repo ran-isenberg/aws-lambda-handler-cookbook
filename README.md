@@ -1,8 +1,8 @@
 # AWS Lambda Handler Cookbook (Python)
 
 [![license](https://img.shields.io/github/license/ran-isenberg/aws-lambda-handler-cookbook)](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/master/LICENSE)
-![PythonSupport](https://img.shields.io/static/v1?label=python&message=3.13&color=blue?style=flat-square&logo=python)
-[![codecov](https://codecov.io/gh/ran-isenberg/aws-lambda-handler-cookbook/branch/main/graph/badge.svg?token=P2K7K4KICF)](https://codecov.io/gh/ran-isenberg/aws-lambda-handler-cookbook)
+![PythonSupport](https://img.shields.io/static/v1?label=python&message=3.14&color=blue?style=flat-square&logo=python)
+[![codecov](https://codecov.io/github/ran-isenberg/aws-lambda-handler-cookbook/graph/badge.svg?token=P2K7K4KICF)](https://codecov.io/github/ran-isenberg/aws-lambda-handler-cookbook)
 ![version](https://img.shields.io/github/v/release/ran-isenberg/aws-lambda-handler-cookbook)
 ![github-star-badge](https://img.shields.io/github/stars/ran-isenberg/aws-lambda-handler-cookbook.svg?style=social)
 ![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/ran-isenberg/aws-lambda-handler-cookbook/badge)
@@ -10,7 +10,7 @@
 
 ![alt text](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/banner.png?raw=true)
 
-This project provides a working, open source based, AWS Lambda handler skeleton Python code including DEPLOYMENT code with CDK and a pipeline.
+This project provides a working, open source based, AWS Lambda handler skeleton Python code includingx DEPLOYMENT code with CDK and a pipeline.
 
 This project can serve as a blueprint for new Serverless services - CDK deployment code, pipeline and handler are covered.
 

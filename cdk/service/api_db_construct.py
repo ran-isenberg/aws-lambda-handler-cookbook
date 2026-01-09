@@ -45,6 +45,9 @@ class ApiDbConstruct(Construct):
                 recovery_period_in_days=1,
             ),
             removal_policy=RemovalPolicy.DESTROY,
+            contributor_insights_specification=dynamodb.ContributorInsightsSpecification(
+                enabled=True, mode=dynamodb.ContributorInsightsMode.THROTTLED_KEYS
+            ),
         )
         CfnOutput(self, id=constants.TABLE_NAME_OUTPUT, value=table.table_name).override_logical_id(constants.TABLE_NAME_OUTPUT)
         return table
