@@ -18,7 +18,7 @@ on:
 
 jobs:
   quality_standards:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
       - run: |
           echo "🎉 The job was automatically triggered by a ${{ env.EVENT_NAME }} event." >> $GITHUB_STEP_SUMMARY
@@ -49,7 +49,7 @@ jobs:
         run: make complex
   tests:
     needs: quality_standards
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
     environment: dev
     permissions:
       id-token: write # required for requesting the JWT (GitHub OIDC)
