@@ -29,7 +29,7 @@ class ConfigurationStore(Construct):
         self.config_app = appconfig.Application(
             self,
             id=self.app_name,
-            application_name=self.app_name,
+            application_name=self.app_name[:64],
         )
 
         self.config_env = appconfig.Environment(
