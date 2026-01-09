@@ -2,8 +2,8 @@ from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
+from aws_cdk import aws_logs as logs
 from aws_cdk.aws_lambda_python_alpha import PythonLayerVersion
-from aws_cdk.aws_logs import RetentionDays
 from constructs import Construct
 
 import cdk.service.constants as constants
@@ -105,7 +105,10 @@ class ApiConstruct(Construct):
             compatible_runtimes=[_lambda.Runtime.PYTHON_3_14],
             removal_policy=RemovalPolicy.DESTROY,
             description='Common layer for the service',
-            compatible_architectures=[_lambda.Architecture.X86_64],
+            compatible_architectures=[_lambda.Architecture.ARM_64],
+            bundling={
+                'platform': 'linux/arm64',
+            },
         )
 
     def _add_post_lambda_integration(
@@ -116,6 +119,14 @@ class ApiConstruct(Construct):
         appconfig_app_name: str,
         idempotency_table: dynamodb.TableV2,
     ) -> _lambda.Function:
+        # Create a custom log group with explicit retention settings
+        log_group = logs.LogGroup(
+            self,
+            f'{constants.CREATE_LAMBDA}LogGroup',
+            retention=logs.RetentionDays.ONE_DAY,
+            removal_policy=RemovalPolicy.DESTROY,
+        )
+
         lambda_function = _lambda.Function(
             self,
             constants.CREATE_LAMBDA,
@@ -140,10 +151,10 @@ class ApiConstruct(Construct):
             memory_size=constants.API_HANDLER_LAMBDA_MEMORY_SIZE,
             layers=[self.common_layer],
             role=role,
-            log_retention=RetentionDays.ONE_DAY,
+            log_group=log_group,
             logging_format=_lambda.LoggingFormat.JSON,
             system_log_level_v2=_lambda.SystemLogLevel.INFO,
-            architecture=_lambda.Architecture.X86_64,
+            architecture=_lambda.Architecture.ARM_64,
         )
 
         # POST /api/orders/
