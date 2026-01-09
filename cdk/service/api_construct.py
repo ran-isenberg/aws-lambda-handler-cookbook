@@ -106,6 +106,9 @@ class ApiConstruct(Construct):
             removal_policy=RemovalPolicy.DESTROY,
             description='Common layer for the service',
             compatible_architectures=[_lambda.Architecture.ARM_64],
+            bundling={
+                'platform': 'linux/arm64',
+            },
         )
 
     def _add_post_lambda_integration(
