@@ -1,5 +1,5 @@
 {
-  "app": "poetry run python app.py",
+  "app": "uv run python app.py",
   "watch": {
     "include": [
       "service/**",

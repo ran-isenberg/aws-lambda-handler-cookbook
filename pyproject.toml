@@ -1,66 +1,76 @@
 [build-system]
-requires = ["poetry>=2.0.1"]
-build-backend = "poetry.core.masonry.api"
-[tool.poetry]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
 name = "aws_lambda_handler_cookbook"
 version = "3.0.0"
 description = "This repository provides a working, deployable, open source based, AWS Lambda handler and CDK Python code. This handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler"
-authors = ["Ran Isenberg"]
-classifiers=[
+authors = [{name = "Ran Isenberg"}]
+classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3.14",
 ]
-repository="https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
 readme = "README.md"
 keywords = ["aws lambda cookbook", "guide to aws lambda", "cdk blueprint", "best practices", "serverless service blueprint"]
-license = "MIT-0"
+license = {text = "MIT-0"}
+requires-python = ">=3.14"
+dependencies = [
+    "pydantic>=2.12.0",
+    "email-validator",
+    "aws-lambda-powertools[tracer]>=3.22.1",
+    "mypy-boto3-dynamodb",
+    "cachetools",
+    "boto3>=1.26.125",
+    "aws-lambda-env-modeler",
+]
 
+[project.urls]
+Repository = "https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
 
-[tool.poetry.dependencies]
-python = "^3.14.0"
-pydantic = {version = "^2.12.0"}
-email-validator = {version = "*"}
-aws-lambda-powertools =  {extras = ["tracer"],version = "^3.22.1"}
-mypy-boto3-dynamodb = "*"
-cachetools = "*"
-boto3 = "^1.26.125"
-aws-lambda-env-modeler = "*"
+[dependency-groups]
+dev = [
+    # CDK
+    "service-cdk",
+    "aws-cdk-lib>=2.180.0",
+    "constructs>=10.0.0",
+    "cdk-nag>2.0.0",
+    "aws-cdk-aws-lambda-python-alpha>=2.180.0a0",
+    "cdk-monitoring-constructs",
+    # DEV
+    "pytest",
+    "pytest-mock",
+    "pycodestyle",
+    "pytest-cov",
+    "pytest-html",
+    "python-dateutil",
+    "python-dotenv",
+    "GitPython",
+    "ruff",
+    "radon",
+    "xenon",
+    "pre-commit",
+    "mkdocs-material",
+    "mkdocs-git-revision-date-plugin",
+    "mkdocs-glightbox",
+    "types-cachetools",
+    "mypy",
+    "types-requests",
+    "toml",
+    "mkdocs-render-swagger-plugin",
+]
 
-[tool.poetry.group.dev.dependencies]
-# CDK
-service-cdk = {path = "cdk", develop = true}
-aws-cdk-lib = ">=2.180.0"
-constructs = ">=10.0.0"
-cdk-nag = ">2.0.0"
-"aws-cdk.aws-lambda-python-alpha" = "^2.180.0-alpha.0"
-cdk-monitoring-constructs = "*"
-# DEV
-pytest = "*"
-pytest-mock = "*"
-pycodestyle = "*"
-pytest-cov = "*"
-pytest-html = "*"
-python-dateutil = "*"
-python-dotenv = "*"
-GitPython = "*"
-ruff = "*"
-radon = "*"
-xenon = "*"
-pre-commit = "*"
-mkdocs-material = "*"
-mkdocs-git-revision-date-plugin = "*"
-mkdocs-glightbox = "*"
-types-cachetools = "*"
-mypy = "*"
-types-requests = "*"
-toml = "*"
-mkdocs-render-swagger-plugin = "*"
+[tool.uv.sources]
+service-cdk = { path = "cdk", editable = true }
 
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.9"
+[tool.hatch.build.targets.wheel]
+packages = ["service"]
+
+[tool.hatch.build]
+skip-excluded-dirs = true
 
 [tool.pytest.ini_options]
 testpaths = "tests"
