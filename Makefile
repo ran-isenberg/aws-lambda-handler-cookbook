@@ -36,15 +36,15 @@ mypy-lint:
 	uv run mypy --pretty service cdk tests
 
 deps:
-	uv export --no-dev --no-editable --no-emit-project --format=requirements-txt > lambda_requirements.txt
-	uv export --no-editable --no-emit-project --format=requirements-txt > dev_requirements.txt
+	uv export --no-dev --no-editable --no-emit-project --no-color --format=requirements-txt > lambda_requirements.txt
+	uv export --no-editable --no-emit-project --no-color --format=requirements-txt > dev_requirements.txt
 
 unit:
 	uv run pytest tests/unit  --cov-config=.coveragerc --cov=service --cov-report xml
 
 build: deps
 	mkdir -p .build/lambdas ; cp -r service .build/lambdas
-	mkdir -p .build/common_layer ; uv export --no-dev --no-editable --no-emit-project --format=requirements-txt > .build/common_layer/requirements.txt
+	mkdir -p .build/common_layer ; uv export --no-dev --no-editable --no-emit-project --no-color --format=requirements-txt > .build/common_layer/requirements.txt
 
 infra-tests: build
 	uv run pytest tests/infrastructure
