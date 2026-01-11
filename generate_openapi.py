@@ -23,16 +23,18 @@ def write_swagger(out_destination: str, out_filename: str) -> None:
     file_path = os.path.join(out_destination, out_filename)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     merge = OpenAPIMerge(title='AWS Lambda Handler Cookbook - Orders Service', version='1.0.0', on_conflict='warn')
-    merge.discover(
+    x = merge.discover(
         path='service/handlers',
-        pattern='*/.py',
+        pattern='**/*.py',
         resolver_name='app',
         recursive=True,
         project_root='.',
     )
-    print(merge.get_openapi_json_schema())
-    with open(file_path, 'w') as f:
-        f.write(merge.get_openapi_json_schema())
+    print(f'Discovered {x} resolver file(s) for OpenAPI generation.')
+
+    # print(merge.get_openapi_json_schema())
+    # with open(file_path, 'w') as f:
+    #    f.write(merge.get_openapi_json_schema())
 
 
 if __name__ == '__main__':
