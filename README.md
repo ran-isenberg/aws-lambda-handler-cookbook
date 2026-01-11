@@ -54,11 +54,11 @@ Answer the questions to select repo name, service name, etc.:
 
 ```bash
 cd {new repo folder}
-poetry env activate
+uv sync
 make deploy
 ```
 
-Make sure you have poetry v2 and above.
+Make sure you have [uv](https://docs.astral.sh/uv/) installed.
 
 You can also run 'make pr' will run all checks, synth, file formatters , unit tests, deploy to AWS and run integration and E2E tests.
 

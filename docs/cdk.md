@@ -21,9 +21,9 @@ The AWS Lambda handler uses a Lambda layer optimization which takes all the pack
 
 This allows you to package any custom dependencies you might have.
 
-In order to add a new dev dependency, add it to the Pipfile under the [tool.poetry.dependencies] section and run ``poetry update -vvv``.
+In order to add a new dev dependency, add it to the pyproject.toml under the ``[dependency-groups]`` dev section and run ``uv lock && uv sync``.
 
-In order to add a new Lambda runtime dependency, add it to the Pipfile under the [tool.poetry.dependencies] section and run ``poetry update -vvv``.
+In order to add a new Lambda runtime dependency, add it to the pyproject.toml under the ``[project]`` dependencies section and run ``uv lock && uv sync``.
 
 ### **CDK Constants**
 
