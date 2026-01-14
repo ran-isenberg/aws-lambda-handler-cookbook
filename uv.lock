@@ -118,8 +118,8 @@ dependencies = [
     { name = "boto3" },
     { name = "cachetools" },
     { name = "email-validator" },
-    { name = "mypy-boto3-dynamodb" },
     { name = "pydantic" },
+    { name = "pydynox", extra = ["pydantic"] },
 ]
 
 [package.dev-dependencies]
@@ -159,8 +159,8 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.26.125" },
     { name = "cachetools" },
     { name = "email-validator" },
-    { name = "mypy-boto3-dynamodb" },
     { name = "pydantic", specifier = ">=2.12.0" },
+    { name = "pydynox", extras = ["pydantic"] },
 ]
 
 [package.metadata.requires-dev]
@@ -810,15 +810,6 @@ wheels = [
 ]
 
 [[package]]
-name = "mypy-boto3-dynamodb"
-version = "1.42.3"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/0e/66/deeaa9f84880b7d22c2511d45b51fc84da045db9b13b0986fa874ec92ee0/mypy_boto3_dynamodb-1.42.3.tar.gz", hash = "sha256:6e390b7442eded84279fda6ddb8d8f14d0cfc52c8d16e64dab14e6239acb4a2a", size = 47415, upload-time = "2025-12-04T21:01:17.603Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e0/fd/a8fa19b246fa68c8fe8bfaec811bc7f889d8f61af43ba740b6b43b250a49/mypy_boto3_dynamodb-1.42.3-py3-none-any.whl", hash = "sha256:ed339bb2a61131531a23d55b85e51fd5aed085fff2d6ce1c36f88988b3a9bef4", size = 56737, upload-time = "2025-12-04T21:01:15.778Z" },
-]
-
-[[package]]
 name = "mypy-extensions"
 version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -967,6 +958,23 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5c/96/5fb7d8c3c17bc8c62fdb031c47d77a1af698f1d7a406b0f79aaa1338f9ad/pydantic_core-2.41.5-cp314-cp314t-win32.whl", hash = "sha256:b4ececa40ac28afa90871c2cc2b9ffd2ff0bf749380fbdf57d165fd23da353aa", size = 1988906, upload-time = "2025-11-04T13:41:56.606Z" },
     { url = "https://files.pythonhosted.org/packages/22/ed/182129d83032702912c2e2d8bbe33c036f342cc735737064668585dac28f/pydantic_core-2.41.5-cp314-cp314t-win_amd64.whl", hash = "sha256:80aa89cad80b32a912a65332f64a4450ed00966111b6615ca6816153d3585a8c", size = 1981607, upload-time = "2025-11-04T13:41:58.889Z" },
     { url = "https://files.pythonhosted.org/packages/9f/ed/068e41660b832bb0b1aa5b58011dea2a3fe0ba7861ff38c4d4904c1c1a99/pydantic_core-2.41.5-cp314-cp314t-win_arm64.whl", hash = "sha256:35b44f37a3199f771c3eaa53051bc8a70cd7b54f333531c59e29fd4db5d15008", size = 1974769, upload-time = "2025-11-04T13:42:01.186Z" },
+]
+
+[[package]]
+name = "pydynox"
+version = "0.16.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d0/82/510a2b7c69233b0df3b3f00ca58646100f7f3b6460ba3449e99ac0748a3b/pydynox-0.16.0.tar.gz", hash = "sha256:69f2c67eb2b88c91b4f24b7ee5bebdffe5e3e2341793305015b13b8ca28d4428", size = 383083, upload-time = "2026-01-10T16:39:08.638Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1a/3c/980a6397e38d4cca5beeba6eb8ed485614c7e6d181e8a701f3232706fb38/pydynox-0.16.0-cp314-cp314-macosx_10_12_x86_64.whl", hash = "sha256:d8c27e2586aba17ef7874a63cc7ca0b8e4b8142f27125dbceaae6929e905c72d", size = 7421919, upload-time = "2026-01-10T16:39:00.118Z" },
+    { url = "https://files.pythonhosted.org/packages/10/64/3959e1aa52da37c633da79671006780deb34d9cd374767686b85a86b2be6/pydynox-0.16.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:9eae8a4830790e723dc878456c6b680ee5b273b7deed3a94c250865df23539af", size = 6951597, upload-time = "2026-01-10T16:39:02.933Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/07/5063f7b99261e7a75adc78f47239d8d0c890db90665adbc3cedc87050e10/pydynox-0.16.0-cp314-cp314-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:295de573bc3f08f43cda2c933720f51865bf30acd30509ebed454ff28c40a73e", size = 7650870, upload-time = "2026-01-10T16:39:04.767Z" },
+    { url = "https://files.pythonhosted.org/packages/67/c6/5c67571d120d094bbc7685dc94c39f99fd1feb9e53472bd0c430e87ee776/pydynox-0.16.0-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6f19a8c49536662a1202d7f2eada3e508463105e4704794f304489afd09d6caa", size = 7685331, upload-time = "2026-01-10T16:39:07.112Z" },
+]
+
+[package.optional-dependencies]
+pydantic = [
+    { name = "pydantic" },
 ]
 
 [[package]]

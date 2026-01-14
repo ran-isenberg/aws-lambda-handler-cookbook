@@ -3,9 +3,7 @@ from datetime import datetime, timezone
 from http import HTTPStatus
 from typing import Any
 
-import boto3
 from aws_lambda_powertools.utilities.feature_flags.exceptions import SchemaValidationError
-from botocore.stub import Stubber
 
 from service.dal.dynamo_dal_handler import DynamoDalHandler
 from service.models.input import CreateOrderRequest
@@ -65,32 +63,33 @@ def test_handler_200_ok(mocker, table_name: str):
     assert body_dict['name'] == customer_name
     assert body_dict['item_count'] == 5
 
-    dynamodb_table = boto3.resource('dynamodb').Table(table_name)
-    response = dynamodb_table.get_item(Key={'id': body_dict['id']})
-    assert 'Item' in response
-    assert response['Item']['name'] == customer_name
-    assert response['Item']['item_count'] == order_item_count
+    # Use pydynox to verify the item was saved correctly
+    db_handler = DynamoDalHandler(table_name)
+    OrderEntryModel = db_handler._get_order_model()
+    saved_order = OrderEntryModel.get(id=body_dict['id'])
+    assert saved_order is not None
+    assert saved_order.name == customer_name
+    assert saved_order.item_count == order_item_count
     now = int(datetime.now(timezone.utc).timestamp())
-    assert now - int(response['Item']['created_at']) <= 60  # assume item was created in last minute, check that utc time calc is correct
+    assert now - saved_order.created_at <= 60  # assume item was created in last minute, check that utc time calc is correct
 
 
 def test_internal_server_error(mocker, table_name: str):
     # Given: Dynamic configuration and a simulated error during DB interaction
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
-    db_handler: DynamoDalHandler = DynamoDalHandler(table_name)
-    table = db_handler._get_db_handler(table_name)
 
-    with Stubber(table.meta.client) as stubber:
-        stubber.add_client_error(method='put_item', service_error_code='ValidationException')
-        body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
+    # Mock pydynox save to raise an exception
+    mocker.patch.object(DynamoDalHandler, '_get_order_model', side_effect=Exception('DynamoDB error'))
 
-        # When: The order creation lambda_handler is called
-        response = call_create_order(generate_api_gw_event(body.model_dump()))
+    body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
 
-        # Then: Ensure the response reflects an internal server error
-        assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
-        body_dict = json.loads(response['body'])
-        assert body_dict == {'error': 'internal server error'}
+    # When: The order creation lambda_handler is called
+    response = call_create_order(generate_api_gw_event(body.model_dump()))
+
+    # Then: Ensure the response reflects an internal server error
+    assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
+    body_dict = json.loads(response['body'])
+    assert body_dict == {'error': 'internal server error'}
 
 
 def test_handler_bad_request(mocker):
