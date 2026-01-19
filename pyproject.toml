@@ -22,7 +22,7 @@ dependencies = [
     "pydantic>=2.12.0",
     "email-validator",
     "aws-lambda-powertools[tracer]>=3.22.1",
-    "mypy-boto3-dynamodb",
+    "pydynox[pydantic]",
     "cachetools",
     "boto3>=1.26.125",
     "aws-lambda-env-modeler",

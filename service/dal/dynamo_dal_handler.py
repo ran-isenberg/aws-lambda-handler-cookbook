@@ -1,12 +1,9 @@
 import uuid
 from datetime import datetime, timezone
+from typing import Any
 
-import boto3
-from botocore.exceptions import ClientError
-from cachetools import TTLCache, cached
-from mypy_boto3_dynamodb import DynamoDBServiceResource
-from mypy_boto3_dynamodb.service_resource import Table
 from pydantic import ValidationError
+from pydynox import DynamoDBClient, dynamodb_model
 
 from service.dal.db_handler import DalHandler
 from service.dal.models.db import OrderEntry
@@ -18,13 +15,23 @@ from service.models.order import Order
 class DynamoDalHandler(DalHandler):
     def __init__(self, table_name: str):
         self.table_name = table_name
+        self._client = DynamoDBClient()
+        self._order_model: Any = None
 
-    # cache dynamodb connection data for no longer than 5 minutes
-    @cached(cache=TTLCache(maxsize=1, ttl=300))
-    def _get_db_handler(self, table_name: str) -> Table:
-        logger.info('opening connection to dynamodb table', table_name=table_name)
-        dynamodb: DynamoDBServiceResource = boto3.resource('dynamodb')
-        return dynamodb.Table(table_name)
+    def _get_order_model(self) -> Any:
+        """Get or create the pydynox-decorated OrderEntry model.
+
+        Returns:
+            A pydynox-decorated Pydantic model class bound to the table.
+        """
+        if self._order_model is None:
+
+            @dynamodb_model(table=self.table_name, hash_key='id', client=self._client)
+            class DynamoOrderEntry(OrderEntry):
+                pass
+
+            self._order_model = DynamoOrderEntry
+        return self._order_model
 
     def _get_unix_time(self) -> int:
         return int(datetime.now(timezone.utc).timestamp())
@@ -35,15 +42,14 @@ class DynamoDalHandler(DalHandler):
         logger.append_keys(order_id=order_id)
         logger.info('trying to save order', customer_name=customer_name, order_item_count=order_item_count)
         try:
-            entry = OrderEntry(
+            entry = self._get_order_model()(
                 id=order_id,
                 name=customer_name,
                 item_count=order_item_count,
                 created_at=self._get_unix_time(),
             )
-            table: Table = self._get_db_handler(self.table_name)
-            table.put_item(Item=entry.model_dump())
-        except (ClientError, ValidationError) as exc:  # pragma: no cover
+            entry.save()
+        except (ValidationError, Exception) as exc:  # pragma: no cover
             error_msg = 'failed to create order'
             logger.exception(error_msg, customer_name=customer_name)
             raise InternalServerException(error_msg) from exc
