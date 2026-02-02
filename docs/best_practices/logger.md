@@ -20,7 +20,7 @@ It’s a wrapper of Python’s logging library that provides extra capabilities 
 
 ## **Blog Reference**
 
-Read more about the importance of the logger and how to use AWS CloudWatch logs in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}
+Read more about the importance of the logger and how to use AWS CloudWatch logs in [my blog post on logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging){:target="_blank" rel="noopener"}.
 
 ## **More Details**
 
