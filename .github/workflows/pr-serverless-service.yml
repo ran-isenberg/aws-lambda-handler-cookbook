@@ -31,7 +31,7 @@ jobs:
           BRANCH_NAME: ${{ github.ref }}
           REPO_NAME: ${{ github.repository }}
       - name: Check out repository code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install uv
         uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v6.0.0
         with:
@@ -54,7 +54,7 @@ jobs:
       id-token: write # required for requesting the JWT (GitHub OIDC)
     steps:
       - name: Check out repository code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install uv
         uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v6.0.0
         with:
