@@ -24,7 +24,7 @@ The [AWS Lambda environment variables modeler](https://github.com/ran-isenberg/a
 
 ## **Blog Reference**
 
-Read more about the importance of validating environment variables and how this utility works. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}
+Read more about the importance of validating environment variables and how this utility works in [my blog post on environment variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}.
 
 ## **Schema Definition**
 
@@ -47,7 +47,7 @@ This schema makes sure that:
 * ‘REST_API’ is a valid HTTP URL.
 * ‘POWERTOOLS_SERVICE_NAME’ is a non-empty string.
 
-Read [here](https://pydantic-docs.helpmanual.io/usage/models/){:target="_blank" rel="noopener"} about Pydantic Model capabilities.
+Read about [Pydantic Model capabilities](https://pydantic-docs.helpmanual.io/usage/models/){:target="_blank" rel="noopener"}.
 
 ## **Decorator Usage**
 
@@ -73,6 +73,6 @@ It can be used *anywhere* in the function code, not just the handler.
 
 ## **More Details**
 
-Read [here](https://pydantic-docs.helpmanual.io/usage/types/){:target="_blank" rel="noopener"} about Pydantic field types.
+Read about [Pydantic field types](https://pydantic-docs.helpmanual.io/usage/types/){:target="_blank" rel="noopener"}.
 
-Read [here](https://pydantic-docs.helpmanual.io/usage/validators/){:target="_blank" rel="noopener"} about custom validators and advanced value constraints.
+Read about [Pydantic custom validators and advanced value constraints](https://pydantic-docs.helpmanual.io/usage/validators/){:target="_blank" rel="noopener"}.

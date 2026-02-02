@@ -20,7 +20,7 @@ Tracer is a thin wrapper for [AWS X-Ray Python SDK](https://github.com/aws/aws-x
 
 ## **Blog Reference**
 
-Read more about the importance of observability and traces in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}
+Read more about the importance of observability and traces in [my blog post on observability](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability){:target="_blank" rel="noopener"}.
 
 ## **More Details**
 

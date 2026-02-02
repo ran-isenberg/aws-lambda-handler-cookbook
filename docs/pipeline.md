@@ -11,7 +11,7 @@ The pipelines uses environment secrets (under the defined environment 'dev', 'st
 
 When you clone this repository be sure to define the environments in your [repo settings](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) and create a secret per environment:
 
-- AWS_ROLE - to role to assume for your GitHub worker as defined [here](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
+- AWS_ROLE_ARN - the role ARN to assume for your GitHub worker as defined in the [GitHub OIDC documentation for AWS](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
 
 ### **Makefile Commands**
 

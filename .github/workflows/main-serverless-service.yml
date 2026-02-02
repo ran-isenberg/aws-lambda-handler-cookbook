@@ -36,7 +36,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Install uv
-        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6.0.0
+        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v6.0.0
         with:
           enable-cache: true
       - name: Set up Python
@@ -52,9 +52,9 @@ jobs:
       #       once that's discussed we can move unit and infra tests as part of the fast quality standards
       #       see https://github.com/ran-isenberg/serverless-python-demo/pull/38#discussion_r1299372169
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@00943011d9042930efac3dcd3a170e4273319bc8 # v5.1.0
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
         with:
-          role-to-assume: ${{ secrets['AWS_ROLE'] }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: ${{ env.SESSION_NAME }}
           aws-region: ${{ env.AWS_REGION }}
         env:
@@ -101,7 +101,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Install uv
-        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6.0.0
+        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v6.0.0
         with:
           enable-cache: true
       - name: Set up Python
@@ -117,9 +117,9 @@ jobs:
       #       once that's discussed we can move unit and infra tests as part of the fast quality standards
       #       see https://github.com/ran-isenberg/serverless-python-demo/pull/38#discussion_r1299372169
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@00943011d9042930efac3dcd3a170e4273319bc8 # v5.1.0
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
         with:
-          role-to-assume: ${{ secrets['AWS_ROLE'] }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: ${{ env.SESSION_NAME }}
           aws-region: ${{ env.AWS_REGION }}
         env:
@@ -139,7 +139,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Install uv
-        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6.0.0
+        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v6.0.0
         with:
           enable-cache: true
       - name: Set up Python

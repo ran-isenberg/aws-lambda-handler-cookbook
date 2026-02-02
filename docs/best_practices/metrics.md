@@ -26,7 +26,7 @@ These metrics can be visualized through [Amazon CloudWatch Console](https://cons
 
 ## **Blog Reference**
 
-Read more about the importance of the business KPis and metrics in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}
+Read more about the importance of the business KPIs and metrics in [my blog post on business domain observability](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}.
 
 ## **More Details**
 

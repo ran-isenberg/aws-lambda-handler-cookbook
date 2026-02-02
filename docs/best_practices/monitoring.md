@@ -86,7 +86,7 @@ From there, you can connect any subscription - HTTPS/SMS/Email, etc. to notify y
 
 We use the open-source [cdk-monitoring-constructs](https://github.com/cdklabs/cdk-monitoring-constructs){:target="_blank" rel="noopener"}.
 
-You can view find the monitoring CDK construct [here](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/cdk/service/monitoring.py).
+You can find the [monitoring CDK construct on GitHub](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/cdk/service/monitoring.py).
 
 ## **Further Reading**
 
