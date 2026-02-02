@@ -13,7 +13,7 @@ This utility is based on the [Feature Flags utility of AWS Lambda Powertools](ht
 
 ## **Blog Reference**
 
-Read more about the differences between static and dynamic configurations, when to use each type how this utility works. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}
+Read more about the differences between static and dynamic configurations, when to use each type how this utility works in [my blog post on feature flags and configuration best practices](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}.
 
 ## **Key features**
 
@@ -53,7 +53,7 @@ The construct **validates** the JSON file and verifies that feature flags syntax
 
 Make sure to deploy this construct in a separate pipeline from the AWS Lambda function (unlike in this example), otherwise it wont be a dynamic configuration.
 
-Read more about AWS AppConfig [here.](https://docs.aws.amazon.com/appconfig/latest/userguide/what-is-appconfig.html){:target="_blank" rel="noopener"}
+Read more in the [AWS AppConfig documentation](https://docs.aws.amazon.com/appconfig/latest/userguide/what-is-appconfig.html){:target="_blank" rel="noopener"}.
 
 ### Configuration Stack Example
 
@@ -127,7 +127,7 @@ The function fetch the JSON file from AWS AppConfig and return a parsed instance
 --8<-- "docs/examples/best_practices/dynamic_configuration/parse_configuration.py"
 ```
 
-If you want to learn more about how ``parse_configuration`` function works, click [here](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}.
+If you want to learn more about how ``parse_configuration`` function works, read [my blog post on feature flags and configuration](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices){:target="_blank" rel="noopener"}.
 
 ## **Feature Flags**
 
@@ -147,7 +147,7 @@ A smart feature flag will need to evaluate the customer name and decide whether 
 
 Smart feature flags are defined by rules, conditions, and actions determining the final value.
 
-Read more about them [here](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#schema){:target="_blank" rel="noopener"}
+Read more about them in the [Powertools feature flags schema documentation](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#schema){:target="_blank" rel="noopener"}.
 
 ### **Regular Feature Flags**
 
@@ -224,7 +224,7 @@ Line 30 will return a value of ``True`` for the context ``{'customer_name': 'Ran
 
 There are several actions for conditions such as ``STARTSWITH``, ``ENDSWITH``, ``EQUALS``, etc.
 
-You can read more about the rules, conditions, logic, and supported actions [here.](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#rules){:target="_blank" rel="noopener"}
+You can read more about the rules, conditions, logic, and supported actions in the [Powertools feature flags rules documentation](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#rules){:target="_blank" rel="noopener"}.
 
 ## **How To Locally Test Your Lambda In IDE**
 
@@ -242,10 +242,10 @@ However, I'd do that in the E2E tests.
 --8<-- "docs/examples/best_practices/dynamic_configuration/mock.py"
 ```
 
-Click [here](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#testing-your-code) for more details.
+See the [Powertools testing your code documentation](https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#testing-your-code) for more details.
 
 ## **Extra Documentation**
 
-Read [here](https://pydantic-docs.helpmanual.io/usage/types/){:target="_blank" rel="noopener"} about Pydantic field types.
+Read about [Pydantic field types](https://pydantic-docs.helpmanual.io/usage/types/){:target="_blank" rel="noopener"}.
 
-Read [here](https://pydantic-docs.helpmanual.io/usage/validators/){:target="_blank" rel="noopener"} about custom validators and advanced value constraints.
+Read about [Pydantic custom validators and advanced value constraints](https://pydantic-docs.helpmanual.io/usage/validators/){:target="_blank" rel="noopener"}.

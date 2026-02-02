@@ -75,8 +75,7 @@ docs:
 	uv run mkdocs serve
 
 lint-docs:
-	@echo "Linting documentation with Docker. Make sure Docker is running."
-	docker run -v "%cd%:/markdown" 06kellyjac/markdownlint-cli --fix "docs"
+	npx markdownlint-cli --fix "docs"
 
 watch:
 	npx cdk watch

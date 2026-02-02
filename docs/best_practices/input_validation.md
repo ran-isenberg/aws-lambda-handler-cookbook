@@ -32,7 +32,7 @@ Each AWS service has its envelope structure and may encapsulate the business log
 
 ## **Supported AWS Services**
 
-For a complete list click [**here**](https://docs.powertools.aws.dev/lambda-python/latest/utilities/parser/#built-in-envelopes).
+For a complete list see the [Powertools built-in envelopes documentation](https://docs.powertools.aws.dev/lambda-python/latest/utilities/parser/#built-in-envelopes).
 
 ## **Define Business Logic Schema**
 
@@ -55,7 +55,7 @@ The schema defines:
 1. 'customer_name' - customer name, a non-empty string with up to 20 characters.
 2. 'order_item_count' - a positive integer representing the number of ordered items that 'customer_name' placed.
 
-Learn about models [**here**](https://pydantic-docs.helpmanual.io/usage/models/) and about advanced parsing [**here**](https://pydantic-docs.helpmanual.io/usage/validators/).
+Learn about [Pydantic models](https://pydantic-docs.helpmanual.io/usage/models/) and about [advanced parsing with validators](https://pydantic-docs.helpmanual.io/usage/validators/).
 
 ## **Usage in Handler**
 
@@ -71,11 +71,11 @@ Use the envelope class that matches the AWS service that triggers your AWS Lambd
 
 You can access the metadata parameters by extending the model class and parsing the input without the envelope class.
 
-Read more about it [**here**](https://docs.powertools.aws.dev/lambda-python/latest/utilities/parser/#extending-built-in-models).
+Read more about [extending built-in models](https://docs.powertools.aws.dev/lambda-python/latest/utilities/parser/#extending-built-in-models).
 
 ## **Blog Reference**
 
-Read more about the importance of input validation and the potential pitfalls it prevents in my blog. Click [**HERE**](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation){:target="_blank" rel="noopener"}.
+Read more about the importance of input validation and the potential pitfalls it prevents in [my blog post on input validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation){:target="_blank" rel="noopener"}.
 
 ## **More Details**
 
