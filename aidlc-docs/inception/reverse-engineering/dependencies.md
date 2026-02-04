@@ -97,7 +97,7 @@
 - **License**: MIT
 
 ### pydynox
-- **Version**: 0.16.0
+- **Version**: 0.24.0 or higher
 - **Purpose**: DynamoDB ORM with Pydantic
 - **Usage Locations**:
   - `service/dal/models/db.py` - OrderEntry table definition
@@ -162,7 +162,7 @@ aws-lambda-handler-cookbook
 │   ├── pydantic >= 2.12.0
 │   │   └── email-validator
 │   ├── aws-lambda-powertools[tracer] >= 3.22.1
-│   ├── pydynox[pydantic] == 0.16.0
+│   ├── pydynox[pydantic] == 0.24.0
 │   ├── cachetools
 │   ├── boto3 >= 1.26.125
 │   └── aws-lambda-env-modeler
