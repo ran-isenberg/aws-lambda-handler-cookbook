@@ -66,7 +66,7 @@ def test_handler_200_ok(mocker, table_name: str):
     # Use pydynox to verify the item was saved correctly
     db_handler = DynamoDalHandler(table_name)
     OrderEntryModel = db_handler._get_order_model()
-    saved_order = OrderEntryModel.get(id=body_dict['id'])
+    saved_order = OrderEntryModel.sync_get(id=body_dict['id'])
     assert saved_order is not None
     assert saved_order.name == customer_name
     assert saved_order.item_count == order_item_count
