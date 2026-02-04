@@ -190,7 +190,7 @@ aws-lambda-handler-cookbook/
 - **Purpose**: Type-safe data validation and serialization
 
 ### pydynox
-- **Version**: 0.16.0
+- **Version**: 0.24.0 or higher
 - **Usage**: DynamoDB ORM in `service/dal/models/db.py`
 - **Purpose**: Pydantic-based DynamoDB table definitions
 

@@ -13,7 +13,7 @@
 | ------------------------- | -------- | ------------------------------------------- |
 | **AWS Lambda Powertools** | ≥3.22.1  | Observability, feature flags, idempotency   |
 | **Pydantic**              | ≥2.12.0  | Data validation, serialization, type safety |
-| **pydynox**               | 0.16.0   | DynamoDB ORM with Pydantic integration      |
+| **pydynox**               | 0.24.0   | DynamoDB ORM with Pydantic integration      |
 | **AWS CDK**               | ≥2.180.0 | Infrastructure as Code                      |
 
 ## Infrastructure (AWS Services)
@@ -81,7 +81,7 @@
 pydantic>=2.12.0
 email-validator
 aws-lambda-powertools[tracer]>=3.22.1
-pydynox[pydantic]==0.16.0
+pydynox[pydantic]>=0.22.0
 cachetools
 boto3>=1.26.125
 aws-lambda-env-modeler

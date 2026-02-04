@@ -26,7 +26,7 @@ class DynamoDalHandler(DalHandler):
         """
         if self._order_model is None:
 
-            @dynamodb_model(table=self.table_name, hash_key='id', client=self._client)
+            @dynamodb_model(table=self.table_name, partition_key='id', client=self._client)
             class DynamoOrderEntry(OrderEntry):
                 pass
 
@@ -48,7 +48,7 @@ class DynamoDalHandler(DalHandler):
                 item_count=order_item_count,
                 created_at=self._get_unix_time(),
             )
-            entry.save()
+            entry.sync_save()
         except (ValidationError, Exception) as exc:  # pragma: no cover
             error_msg = 'failed to create order'
             logger.exception(error_msg, customer_name=customer_name)
