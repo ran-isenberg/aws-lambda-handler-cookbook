@@ -63,6 +63,19 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 The GitHub blueprint project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
+## **AI-Assisted Development**
+
+This project uses [AI-DLC (AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows){:target="_blank" rel="noopener"} for AI-assisted software development. Learn more about AI-DLC in this [blog post](https://www.ranthebuilder.cloud/post/ai-driven-sdlc){:target="_blank" rel="noopener"}.
+
+AI-DLC provides a structured, adaptive workflow for:
+
+- **Requirements Analysis** - Intelligent requirements gathering and clarification
+- **Architecture Design** - AI-assisted architectural decisions
+- **Code Generation** - Structured code implementation with best practices
+- **Testing** - Comprehensive test generation and validation
+
+The AI-DLC workflow artifacts are stored in the `aidlc-docs/` directory.
+
 ## **Serverless Best Practices**
 
 The AWS Lambda handler will implement multiple best practice utilities.

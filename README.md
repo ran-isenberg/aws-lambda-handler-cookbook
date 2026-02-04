@@ -158,9 +158,23 @@ Read our code of conduct [here.](https://github.com/ran-isenberg/aws-lambda-hand
 - X:       [@RanBuilder](https://twitter.com/RanBuilder)
 - LinkedIn: https://www.linkedin.com/in/ranbuilder/
 
+## AI-Assisted Development
+
+This project uses [AI-DLC (AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows) for AI-assisted software development. Learn more about AI-DLC in this [blog post](https://www.ranthebuilder.cloud/post/ai-driven-sdlc).
+
+AI-DLC provides a structured, adaptive workflow for:
+
+* **Requirements Analysis** - Intelligent requirements gathering and clarification
+* **Architecture Design** - AI-assisted architectural decisions
+* **Code Generation** - Structured code implementation with best practices
+* **Testing** - Comprehensive test generation and validation
+
+The AI-DLC workflow artifacts are stored in the `aidlc-docs/` directory.
+
 ## Credits
 
 * [AWS Lambda Powertools (Python)](https://github.com/aws-powertools/powertools-lambda-python)
+* [AI-DLC Workflows](https://github.com/awslabs/aidlc-workflows)
 
 ## License
 
