@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 2
 requires-python = ">=3.14"
 
 [[package]]
@@ -160,7 +160,7 @@ requires-dist = [
     { name = "cachetools" },
     { name = "email-validator" },
     { name = "pydantic", specifier = ">=2.12.0" },
-    { name = "pydynox", extras = ["pydantic"], specifier = "==0.16.0" },
+    { name = "pydynox", extras = ["pydantic"], specifier = ">=0.22.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -962,14 +962,14 @@ wheels = [
 
 [[package]]
 name = "pydynox"
-version = "0.16.0"
+version = "0.24.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d0/82/510a2b7c69233b0df3b3f00ca58646100f7f3b6460ba3449e99ac0748a3b/pydynox-0.16.0.tar.gz", hash = "sha256:69f2c67eb2b88c91b4f24b7ee5bebdffe5e3e2341793305015b13b8ca28d4428", size = 383083, upload-time = "2026-01-10T16:39:08.638Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/22/54/4cdfd430f3545e3a2d64d4f127f2a527b063f10fd8aeaa7124515970d26b/pydynox-0.24.0.tar.gz", hash = "sha256:e35b94527b4d3717795167e8f25590325840a28e1cea0a8125841c8479421d24", size = 515810, upload-time = "2026-01-31T15:33:27.945Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1a/3c/980a6397e38d4cca5beeba6eb8ed485614c7e6d181e8a701f3232706fb38/pydynox-0.16.0-cp314-cp314-macosx_10_12_x86_64.whl", hash = "sha256:d8c27e2586aba17ef7874a63cc7ca0b8e4b8142f27125dbceaae6929e905c72d", size = 7421919, upload-time = "2026-01-10T16:39:00.118Z" },
-    { url = "https://files.pythonhosted.org/packages/10/64/3959e1aa52da37c633da79671006780deb34d9cd374767686b85a86b2be6/pydynox-0.16.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:9eae8a4830790e723dc878456c6b680ee5b273b7deed3a94c250865df23539af", size = 6951597, upload-time = "2026-01-10T16:39:02.933Z" },
-    { url = "https://files.pythonhosted.org/packages/e6/07/5063f7b99261e7a75adc78f47239d8d0c890db90665adbc3cedc87050e10/pydynox-0.16.0-cp314-cp314-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:295de573bc3f08f43cda2c933720f51865bf30acd30509ebed454ff28c40a73e", size = 7650870, upload-time = "2026-01-10T16:39:04.767Z" },
-    { url = "https://files.pythonhosted.org/packages/67/c6/5c67571d120d094bbc7685dc94c39f99fd1feb9e53472bd0c430e87ee776/pydynox-0.16.0-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6f19a8c49536662a1202d7f2eada3e508463105e4704794f304489afd09d6caa", size = 7685331, upload-time = "2026-01-10T16:39:07.112Z" },
+    { url = "https://files.pythonhosted.org/packages/ba/ea/75e415cf9e5bce6b9baa3c8d5e3daefc481d10cc893ee52f078c4ee966aa/pydynox-0.24.0-cp314-cp314-macosx_10_12_x86_64.whl", hash = "sha256:54a177aa344eb8e722057742e83486cd1a6ddc24ac2299150bd0b503aaadc9c3", size = 8013643, upload-time = "2026-01-31T15:33:18.625Z" },
+    { url = "https://files.pythonhosted.org/packages/9b/22/45b1f89393c4803dfbdf4c503388cebdef0b986b9a691cf2ef28b34e1ed8/pydynox-0.24.0-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:2b11e173cf92f23563893ccfb18d15c1b661894c765d48a64509efb8134c540f", size = 6972217, upload-time = "2026-01-31T15:33:20.938Z" },
+    { url = "https://files.pythonhosted.org/packages/c4/1e/f972e095e2146ea2d45099e84e9b41b381f3b70c0f4c74381dfc720bfe4b/pydynox-0.24.0-cp314-cp314-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:44340c0d454037bc516807fc05bb37f75f54bde6f9627cb6763abae1fcc3b23c", size = 7845337, upload-time = "2026-01-31T15:33:23.373Z" },
+    { url = "https://files.pythonhosted.org/packages/da/60/f45aa3e749d500485ca572cbba37161beda23ff82c8bf043b35aaf203d47/pydynox-0.24.0-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f2b9ffa0ddcc8e6d8b3f70f78a4649995bdda4fd90e0dda24f5c8882dba351ed", size = 8272157, upload-time = "2026-01-31T15:33:25.839Z" },
 ]
 
 [package.optional-dependencies]
