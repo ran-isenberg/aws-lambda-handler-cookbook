@@ -2,31 +2,46 @@
 title: Getting Started
 description: AWS Lambda Cookbook Project Getting started
 ---
+
 ## **Prerequisites**
+
+!!! warning "Required Tools"
+    Make sure you have all prerequisites installed before proceeding.
 
 * **Docker** - install [Docker](https://www.docker.com/){target="_blank"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack. Run CDK [Bootstrap](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html) on your AWS account and region.
 * Python 3.14
 * [uv](https://docs.astral.sh/uv/){target="_blank"} - A fast Python package installer and resolver. Install with ``curl -LsSf https://astral.sh/uv/install.sh | sh`` or ``pip install uv``.
-* For Windows based machines, use the Makefile_windows version (rename to Makefile). Default Makefile is for Mac/Linux.
+
+!!! tip "Windows Users"
+    For Windows based machines, use the `Makefile_windows` version (rename to `Makefile`). Default Makefile is for Mac/Linux.
 
 ## Getting Started
 
 You can start with a clean service out of this blueprint repository without using the 'Template' button on GitHub.
 
-You can use Cookiecutter.
+!!! success "Recommended: Use Cookiecutter"
+    The fastest way to get started is using Cookiecutter to generate a customized project.
 
 * Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter`
 
 Then run:
 
-**[`cookiecutter gh:ran-isenberg/cookiecutter-serverless-python`](#){: .copyMe}:clipboard:**
+```bash
+cookiecutter gh:ran-isenberg/cookiecutter-serverless-python
+```
 
 Answer the questions to select repo name, service name, etc.:
 
 ![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
 
 **That's it, your developer environment has been set! you are ready to deploy the service:**
+
+```bash
+cd {new repo folder}
+make dev
+make deploy
+```
 
 ## **Creating a Developer Environment (without cookiecutter)**
 
@@ -36,6 +51,9 @@ Answer the questions to select repo name, service name, etc.:
 
 Create a cloudformation stack by running ``make deploy``.
 
+!!! info "First Deployment"
+    The first deployment may take 5-10 minutes as CDK provisions all resources.
+
 ## **Unit Tests**
 
 Unit tests can be found under the ``tests/unit`` folder.
@@ -44,7 +62,8 @@ You can run the tests by using the following command: ``make unit``.
 
 ## **Integration Tests**
 
-Make sure you deploy the stack first as these tests trigger your lambda handler LOCALLY but they can communicate with AWS services.
+!!! warning "Deploy First"
+    Make sure you deploy the stack first as these tests trigger your Lambda handler LOCALLY but communicate with AWS services.
 
 These tests allow you to debug in your IDE your AWS Lambda function.
 

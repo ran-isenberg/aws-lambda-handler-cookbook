@@ -83,13 +83,96 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 * The project deploys an API GW with an AWS Lambda integration under the path POST /api/orders/ and stores data in a DynamoDB table.
 
-![design](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/design.png?raw=true)
-<br></br>
+```mermaid
+flowchart LR
+    subgraph AWS["AWS Cloud"]
+        subgraph APIGW["API Gateway"]
+            REST["REST API<br/>POST /api/orders"]
+        end
+
+        subgraph Security["Security (Production)"]
+            WAF["WAF WebACL<br/>AWS Managed Rules"]
+        end
+
+        subgraph Compute["Compute"]
+            LAMBDA["Lambda Function<br/>Python 3.14"]
+            LAYER["Lambda Layer<br/>Common Dependencies"]
+        end
+
+        subgraph Config["Configuration"]
+            APPCONFIG["AppConfig<br/>Feature Flags"]
+        end
+
+        subgraph Storage["Storage"]
+            DDB[("DynamoDB<br/>Orders Table")]
+            IDEMPOTENCY[("DynamoDB<br/>Idempotency Table")]
+        end
+    end
+
+    CLIENT((Client)) --> WAF
+    WAF --> REST
+    REST --> LAMBDA
+    LAMBDA --> LAYER
+    LAMBDA --> APPCONFIG
+    LAMBDA --> DDB
+    LAMBDA --> IDEMPOTENCY
+
+    style CLIENT fill:#f9f,stroke:#333
+    style WAF fill:#ff6b6b,stroke:#333
+    style REST fill:#4ecdc4,stroke:#333
+    style LAMBDA fill:#ffe66d,stroke:#333
+    style LAYER fill:#ffe66d,stroke:#333
+    style APPCONFIG fill:#95e1d3,stroke:#333
+    style DDB fill:#4a90d9,stroke:#333
+    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+```
 
 #### **Monitoring Design**
 
-![monitoring_design](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/monitoring_design.png?raw=true)
-<br></br>
+```mermaid
+flowchart TB
+    subgraph Monitoring["CloudWatch Monitoring"]
+        subgraph Dashboards["Dashboards"]
+            HL["High-Level Dashboard<br/>API Gateway Metrics<br/>Business KPIs"]
+            LL["Low-Level Dashboard<br/>Lambda Metrics<br/>DynamoDB Metrics"]
+        end
+
+        subgraph Alarms["CloudWatch Alarms"]
+            API_ALARM["API Gateway Alarms<br/>5XX Errors, Latency"]
+            LAMBDA_ALARM["Lambda Alarms<br/>Errors, P90 Latency"]
+            DDB_ALARM["DynamoDB Alarms<br/>Throttles, Errors"]
+        end
+    end
+
+    subgraph Notification["Notification"]
+        SNS["SNS Topic<br/>KMS Encrypted"]
+    end
+
+    subgraph Resources["Monitored Resources"]
+        APIGW["API Gateway"]
+        LAMBDA["Lambda Function"]
+        DDB["DynamoDB Tables"]
+    end
+
+    APIGW --> API_ALARM
+    LAMBDA --> LAMBDA_ALARM
+    DDB --> DDB_ALARM
+
+    API_ALARM --> SNS
+    LAMBDA_ALARM --> SNS
+    DDB_ALARM --> SNS
+
+    API_ALARM --> HL
+    LAMBDA_ALARM --> LL
+    DDB_ALARM --> LL
+
+    style HL fill:#4ecdc4,stroke:#333
+    style LL fill:#4ecdc4,stroke:#333
+    style SNS fill:#ff6b6b,stroke:#333
+    style API_ALARM fill:#ffe66d,stroke:#333
+    style LAMBDA_ALARM fill:#ffe66d,stroke:#333
+    style DDB_ALARM fill:#ffe66d,stroke:#333
+```
 
 ### **Features**
 
@@ -97,6 +180,8 @@ This project aims to reduce cognitive load and answer these questions for you by
 * CDK infrastructure with infrastructure tests and security tests.
 * CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
 * CI/CD pipeline deploys to dev/staging and production environments with different gates between each environment
+* Automatic GitHub releases with semantic versioning based on conventional commits
+* Automatic PR labeling based on commit message prefixes (feat, fix, docs, chore)
 * Makefile for simple developer experience.
 * The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 * AWS Lambda handler uses [AWS Lambda Powertools](https://docs.powertools.aws.dev/lambda-python/).
