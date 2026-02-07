@@ -1,0 +1,87 @@
+name: PR Labeler
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+permissions:
+    contents: read
+    pull-requests: write
+    issues: write
+
+jobs:
+    label:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              with:
+                  fetch-depth: 0
+
+            - name: Ensure labels exist
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  gh label create enhancement --color 0E8A16 --description "New feature" --force || true
+                  gh label create bug --color D73A4A --description "Bug fix" --force || true
+                  gh label create documentation --color 0075CA --description "Documentation changes" --force || true
+                  gh label create chore --color FEF2C0 --description "Maintenance tasks" --force || true
+                  gh label create breaking-change --color B60205 --description "Breaking change" --force || true
+
+            - name: Label PR based on commit prefixes
+              uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+              with:
+                  script: |
+                      const prNumber = context.payload.pull_request.number;
+                      const prTitle = context.payload.pull_request.title.toLowerCase();
+
+                      // Get all commits in the PR
+                      const commits = await github.rest.pulls.listCommits({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        pull_number: prNumber
+                      });
+
+                      const commitMessages = commits.data.map(c => c.commit.message.toLowerCase());
+
+                      // Combine PR title and commit messages for analysis
+                      const allText = [prTitle, ...commitMessages];
+
+                      const labelsToAdd = new Set();
+
+                      // Define prefix to label mapping
+                      const prefixMap = {
+                        'feature': 'enhancement',
+                        'feat': 'enhancement',
+                        'fix': 'bug',
+                        'docs': 'documentation',
+                        'chore': 'chore',
+                        'breaking': 'breaking-change'
+                      };
+
+                      // Check each text for prefixes
+                      for (const text of allText) {
+                        for (const [prefix, label] of Object.entries(prefixMap)) {
+                          // Match patterns like "fix:", "fix(scope):", "fix!:"
+                          const regex = new RegExp(`^${prefix}(\\([^)]+\\))?!?:`);
+                          if (regex.test(text)) {
+                            labelsToAdd.add(label);
+                          }
+                          // Also check for "!" which indicates breaking change
+                          if (text.startsWith(`${prefix}!:`) || text.includes('!:')) {
+                            labelsToAdd.add('breaking-change');
+                          }
+                        }
+                      }
+
+                      if (labelsToAdd.size > 0) {
+                        console.log(`Adding labels: ${[...labelsToAdd].join(', ')}`);
+                        await github.rest.issues.addLabels({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: prNumber,
+                          labels: [...labelsToAdd]
+                        });
+                      } else {
+                        console.log('No matching prefixes found in PR title or commits');
+                      }

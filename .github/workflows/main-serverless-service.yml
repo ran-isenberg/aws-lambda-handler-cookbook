@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: "22"
+  NODE_VERSION: "24"
   PYTHON_VERSION: "3.14"
   AWS_REGION: "us-east-1"
 
@@ -154,3 +154,120 @@ jobs:
       - name: Generate docs
         run: |
           uv run mkdocs gh-deploy --force
+
+  create_release:
+    runs-on: ubuntu-latest
+    needs: [production]
+    permissions:
+      contents: write
+    if: contains('refs/heads/main', github.ref)
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Get version from pyproject.toml
+        id: get_version
+        run: |
+          VERSION=$(grep -m1 'version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          echo "pyproject_version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Current pyproject.toml version: $VERSION"
+
+      - name: Determine release version
+        id: version
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const pyprojectVersion = '${{ steps.get_version.outputs.pyproject_version }}';
+            const [major, minor, patch] = pyprojectVersion.split('.').map(Number);
+
+            // Get all tags
+            const { data: tags } = await github.rest.repos.listTags({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+
+            const tagNames = tags.map(t => t.name);
+            console.log('Existing tags:', tagNames.slice(0, 10));
+
+            // Check if pyproject version already released
+            const pyprojectTag = `v${pyprojectVersion}`;
+            if (!tagNames.includes(pyprojectTag)) {
+              // New version in pyproject.toml - use it as is
+              console.log(`New version ${pyprojectVersion} found in pyproject.toml`);
+              core.setOutput('version', pyprojectVersion);
+              core.setOutput('should_release', 'true');
+              return;
+            }
+
+            // Find latest release matching major.minor pattern
+            const latestTag = tagNames
+              .filter(t => t.match(/^v\d+\.\d+\.\d+$/))
+              .sort((a, b) => {
+                const [aMaj, aMin, aPat] = a.slice(1).split('.').map(Number);
+                const [bMaj, bMin, bPat] = b.slice(1).split('.').map(Number);
+                return bMaj - aMaj || bMin - aMin || bPat - aPat;
+              })[0];
+
+            if (!latestTag) {
+              console.log('No existing semver tags found, using pyproject version');
+              core.setOutput('version', pyprojectVersion);
+              core.setOutput('should_release', 'true');
+              return;
+            }
+
+            const [latMaj, latMin, latPatch] = latestTag.slice(1).split('.').map(Number);
+
+            // Get commits since last release to determine bump type
+            const { data: commits } = await github.rest.repos.compareCommitsWithBasehead({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              basehead: `${latestTag}...HEAD`
+            });
+
+            let hasBreaking = false;
+            let hasFeature = false;
+
+            for (const commit of commits.commits) {
+              const msg = commit.commit.message.toLowerCase();
+              if (msg.includes('!:') || msg.startsWith('breaking')) {
+                hasBreaking = true;
+              }
+              if (msg.startsWith('feat') || msg.startsWith('feature')) {
+                hasFeature = true;
+              }
+            }
+
+            let newVersion;
+            if (major > latMaj || (major === latMaj && minor > latMin)) {
+              // pyproject.toml has higher major/minor - use it
+              newVersion = pyprojectVersion;
+            } else if (hasBreaking) {
+              newVersion = `${latMaj + 1}.0.0`;
+            } else if (hasFeature) {
+              newVersion = `${latMaj}.${latMin + 1}.0`;
+            } else {
+              newVersion = `${latMaj}.${latMin}.${latPatch + 1}`;
+            }
+
+            // Check if this version already exists
+            if (tagNames.includes(`v${newVersion}`)) {
+              console.log(`Version v${newVersion} already exists, skipping release`);
+              core.setOutput('should_release', 'false');
+              return;
+            }
+
+            console.log(`Calculated version: ${newVersion} (breaking: ${hasBreaking}, feature: ${hasFeature})`);
+            core.setOutput('version', newVersion);
+            core.setOutput('should_release', 'true');
+
+      - name: Create GitHub Release
+        if: steps.version.outputs.should_release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          echo "Creating release v${VERSION}"
+          gh release create "v${VERSION}" --generate-notes --title "v${VERSION}"
