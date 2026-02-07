@@ -11,7 +11,51 @@ description: AWS Lambda Cookbook CDK Project
 
 ## **CDK Deployment**
 
-<img alt="alt_text" src="../media/design.png" />
+```mermaid
+flowchart LR
+    subgraph AWS["AWS Cloud"]
+        subgraph APIGW["API Gateway"]
+            REST["REST API<br/>POST /api/orders"]
+        end
+
+        subgraph Security["Security (Production)"]
+            WAF["WAF WebACL<br/>AWS Managed Rules"]
+        end
+
+        subgraph Compute["Compute"]
+            LAMBDA["Lambda Function<br/>Python 3.14"]
+            LAYER["Lambda Layer<br/>Common Dependencies"]
+        end
+
+        subgraph Config["Configuration"]
+            APPCONFIG["AppConfig<br/>Feature Flags"]
+        end
+
+        subgraph Storage["Storage"]
+            DDB[("DynamoDB<br/>Orders Table")]
+            IDEMPOTENCY[("DynamoDB<br/>Idempotency Table")]
+        end
+    end
+
+    CLIENT((Client)) --> WAF
+    WAF --> REST
+    REST --> LAMBDA
+    LAMBDA --> LAYER
+    LAMBDA --> APPCONFIG
+    LAMBDA --> DDB
+    LAMBDA --> IDEMPOTENCY
+
+    style CLIENT fill:#f9f,stroke:#333
+    style WAF fill:#ff6b6b,stroke:#333
+    style REST fill:#4ecdc4,stroke:#333
+    style LAMBDA fill:#ffe66d,stroke:#333
+    style LAYER fill:#ffe66d,stroke:#333
+    style APPCONFIG fill:#95e1d3,stroke:#333
+    style DDB fill:#4a90d9,stroke:#333
+    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+```
+
+<p class="mermaid-hint">Click diagram to zoom</p>
 
 All CDK project files can be found under the CDK folder.
 

@@ -7,11 +7,15 @@ description: AWS Lambda Cookbook - Elevate Your Handler's Code Python pipeline
 
 The GitHub CI/CD pipeline includes the following steps.
 
-The pipelines uses environment secrets (under the defined environment 'dev', 'staging' and 'production') for code coverage and for the role to deploy to AWS.
+!!! warning "Required Configuration"
+    The pipelines uses environment secrets (under the defined environment 'dev', 'staging' and 'production') for code coverage and for the role to deploy to AWS.
 
 When you clone this repository be sure to define the environments in your [repo settings](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) and create a secret per environment:
 
-- AWS_ROLE_ARN - the role ARN to assume for your GitHub worker as defined in the [GitHub OIDC documentation for AWS](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
+- `AWS_ROLE_ARN` - the role ARN to assume for your GitHub worker as defined in the [GitHub OIDC documentation for AWS](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
+
+!!! tip "Quick Start"
+    Run `make pr` locally to validate all checks before pushing. This runs the same checks as the CI pipeline.
 
 ### **Makefile Commands**
 
@@ -50,9 +54,46 @@ The two most important ones are `pr-serverless-service`  and `main-serverless-se
 
 ### **pr-serverless-service**
 
-<img alt="alt_text" src="../media/cicd_pr.png" />
+```mermaid
+flowchart LR
+    subgraph PR["Pull Request Opened"]
+        direction TB
+        A[PR Created]
+    end
 
-`pr-serverless-service` runs for every pull request you open. It expects you defined a GitHub environments by the name `dev`, `staging` and `production` and for each environments to have the following variables:  `CODECOV_TOKEN ` for CodeCov integration and `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
+    subgraph QS["quality_standards"]
+        direction TB
+        B1[Checkout] --> B2[Install uv & Python]
+        B2 --> B3[Install Dependencies]
+        B3 --> B4[Pre-commit Checks]
+        B4 --> B5[Linting & Formatting]
+        B5 --> B6[Complexity Scan]
+    end
+
+    subgraph Tests["tests (dev environment)"]
+        direction TB
+        C1[Checkout & Setup] --> C2[Configure AWS OIDC]
+        C2 --> C3[Unit Tests]
+        C3 --> C4[Infrastructure Tests]
+        C4 --> C5[Deploy to AWS]
+        C5 --> C6[OpenAPI Validation]
+        C6 --> C7[Coverage Tests]
+        C7 --> C8[E2E Tests]
+        C8 --> C9[Destroy Stack]
+    end
+
+    PR --> QS
+    QS -->|Success| Tests
+    Tests -->|Success| D[Ready to Merge]
+
+    style QS fill:#e1f5fe
+    style Tests fill:#fff3e0
+    style D fill:#c8e6c9
+```
+
+*:material-magnify-plus-outline: Click diagram to zoom*
+
+`pr-serverless-service` runs for every pull request you open. It expects you defined a GitHub environments by the name `dev`, `staging` and `production` and for each environments to have the following variables: `CODECOV_TOKEN` for CodeCov integration and `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
 
 It includes two jobs: 'quality_standards' and 'tests' where a failure in 'quality_standards' does not trigger 'tests'. Both jobs MUST pass in order to to be able to merge.
 
@@ -66,7 +107,50 @@ Once merged, `main-serverless-service` will run.
 
 ### **main-serverless-service**
 
-<img alt="alt_text" src="../media/cicd_main.png" />
+```mermaid
+flowchart LR
+    subgraph Trigger["PR Merged to Main"]
+        direction TB
+        A[Push to main]
+    end
+
+    subgraph Staging["staging"]
+        direction TB
+        S1[Checkout & Setup] --> S2[Configure AWS OIDC]
+        S2 --> S3[Deploy to AWS]
+        S3 --> S4[Coverage Tests]
+        S4 --> S5[E2E Tests]
+    end
+
+    subgraph Production["production"]
+        direction TB
+        P1[Checkout & Setup] --> P2[Configure AWS OIDC]
+        P2 --> P3[Deploy to AWS]
+    end
+
+    subgraph Parallel["Post-Production (parallel)"]
+        direction TB
+        subgraph Docs["publish_github_pages"]
+            D1[Generate & Deploy Docs]
+        end
+        subgraph Release["create_release"]
+            R1[Read pyproject.toml version]
+            R1 --> R2[Determine semver bump]
+            R2 --> R3[Create GitHub Release]
+        end
+    end
+
+    Trigger --> Staging
+    Staging -->|Success| Production
+    Production -->|Success| Parallel
+
+    style Staging fill:#fff3e0
+    style Production fill:#ffebee
+    style Docs fill:#e8f5e9
+    style Release fill:#e3f2fd
+```
+
+*:material-magnify-plus-outline: Click diagram to zoom*
 
 `main-serverless-service` runs for every MERGED pull request that runs on the main branch. It expects you defined a GitHub environments by the name `staging` and `production` and that both includes a secret by the name of `AWS_ROLE`.
 
@@ -76,3 +160,50 @@ It includes three jobs: 'staging', 'production' and 'publish_github_pages'.
 Any failure in staging will stop the pipeline and production environment will not get updated with the new code.
 
 'production' does not run any of the 'quality_standards' checks, since they were already checked before the code was merged. It does not run any test at the moment. Stack is not deleted. Stack has a 'production' prefix as part of its name.
+
+### **create_release**
+
+After successful production deployment, the `create_release` job automatically creates a GitHub release with auto-generated release notes.
+
+**How versioning works:**
+
+1. The job reads the version from `pyproject.toml`
+2. If this version hasn't been released yet, it uses it as-is
+3. If already released, it analyzes commits since the last tag:
+   - Commits with `!:` (e.g., `feat!:`) → **Major** version bump
+   - Commits with `feat:` or `feature:` → **Minor** version bump
+   - Other commits → **Patch** version bump
+
+Release notes are automatically generated based on the merged PRs and their labels.
+
+---
+
+## **Automatic PR Labeling**
+
+The `pr-labeler` workflow automatically labels PRs based on commit message prefixes following [Conventional Commits](https://www.conventionalcommits.org/).
+
+### **pr-labeler**
+
+This workflow runs on every PR and:
+
+1. **Creates required labels** if they don't exist in the repository
+2. **Scans commit messages and PR title** for conventional commit prefixes
+3. **Applies matching labels** to the PR
+
+| Commit Prefix                  | Label Applied     | Release Notes Section   |
+| ------------------------------ | ----------------- | ----------------------- |
+| `feat:` or `feature:`          | `enhancement`     | Exciting New Features 🎉 |
+| `fix:`                         | `bug`             | Bug Fixes 🐛             |
+| `docs:`                        | `documentation`   | Documentation 📚         |
+| `chore:`                       | `chore`           | Maintenance 🔧           |
+| `feat!:` or `fix!:` (with `!`) | `breaking-change` | Breaking Changes 🛠      |
+
+### **Release Notes Configuration**
+
+The `.github/release.yml` file configures how GitHub generates release notes. PRs are categorized into sections based on their labels, which are automatically applied by the `pr-labeler` workflow.
+
+This creates a seamless flow:
+
+```text
+Commit with prefix → PR gets labeled → PR merged → Release created with categorized notes
+```

@@ -11,17 +11,20 @@ nav:
   - Pipeline: pipeline.md
   - Swagger: swagger/swagger.md
   - Best Practices:
-      - best_practices/logger.md
-      - best_practices/tracer.md
-      - best_practices/metrics.md
-      - best_practices/environment_variables.md
-      - Architecture Layers: https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers" target="_blank"
-      - best_practices/input_validation.md
-      - best_practices/dynamic_configuration.md
-      - best_practices/monitoring.md
-      - Idempotency: https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk" target="_blank"
-      - CDK Best practices: https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches" target="_blank"
-      - Testing Best practices: https://www.ranthebuilder.cloud/post/guide-to-serverless-lambda-testing-best-practices-part-1" target="_blank"
+      - best_practices/index.md
+      - Architecture Layers: https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers
+      - CDK Best Practices: https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches
+      - Dynamic Configuration: best_practices/dynamic_configuration.md
+      - Environment Variables: best_practices/environment_variables.md
+      - Idempotency: https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk
+      - Input Validation: best_practices/input_validation.md
+      - Logger: best_practices/logger.md
+      - Metrics: best_practices/metrics.md
+      - Monitoring: best_practices/monitoring.md
+      - Testing Best Practices: https://www.ranthebuilder.cloud/post/guide-to-serverless-lambda-testing-best-practices-part-1
+      - Tracer: best_practices/tracer.md
+  - Changelog: changelog.md
+  - Contributing: contributing.md
 
 theme:
   name: material
@@ -40,13 +43,14 @@ theme:
         icon: material/toggle-switch
         name: Switch to light mode
   features:
-    - navigation.sections
-    - navigation.expand
     - navigation.top
     - navigation.instant
     - navigation.indexes
     - navigation.tracking
     - content.code.annotate
+    - content.code.copy
+    - search.highlight
+    - search.suggest
   icon:
     repo: fontawesome/brands/github
   logo: media/builder.png
@@ -98,6 +102,9 @@ plugins:
 
 extra_css:
   - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mermaid-zoom.js
 
 extra:
   analytics:
