@@ -1,0 +1,26 @@
+{
+    "features": {
+        "premium_features": {
+            "default": false,
+            "rules": {
+                "enable premium features for this specific customer name": {
+                    "when_match": true,
+                    "conditions": [
+                        {
+                            "action": "EQUALS",
+                            "key": "customer_name",
+                            "value": "RanTheBuilder"
+                        }
+                    ]
+                }
+            }
+        },
+        "ten_percent_off_campaign": {
+            "default": true
+        }
+    },
+    "countries": [
+        "ISRAEL",
+        "USA"
+    ]
+}

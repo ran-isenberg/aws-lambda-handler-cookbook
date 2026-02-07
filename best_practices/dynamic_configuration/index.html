@@ -1,0 +1,2069 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Dynamic Configuration &amp; Smart Feature Flags">
+      
+      
+        <meta name="author" content="Ran Isenberg">
+      
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../environment_variables/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../media/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Dynamic Configuration &amp; Smart Feature Flags - AWS Lambda Handler CookBook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Ubuntu";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-VN803S5YZ3"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-VN803S5YZ3",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-VN803S5YZ3",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#blog-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="AWS Lambda Handler CookBook" class="md-header__button md-logo" aria-label="AWS Lambda Handler CookBook" data-md-component="logo">
+      
+  <img src="../../media/builder.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AWS Lambda Handler CookBook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dynamic Configuration &amp; Smart Feature Flags
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="teal" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ran-isenberg/aws-lambda-handler-cookbook" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="AWS Lambda Handler CookBook" class="md-nav__button md-logo" aria-label="AWS Lambda Handler CookBook" data-md-component="logo">
+      
+  <img src="../../media/builder.png" alt="logo">
+
+    </a>
+    AWS Lambda Handler CookBook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ran-isenberg/aws-lambda-handler-cookbook" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Homepage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CDK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../swagger/swagger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Swagger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Best Practices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Best Practices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CDK Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Configuration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#blog-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blog Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-aws-appconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is AWS AppConfig
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cdk-construct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CDK Construct
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CDK Construct">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-stack-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Stack Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aws-lambda-cdk-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AWS Lambda CDK Changes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fetching-dynamic-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fetching Dynamic Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feature-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Feature Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smart-feature-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Smart Feature Flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regular-feature-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regular Feature Flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluating-feature-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluating Feature Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluating Feature Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#regular-feature-flags-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regular Feature Flags Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smart-feature-flags-json-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Smart Feature Flags JSON Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-locally-test-your-lambda-in-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How To Locally Test Your Lambda In IDE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extra-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extra Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../environment_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment Variables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Idempotency
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input_validation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Validation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.ranthebuilder.cloud/post/guide-to-serverless-lambda-testing-best-practices-part-1" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tracer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tracer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#blog-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blog Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-aws-appconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is AWS AppConfig
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cdk-construct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CDK Construct
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CDK Construct">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-stack-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Stack Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aws-lambda-cdk-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AWS Lambda CDK Changes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fetching-dynamic-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fetching Dynamic Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feature-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Feature Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Feature Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#smart-feature-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Smart Feature Flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regular-feature-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regular Feature Flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluating-feature-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluating Feature Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluating Feature Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#regular-feature-flags-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regular Feature Flags Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#smart-feature-flags-json-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Smart Feature Flags JSON Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-locally-test-your-lambda-in-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How To Locally Test Your Lambda In IDE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extra-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extra Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Dynamic Configuration</h1>
+
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../../media/appconfig.png" data-desc-position="bottom"><img alt="Dynamic Configuration &amp; Feature Flags" src="../../media/appconfig.png"></a></p>
+<p>Feature flags are used to modify behavior without changing the application's code.</p>
+<p>This pages describes a utility for fetching dynamic configuration and evaluating smart feature flags stored in AWS AppConfig as a JSON file.</p>
+<p>This utility is based on the <a href="https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/" rel="noopener" target="_blank">Feature Flags utility of AWS Lambda Powertools</a> Github repository that I designed and developed.</p>
+<h2 id="blog-reference"><strong>Blog Reference</strong><a class="headerlink" href="#blog-reference" title="Permanent link">¶</a></h2>
+<p>Read more about the differences between static and dynamic configurations, when to use each type how this utility works in <a href="https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices" rel="noopener" target="_blank">my blog post on feature flags and configuration best practices</a>.</p>
+<h2 id="key-features"><strong>Key features</strong><a class="headerlink" href="#key-features" title="Permanent link">¶</a></h2>
+<ul>
+<li>CDK construct that deploys your JSON configuration to AWS AppConfig</li>
+<li>Uses a JSON file to describe both configuration values and smart feature flags.</li>
+<li>Provides one simple API to get configuration anywhere in the AWS Lambda function code.</li>
+<li>Provides one simple API to evaluate smart feature flags values.</li>
+<li>During runtime, stores the configuration in a local cache with a configurable TTL to reduce API calls to AWS (to fetch the JSON configuration) and total cost.</li>
+<li>Built-in support for <a href="https://pydantic-docs.helpmanual.io/" rel="noopener" target="_blank">Pydantic</a> models. We've used Pydantic to serialize and validate JSON configuration (input validation and environment variables) throughout this blog series, so it makes sense to use it to parse dynamic configuration.</li>
+</ul>
+<h2 id="what-is-aws-appconfig"><strong>What is AWS AppConfig</strong><a class="headerlink" href="#what-is-aws-appconfig" title="Permanent link">¶</a></h2>
+<p>AWS AppConfig is a self-managed service that stores plain text/YAML/JSON configuration to be consumed by multiple clients.</p>
+<p>We will use it in the context of dynamic configuration and feature toggles and store a single JSON file that contains both feature flags and configuration values.</p>
+<p>Let's review its advantages:</p>
+<ul>
+<li>FedRAMP High certified</li>
+<li>Fully Serverless</li>
+<li>Out of the box support for schema validations that run before a configuration update.</li>
+<li>Out-of-the-box integration with AWS CloudWatch alarms triggers an automatic configuration revert if a configuration update fails your AWS Lambda functions. Read more about it here.</li>
+<li>You can define configuration deployment strategies. Deployment strategies define how and when to change a configuration. Read more about it here.</li>
+<li>It provides a single API that provides configuration and feature flags access—more on that below.</li>
+<li>AWS AppConfig provides integrations with other services such as Atlassian Jira and AWS CodeDeploy.</li>
+</ul>
+<h2 id="cdk-construct"><strong>CDK Construct</strong><a class="headerlink" href="#cdk-construct" title="Permanent link">¶</a></h2>
+<p>'configuration_construct.py' defines a CDK v2 AWS AppConfig configuration with the following entities:</p>
+<ol>
+<li>Application (service)</li>
+<li>Environment</li>
+<li>Custom deployment strategy - immediate deploy, 0 minutes wait, no validations or AWS CloudWatch alerts</li>
+<li>The JSON configuration. It uploads the files ‘cdk/service/configuration/json/{environment}_configuration.json’, where environment is a construct argument (default is 'dev')</li>
+</ol>
+<p>The construct <strong>validates</strong> the JSON file and verifies that feature flags syntax is valid and exists under the 'features' key. Feature flags are optional.</p>
+<p>Make sure to deploy this construct in a separate pipeline from the AWS Lambda function (unlike in this example), otherwise it wont be a dynamic configuration.</p>
+<p>Read more in the <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/what-is-appconfig.html" rel="noopener" target="_blank">AWS AppConfig documentation</a>.</p>
+<h3 id="configuration-stack-example">Configuration Stack Example<a class="headerlink" href="#configuration-stack-example" title="Permanent link">¶</a></h3>
+<p>Args:</p>
+<ul>
+<li>scope (Construct): The scope in which to define this construct.</li>
+<li>id_ (str): The scoped construct ID. Must be unique amongst siblings. If the ID includes a path separator (<code>/</code>), then it will be replaced by double dash <code>--</code>.</li>
+<li>environment (str): environment name. Used for loading the corresponding JSON file to upload under 'configuration/json/{environment}_configuration.json'</li>
+<li>service_name (str): application name.</li>
+<li>configuration_name (str): configuration name</li>
+<li>deployment_strategy_id (str, optional): AWS AppConfig deployment strategy.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">configuration_stack.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">aws_cdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">Stack</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">constructs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Construct</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cdk.service.configuration.configuration_construct</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigurationStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cdk.service.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">CONFIGURATION_NAME</span><span class="p">,</span> <span class="n">ENVIRONMENT</span><span class="p">,</span> <span class="n">SERVICE_NAME</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DynamicConfigurationStack</span><span class="p">(</span><span class="n">Stack</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scope</span><span class="p">:</span> <span class="n">Construct</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamic_configuration</span> <span class="o">=</span> <span class="n">ConfigurationStore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'dynamic_conf'</span><span class="p">,</span> <span class="n">ENVIRONMENT</span><span class="p">,</span> <span class="n">SERVICE_NAME</span><span class="p">,</span> <span class="n">CONFIGURATION_NAME</span><span class="p">)</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>The JSON configuration that is uploaded to AWS AppConfig resides under <code>cdk/service/configuration/json/dev_configuration.json</code></p>
+<p><code>dev</code> represents the default environment. You can add multiple configurations for different environments.</p>
+<p>Make sure the prefix remains the environment underscore configuration <code>dev_configuration</code>, <code>prod_configuration</code> etc.</p>
+<h2 id="aws-lambda-cdk-changes"><strong>AWS Lambda CDK Changes</strong><a class="headerlink" href="#aws-lambda-cdk-changes" title="Permanent link">¶</a></h2>
+<p>You need to add two new settings in order to use this utility:</p>
+<ol>
+<li>New environment variables:</li>
+<li>AWS AppConfig configuration application name (‘CONFIGURATION_APP’)</li>
+<li>AWS AppConfig environment name (‘CONFIGURATION_ENV’)</li>
+<li>AWS AppConfig configuration name to fetch (‘CONFIGURATION_NAME’)</li>
+<li>Cache TTL in minutes (‘CONFIGURATION_MAX_AGE_MINUTES’)</li>
+<li>AWS Lambda IAM role to include allow 'appconfig:GetLatestConfiguration' and 'appconfig:StartConfigurationSession' on '*'.</li>
+</ol>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">cdk_lambda.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">aws_cdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">Duration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aws_cdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">aws_dynamodb</span> <span class="k">as</span> <span class="n">dynamodb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aws_cdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">aws_iam</span> <span class="k">as</span> <span class="n">iam</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aws_cdk</span><span class="w"> </span><span class="kn">import</span> <span class="n">aws_lambda</span> <span class="k">as</span> <span class="n">_lambda</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cdk.service.constants</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">constants</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_lambda_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">dynamodb</span><span class="o">.</span><span class="n">Table</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">iam</span><span class="o">.</span><span class="n">Role</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">iam</span><span class="o">.</span><span class="n">Role</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">constants</span><span class="o">.</span><span class="n">SERVICE_ROLE</span><span class="p">,</span>
+        <span class="n">assumed_by</span><span class="o">=</span><span class="n">iam</span><span class="o">.</span><span class="n">ServicePrincipal</span><span class="p">(</span><span class="s1">'lambda.amazonaws.com'</span><span class="p">),</span>
+        <span class="n">inline_policies</span><span class="o">=</span><span class="p">{</span>
+<span class="hll">            <span class="s1">'dynamic_configuration'</span><span class="p">:</span> <span class="n">iam</span><span class="o">.</span><span class="n">PolicyDocument</span><span class="p">(</span>
+</span><span class="hll">                <span class="n">statements</span><span class="o">=</span><span class="p">[</span>
+</span><span class="hll">                    <span class="n">iam</span><span class="o">.</span><span class="n">PolicyStatement</span><span class="p">(</span>
+</span><span class="hll">                        <span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="s1">'appconfig:GetLatestConfiguration'</span><span class="p">,</span> <span class="s1">'appconfig:StartConfigurationSession'</span><span class="p">],</span>
+</span><span class="hll">                        <span class="n">resources</span><span class="o">=</span><span class="p">[</span><span class="s1">'*'</span><span class="p">],</span>
+</span><span class="hll">                        <span class="n">effect</span><span class="o">=</span><span class="n">iam</span><span class="o">.</span><span class="n">Effect</span><span class="o">.</span><span class="n">ALLOW</span><span class="p">,</span>
+</span><span class="hll">                    <span class="p">)</span>
+</span><span class="hll">                <span class="p">]</span>
+</span>            <span class="p">),</span>
+            <span class="s1">'dynamodb_db'</span><span class="p">:</span> <span class="n">iam</span><span class="o">.</span><span class="n">PolicyDocument</span><span class="p">(</span>
+                <span class="n">statements</span><span class="o">=</span><span class="p">[</span><span class="n">iam</span><span class="o">.</span><span class="n">PolicyStatement</span><span class="p">(</span><span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="s1">'dynamodb:PutItem'</span><span class="p">,</span> <span class="s1">'dynamodb:GetItem'</span><span class="p">],</span> <span class="n">resources</span><span class="o">=</span><span class="p">[</span><span class="n">db</span><span class="o">.</span><span class="n">table_arn</span><span class="p">],</span> <span class="n">effect</span><span class="o">=</span><span class="n">iam</span><span class="o">.</span><span class="n">Effect</span><span class="o">.</span><span class="n">ALLOW</span><span class="p">)]</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="n">managed_policies</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">iam</span><span class="o">.</span><span class="n">ManagedPolicy</span><span class="o">.</span><span class="n">from_aws_managed_policy_name</span><span class="p">(</span><span class="n">managed_policy_name</span><span class="o">=</span><span class="p">(</span><span class="sa">f</span><span class="s1">'service-role/</span><span class="si">{</span><span class="n">constants</span><span class="o">.</span><span class="n">LAMBDA_BASIC_EXECUTION_ROLE</span><span class="si">}</span><span class="s1">'</span><span class="p">))</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_lambda_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="n">iam</span><span class="o">.</span><span class="n">Role</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">dynamodb</span><span class="o">.</span><span class="n">Table</span><span class="p">,</span> <span class="n">appconfig_app_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_lambda</span><span class="o">.</span><span class="n">Function</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_lambda</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="s1">'ServicePost'</span><span class="p">,</span>
+        <span class="n">runtime</span><span class="o">=</span><span class="n">_lambda</span><span class="o">.</span><span class="n">Runtime</span><span class="o">.</span><span class="n">PYTHON_3_14</span><span class="p">,</span>
+        <span class="n">code</span><span class="o">=</span><span class="n">_lambda</span><span class="o">.</span><span class="n">Code</span><span class="o">.</span><span class="n">from_asset</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">BUILD_FOLDER</span><span class="p">),</span>
+        <span class="n">handler</span><span class="o">=</span><span class="s1">'service.handlers.create_order.create_order'</span><span class="p">,</span>
+        <span class="n">environment</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">constants</span><span class="o">.</span><span class="n">POWERTOOLS_SERVICE_NAME</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">SERVICE_NAME</span><span class="p">,</span>  <span class="c1"># for logger, tracer and metrics</span>
+            <span class="n">constants</span><span class="o">.</span><span class="n">POWER_TOOLS_LOG_LEVEL</span><span class="p">:</span> <span class="s1">'DEBUG'</span><span class="p">,</span>  <span class="c1"># for logger</span>
+            <span class="s1">'REST_API'</span><span class="p">:</span> <span class="s1">'https://www.ranthebuilder.cloud/api'</span><span class="p">,</span>  <span class="c1"># for env vars example</span>
+            <span class="s1">'ROLE_ARN'</span><span class="p">:</span> <span class="s1">'arn:partition:service:region:account-id:resource-type:resource-id'</span><span class="p">,</span>  <span class="c1"># for env vars example</span>
+<span class="hll">            <span class="s1">'CONFIGURATION_APP'</span><span class="p">:</span> <span class="n">appconfig_app_name</span><span class="p">,</span>  <span class="c1"># for feature flags</span>
+</span><span class="hll">            <span class="s1">'CONFIGURATION_ENV'</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">ENVIRONMENT</span><span class="p">,</span>
+</span><span class="hll">            <span class="s1">'CONFIGURATION_NAME'</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONFIGURATION_NAME</span><span class="p">,</span>
+</span><span class="hll">            <span class="s1">'CONFIGURATION_MAX_AGE_MINUTES'</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">CONFIGURATION_MAX_AGE_MINUTES</span><span class="p">,</span>
+</span>            <span class="s1">'TABLE_NAME'</span><span class="p">:</span> <span class="n">db</span><span class="o">.</span><span class="n">table_name</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="n">tracing</span><span class="o">=</span><span class="n">_lambda</span><span class="o">.</span><span class="n">Tracing</span><span class="o">.</span><span class="n">ACTIVE</span><span class="p">,</span>
+        <span class="n">retry_attempts</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="n">Duration</span><span class="o">.</span><span class="n">seconds</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">API_HANDLER_LAMBDA_TIMEOUT</span><span class="p">),</span>
+        <span class="n">memory_size</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">API_HANDLER_LAMBDA_MEMORY_SIZE</span><span class="p">,</span>
+        <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></tbody></table></div>
+<h2 id="fetching-dynamic-configuration"><strong>Fetching Dynamic Configuration</strong><a class="headerlink" href="#fetching-dynamic-configuration" title="Permanent link">¶</a></h2>
+<p>You need to model your dynamic configuration as a Pydantic schema class (excluding feature flags) extend Pydantic's BaseModel class.</p>
+<p>The <code>parse_configuration</code> function will fetch the JSON configuration from AWS AppConfig and use your Pydantic model to validate it and return a valid dataclass instance.</p>
+<p>Let's assume that our configuration looks like this:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><div class="tabbed-labels"><label for="__tabbed_3_1">configuration.json</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"countries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"ISRAEL"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"USA"</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>We need to define a Pydantic model that will parse and validate the JSON file and pass it as an argument to the function <code>parse_configuration</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio"><div class="tabbed-labels"><label for="__tabbed_4_1">configuration_schema.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+
+<span class="c1"># does not include feature flags part of the JSON</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyConfiguration</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">countries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>Now we can call the <code>parse_configuration</code> function and pass it the <code>MyConfiguration</code> class name.</p>
+<p>The function fetch the JSON file from AWS AppConfig and return a parsed instance of the configuration dataclass <code>MyConfiguration</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio"><div class="tabbed-labels"><label for="__tabbed_5_1">my_handler.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPStatus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">aws_lambda_env_modeler</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_environment_variables</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aws_lambda_powertools.utilities.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">LambdaContext</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">service.handlers.models.dynamic_configuration</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyConfiguration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">service.handlers.models.env_vars</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyHandlerEnvVars</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">service.handlers.utils.dynamic_configuration</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_configuration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">service.handlers.utils.observability</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_response</span><span class="p">(</span><span class="n">http_status</span><span class="p">:</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'statusCode'</span><span class="p">:</span> <span class="n">http_status</span><span class="p">,</span> <span class="s1">'headers'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'Content-Type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">},</span> <span class="s1">'body'</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">body</span><span class="p">)}</span>
+
+
+<span class="nd">@init_environment_variables</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">MyHandlerEnvVars</span><span class="p">)</span>
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">my_handler</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">context</span><span class="p">:</span> <span class="n">LambdaContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span>    <span class="k">try</span><span class="p">:</span>
+<span class="hll">        <span class="n">my_configuration</span> <span class="o">=</span> <span class="n">parse_configuration</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">MyConfiguration</span><span class="p">)</span>
+</span>    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">'dynamic configuration error'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">build_response</span><span class="p">(</span><span class="n">http_status</span><span class="o">=</span><span class="n">HTTPStatus</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="p">{})</span>
+
+<span class="hll">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'fetched dynamic configuration'</span><span class="p">,</span> <span class="n">countries</span><span class="o">=</span><span class="n">my_configuration</span><span class="o">.</span><span class="n">countries</span><span class="p">)</span>
+</span>    <span class="k">return</span> <span class="n">build_response</span><span class="p">(</span><span class="n">http_status</span><span class="o">=</span><span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="p">{</span><span class="s1">'message'</span><span class="p">:</span> <span class="s1">'success'</span><span class="p">})</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>If you want to learn more about how <code>parse_configuration</code> function works, read <a href="https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices" rel="noopener" target="_blank">my blog post on feature flags and configuration</a>.</p>
+<h2 id="feature-flags"><strong>Feature Flags</strong><a class="headerlink" href="#feature-flags" title="Permanent link">¶</a></h2>
+<p>Feature flags can be evaluated to any valid JSON value.</p>
+<p>However, in these snippets, they are all boolean for simplicity.</p>
+<h3 id="smart-feature-flags"><strong>Smart Feature Flags</strong><a class="headerlink" href="#smart-feature-flags" title="Permanent link">¶</a></h3>
+<p>Smart feature flags are feature flags that are evaluated in runtime and can change their values according to session context.</p>
+<p>Smart feature flags require evaluation in runtime and can have different values for different AWS Lambda function sessions.</p>
+<p>Imagine pushing a new feature into production but enabling it only for several specific customers.</p>
+<p>A smart feature flag will need to evaluate the customer name and decide whether the final value is 'True/False'.</p>
+<p>Smart feature flags are defined by rules, conditions, and actions determining the final value.</p>
+<p>Read more about them in the <a href="https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#schema" rel="noopener" target="_blank">Powertools feature flags schema documentation</a>.</p>
+<h3 id="regular-feature-flags"><strong>Regular Feature Flags</strong><a class="headerlink" href="#regular-feature-flags" title="Permanent link">¶</a></h3>
+<p>Regular feature flags are flags that have a default value which does not change according to input context.</p>
+<h2 id="evaluating-feature-flags"><strong>Evaluating Feature Flags</strong><a class="headerlink" href="#evaluating-feature-flags" title="Permanent link">¶</a></h2>
+<p>It is mandatory to store feature flags under the 'features' key in the configuration JSON as the utilities described here are configured as such.</p>
+<p><strong>Feature flags can have any valid JSON value but these examples use boolean.</strong></p>
+<p>Let's assume that our AWS Lambda handler supports two feature flags: regular and smart.</p>
+<ol>
+<li>Ten percent discount for the current order: <code>True/False</code>.</li>
+<li>Premium feature for the customer: <code>True/False</code>.</li>
+</ol>
+<p>Premium features are enabled only to specific customers. A ten percent discount is a simple feature flag. According to store policy, a ten percent discount can be turned on or off.</p>
+<p>It doesn't change according to session input; it is <code>True</code> or <code>False</code> for all inputs.</p>
+<p>On the other hand,  premium features are based on a rule. It's a smart feature flag.Its' value is <code>False</code> for all but specific customers.</p>
+<p>To use AWS Lambda Powertools feature flags capabilities, we need to build a JSON file that matches the SDK language.</p>
+<h3 id="regular-feature-flags-definition">Regular Feature Flags Definition<a class="headerlink" href="#regular-feature-flags-definition" title="Permanent link">¶</a></h3>
+<p>Defining the ten percent discount flag is simple. It has a key and a dictionary containing a <code>default value</code> key with a boolean value.</p>
+<p>Let's assume the feature flags are enabled. Let's add it to the current configuration we already have:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio"><div class="tabbed-labels"><label for="__tabbed_6_1">configuration.json</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"countries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"ISRAEL"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"USA"</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></tbody></table></div>
+<h3 id="smart-feature-flags-json-definition"><strong>Smart Feature Flags JSON Definition</strong><a class="headerlink" href="#smart-feature-flags-json-definition" title="Permanent link">¶</a></h3>
+<p>Now, let's add the smart feature flag, premium features. We want to enable it only for customers by 'RanTheBuilder.'</p>
+<p>The JSON structure is simple.</p>
+<p>Each feature has a default value under the default key. It can any valid JSON value (boolean, int etc.).</p>
+<p>Each feature can have optional rules that determine the evaluated value.</p>
+<p>Each rule consists of a default value to return (in case of a match — when_match ) and a list of conditions. Only one rule can match.</p>
+<p>Each condition consists of an action name (which is mapped to an operator in the rule engine code) and a key-value pair that serves as an argument to the SDK rule engine.</p>
+<p>The combined JSON configuration look like this:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio"><div class="tabbed-labels"><label for="__tabbed_7_1">configuration.json</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"features"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"premium_features"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"rules"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">"enable premium features for this specific customer name"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">"when_match"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">"conditions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                        </span><span class="p">{</span>
+<span class="w">                            </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EQUALS"</span><span class="p">,</span>
+<span class="w">                            </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"customer_name"</span><span class="p">,</span>
+<span class="w">                            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RanTheBuilder"</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                    </span><span class="p">]</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"ten_percent_off_campaign"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"countries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"ISRAEL"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"USA"</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></tbody></table></div>
+<h3 id="api-example"><strong>API Example</strong><a class="headerlink" href="#api-example" title="Permanent link">¶</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio"><div class="tabbed-labels"><label for="__tabbed_8_1">my_handler.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPStatus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">aws_lambda_env_modeler</span><span class="w"> </span><span class="kn">import</span> <span class="n">init_environment_variables</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aws_lambda_powertools.utilities.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">LambdaContext</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">service.handlers.models.dynamic_configuration</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyConfiguration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">service.handlers.models.env_vars</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyHandlerEnvVars</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">service.handlers.utils.dynamic_configuration</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_configuration_store</span><span class="p">,</span> <span class="n">parse_configuration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">service.handlers.utils.observability</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
+
+
+<span class="nd">@init_environment_variables</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">MyHandlerEnvVars</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_handler</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">context</span><span class="p">:</span> <span class="n">LambdaContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">try</span><span class="p">:</span>
+<span class="hll">        <span class="n">my_configuration</span><span class="p">:</span> <span class="n">MyConfiguration</span> <span class="o">=</span> <span class="n">parse_configuration</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">MyConfiguration</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+</span>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'fetched dynamic configuration'</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="n">my_configuration</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">'dynamic configuration error'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">'statusCode'</span><span class="p">:</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span><span class="p">,</span> <span class="s1">'headers'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'Content-Type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">},</span> <span class="s1">'body'</span><span class="p">:</span> <span class="s1">''</span><span class="p">}</span>
+
+<span class="hll">    <span class="n">campaign</span> <span class="o">=</span> <span class="n">get_configuration_store</span><span class="p">()</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+</span><span class="hll">        <span class="n">name</span><span class="o">=</span><span class="s1">'ten_percent_off_campaign'</span><span class="p">,</span>
+</span><span class="hll">        <span class="n">context</span><span class="o">=</span><span class="p">{},</span>
+</span><span class="hll">        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span class="hll">    <span class="p">)</span>
+</span><span class="hll">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'campaign feature flag value'</span><span class="p">,</span> <span class="n">campaign</span><span class="o">=</span><span class="n">campaign</span><span class="p">)</span>
+</span>
+<span class="hll">    <span class="n">premium</span> <span class="o">=</span> <span class="n">get_configuration_store</span><span class="p">()</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+</span><span class="hll">        <span class="n">name</span><span class="o">=</span><span class="s1">'premium_features'</span><span class="p">,</span>
+</span><span class="hll">        <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s1">'customer_name'</span><span class="p">:</span> <span class="s1">'RanTheBuilder'</span><span class="p">},</span>
+</span><span class="hll">        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span class="hll">    <span class="p">)</span>
+</span><span class="hll">    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">'premium feature flag value'</span><span class="p">,</span> <span class="n">premium</span><span class="o">=</span><span class="n">premium</span><span class="p">)</span>
+</span>    <span class="k">return</span> <span class="p">{</span><span class="s1">'statusCode'</span><span class="p">:</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span> <span class="s1">'headers'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'Content-Type'</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">},</span> <span class="s1">'body'</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">'message'</span><span class="p">:</span> <span class="s1">'success'</span><span class="p">})}</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>In this example, we evaluate both feature flags' value and provide a context.</p>
+<p><code>ten_percent_off_campaign</code> will be evaluated to <code>True</code> since it's a non smart feature flag with a default value of <code>False</code> in the JSON configuration.</p>
+<p>The rule for <code>premium_features</code> is matched (which returns a <code>True</code> value for the flag) when the context dictionary has a key <code>customer_name</code> with a value of <code>RanTheBuilder</code> EQUALS <code>RanTheBuilder</code>.</p>
+<p>Line 30 will return a value of <code>True</code> for the context <code>{'customer_name': 'RanTheBuilder'}</code> and <code>False</code> for any other input.</p>
+<p>There are several actions for conditions such as <code>STARTSWITH</code>, <code>ENDSWITH</code>, <code>EQUALS</code>, etc.</p>
+<p>You can read more about the rules, conditions, logic, and supported actions in the <a href="https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#rules" rel="noopener" target="_blank">Powertools feature flags rules documentation</a>.</p>
+<h2 id="how-to-locally-test-your-lambda-in-ide"><strong>How To Locally Test Your Lambda In IDE</strong><a class="headerlink" href="#how-to-locally-test-your-lambda-in-ide" title="Permanent link">¶</a></h2>
+<p>You can and should mock the values that AWS AppConfig returns in order to check different types of configurations values and feature flags.</p>
+<p>Make sure to always test your feature flags with all its possible values scope (enabled/disabled etc.)</p>
+<p>You can also skip the mock and read the real values that are currently stored in AWS AppConfig.</p>
+<p>However, I'd do that in the E2E tests.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:1"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio"><div class="tabbed-labels"><label for="__tabbed_9_1">mock_test.py</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="hll"><span class="n">MOCKED_SCHEMA</span> <span class="o">=</span> <span class="p">{</span>
+</span>    <span class="s1">'features'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">'premium_features'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">'default'</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">'rules'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">'enable premium features for this specific customer name"'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">'when_match'</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">'conditions'</span><span class="p">:</span> <span class="p">[{</span><span class="s1">'action'</span><span class="p">:</span> <span class="s1">'EQUALS'</span><span class="p">,</span> <span class="s1">'key'</span><span class="p">:</span> <span class="s1">'customer_name'</span><span class="p">,</span> <span class="s1">'value'</span><span class="p">:</span> <span class="s1">'RanTheBuilder'</span><span class="p">}],</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="s1">'ten_percent_off_campaign'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'default'</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s1">'countries'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'ISRAEL'</span><span class="p">,</span> <span class="s1">'USA'</span><span class="p">],</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mock_dynamic_configuration</span><span class="p">(</span><span class="n">mocker</span><span class="p">,</span> <span class="n">mock_schema</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Mock AppConfig Store get_configuration method to use mock schema instead"""</span>
+    <span class="n">mocked_get_conf</span> <span class="o">=</span> <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">'aws_lambda_powertools.utilities.parameters.AppConfigProvider.get'</span><span class="p">)</span>
+    <span class="n">mocked_get_conf</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_schema</span>
+
+
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">my_test</span><span class="p">(</span><span class="n">mocker</span><span class="p">):</span>
+</span><span class="hll">    <span class="n">mock_dynamic_configuration</span><span class="p">(</span><span class="n">mocker</span><span class="p">,</span> <span class="n">MOCKED_SCHEMA</span><span class="p">)</span>
+</span><span class="hll">    <span class="c1"># start test</span>
+</span></code></pre></div></td></tr></tbody></table></div>
+<p>See the <a href="https://docs.powertools.aws.dev/lambda-python/latest/utilities/feature_flags/#testing-your-code">Powertools testing your code documentation</a> for more details.</p>
+<h2 id="extra-documentation"><strong>Extra Documentation</strong><a class="headerlink" href="#extra-documentation" title="Permanent link">¶</a></h2>
+<p>Read about <a href="https://pydantic-docs.helpmanual.io/usage/types/" rel="noopener" target="_blank">Pydantic field types</a>.</p>
+<p>Read about <a href="https://pydantic-docs.helpmanual.io/usage/validators/" rel="noopener" target="_blank">Pydantic custom validators and advanced value constraints</a>.</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+    </span>
+    2026-02-07
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © 2025 Ran Isenberg
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/ran-isenberg/aws-lambda-handler-cookbook" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M202.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M496 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/RanBuilder" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/ranisenberg/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://medium.com/@isenberg-ran" target="_blank" rel="noopener" title="medium.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M369.4 32c43.4 0 78.6 35.2 78.6 78.6v83.8c-1.9-.1-3.8-.2-5.7-.2h-.4c-10 0-22.3 2.4-31.1 6.8-10 4.6-18.7 11.5-26 20.6-11.8 14.6-18.9 34.3-20.6 56.4-.1.7-.1 1.3-.2 2s-.1 1.2-.1 1.9c-.1 1.2-.1 2.4-.1 3.6 0 1.9-.1 3.8 0 5.8 1.2 50.1 28.2 90.2 76.3 90.2 2.7 0 5.3-.1 7.9-.4v20.4c0 43.4-35.2 78.6-78.6 78.6L78.6 480C35.2 480 0 444.8 0 401.4V110.6C0 67.2 35.2 32 78.6 32zM82.3 138.9l.3.1c13.2 3 19.8 7.4 19.8 23.4v187.2c0 16-6.7 20.4-19.9 23.4l-.3.1v2.8H135v-2.8l-.3-.1c-13.2-3-19.9-7.4-19.9-23.4V173.3l86.1 202.5h4.9l88.6-208.2v186.6c-1.1 12.6-7.8 16.5-19.7 19.2l-.3.1v2.7h91.9v-2.7l-.3-.1c-11.9-2.7-18.7-6.6-19.9-19.2l-.1-191.8h.1c0-16 6.7-20.4 19.9-23.4l.3-.1v-2.7h-72.2l-67 157.4-67-157.4H82.3zM448 340.3c-25.1-7.4-43-35.1-41.2-67.8h41.1v67.8zm-6.4-135.6c2.3 0 4.4.3 6.4.9V263h-40.2c1.5-33.6 13.6-57.9 33.8-58.3"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.ranthebuilder.cloud" target="_blank" rel="noopener" title="www.ranthebuilder.cloud" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M351.9 280H161c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zm-191-48h190.9c-2.8-64.5-17.1-123.9-37.4-167.4-11.4-24.4-23.7-41.8-35.1-52.4C268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4m-48 0c3.5-85.6 25.6-165.1 57.9-217.3C78.7 47.3 10.9 131.2 1.5 232zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3zm111.4-48C501.9 131.2 434.1 47.3 342 14.7c32.3 52.2 54.4 131.7 57.9 217.3z"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.instant", "navigation.indexes", "navigation.tracking", "content.code.annotate", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mermaid-zoom.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

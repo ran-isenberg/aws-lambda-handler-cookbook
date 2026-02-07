@@ -1,0 +1,105 @@
+.md-grid {
+    max-width: 81vw
+}
+
+.highlight .hll {
+    background-color: lavender [data-md-color-scheme="slate"] {
+        background-color: rgb(69, 48, 164)
+    }
+}
+
+.md-typeset table:not([class]) {
+    font-size: 0.75rem
+}
+
+.md-typeset a {
+    border-bottom: 0.1px dashed black
+}
+
+.md-typeset table:not([class]) {
+    font-size: 0.75rem
+}
+
+.md-nav__link--active {
+    font-weight: bold
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+    font-size: 0.70rem
+}
+
+[data-md-color-scheme="slate"] {
+    --md-typeset-a-color: rgb(28, 152, 152)
+}
+
+.copyMe {
+    cursor: pointer;
+    border-bottom: 0.1px dashed black;
+}
+
+p>code,
+li>code {
+    font-weight: bold
+}
+
+/* Mermaid diagram zoom on click */
+.mermaid,
+pre.mermaid {
+    cursor: zoom-in;
+    transition: all 0.3s ease;
+}
+
+.mermaid:hover,
+pre.mermaid:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mermaid.zoomed,
+pre.mermaid.zoomed {
+    position: fixed !important;
+    top: 2% !important;
+    left: 2% !important;
+    width: 96vw !important;
+    height: 96vh !important;
+    z-index: 9999 !important;
+    background: white !important;
+    padding: 1rem !important;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    cursor: zoom-out;
+    overflow: auto;
+    display: block !important;
+    margin: 0 !important;
+}
+
+.mermaid.zoomed svg,
+pre.mermaid.zoomed svg {
+    max-width: none !important;
+    max-height: none !important;
+    width: 94vw !important;
+    height: auto !important;
+    transform: none !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid.zoomed,
+[data-md-color-scheme="slate"] pre.mermaid.zoomed {
+    background: #1e1e1e !important;
+}
+
+.mermaid-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: none;
+}
+
+.mermaid-overlay.active {
+    display: block;
+}
