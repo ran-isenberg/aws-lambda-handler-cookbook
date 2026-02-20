@@ -25,8 +25,11 @@ class ApiConstruct(Construct):
         self.create_order_func = self._add_post_lambda_integration(
             orders_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
         )
+        self.delete_order_func = self._add_delete_lambda_integration(
+            orders_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
+        )
         self._build_swagger_endpoints(rest_api=self.rest_api, dest_func=self.create_order_func)
-        self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func])
+        self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func, self.delete_order_func])
 
         if is_production_env:
             # add WAF
@@ -76,7 +79,7 @@ class ApiConstruct(Construct):
                 'dynamodb_db': iam.PolicyDocument(
                     statements=[
                         iam.PolicyStatement(
-                            actions=['dynamodb:PutItem'],
+                            actions=['dynamodb:PutItem', 'dynamodb:DeleteItem'],
                             resources=[db.table_arn],
                             effect=iam.Effect.ALLOW,
                         )
@@ -159,4 +162,40 @@ class ApiConstruct(Construct):
 
         # POST /api/orders/
         api_resource.add_method(http_method='POST', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
+        return lambda_function
+        
+    def _add_delete_lambda_integration(
+        self,
+        api_resource: aws_apigateway.Resource,
+        role: iam.Role,
+        db: dynamodb.TableV2,
+        appconfig_app_name: str,
+        idempotency_table: dynamodb.TableV2,
+    ) -> _lambda.Function:
+        lambda_function = _lambda.Function(
+            self,
+            constants.DELETE_LAMBDA,
+            runtime=_lambda.Runtime.PYTHON_3_13,
+            code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
+            handler='service.handlers.handle_delete_order.lambda_handler',
+            environment={
+                constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,  # for logger, tracer and metrics
+                constants.POWER_TOOLS_LOG_LEVEL: 'INFO',  # for logger
+                'TABLE_NAME': db.table_name,
+                'IDEMPOTENCY_TABLE_NAME': idempotency_table.table_name,
+            },
+            tracing=_lambda.Tracing.ACTIVE,
+            retry_attempts=0,
+            timeout=Duration.seconds(constants.API_HANDLER_LAMBDA_TIMEOUT),
+            memory_size=constants.API_HANDLER_LAMBDA_MEMORY_SIZE,
+            layers=[self.common_layer],
+            role=role,
+            log_retention=RetentionDays.ONE_DAY,
+            logging_format=_lambda.LoggingFormat.JSON,
+            system_log_level_v2=_lambda.SystemLogLevel.INFO,
+        )
+
+        # DELETE /api/orders/{order_id}
+        order_resource = api_resource.add_resource('{order_id}')
+        order_resource.add_method(http_method='DELETE', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
         return lambda_function
