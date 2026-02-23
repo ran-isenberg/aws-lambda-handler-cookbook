@@ -4,7 +4,7 @@ description: AWS Lambda Handler Cookbook - a Serverless Service Blueprint
 ---
 ## **AWS Lambda Handler Cookbook - A Serverless Service Blueprint**
 
-[<img alt="alt_text" src="./media/banner.png" />](https://www.ranthebuilder.cloud/)
+[<img alt="AWS Lambda Handler Cookbook" src="./media/banner.png" />](https://www.ranthebuilder.cloud/)
 
 ## AWS Recommendation
 

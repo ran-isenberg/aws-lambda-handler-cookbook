@@ -22,7 +22,7 @@ make pr
 ## Reporting Bugs/Feature Requests
 
 !!! tip "Before Opening an Issue"
-    Check existing [open issues](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/issues){:target="_blank"} to avoid duplicates.
+    Check existing [open issues](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/issues){:target="_blank" rel="noopener"} to avoid duplicates.
 
 Use the GitHub issue tracker to:
 
@@ -33,7 +33,7 @@ Use the GitHub issue tracker to:
 ## Contributing via Pull Requests
 
 !!! warning "Open an Issue First"
-    Please open an [issue](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/issues){:target="_blank"} before starting implementation. This ensures alignment and saves your time.
+    Please open an [issue](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/issues){:target="_blank" rel="noopener"} before starting implementation. This ensures alignment and saves your time.
 
 ### Pull Request Process
 
@@ -41,7 +41,7 @@ Use the GitHub issue tracker to:
 2. **Create a branch** for your change (e.g., `feature/add-new-utility`)
 3. **Make your changes** following the code style
 4. **Run checks**: `make pr`
-5. **Commit** with [conventional commit](https://www.conventionalcommits.org/){:target="_blank"} messages:
+5. **Commit** with [conventional commit](https://www.conventionalcommits.org/){:target="_blank" rel="noopener"} messages:
     - `feat:` for new features
     - `fix:` for bug fixes
     - `docs:` for documentation
@@ -66,7 +66,7 @@ docs: update getting started guide
 
 ## Development Setup
 
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/from-referrer/){:target="_blank"}
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/from-referrer/){:target="_blank" rel="noopener"}
 
 ### Local Development
 
@@ -101,8 +101,8 @@ make docs
 
 ## Code of Conduct
 
-Please read our [Code of Conduct](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/CODE_OF_CONDUCT.md){:target="_blank"} before contributing.
+Please read our [Code of Conduct](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/CODE_OF_CONDUCT.md){:target="_blank" rel="noopener"} before contributing.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the [MIT License](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/LICENSE){:target="_blank"}.
+By contributing, you agree that your contributions will be licensed under the [MIT License](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/LICENSE){:target="_blank" rel="noopener"}.

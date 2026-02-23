@@ -7,7 +7,7 @@ All notable changes to this project are documented in GitHub Releases.
 
 ## Versioning
 
-This project follows [Semantic Versioning](https://semver.org/){:target="_blank"}:
+This project follows [Semantic Versioning](https://semver.org/){:target="_blank" rel="noopener"}:
 
 - **MAJOR** version for breaking changes
 - **MINOR** version for new features (backward compatible)

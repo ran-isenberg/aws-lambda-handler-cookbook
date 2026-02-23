@@ -53,14 +53,11 @@ dev = [
     "radon",
     "xenon",
     "pre-commit",
-    "mkdocs-material",
-    "mkdocs-git-revision-date-plugin",
-    "mkdocs-glightbox",
+    "zensical",
     "types-cachetools",
     "mypy",
     "types-requests",
     "toml",
-    "mkdocs-render-swagger-plugin",
 ]
 
 [tool.uv.sources]
