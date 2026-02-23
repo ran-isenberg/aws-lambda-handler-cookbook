@@ -264,3 +264,5 @@ The AI-DLC workflow artifacts are stored in the `aidlc-docs/` directory.
 ## License
 
 This library is licensed under the MIT License. See the [LICENSE](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/LICENSE) file.
+
+Copyright (c) 2026 Ran Isenberg
