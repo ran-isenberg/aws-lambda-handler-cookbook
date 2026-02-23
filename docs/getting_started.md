@@ -8,10 +8,10 @@ description: AWS Lambda Cookbook Project Getting started
 !!! warning "Required Tools"
     Make sure you have all prerequisites installed before proceeding.
 
-* **Docker** - install [Docker](https://www.docker.com/){target="_blank"}. Required for the Lambda layer packaging process.
+* **Docker** - install [Docker](https://www.docker.com/){:target="_blank" rel="noopener"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack. Run CDK [Bootstrap](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html) on your AWS account and region.
 * Python 3.14
-* [uv](https://docs.astral.sh/uv/){target="_blank"} - A fast Python package installer and resolver. Install with ``curl -LsSf https://astral.sh/uv/install.sh | sh`` or ``pip install uv``.
+* [uv](https://docs.astral.sh/uv/){:target="_blank" rel="noopener"} - A fast Python package installer and resolver. Install with ``curl -LsSf https://astral.sh/uv/install.sh | sh`` or ``pip install uv``.
 
 !!! tip "Windows Users"
     For Windows based machines, use the `Makefile_windows` version (rename to `Makefile`). Default Makefile is for Mac/Linux.
@@ -97,7 +97,7 @@ Be sure to commit all the changes that ``make pr`` does for you.
 
 ## **OpenAPI Swagger Generation**
 
-Run either ``make pr`` or ``make openopi`` to generate an updated swagger OpenAPI JSON file and place it at docs/swagger/openapi.json location.
+Run either ``make pr`` or ``make openapi`` to generate an updated swagger OpenAPI JSON file and place it at docs/swagger/openapi.json location.
 
 ## **GitHub Pages Documentation**
 

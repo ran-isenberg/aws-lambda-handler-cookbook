@@ -102,9 +102,3 @@ The first test, `test_cdk` uses CDK's testing framework which asserts that requi
 The security tests are based on `cdk_nag`. It checks your cloudformation output for security best practices. It can be found in the `service_stack.py` as part of the stack definition. It will fail the deployment when there is a security issue.
 
 For more information see the [AWS CDK-Nag documentation](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/check-aws-cdk-applications-or-cloudformation-templates-for-best-practices-by-using-cdk-nag-rule-packs.html){:target="_blank" rel="noopener"}.
-
-### Deployed Resources
-
-In the picture below you can see all the deployed resources ordered into domain groups. The image was created with the IDE plugin of AWS Application Composer.
-
-<img alt="alt_text" src="../media/application-composer-main-Orders-dev.template.json.png" />

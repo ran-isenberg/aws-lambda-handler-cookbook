@@ -91,7 +91,7 @@ flowchart LR
     style D fill:#c8e6c9
 ```
 
-*:material-magnify-plus-outline: Click diagram to zoom*
+<p class="mermaid-hint">Click diagram to zoom</p>
 
 `pr-serverless-service` runs for every pull request you open. It expects you defined a GitHub environments by the name `dev`, `staging` and `production` and for each environments to have the following variables: `CODECOV_TOKEN` for CodeCov integration and `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
 
@@ -150,7 +150,7 @@ flowchart LR
     style Release fill:#e3f2fd
 ```
 
-*:material-magnify-plus-outline: Click diagram to zoom*
+<p class="mermaid-hint">Click diagram to zoom</p>
 
 `main-serverless-service` runs for every MERGED pull request that runs on the main branch. It expects you defined a GitHub environments by the name `staging` and `production` and that both includes a secret by the name of `AWS_ROLE`.
 

@@ -1,0 +1,148 @@
+[project]
+
+site_name = "AWS Lambda Handler CookBook"
+site_description = "AWS Lambda Handler CookBook"
+site_author = "Ran Isenberg"
+
+site_url = "https://ran-isenberg.github.io/aws-lambda-handler-cookbook/"
+
+copyright = "Copyright &copy; 2026 Ran Isenberg"
+
+repo_url = "https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
+edit_uri = "edit/main/docs"
+
+nav = [
+    { "Homepage" = "index.md" },
+    { "Getting Started" = "getting_started.md" },
+    { "CDK" = "cdk.md" },
+    { "Pipeline" = "pipeline.md" },
+    { "Swagger" = "swagger/swagger.md" },
+    { "Best Practices" = [
+        "best_practices/index.md",
+        { "Architecture Layers" = "https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers" },
+        { "CDK Best Practices" = "https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches" },
+        { "Dynamic Configuration" = "best_practices/dynamic_configuration.md" },
+        { "Environment Variables" = "best_practices/environment_variables.md" },
+        { "Idempotency" = "https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk" },
+        { "Input Validation" = "best_practices/input_validation.md" },
+        { "Logger" = "best_practices/logger.md" },
+        { "Metrics" = "best_practices/metrics.md" },
+        { "Monitoring" = "best_practices/monitoring.md" },
+        { "Testing Best Practices" = "https://www.ranthebuilder.cloud/post/guide-to-serverless-lambda-testing-best-practices-part-1" },
+        { "Tracer" = "best_practices/tracer.md" },
+    ]},
+    { "Changelog" = "changelog.md" },
+    { "Contributing" = "contributing.md" },
+]
+
+extra_css = [
+    "stylesheets/extra.css",
+    "https://unpkg.com/swagger-ui-dist@5/swagger-ui.css",
+]
+
+extra_javascript = [
+    "javascripts/mermaid-zoom.js",
+    "javascripts/swagger-init.js",
+]
+
+# ---- Theme ----
+
+[project.theme]
+
+variant = "classic"
+
+logo = "media/builder.png"
+favicon = "media/favicon.png"
+
+features = [
+    "navigation.top",
+    "navigation.instant",
+    "navigation.indexes",
+    "navigation.tracking",
+    "content.code.annotate",
+    "content.code.copy",
+    "search.highlight",
+    "search.suggest",
+]
+
+[project.theme.font]
+text = "Ubuntu"
+
+[project.theme.icon]
+repo = "fontawesome/brands/github"
+
+# Palette toggle: light mode
+[[project.theme.palette]]
+scheme = "default"
+primary = "blue"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+# Palette toggle: dark mode
+[[project.theme.palette]]
+scheme = "slate"
+primary = "indigo"
+accent = "teal"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+# ---- Markdown Extensions ----
+
+[project.markdown_extensions.admonition]
+
+[project.markdown_extensions.pymdownx.tabbed]
+alternate_style = true
+
+[project.markdown_extensions.pymdownx.highlight]
+linenums = true
+
+[project.markdown_extensions.pymdownx.details]
+
+[project.markdown_extensions.pymdownx.snippets]
+base_path = "."
+check_paths = true
+
+[project.markdown_extensions.meta]
+
+[project.markdown_extensions.toc]
+permalink = true
+toc_depth = 4
+
+[project.markdown_extensions.attr_list]
+
+[project.markdown_extensions.pymdownx.emoji]
+emoji_index = "zensical.extensions.emoji.twemoji"
+emoji_generator = "zensical.extensions.emoji.to_svg"
+
+[project.markdown_extensions.pymdownx.inlinehilite]
+
+[project.markdown_extensions.pymdownx.superfences]
+custom_fences = [
+    { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+
+# ---- Extra ----
+
+[project.extra.analytics]
+provider = "google"
+property = "G-VN803S5YZ3"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github-alt"
+link = "https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/twitter"
+link = "https://twitter.com/RanBuilder"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/linkedin"
+link = "https://www.linkedin.com/in/ranisenberg/"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/medium"
+link = "https://medium.com/@isenberg-ran"
+
+[[project.extra.social]]
+icon = "fontawesome/solid/globe"
+link = "https://www.ranthebuilder.cloud"

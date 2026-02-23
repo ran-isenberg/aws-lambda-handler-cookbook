@@ -67,7 +67,10 @@ destroy:
 	npx cdk destroy --app="${PYTHON} ${PWD}/app.py" --force
 
 docs:
-	uv run mkdocs serve
+	uv run zensical serve
+
+publish-docs:
+	uv run zensical build --clean
 
 lint-docs:
 	npx markdownlint-cli --fix "docs"
