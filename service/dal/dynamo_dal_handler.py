@@ -56,3 +56,32 @@ class DynamoDalHandler(DalHandler):
 
         logger.info('finished create order successfully', order_item_count=order_item_count, customer_name=customer_name)
         return Order(id=entry.id, name=entry.name, item_count=entry.item_count)
+            
+    @tracer.capture_method(capture_response=False)
+    def delete_order_in_db(self, order_id: str) -> Order:
+        logger.append_keys(order_id=order_id)
+        logger.info('trying to delete order', order_id=order_id)
+        try:
+            table: Table = self._get_db_handler(self.table_name)
+            response = table.delete_item(
+                Key={'id': order_id},
+                ReturnValues='ALL_OLD'
+            )
+            
+            if 'Attributes' not in response:
+                error_msg = f'Order with ID {order_id} not found'
+                logger.error(error_msg)
+                raise InternalServerException(error_msg)
+                
+            attributes = response['Attributes']
+            deleted_order = Order(
+                id=attributes['id'],
+                name=attributes['name'],
+                item_count=attributes['item_count']
+            )
+            logger.info('finished delete order successfully', order_id=order_id)
+            return deleted_order
+        except (ClientError, ValidationError) as exc:  # pragma: no cover
+            error_msg = 'failed to delete order'
+            logger.exception(error_msg, order_id=order_id)
+            raise InternalServerException(error_msg) from exc
