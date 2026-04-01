@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "aws-cdk": "2.1114.1"
+        "aws-cdk": "2.1115.1"
     },
     "devDependencies": {
         "markdownlint-cli": "^0.48.0"
