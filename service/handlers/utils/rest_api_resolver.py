@@ -10,6 +10,12 @@ ORDERS_PATH = '/api/orders/'
 
 app = APIGatewayRestResolver(enable_validation=True)
 app.enable_swagger(path='/swagger', title='AWS Lambda Handler Cookbook - Orders Service')
+app.configure_openapi_merge(
+    path='service/handlers/',
+    pattern='*/.py',
+    resolver_name='app',
+    title='AWS Lambda Handler Cookbook - Orders Service',
+)
 
 
 @app.exception_handler(DynamicConfigurationException)

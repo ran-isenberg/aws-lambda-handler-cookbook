@@ -4,97 +4,95 @@ It's particularly useful for automating the process of fetching Swagger document
 You can place the swagger file under your docs folder and publish it as part of your PR changes.
 When you run the 'make pr' command, it will run automatically run this script and save its' output to the default location where it will be uploaded to GitHub pages.
 
-The script uses AWS Boto3 to interact with AWS services, and the 'requests' library to download the Swagger JSON.
-
 Usage:
     The script accepts command-line arguments for customization:
     --out-destination: Specifies the directory where the Swagger JSON will be saved. (Default: 'docs/swagger')
     --out-filename: Specifies the filename for the saved Swagger JSON. (Default: 'openapi.json')
-    --swagger-url-key: The key for the Swagger URL in the CDK stack outputs. (Default: 'SwaggerURL')
-    --stack-name: (Optional) The name of the CDK stack to use. If not provided, the 'get_stack_name' function from the cdk folder will be used
 
 Example:
-    python generate_openapi.py --out-destination './docs/swagger' --out-filename 'openapi.json' --swagger-url-key 'SwaggerURL' --stack-name 'MyStack'
+    python generate_openapi.py --out-destination './docs/swagger' --out-filename 'openapi.json'
 """
 
 import argparse
+import importlib
 import json
 import os
-from typing import Any, Dict
+import shutil
+import sys
+from pathlib import Path
 
-import boto3
-import requests
+import aws_lambda_powertools.event_handler.openapi as _openapi_pkg
 
-from cdk.service.utils import get_stack_name
+# Patch the installed merge.py with our version that supports the shared-resolver pattern
+# (project_root param and dependent file discovery). The current Powertools release (3.24+)
+# removed this support. This works in both local venvs and CI (GitHub Actions) since
+# we resolve the target path dynamically from the installed package location.
+# workaround until https://github.com/aws-powertools/powertools-lambda-python/pull/7939 merged
+_MERGE_SRC = Path(__file__).parent / 'merge.py'
+_MERGE_DST = Path(_openapi_pkg.__file__).parent / 'merge.py'
+shutil.copy2(_MERGE_SRC, _MERGE_DST)
 
+# Force Python to reload the patched module
+sys.modules.pop('aws_lambda_powertools.event_handler.openapi.merge', None)
+importlib.reload(_openapi_pkg)
 
-def get_cdk_stack_outputs(stack_name: str = None) -> Dict[str, str]:
-    """
-    Get outputs from a specified CDK stack.
+from aws_lambda_powertools.event_handler.openapi import OpenAPIMerge  # noqa: E402
 
-    Args:
-        stack_name (str, optional): The name of the CDK stack. If not provided, the 'get_stack_name' function from the cdk folder will be used
-
-    Returns:
-        Dict[str, str]: A dictionary of stack outputs.
-    """
-    client = boto3.client('cloudformation')
-    stack_name_to_use = stack_name if stack_name else get_stack_name()
-    response = client.describe_stacks(StackName=stack_name_to_use)
-    outputs = response['Stacks'][0]['Outputs']
-    return {output['OutputKey']: output['OutputValue'] for output in outputs}
-
-
-def download_swagger_json(swagger_url: str) -> Dict[str, Any]:
-    """
-    Download Swagger JSON from the provided URL.
-
-    Args:
-        swagger_url (str): The URL from which to download the Swagger JSON.
-
-    Returns:
-        Dict[str, Any]: The downloaded Swagger JSON.
-    """
-    response = requests.get(f'{swagger_url}?format=json')
-    response.raise_for_status()
-    return response.json()
+# Dummy environment variables required for handler module loading.
+# When merge.py imports handler files to discover routes, decorators like
+# @init_environment_variables validate env vars at import time.
+# These dummy values allow the module to load without a real Lambda environment.
+_DUMMY_ENV_VARS = {
+    'POWERTOOLS_SERVICE_NAME': 'orders',
+    'POWERTOOLS_TRACE_DISABLED': 'true',
+    'LOG_LEVEL': 'INFO',
+    'IDEMPOTENCY_TABLE_NAME': 'dummy',
+    'CONFIGURATION_APP': 'dummy',
+    'CONFIGURATION_ENV': 'dummy',
+    'CONFIGURATION_NAME': 'dummy',
+    'CONFIGURATION_MAX_AGE_MINUTES': '1',
+    'REST_API': 'https://dummy.execute-api.us-east-1.amazonaws.com',
+    'ROLE_ARN': 'arn:aws:iam::123456789012:role/dummy',
+    'TABLE_NAME': 'dummy',
+}
 
 
-def save_json_to_file(json_data: Dict[str, Any], file_path: str) -> None:
-    """
-    Save JSON data to a file.
+def _print_discovery_info(merge: OpenAPIMerge, files: list, schema_json: str) -> None:
+    print(f'Discovered {len(files)} resolver file(s):')
+    for f in files:
+        print(f'  - Resolver: {f}')
+    for resolver_file, deps in merge.dependent_files.items():
+        print(f'  Resolver {resolver_file.name} has {len(deps)} dependent handler(s):')
+        for dep in deps:
+            print(f'    - Handler: {dep}')
+    paths = json.loads(schema_json).get('paths', {})
+    print(f'Generated {len(paths)} API path(s):')
+    for path, methods in paths.items():
+        for method in methods:
+            print(f'  - {method.upper()} {path}')
 
-    Args:
-        json_data (Dict[str, Any]): JSON data to save.
-        file_path (str): The file path where the JSON data will be saved.
-    """
+
+def write_swagger(out_destination: str, out_filename: str) -> None:
+    # Set dummy env vars only for keys not already present
+    for key, value in _DUMMY_ENV_VARS.items():
+        os.environ.setdefault(key, value)
+
+    file_path = os.path.join(out_destination, out_filename)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    with open(file_path, 'w') as file:
-        json.dump(json_data, file, indent=4)
+    merge = OpenAPIMerge(title='AWS Lambda Handler Cookbook - Orders Service', version='1.0.0', on_conflict='warn')
+    files = merge.discover(
+        path='service/handlers',
+        pattern='**/*.py',
+        resolver_name='app',
+        recursive=True,
+        project_root='.',
+    )
+    schema_json = merge.get_openapi_json_schema()
+    _print_discovery_info(merge, files, schema_json)
 
-
-def main(out_destination: str, out_filename: str, swagger_url_key: str, stack_name: str = None) -> None:
-    """
-    Main function that orchestrates the download and saving of Swagger JSON.
-
-    Args:
-        out_destination (str): The directory to save the Swagger JSON. Default is 'docs/swagger'.
-        out_filename (str): The filename for the Swagger JSON. Default is 'openapi.json'.
-        swagger_url_key (str): The key for the Swagger URL in CDK stack outputs. Default is 'SwaggerURL'.
-        stack_name (str, optional): The name of the CDK stack to use.
-    """
-    outputs = get_cdk_stack_outputs(stack_name)
-    swagger_url = outputs.get(swagger_url_key)
-    if swagger_url:
-        try:
-            swagger_json = download_swagger_json(swagger_url)
-            file_path = os.path.join(out_destination, out_filename)
-            save_json_to_file(swagger_json, file_path)
-            print(f'Swagger JSON saved to {file_path}')
-        except requests.HTTPError as e:
-            print(f'Failed to download Swagger JSON: {e}')
-    else:
-        print(f'Swagger endpoint URL with key "{swagger_url_key}" not found in stack outputs.')
+    with open(file_path, 'w') as f:
+        f.write(schema_json)
+    print(f'OpenAPI schema written to {file_path}')
 
 
 if __name__ == '__main__':
@@ -103,13 +101,5 @@ if __name__ == '__main__':
         '--out-destination', type=str, default='docs/swagger', help='Output destination directory for Swagger JSON (default: docs/swagger)'
     )
     parser.add_argument('--out-filename', type=str, default='openapi.json', help='Output filename for Swagger JSON (default: openapi.json)')
-    parser.add_argument('--swagger-url-key', type=str, default='SwaggerURL', help='Key for Swagger URL in CDK stack outputs (default: SwaggerURL)')
-    parser.add_argument(
-        '--stack-name',
-        type=str,
-        help='Name of the CDK stack to use (optional), If not provided, the get_stack_name function from the CDK folder will be used',
-    )
-
     args = parser.parse_args()
-
-    main(args.out_destination, args.out_filename, args.swagger_url_key, args.stack_name)
+    write_swagger(args.out_destination, args.out_filename)
