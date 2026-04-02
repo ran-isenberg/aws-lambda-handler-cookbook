@@ -15,6 +15,7 @@ Example:
 
 import argparse
 import importlib
+import json
 import os
 import shutil
 import sys
@@ -56,6 +57,21 @@ _DUMMY_ENV_VARS = {
 }
 
 
+def _print_discovery_info(merge: OpenAPIMerge, files: list, schema_json: str) -> None:
+    print(f'Discovered {len(files)} resolver file(s):')
+    for f in files:
+        print(f'  - Resolver: {f}')
+    for resolver_file, deps in merge.dependent_files.items():
+        print(f'  Resolver {resolver_file.name} has {len(deps)} dependent handler(s):')
+        for dep in deps:
+            print(f'    - Handler: {dep}')
+    paths = json.loads(schema_json).get('paths', {})
+    print(f'Generated {len(paths)} API path(s):')
+    for path, methods in paths.items():
+        for method in methods:
+            print(f'  - {method.upper()} {path}')
+
+
 def write_swagger(out_destination: str, out_filename: str) -> None:
     # Set dummy env vars only for keys not already present
     for key, value in _DUMMY_ENV_VARS.items():
@@ -71,23 +87,8 @@ def write_swagger(out_destination: str, out_filename: str) -> None:
         recursive=True,
         project_root='.',
     )
-    print(f'Discovered {len(files)} resolver file(s):')
-    for f in files:
-        print(f'  - Resolver: {f}')
-    for resolver_file, deps in merge.dependent_files.items():
-        print(f'  Resolver {resolver_file.name} has {len(deps)} dependent handler(s):')
-        for dep in deps:
-            print(f'    - Handler: {dep}')
-
     schema_json = merge.get_openapi_json_schema()
-    import json
-
-    schema = json.loads(schema_json)
-    paths = schema.get('paths', {})
-    print(f'Generated {len(paths)} API path(s):')
-    for path, methods in paths.items():
-        for method in methods:
-            print(f'  - {method.upper()} {path}')
+    _print_discovery_info(merge, files, schema_json)
 
     with open(file_path, 'w') as f:
         f.write(schema_json)
