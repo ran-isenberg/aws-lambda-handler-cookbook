@@ -10,6 +10,130 @@
     }
   ],
   "paths": {
+    "/api/orders/{order_id}": {
+      "get": {
+        "tags": [
+          "CRUD"
+        ],
+        "summary": "Get an order",
+        "description": "Get an order by its ID",
+        "operationId": "handle_get_order_api_orders__order_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Order Id"
+            },
+            "name": "order_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The requested order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOrderOutput"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderNotFoundOutput"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CRUD"
+        ],
+        "summary": "Delete an order",
+        "description": "Delete an order by its ID",
+        "operationId": "handle_delete_order_api_orders__order_id__delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Order Id"
+            },
+            "name": "order_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Order deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteOrderOutput"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderNotFoundOutput"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/orders": {
       "post": {
         "tags": [
@@ -117,6 +241,50 @@
         ],
         "title": "CreateOrderRequest"
       },
+      "DeleteOrderOutput": {
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "title": "Order Id",
+            "description": "The deleted order ID"
+          }
+        },
+        "type": "object",
+        "required": [
+          "order_id"
+        ],
+        "title": "DeleteOrderOutput"
+      },
+      "GetOrderOutput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Name",
+            "description": "Customer name"
+          },
+          "item_count": {
+            "type": "integer",
+            "title": "Item Count",
+            "description": "Amount of items in order"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 36,
+            "minLength": 36,
+            "title": "Id",
+            "description": "Order ID as UUID"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "item_count",
+          "id"
+        ],
+        "title": "GetOrderOutput"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -141,6 +309,18 @@
         },
         "type": "object",
         "title": "InternalServerErrorOutput"
+      },
+      "OrderNotFoundOutput": {
+        "properties": {
+          "error": {
+            "type": "string",
+            "title": "Error",
+            "description": "Error description",
+            "default": "order was not found"
+          }
+        },
+        "type": "object",
+        "title": "OrderNotFoundOutput"
       },
       "ValidationError": {
         "properties": {

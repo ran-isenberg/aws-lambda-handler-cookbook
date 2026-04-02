@@ -12,5 +12,17 @@ class CreateOrderOutput(Order):
     pass
 
 
+class GetOrderOutput(Order):
+    pass
+
+
+class DeleteOrderOutput(BaseModel):
+    order_id: Annotated[str, Field(description='The deleted order ID')]
+
+
 class InternalServerErrorOutput(BaseModel):
     error: Annotated[str, Field(description='Error description')] = 'internal server error'
+
+
+class OrderNotFoundOutput(BaseModel):
+    error: Annotated[str, Field(description='Error description')] = 'order was not found'

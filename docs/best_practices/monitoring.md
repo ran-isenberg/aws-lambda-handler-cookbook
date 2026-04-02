@@ -17,7 +17,7 @@ By aggregating metrics, logs, and alarms, CloudWatch facilitates swift issue dia
 flowchart LR
     subgraph AWS["AWS Cloud"]
         subgraph APIGW["API Gateway"]
-            REST["REST API<br/>POST /api/orders"]
+            REST["REST API<br/>POST /api/orders<br/>GET /api/orders/{id}<br/>DELETE /api/orders/{id}"]
         end
 
         subgraph Security["Security (Production)"]
@@ -25,7 +25,9 @@ flowchart LR
         end
 
         subgraph Compute["Compute"]
-            LAMBDA["Lambda Function<br/>Python 3.14"]
+            CREATE["Create Order<br/>Lambda Function"]
+            GET["Get Order<br/>Lambda Function"]
+            DELETE["Delete Order<br/>Lambda Function"]
             LAYER["Lambda Layer<br/>Common Dependencies"]
         end
 
@@ -41,16 +43,24 @@ flowchart LR
 
     CLIENT((Client)) --> WAF
     WAF --> REST
-    REST --> LAMBDA
-    LAMBDA --> LAYER
-    LAMBDA --> APPCONFIG
-    LAMBDA --> DDB
-    LAMBDA --> IDEMPOTENCY
+    REST --> CREATE
+    REST --> GET
+    REST --> DELETE
+    CREATE --> LAYER
+    GET --> LAYER
+    DELETE --> LAYER
+    CREATE --> APPCONFIG
+    CREATE --> DDB
+    CREATE --> IDEMPOTENCY
+    GET --> DDB
+    DELETE --> DDB
 
     style CLIENT fill:#f9f,stroke:#333
     style WAF fill:#ff6b6b,stroke:#333
     style REST fill:#4ecdc4,stroke:#333
-    style LAMBDA fill:#ffe66d,stroke:#333
+    style CREATE fill:#ffe66d,stroke:#333
+    style GET fill:#ffe66d,stroke:#333
+    style DELETE fill:#ffe66d,stroke:#333
     style LAYER fill:#ffe66d,stroke:#333
     style APPCONFIG fill:#95e1d3,stroke:#333
     style DDB fill:#4a90d9,stroke:#333

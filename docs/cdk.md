@@ -15,7 +15,7 @@ description: AWS Lambda Cookbook CDK Project
 flowchart LR
     subgraph AWS["AWS Cloud"]
         subgraph APIGW["API Gateway"]
-            REST["REST API<br/>POST /api/orders"]
+            REST["REST API<br/>POST /api/orders<br/>GET /api/orders/{id}<br/>DELETE /api/orders/{id}"]
         end
 
         subgraph Security["Security (Production)"]
@@ -23,7 +23,9 @@ flowchart LR
         end
 
         subgraph Compute["Compute"]
-            LAMBDA["Lambda Function<br/>Python 3.14"]
+            CREATE["Create Order<br/>Lambda Function"]
+            GET["Get Order<br/>Lambda Function"]
+            DELETE["Delete Order<br/>Lambda Function"]
             LAYER["Lambda Layer<br/>Common Dependencies"]
         end
 
@@ -39,16 +41,24 @@ flowchart LR
 
     CLIENT((Client)) --> WAF
     WAF --> REST
-    REST --> LAMBDA
-    LAMBDA --> LAYER
-    LAMBDA --> APPCONFIG
-    LAMBDA --> DDB
-    LAMBDA --> IDEMPOTENCY
+    REST --> CREATE
+    REST --> GET
+    REST --> DELETE
+    CREATE --> LAYER
+    GET --> LAYER
+    DELETE --> LAYER
+    CREATE --> APPCONFIG
+    CREATE --> DDB
+    CREATE --> IDEMPOTENCY
+    GET --> DDB
+    DELETE --> DDB
 
     style CLIENT fill:#f9f,stroke:#333
     style WAF fill:#ff6b6b,stroke:#333
     style REST fill:#4ecdc4,stroke:#333
-    style LAMBDA fill:#ffe66d,stroke:#333
+    style CREATE fill:#ffe66d,stroke:#333
+    style GET fill:#ffe66d,stroke:#333
+    style DELETE fill:#ffe66d,stroke:#333
     style LAYER fill:#ffe66d,stroke:#333
     style APPCONFIG fill:#95e1d3,stroke:#333
     style DDB fill:#4a90d9,stroke:#333
@@ -59,7 +69,7 @@ flowchart LR
 
 All CDK project files can be found under the CDK folder.
 
-The CDK code create an API GW with a path of /api/orders which triggers the lambda on 'POST' requests.
+The CDK code creates an API GW with paths /api/orders (POST) and /api/orders/{order_id} (GET, DELETE), each backed by a dedicated Lambda function.
 
 The AWS Lambda handler uses a Lambda layer optimization which takes all the packages under the [packages] section in the Pipfile and downloads them in via a Docker instance.
 
@@ -85,9 +95,9 @@ All AWS Lambda function configurations are saved as constants at the `cdk.servic
 - AWS Cloudformation stack: **cdk.service.service_stack.py** which is consisted of one construct
 - Construct: **cdk.service.api_construct.py** which includes:
     - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more in [my blog post on Lambda layers best practices](https://ranthebuilder.cloud/blog/aws-lambda-layers-best-practices/){:target="_blank" rel="noopener"}.
-    - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
-    - **Lambda Role** - The role of the Lambda function.
-    - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/orders that triggers the Lambda function.
+    - **Lambda Functions** - Three Lambda handler functions for create, get, and delete order operations. Handler code is taken from the service `folder`.
+    - **Lambda Roles** - Dedicated least-privilege IAM roles for each Lambda function.
+    - **API GW with Lambda Integrations** - API GW with Lambda integrations: POST /api/orders (create), GET /api/orders/{order_id} (get), and DELETE /api/orders/{order_id} (delete).
     - **AWS DynamoDB table** - stores request data. Created in the `api_db_construct.py` construct.
     - **AWS DynamoDB table** - stores idempotency data. Created in the `api_db_construct.py` construct.
 - Construct: **cdk.service.configuration.configuration_construct.py** which includes:
