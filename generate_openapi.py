@@ -71,9 +71,26 @@ def write_swagger(out_destination: str, out_filename: str) -> None:
         recursive=True,
         project_root='.',
     )
-    print(f'Discovered {files} resolver file(s) for OpenAPI generation.')
+    print(f'Discovered {len(files)} resolver file(s):')
+    for f in files:
+        print(f'  - Resolver: {f}')
+    for resolver_file, deps in merge.dependent_files.items():
+        print(f'  Resolver {resolver_file.name} has {len(deps)} dependent handler(s):')
+        for dep in deps:
+            print(f'    - Handler: {dep}')
+
+    schema_json = merge.get_openapi_json_schema()
+    import json
+    schema = json.loads(schema_json)
+    paths = schema.get('paths', {})
+    print(f'Generated {len(paths)} API path(s):')
+    for path, methods in paths.items():
+        for method in methods:
+            print(f'  - {method.upper()} {path}')
+
     with open(file_path, 'w') as f:
-        f.write(merge.get_openapi_json_schema())
+        f.write(schema_json)
+    print(f'OpenAPI schema written to {file_path}')
 
 
 if __name__ == '__main__':
