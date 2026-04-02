@@ -26,6 +26,7 @@ import aws_lambda_powertools.event_handler.openapi as _openapi_pkg
 # (project_root param and dependent file discovery). The current Powertools release (3.24+)
 # removed this support. This works in both local venvs and CI (GitHub Actions) since
 # we resolve the target path dynamically from the installed package location.
+# workaround until https://github.com/aws-powertools/powertools-lambda-python/pull/7939 merged
 _MERGE_SRC = Path(__file__).parent / 'merge.py'
 _MERGE_DST = Path(_openapi_pkg.__file__).parent / 'merge.py'
 shutil.copy2(_MERGE_SRC, _MERGE_DST)

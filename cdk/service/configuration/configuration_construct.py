@@ -60,6 +60,7 @@ class ConfigurationStore(Construct):
             type=appconfig.ConfigurationType.FREEFORM,
             deployment_strategy=self.config_dep_strategy,
             deploy_to=[self.config_env],
+            deletion_protection_check=appconfig.DeletionProtectionCheck.BYPASS,
         )
 
     def _get_and_validate_configuration(self, environment: str) -> str:
