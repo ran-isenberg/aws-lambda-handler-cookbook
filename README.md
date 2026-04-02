@@ -14,11 +14,11 @@ This project provides a working, open source based, AWS Lambda handler skeleton 
 
 This project can serve as a blueprint for new Serverless services - CDK deployment code, pipeline and handler are covered.
 
-**[📜Documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)** | **[Blogs website](https://www.ranthebuilder.cloud)**
+**[📜Documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)** | **[Blogs website](https://ranthebuilder.cloud/)**
 > **Contact details | mailto:ran.isenberg@ranthebuilder.cloud**
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/IsenbergRan?label=Follow&style=social)](https://twitter.com/RanBuilder)
-[![Website](https://img.shields.io/badge/Website-www.ranthebuilder.cloud-blue)](https://www.ranthebuilder.cloud/)
+[![Website](https://img.shields.io/badge/Website-www.ranthebuilder.cloud-blue)](https://ranthebuilder.cloud/)
 
 ## AWS Recommendation
 
@@ -211,17 +211,17 @@ Each utility is implemented when a new blog post is published about that utility
 
 The utilities cover multiple aspect of a production-ready service, including:
 
-* [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging)
-* [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability)
-* [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability)
-* [Environment Variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables)
-* [Input Validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation)
-* [Dynamic Configuration & feature flags](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices)
-* [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-blueprint-project)
-* [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook)
-* [Serverless Monitoring](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one)
-* [API Idempotency](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk)
-* [Serverless OpenAPI Documentation with AWS Powertools](https://www.ranthebuilder.cloud/post/serverless-open-api-documentation-with-aws-powertools)
+* [Logging](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging/)
+* [Observability: Monitoring and Tracing](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability/)
+* [Observability: Business KPIs Metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/)
+* [Environment Variables](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-environment-variables/)
+* [Input Validation](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation/)
+* [Dynamic Configuration & feature flags](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices/)
+* [Start Your AWS Serverless Service With Two Clicks](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project/)
+* [CDK Best practices](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/)
+* [Serverless Monitoring](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
+* [API Idempotency](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/)
+* [Serverless OpenAPI Documentation with AWS Powertools](https://ranthebuilder.cloud/blog/serverless-open-api-documentation-with-aws-powertools/)
 
 ## Getting started
 
@@ -238,14 +238,14 @@ Read our code of conduct [here.](https://github.com/ran-isenberg/aws-lambda-hand
 ## Connect
 
 - Email: ran.isenberg@ranthebuilder.cloud
-- Blog: https://www.ranthebuilder.cloud
+- Blog: https://ranthebuilder.cloud/
 - Bluesky: [@ranthebuilder.cloud](https://bsky.app/profile/ranthebuilder.cloud)
 - X:       [@RanBuilder](https://twitter.com/RanBuilder)
 - LinkedIn: https://www.linkedin.com/in/ranbuilder/
 
 ## AI-Assisted Development
 
-This project uses [AI-DLC (AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows) for AI-assisted software development. Learn more about AI-DLC in this [blog post](https://www.ranthebuilder.cloud/post/ai-driven-sdlc).
+This project uses [AI-DLC (AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows) for AI-assisted software development. Learn more about AI-DLC in this [blog post](https://ranthebuilder.cloud/blog/ai-driven-sdlc/).
 
 AI-DLC provides a structured, adaptive workflow for:
 

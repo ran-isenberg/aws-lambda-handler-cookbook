@@ -75,7 +75,7 @@ Read more about [extending built-in models](https://docs.powertools.aws.dev/lamb
 
 ## **Blog Reference**
 
-Read more about the importance of input validation and the potential pitfalls it prevents in [my blog post on input validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation){:target="_blank" rel="noopener"}.
+Read more about the importance of input validation and the potential pitfalls it prevents in [my blog post on input validation](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation/){:target="_blank" rel="noopener"}.
 
 ## **More Details**
 

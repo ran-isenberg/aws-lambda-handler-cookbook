@@ -4,7 +4,7 @@ description: AWS Lambda Handler Cookbook - a Serverless Service Blueprint
 ---
 ## **AWS Lambda Handler Cookbook - A Serverless Service Blueprint**
 
-[<img alt="AWS Lambda Handler Cookbook" src="./media/banner.png" />](https://www.ranthebuilder.cloud/)
+[<img alt="AWS Lambda Handler Cookbook" src="./media/banner.png" />](https://ranthebuilder.cloud/)
 
 ## AWS Recommendation
 
@@ -154,7 +154,7 @@ The GitHub blueprint project can be found at [https://github.com/ran-isenberg/aw
 
 ## **AI-Assisted Development**
 
-This project uses [AI-DLC (AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows){:target="_blank" rel="noopener"} for AI-assisted software development. Learn more about AI-DLC in this [blog post](https://www.ranthebuilder.cloud/post/ai-driven-sdlc){:target="_blank" rel="noopener"}.
+This project uses [AI-DLC (AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows){:target="_blank" rel="noopener"} for AI-assisted software development. Learn more about AI-DLC in this [blog post](https://ranthebuilder.cloud/blog/ai-driven-sdlc/){:target="_blank" rel="noopener"}.
 
 AI-DLC provides a structured, adaptive workflow for:
 
@@ -179,10 +179,10 @@ The utilities cover multiple aspects of a production-ready service, including:
 - [**Environment Variables**](best_practices/environment_variables.md)
 - [**Input Validation**](best_practices/input_validation.md)
 - [**Dynamic configuration & features flags**](best_practices/dynamic_configuration.md)
-- [**Serverless Monitoring**](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one)
-- [**API Idempotency**](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk){:target="_blank" rel="noopener"}
-- [**Learn How to Write AWS Lambda Functions with Three Architecture Layers**](https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers){:target="_blank" rel="noopener"}
-- [**Serverless OpenAPI Documentation with AWS Powertools**](https://www.ranthebuilder.cloud/post/serverless-open-api-documentation-with-aws-powertools){:target="_blank" rel="noopener"}
+- [**Serverless Monitoring**](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
+- [**API Idempotency**](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/){:target="_blank" rel="noopener"}
+- [**Learn How to Write AWS Lambda Functions with Three Architecture Layers**](https://ranthebuilder.cloud/blog/learn-how-to-write-aws-lambda-functions-with-architecture-layers/){:target="_blank" rel="noopener"}
+- [**Serverless OpenAPI Documentation with AWS Powertools**](https://ranthebuilder.cloud/blog/serverless-open-api-documentation-with-aws-powertools/){:target="_blank" rel="noopener"}
 
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
 

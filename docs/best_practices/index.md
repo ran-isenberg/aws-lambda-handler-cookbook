@@ -19,7 +19,7 @@ This section covers essential best practices for building production-ready AWS L
 
 ## External Resources
 
-- [Architecture Layers](https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers) - Handler, logic, and data access layer patterns
-- [CDK Best Practices](https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches) - Infrastructure as code patterns
-- [Idempotency](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk) - API idempotency with Powertools
-- [Testing Best Practices](https://www.ranthebuilder.cloud/post/guide-to-serverless-lambda-testing-best-practices-part-1) - Unit, integration, and E2E testing
+- [Architecture Layers](https://ranthebuilder.cloud/blog/learn-how-to-write-aws-lambda-functions-with-architecture-layers/) - Handler, logic, and data access layer patterns
+- [CDK Best Practices](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/) - Infrastructure as code patterns
+- [Idempotency](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/) - API idempotency with Powertools
+- [Testing Best Practices](https://ranthebuilder.cloud/blog/guide-to-serverless-lambda-testing-best-practices-part-1/) - Unit, integration, and E2E testing

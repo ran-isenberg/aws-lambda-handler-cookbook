@@ -24,7 +24,7 @@ The [AWS Lambda environment variables modeler](https://github.com/ran-isenberg/a
 
 ## **Blog Reference**
 
-Read more about the importance of validating environment variables and how this utility works in [my blog post on environment variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables){:target="_blank" rel="noopener"}.
+Read more about the importance of validating environment variables and how this utility works in [my blog post on environment variables](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-environment-variables/){:target="_blank" rel="noopener"}.
 
 ## **Schema Definition**
 
