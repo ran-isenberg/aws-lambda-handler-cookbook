@@ -18,23 +18,43 @@ import os
 
 from aws_lambda_powertools.event_handler.openapi import OpenAPIMerge
 
+# Dummy environment variables required for handler module loading.
+# When merge.py imports handler files to discover routes, decorators like
+# @init_environment_variables validate env vars at import time.
+# These dummy values allow the module to load without a real Lambda environment.
+_DUMMY_ENV_VARS = {
+    'POWERTOOLS_SERVICE_NAME': 'orders',
+    'POWERTOOLS_TRACE_DISABLED': 'true',
+    'LOG_LEVEL': 'INFO',
+    'IDEMPOTENCY_TABLE_NAME': 'dummy',
+    'CONFIGURATION_APP': 'dummy',
+    'CONFIGURATION_ENV': 'dummy',
+    'CONFIGURATION_NAME': 'dummy',
+    'CONFIGURATION_MAX_AGE_MINUTES': '1',
+    'REST_API': 'https://dummy.execute-api.us-east-1.amazonaws.com',
+    'ROLE_ARN': 'arn:aws:iam::123456789012:role/dummy',
+    'TABLE_NAME': 'dummy',
+}
+
 
 def write_swagger(out_destination: str, out_filename: str) -> None:
+    # Set dummy env vars only for keys not already present
+    for key, value in _DUMMY_ENV_VARS.items():
+        os.environ.setdefault(key, value)
+
     file_path = os.path.join(out_destination, out_filename)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     merge = OpenAPIMerge(title='AWS Lambda Handler Cookbook - Orders Service', version='1.0.0', on_conflict='warn')
-    x = merge.discover(
+    files = merge.discover(
         path='service/handlers',
         pattern='**/*.py',
         resolver_name='app',
         recursive=True,
         project_root='.',
     )
-    print(f'Discovered {x} resolver file(s) for OpenAPI generation.')
-
-    # print(merge.get_openapi_json_schema())
-    # with open(file_path, 'w') as f:
-    #    f.write(merge.get_openapi_json_schema())
+    print(f'Discovered {files} resolver file(s) for OpenAPI generation.')
+    with open(file_path, 'w') as f:
+        f.write(merge.get_openapi_json_schema())
 
 
 if __name__ == '__main__':
