@@ -14,9 +14,27 @@ Example:
 """
 
 import argparse
+import importlib
 import os
+import shutil
+import sys
+from pathlib import Path
 
-from aws_lambda_powertools.event_handler.openapi import OpenAPIMerge
+import aws_lambda_powertools.event_handler.openapi as _openapi_pkg
+
+# Patch the installed merge.py with our version that supports the shared-resolver pattern
+# (project_root param and dependent file discovery). The current Powertools release (3.24+)
+# removed this support. This works in both local venvs and CI (GitHub Actions) since
+# we resolve the target path dynamically from the installed package location.
+_MERGE_SRC = Path(__file__).parent / 'merge.py'
+_MERGE_DST = Path(_openapi_pkg.__file__).parent / 'merge.py'
+shutil.copy2(_MERGE_SRC, _MERGE_DST)
+
+# Force Python to reload the patched module
+sys.modules.pop('aws_lambda_powertools.event_handler.openapi.merge', None)
+importlib.reload(_openapi_pkg)
+
+from aws_lambda_powertools.event_handler.openapi import OpenAPIMerge  # noqa: E402
 
 # Dummy environment variables required for handler module loading.
 # When merge.py imports handler files to discover routes, decorators like
