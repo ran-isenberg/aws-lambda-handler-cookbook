@@ -61,7 +61,7 @@ flowchart LR
 
 The goal is to monitor the service API gateway, Lambda function, and DynamoDB tables and ensure everything is in order.
 
-In addition, we want to visualize service [KPI metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}.
+In addition, we want to visualize service [KPI metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/){:target="_blank" rel="noopener"}.
 
 ## **Monitoring Dashboards**
 
@@ -134,4 +134,4 @@ You can find the [monitoring CDK construct on GitHub](https://github.com/ran-ise
 
 ## **Further Reading**
 
-If you wish to learn more about this concept and go over details on the CDK code, check out my [blog post](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one).
+If you wish to learn more about this concept and go over details on the CDK code, check out my [blog post](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/).

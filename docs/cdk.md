@@ -6,8 +6,8 @@ description: AWS Lambda Cookbook CDK Project
 
 - Follow this [getting started with CDK guide](https://docs.aws.amazon.com/cdk/v1/guide/getting_started.html){:target="_blank" rel="noopener"}
 - Make sure your AWS account and machine can deploy an AWS Cloudformation stack and have all the tokens and configuration as described in the page above.
-- CDK Best practices [blog](https://www.ranthebuilder.cloud/post/aws-cdk-best-practices-from-the-trenches){:target="_blank" rel="noopener"}
-- Lambda layers best practices [blog](https://www.ranthebuilder.cloud/post/aws-lambda-layers-best-practices){:target="_blank" rel="noopener"}
+- CDK Best practices [blog](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/){:target="_blank" rel="noopener"}
+- Lambda layers best practices [blog](https://ranthebuilder.cloud/blog/aws-lambda-layers-best-practices/){:target="_blank" rel="noopener"}
 
 ## **CDK Deployment**
 
@@ -84,7 +84,7 @@ All AWS Lambda function configurations are saved as constants at the `cdk.servic
 
 - AWS Cloudformation stack: **cdk.service.service_stack.py** which is consisted of one construct
 - Construct: **cdk.service.api_construct.py** which includes:
-    - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more in [my blog post on Lambda layers best practices](https://www.ranthebuilder.cloud/post/aws-lambda-layers-best-practices){:target="_blank" rel="noopener"}.
+    - **Lambda Layer** - deployment optimization meant to be used with multiple handlers under the same API GW, sharing code logic and dependencies. You can read more in [my blog post on Lambda layers best practices](https://ranthebuilder.cloud/blog/aws-lambda-layers-best-practices/){:target="_blank" rel="noopener"}.
     - **Lambda Function** - The Lambda handler function itself. Handler code is taken from the service `folder`.
     - **Lambda Role** - The role of the Lambda function.
     - **API GW with Lambda Integration** - API GW with a Lambda integration POST /api/orders that triggers the Lambda function.
