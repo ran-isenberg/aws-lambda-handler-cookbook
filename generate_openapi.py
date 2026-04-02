@@ -81,6 +81,7 @@ def write_swagger(out_destination: str, out_filename: str) -> None:
 
     schema_json = merge.get_openapi_json_schema()
     import json
+
     schema = json.loads(schema_json)
     paths = schema.get('paths', {})
     print(f'Generated {len(paths)} API path(s):')
