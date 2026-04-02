@@ -63,7 +63,7 @@ def _file_has_resolver(file_path: Path, resolver_name: str) -> bool:
     try:
         source = file_path.read_text(encoding='utf-8')
         tree = ast.parse(source, filename=str(file_path))
-    except (SyntaxError, UnicodeDecodeError):
+    except SyntaxError, UnicodeDecodeError:
         return False
 
     for node in ast.walk(tree):
@@ -80,7 +80,7 @@ def _file_imports_resolver(file_path: Path, resolver_file: Path, resolver_name: 
     try:
         source = file_path.read_text(encoding='utf-8')
         tree = ast.parse(source, filename=str(file_path))
-    except (SyntaxError, UnicodeDecodeError):
+    except SyntaxError, UnicodeDecodeError:
         return False
 
     # Get the module path of the resolver file relative to root
