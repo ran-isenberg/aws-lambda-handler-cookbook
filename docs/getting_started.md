@@ -2,31 +2,46 @@
 title: Getting Started
 description: AWS Lambda Cookbook Project Getting started
 ---
+
 ## **Prerequisites**
 
-* **Docker** - install [Docker](https://www.docker.com/){target="_blank"}. Required for the Lambda layer packaging process.
+!!! warning "Required Tools"
+    Make sure you have all prerequisites installed before proceeding.
+
+* **Docker** - install [Docker](https://www.docker.com/){:target="_blank" rel="noopener"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack. Run CDK [Bootstrap](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html) on your AWS account and region.
 * Python 3.14
-* [poetry](https://pypi.org/project/poetry/){target="_blank"} - Make sure to have poetry v2 and above and to run ``poetry config --local virtualenvs.in-project true`` so all dependencies are installed in the project '.venv' folder.
-* For Windows based machines, use the Makefile_windows version (rename to Makefile). Default Makefile is for Mac/Linux.
+* [uv](https://docs.astral.sh/uv/){:target="_blank" rel="noopener"} - A fast Python package installer and resolver. Install with ``curl -LsSf https://astral.sh/uv/install.sh | sh`` or ``pip install uv``.
+
+!!! tip "Windows Users"
+    For Windows based machines, use the `Makefile_windows` version (rename to `Makefile`). Default Makefile is for Mac/Linux.
 
 ## Getting Started
 
 You can start with a clean service out of this blueprint repository without using the 'Template' button on GitHub.
 
-You can use Cookiecutter.
+!!! success "Recommended: Use Cookiecutter"
+    The fastest way to get started is using Cookiecutter to generate a customized project.
 
 * Cookiecutter - install with pip/brew ``brew install cookiecutter`` or ``pip install cookiecutter`
 
 Then run:
 
-**[`cookiecutter gh:ran-isenberg/cookiecutter-serverless-python`](#){: .copyMe}:clipboard:**
+```bash
+cookiecutter gh:ran-isenberg/cookiecutter-serverless-python
+```
 
 Answer the questions to select repo name, service name, etc.:
 
 ![logo](https://github.com/ran-isenberg/cookiecutter-serverless-python/blob/main/media/howto.png?raw=true)
 
 **That's it, your developer environment has been set! you are ready to deploy the service:**
+
+```bash
+cd {new repo folder}
+make dev
+make deploy
+```
 
 ## **Creating a Developer Environment (without cookiecutter)**
 
@@ -36,6 +51,9 @@ Answer the questions to select repo name, service name, etc.:
 
 Create a cloudformation stack by running ``make deploy``.
 
+!!! info "First Deployment"
+    The first deployment may take 5-10 minutes as CDK provisions all resources.
+
 ## **Unit Tests**
 
 Unit tests can be found under the ``tests/unit`` folder.
@@ -44,7 +62,8 @@ You can run the tests by using the following command: ``make unit``.
 
 ## **Integration Tests**
 
-Make sure you deploy the stack first as these tests trigger your lambda handler LOCALLY but they can communicate with AWS services.
+!!! warning "Deploy First"
+    Make sure you deploy the stack first as these tests trigger your Lambda handler LOCALLY but communicate with AWS services.
 
 These tests allow you to debug in your IDE your AWS Lambda function.
 
@@ -78,7 +97,7 @@ Be sure to commit all the changes that ``make pr`` does for you.
 
 ## **OpenAPI Swagger Generation**
 
-Run either ``make pr`` or ``make openopi`` to generate an updated swagger OpenAPI JSON file and place it at docs/swagger/openapi.json location.
+Run either ``make pr`` or ``make openapi`` to generate an updated swagger OpenAPI JSON file and place it at docs/swagger/openapi.json location.
 
 ## **GitHub Pages Documentation**
 
@@ -88,14 +107,14 @@ Run either ``make pr`` or ``make openopi`` to generate an updated swagger OpenAP
 
 ### lambda_requirements.txt
 
-CDK requires a requirements.txt in order to create a zip file with the Lambda layer dependencies. It's based on the project's poetry.lock file.
+CDK requires a requirements.txt in order to create a zip file with the Lambda layer dependencies. It's generated from the project's uv.lock file.
 
 ``make deploy`` command will generate it automatically for you.
 
 ### dev_requirements.txt
 
-This file is used during GitHub CI to install all the required Python libraries without using poetry.
+This file is used during GitHub CI to install all the required Python libraries.
 
-File contents are created out of the Pipfile.lock.
+File contents are created from the uv.lock file.
 
-``make deploy`` and ``make deps`` are commands generate it automatically.
+``make deploy`` and ``make deps`` are commands that generate it automatically.

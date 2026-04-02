@@ -4,7 +4,7 @@ description: AWS Lambda Handler Cookbook - a Serverless Service Blueprint
 ---
 ## **AWS Lambda Handler Cookbook - A Serverless Service Blueprint**
 
-[<img alt="alt_text" src="./media/banner.png" />](https://www.ranthebuilder.cloud/)
+[<img alt="AWS Lambda Handler Cookbook" src="./media/banner.png" />](https://ranthebuilder.cloud/)
 
 ## AWS Recommendation
 
@@ -33,7 +33,51 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 ### Serverless Service - The Order service
 
-<img alt="design" src="./media/design.png" />
+```mermaid
+flowchart LR
+    subgraph AWS["AWS Cloud"]
+        subgraph APIGW["API Gateway"]
+            REST["REST API<br/>POST /api/orders"]
+        end
+
+        subgraph Security["Security (Production)"]
+            WAF["WAF WebACL<br/>AWS Managed Rules"]
+        end
+
+        subgraph Compute["Compute"]
+            LAMBDA["Lambda Function<br/>Python 3.14"]
+            LAYER["Lambda Layer<br/>Common Dependencies"]
+        end
+
+        subgraph Config["Configuration"]
+            APPCONFIG["AppConfig<br/>Feature Flags"]
+        end
+
+        subgraph Storage["Storage"]
+            DDB[("DynamoDB<br/>Orders Table")]
+            IDEMPOTENCY[("DynamoDB<br/>Idempotency Table")]
+        end
+    end
+
+    CLIENT((Client)) --> WAF
+    WAF --> REST
+    REST --> LAMBDA
+    LAMBDA --> LAYER
+    LAMBDA --> APPCONFIG
+    LAMBDA --> DDB
+    LAMBDA --> IDEMPOTENCY
+
+    style CLIENT fill:#f9f,stroke:#333
+    style WAF fill:#ff6b6b,stroke:#333
+    style REST fill:#4ecdc4,stroke:#333
+    style LAMBDA fill:#ffe66d,stroke:#333
+    style LAYER fill:#ffe66d,stroke:#333
+    style APPCONFIG fill:#95e1d3,stroke:#333
+    style DDB fill:#4a90d9,stroke:#333
+    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+```
+
+<p class="mermaid-hint">Click diagram to zoom</p>
 
 - This project provides a working orders service where customers can create orders of items.
 
@@ -41,7 +85,52 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 #### **Monitoring Design**
 
-<img alt="monitoring" src="./media/monitoring_design.png" />
+```mermaid
+flowchart TB
+    subgraph Monitoring["CloudWatch Monitoring"]
+        subgraph Dashboards["Dashboards"]
+            HL["High-Level Dashboard<br/>API Gateway Metrics<br/>Business KPIs"]
+            LL["Low-Level Dashboard<br/>Lambda Metrics<br/>DynamoDB Metrics"]
+        end
+
+        subgraph Alarms["CloudWatch Alarms"]
+            API_ALARM["API Gateway Alarms<br/>5XX Errors, Latency"]
+            LAMBDA_ALARM["Lambda Alarms<br/>Errors, P90 Latency"]
+            DDB_ALARM["DynamoDB Alarms<br/>Throttles, Errors"]
+        end
+    end
+
+    subgraph Notification["Notification"]
+        SNS["SNS Topic<br/>KMS Encrypted"]
+    end
+
+    subgraph Resources["Monitored Resources"]
+        APIGW["API Gateway"]
+        LAMBDA["Lambda Function"]
+        DDB["DynamoDB Tables"]
+    end
+
+    APIGW --> API_ALARM
+    LAMBDA --> LAMBDA_ALARM
+    DDB --> DDB_ALARM
+
+    API_ALARM --> SNS
+    LAMBDA_ALARM --> SNS
+    DDB_ALARM --> SNS
+
+    API_ALARM --> HL
+    LAMBDA_ALARM --> LL
+    DDB_ALARM --> LL
+
+    style HL fill:#4ecdc4,stroke:#333
+    style LL fill:#4ecdc4,stroke:#333
+    style SNS fill:#ff6b6b,stroke:#333
+    style API_ALARM fill:#ffe66d,stroke:#333
+    style LAMBDA_ALARM fill:#ffe66d,stroke:#333
+    style DDB_ALARM fill:#ffe66d,stroke:#333
+```
+
+<p class="mermaid-hint">Click diagram to zoom</p>
 
 ### **Features**
 
@@ -63,6 +152,19 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 The GitHub blueprint project can be found at [https://github.com/ran-isenberg/aws-lambda-handler-cookbook](https://github.com/ran-isenberg/aws-lambda-handler-cookbook){:target="_blank" rel="noopener"}.
 
+## **AI-Assisted Development**
+
+This project uses [AI-DLC (AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows){:target="_blank" rel="noopener"} for AI-assisted software development. Learn more about AI-DLC in this [blog post](https://ranthebuilder.cloud/blog/ai-driven-sdlc/){:target="_blank" rel="noopener"}.
+
+AI-DLC provides a structured, adaptive workflow for:
+
+- **Requirements Analysis** - Intelligent requirements gathering and clarification
+- **Architecture Design** - AI-assisted architectural decisions
+- **Code Generation** - Structured code implementation with best practices
+- **Testing** - Comprehensive test generation and validation
+
+The AI-DLC workflow artifacts are stored in the `aidlc-docs/` directory.
+
 ## **Serverless Best Practices**
 
 The AWS Lambda handler will implement multiple best practice utilities.
@@ -77,10 +179,10 @@ The utilities cover multiple aspects of a production-ready service, including:
 - [**Environment Variables**](best_practices/environment_variables.md)
 - [**Input Validation**](best_practices/input_validation.md)
 - [**Dynamic configuration & features flags**](best_practices/dynamic_configuration.md)
-- [**Serverless Monitoring**](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one)
-- [**API Idempotency**](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk){:target="_blank" rel="noopener"}
-- [**Learn How to Write AWS Lambda Functions with Three Architecture Layers**](https://www.ranthebuilder.cloud/post/learn-how-to-write-aws-lambda-functions-with-architecture-layers){:target="_blank" rel="noopener"}
-- [**Serverless OpenAPI Documentation with AWS Powertools**](https://www.ranthebuilder.cloud/post/serverless-open-api-documentation-with-aws-powertools){:target="_blank" rel="noopener"}
+- [**Serverless Monitoring**](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
+- [**API Idempotency**](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/){:target="_blank" rel="noopener"}
+- [**Learn How to Write AWS Lambda Functions with Three Architecture Layers**](https://ranthebuilder.cloud/blog/learn-how-to-write-aws-lambda-functions-with-architecture-layers/){:target="_blank" rel="noopener"}
+- [**Serverless OpenAPI Documentation with AWS Powertools**](https://ranthebuilder.cloud/blog/serverless-open-api-documentation-with-aws-powertools/){:target="_blank" rel="noopener"}
 
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.
 

@@ -14,11 +14,11 @@ This project provides a working, open source based, AWS Lambda handler skeleton 
 
 This project can serve as a blueprint for new Serverless services - CDK deployment code, pipeline and handler are covered.
 
-**[📜Documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)** | **[Blogs website](https://www.ranthebuilder.cloud)**
+**[📜Documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)** | **[Blogs website](https://ranthebuilder.cloud/)**
 > **Contact details | mailto:ran.isenberg@ranthebuilder.cloud**
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/IsenbergRan?label=Follow&style=social)](https://twitter.com/RanBuilder)
-[![Website](https://img.shields.io/badge/Website-www.ranthebuilder.cloud-blue)](https://www.ranthebuilder.cloud/)
+[![Website](https://img.shields.io/badge/Website-www.ranthebuilder.cloud-blue)](https://ranthebuilder.cloud/)
 
 ## AWS Recommendation
 
@@ -54,11 +54,11 @@ Answer the questions to select repo name, service name, etc.:
 
 ```bash
 cd {new repo folder}
-poetry env activate
+uv sync
 make deploy
 ```
 
-Make sure you have poetry v2 and above.
+Make sure you have [uv](https://docs.astral.sh/uv/) installed.
 
 You can also run 'make pr' will run all checks, synth, file formatters , unit tests, deploy to AWS and run integration and E2E tests.
 
@@ -83,13 +83,96 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 * The project deploys an API GW with an AWS Lambda integration under the path POST /api/orders/ and stores data in a DynamoDB table.
 
-![design](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/design.png?raw=true)
-<br></br>
+```mermaid
+flowchart LR
+    subgraph AWS["AWS Cloud"]
+        subgraph APIGW["API Gateway"]
+            REST["REST API<br/>POST /api/orders"]
+        end
+
+        subgraph Security["Security (Production)"]
+            WAF["WAF WebACL<br/>AWS Managed Rules"]
+        end
+
+        subgraph Compute["Compute"]
+            LAMBDA["Lambda Function<br/>Python 3.14"]
+            LAYER["Lambda Layer<br/>Common Dependencies"]
+        end
+
+        subgraph Config["Configuration"]
+            APPCONFIG["AppConfig<br/>Feature Flags"]
+        end
+
+        subgraph Storage["Storage"]
+            DDB[("DynamoDB<br/>Orders Table")]
+            IDEMPOTENCY[("DynamoDB<br/>Idempotency Table")]
+        end
+    end
+
+    CLIENT((Client)) --> WAF
+    WAF --> REST
+    REST --> LAMBDA
+    LAMBDA --> LAYER
+    LAMBDA --> APPCONFIG
+    LAMBDA --> DDB
+    LAMBDA --> IDEMPOTENCY
+
+    style CLIENT fill:#f9f,stroke:#333
+    style WAF fill:#ff6b6b,stroke:#333
+    style REST fill:#4ecdc4,stroke:#333
+    style LAMBDA fill:#ffe66d,stroke:#333
+    style LAYER fill:#ffe66d,stroke:#333
+    style APPCONFIG fill:#95e1d3,stroke:#333
+    style DDB fill:#4a90d9,stroke:#333
+    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+```
 
 #### **Monitoring Design**
 
-![monitoring_design](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/docs/media/monitoring_design.png?raw=true)
-<br></br>
+```mermaid
+flowchart TB
+    subgraph Monitoring["CloudWatch Monitoring"]
+        subgraph Dashboards["Dashboards"]
+            HL["High-Level Dashboard<br/>API Gateway Metrics<br/>Business KPIs"]
+            LL["Low-Level Dashboard<br/>Lambda Metrics<br/>DynamoDB Metrics"]
+        end
+
+        subgraph Alarms["CloudWatch Alarms"]
+            API_ALARM["API Gateway Alarms<br/>5XX Errors, Latency"]
+            LAMBDA_ALARM["Lambda Alarms<br/>Errors, P90 Latency"]
+            DDB_ALARM["DynamoDB Alarms<br/>Throttles, Errors"]
+        end
+    end
+
+    subgraph Notification["Notification"]
+        SNS["SNS Topic<br/>KMS Encrypted"]
+    end
+
+    subgraph Resources["Monitored Resources"]
+        APIGW["API Gateway"]
+        LAMBDA["Lambda Function"]
+        DDB["DynamoDB Tables"]
+    end
+
+    APIGW --> API_ALARM
+    LAMBDA --> LAMBDA_ALARM
+    DDB --> DDB_ALARM
+
+    API_ALARM --> SNS
+    LAMBDA_ALARM --> SNS
+    DDB_ALARM --> SNS
+
+    API_ALARM --> HL
+    LAMBDA_ALARM --> LL
+    DDB_ALARM --> LL
+
+    style HL fill:#4ecdc4,stroke:#333
+    style LL fill:#4ecdc4,stroke:#333
+    style SNS fill:#ff6b6b,stroke:#333
+    style API_ALARM fill:#ffe66d,stroke:#333
+    style LAMBDA_ALARM fill:#ffe66d,stroke:#333
+    style DDB_ALARM fill:#ffe66d,stroke:#333
+```
 
 ### **Features**
 
@@ -97,6 +180,8 @@ This project aims to reduce cognitive load and answer these questions for you by
 * CDK infrastructure with infrastructure tests and security tests.
 * CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
 * CI/CD pipeline deploys to dev/staging and production environments with different gates between each environment
+* Automatic GitHub releases with semantic versioning based on conventional commits
+* Automatic PR labeling based on commit message prefixes (feat, fix, docs, chore)
 * Makefile for simple developer experience.
 * The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
 * AWS Lambda handler uses [AWS Lambda Powertools](https://docs.powertools.aws.dev/lambda-python/).
@@ -126,17 +211,17 @@ Each utility is implemented when a new blog post is published about that utility
 
 The utilities cover multiple aspect of a production-ready service, including:
 
-* [Logging](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging)
-* [Observability: Monitoring and Tracing](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability)
-* [Observability: Business KPIs Metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability)
-* [Environment Variables](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-environment-variables)
-* [Input Validation](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation)
-* [Dynamic Configuration & feature flags](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices)
-* [Start Your AWS Serverless Service With Two Clicks](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-blueprint-project)
-* [CDK Best practices](https://github.com/ran-isenberg/aws-lambda-handler-cookbook)
-* [Serverless Monitoring](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one)
-* [API Idempotency](https://www.ranthebuilder.cloud/post/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk)
-* [Serverless OpenAPI Documentation with AWS Powertools](https://www.ranthebuilder.cloud/post/serverless-open-api-documentation-with-aws-powertools)
+* [Logging](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging/)
+* [Observability: Monitoring and Tracing](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability/)
+* [Observability: Business KPIs Metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/)
+* [Environment Variables](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-environment-variables/)
+* [Input Validation](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation/)
+* [Dynamic Configuration & feature flags](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices/)
+* [Start Your AWS Serverless Service With Two Clicks](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project/)
+* [CDK Best practices](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/)
+* [Serverless Monitoring](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
+* [API Idempotency](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/)
+* [Serverless OpenAPI Documentation with AWS Powertools](https://ranthebuilder.cloud/blog/serverless-open-api-documentation-with-aws-powertools/)
 
 ## Getting started
 
@@ -153,15 +238,31 @@ Read our code of conduct [here.](https://github.com/ran-isenberg/aws-lambda-hand
 ## Connect
 
 - Email: ran.isenberg@ranthebuilder.cloud
-- Blog: https://www.ranthebuilder.cloud
+- Blog: https://ranthebuilder.cloud/
 - Bluesky: [@ranthebuilder.cloud](https://bsky.app/profile/ranthebuilder.cloud)
 - X:       [@RanBuilder](https://twitter.com/RanBuilder)
 - LinkedIn: https://www.linkedin.com/in/ranbuilder/
 
+## AI-Assisted Development
+
+This project uses [AI-DLC (AI-Driven Development Life Cycle)](https://github.com/awslabs/aidlc-workflows) for AI-assisted software development. Learn more about AI-DLC in this [blog post](https://ranthebuilder.cloud/blog/ai-driven-sdlc/).
+
+AI-DLC provides a structured, adaptive workflow for:
+
+* **Requirements Analysis** - Intelligent requirements gathering and clarification
+* **Architecture Design** - AI-assisted architectural decisions
+* **Code Generation** - Structured code implementation with best practices
+* **Testing** - Comprehensive test generation and validation
+
+The AI-DLC workflow artifacts are stored in the `aidlc-docs/` directory.
+
 ## Credits
 
 * [AWS Lambda Powertools (Python)](https://github.com/aws-powertools/powertools-lambda-python)
+* [AI-DLC Workflows](https://github.com/awslabs/aidlc-workflows)
 
 ## License
 
 This library is licensed under the MIT License. See the [LICENSE](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/LICENSE) file.
+
+Copyright (c) 2026 Ran Isenberg

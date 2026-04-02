@@ -1,0 +1,95 @@
+# AWS Lambda Handler Cookbook
+
+> A production-ready Python Serverless service blueprint implementing AWS Lambda best practices with CDK deployment. It serves as a blueprint and cookiecutter template for new Serverless services with a 3-layer architecture (Handler → Logic → Data Access Layer), observability, idempotency, feature flags, and comprehensive testing.
+
+- Author: Ran Isenberg (ran.isenberg@ranthebuilder.cloud)
+- Website: https://www.ranthebuilder.cloud
+- [Full Documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/)
+- [Repository](https://github.com/ran-isenberg/aws-lambda-handler-cookbook)
+- License: MIT-0
+
+## Tech Stack
+
+- Language: Python 3.14
+- Infrastructure: AWS CDK
+- Cloud Services: AWS Lambda, API Gateway, DynamoDB, AppConfig, WAF, CloudWatch
+- Key Libraries: AWS Lambda Powertools, Pydantic, Boto3, pydynox, aws-lambda-env-modeler, cachetools
+- Documentation: Zensical
+- Package Manager: uv
+
+## Using This Template
+
+Recommended: Use [Cookiecutter](https://github.com/ran-isenberg/cookiecutter-serverless-python) to generate a new project:
+
+```bash
+pip install cookiecutter
+cookiecutter gh:ran-isenberg/cookiecutter-serverless-python
+```
+
+Alternatively, use the "Use this template" button on the [GitHub repository](https://github.com/ran-isenberg/aws-lambda-handler-cookbook).
+
+After generation, install dependencies and deploy:
+
+```bash
+cd {new-repo-folder}
+uv sync
+make deploy
+```
+
+## API
+
+- `POST /api/orders/` - Create an order (idempotent, Pydantic-validated, OpenAPI documented at /swagger)
+
+## Architecture
+
+The Lambda handler follows a 3-layer architecture:
+
+1. **Handler Layer** (`service/handlers/`) - Entry point, request parsing, observability decorators (Powertools logging, tracing, metrics)
+2. **Logic Layer** (`service/logic/`) - Pure business logic, independently testable
+3. **Data Access Layer** (`service/dal/`) - DynamoDB operations via pydynox
+
+## Project Structure
+
+- [service/](service/): Lambda handler code
+  - [handlers/](service/handlers/): Lambda entry points
+  - [logic/](service/logic/): Business logic
+  - [dal/](service/dal/): Data access layer (DynamoDB)
+  - [models/](service/models/): Pydantic input/output models
+- [cdk/](cdk/): AWS CDK infrastructure
+  - [service/](cdk/service/): CDK constructs (API Gateway, Lambda, DynamoDB, WAF, monitoring, configuration)
+- [tests/](tests/): Test suites (unit, integration, e2e, infrastructure)
+- [docs/](docs/): Documentation source (Zensical)
+
+## Key Files
+
+- [service/handlers/handle_create_order.py](service/handlers/handle_create_order.py): Main Lambda handler entry point
+- [service/logic/create_order.py](service/logic/create_order.py): Order creation business logic
+- [service/dal/dynamo_dal_handler.py](service/dal/dynamo_dal_handler.py): DynamoDB data access operations
+- [service/models/input.py](service/models/input.py): Input validation models
+- [service/models/output.py](service/models/output.py): Response models
+- [cdk/service/service_stack.py](cdk/service/service_stack.py): Main CDK stack definition
+- [cdk/service/api_construct.py](cdk/service/api_construct.py): API Gateway and Lambda construct
+- [cdk/service/api_db_construct.py](cdk/service/api_db_construct.py): DynamoDB construct
+- [cdk/service/waf_construct.py](cdk/service/waf_construct.py): WAF protection construct
+- [cdk/service/monitoring.py](cdk/service/monitoring.py): CloudWatch monitoring construct
+- [Makefile](Makefile): Developer commands
+
+## Development Commands
+
+- `make deploy` - Deploy to AWS
+- `make destroy` - Destroy AWS resources
+- `make unit` - Run unit tests
+- `make integration` - Run integration tests
+- `make e2e` - Run end-to-end tests
+- `make pr` - Run all checks (lint, tests, deploy)
+- `make lint` - Run linters and formatters
+- `make mypy-lint` - Run type checking
+- `make complex` - Run complexity analysis
+- `make docs` - Serve documentation locally
+- `make openapi` - Generate OpenAPI spec
+
+## Optional
+
+- [pyproject.toml](pyproject.toml): Project configuration, dependencies, and tool settings
+- [zensical.toml](zensical.toml): Documentation configuration
+- [cdk/service/configuration/](cdk/service/configuration/): AppConfig feature flag constructs

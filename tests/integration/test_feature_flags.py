@@ -110,7 +110,7 @@ def test_handler_premium_on_200_ok(mocker, monkeypatch):
     # Given: A mocked dynamic configuration with premium ON and a valid order request.
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_ON)
     # Set POWERTOOLS_IDEMPOTENCY_DISABLED before calling decorated functions
-    monkeypatch.setenv('POWERTOOLS_IDEMPOTENCY_DISABLED', 1)
+    monkeypatch.setenv('POWERTOOLS_IDEMPOTENCY_DISABLED', '1')
     premium_logic_spy = spy_on_premium_logic(mocker)
     customer_name = 'RanTheBuilder'
     order_item_count = 6

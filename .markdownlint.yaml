@@ -225,3 +225,7 @@ MD052: true
 
 # MD053/link-image-reference-definitions - Link and image reference definitions should be needed
 MD053: true
+
+# MD060/table-column-style - Table column style
+# NOTE: Disabled due to emoji width issues in tables
+MD060: false

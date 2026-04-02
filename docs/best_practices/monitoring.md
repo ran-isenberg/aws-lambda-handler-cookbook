@@ -13,11 +13,55 @@ By aggregating metrics, logs, and alarms, CloudWatch facilitates swift issue dia
 
 ## **Service Architecture**
 
-![hl](../media/design.png)
+```mermaid
+flowchart LR
+    subgraph AWS["AWS Cloud"]
+        subgraph APIGW["API Gateway"]
+            REST["REST API<br/>POST /api/orders"]
+        end
+
+        subgraph Security["Security (Production)"]
+            WAF["WAF WebACL<br/>AWS Managed Rules"]
+        end
+
+        subgraph Compute["Compute"]
+            LAMBDA["Lambda Function<br/>Python 3.14"]
+            LAYER["Lambda Layer<br/>Common Dependencies"]
+        end
+
+        subgraph Config["Configuration"]
+            APPCONFIG["AppConfig<br/>Feature Flags"]
+        end
+
+        subgraph Storage["Storage"]
+            DDB[("DynamoDB<br/>Orders Table")]
+            IDEMPOTENCY[("DynamoDB<br/>Idempotency Table")]
+        end
+    end
+
+    CLIENT((Client)) --> WAF
+    WAF --> REST
+    REST --> LAMBDA
+    LAMBDA --> LAYER
+    LAMBDA --> APPCONFIG
+    LAMBDA --> DDB
+    LAMBDA --> IDEMPOTENCY
+
+    style CLIENT fill:#f9f,stroke:#333
+    style WAF fill:#ff6b6b,stroke:#333
+    style REST fill:#4ecdc4,stroke:#333
+    style LAMBDA fill:#ffe66d,stroke:#333
+    style LAYER fill:#ffe66d,stroke:#333
+    style APPCONFIG fill:#95e1d3,stroke:#333
+    style DDB fill:#4a90d9,stroke:#333
+    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+```
+
+<p class="mermaid-hint">Click diagram to zoom</p>
 
 The goal is to monitor the service API gateway, Lambda function, and DynamoDB tables and ensure everything is in order.
 
-In addition, we want to visualize service [KPI metrics](https://www.ranthebuilder.cloud/post/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability){:target="_blank" rel="noopener"}.
+In addition, we want to visualize service [KPI metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/){:target="_blank" rel="noopener"}.
 
 ## **Monitoring Dashboards**
 
@@ -86,8 +130,8 @@ From there, you can connect any subscription - HTTPS/SMS/Email, etc. to notify y
 
 We use the open-source [cdk-monitoring-constructs](https://github.com/cdklabs/cdk-monitoring-constructs){:target="_blank" rel="noopener"}.
 
-You can view find the monitoring CDK construct [here](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/cdk/service/monitoring.py).
+You can find the [monitoring CDK construct on GitHub](https://github.com/ran-isenberg/aws-lambda-handler-cookbook/blob/main/cdk/service/monitoring.py).
 
 ## **Further Reading**
 
-If you wish to learn more about this concept and go over details on the CDK code, check out my [blog post](https://www.ranthebuilder.cloud/post/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one).
+If you wish to learn more about this concept and go over details on the CDK code, check out my [blog post](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/).

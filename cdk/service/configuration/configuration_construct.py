@@ -37,6 +37,7 @@ class ConfigurationStore(Construct):
             id=f'{id_}env',
             application=self.config_app,
             environment_name=environment,
+            deletion_protection_check=appconfig.DeletionProtectionCheck.BYPASS,
         )
 
         # zero minutes, zero bake, 100 growth all at once
