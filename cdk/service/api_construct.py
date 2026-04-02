@@ -13,6 +13,10 @@ from cdk.service.waf_construct import WafToApiGatewayConstruct
 
 
 class ApiConstruct(Construct):
+    LAMBDA_RUNTIME = _lambda.Runtime.PYTHON_3_14
+    LAMBDA_ARCHITECTURE = _lambda.Architecture.ARM_64
+    LAMBDA_LOGGING_FORMAT = _lambda.LoggingFormat.JSON
+
     def __init__(self, scope: Construct, id_: str, appconfig_app_name: str, is_production_env: bool) -> None:
         super().__init__(scope, id_)
         self.id_ = id_
@@ -25,8 +29,20 @@ class ApiConstruct(Construct):
         self.create_order_func = self._add_post_lambda_integration(
             orders_resource, self.lambda_role, self.api_db.db, appconfig_app_name, self.api_db.idempotency_db
         )
+        self.get_order_role = self._build_get_lambda_role(self.api_db.db)
+        self.delete_order_role = self._build_delete_lambda_role(self.api_db.db)
+        order_id_resource = orders_resource.add_resource('{order_id}')
+        self.get_order_func = self._add_get_lambda_integration(order_id_resource, self.get_order_role, self.api_db.db)
+        self.delete_order_func = self._add_delete_lambda_integration(order_id_resource, self.delete_order_role, self.api_db.db)
         self._build_swagger_endpoints(rest_api=self.rest_api, dest_func=self.create_order_func)
-        self.monitoring = CrudMonitoring(self, id_, self.rest_api, self.api_db.db, self.api_db.idempotency_db, [self.create_order_func])
+        self.monitoring = CrudMonitoring(
+            self,
+            id_,
+            self.rest_api,
+            self.api_db.db,
+            self.api_db.idempotency_db,
+            [self.create_order_func, self.get_order_func, self.delete_order_func],
+        )
 
         if is_production_env:
             # add WAF
@@ -102,10 +118,10 @@ class ApiConstruct(Construct):
             self,
             f'{self.id_}{constants.LAMBDA_LAYER_NAME}',
             entry=constants.COMMON_LAYER_BUILD_FOLDER,
-            compatible_runtimes=[_lambda.Runtime.PYTHON_3_14],
+            compatible_runtimes=[self.LAMBDA_RUNTIME],
             removal_policy=RemovalPolicy.DESTROY,
             description='Common layer for the service',
-            compatible_architectures=[_lambda.Architecture.ARM_64],
+            compatible_architectures=[self.LAMBDA_ARCHITECTURE],
             bundling={
                 'platform': 'linux/arm64',
             },
@@ -130,7 +146,7 @@ class ApiConstruct(Construct):
         lambda_function = _lambda.Function(
             self,
             constants.CREATE_LAMBDA,
-            runtime=_lambda.Runtime.PYTHON_3_14,
+            runtime=self.LAMBDA_RUNTIME,
             code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
             handler='service.handlers.handle_create_order.lambda_handler',
             environment={
@@ -152,11 +168,133 @@ class ApiConstruct(Construct):
             layers=[self.common_layer],
             role=role,
             log_group=log_group,
-            logging_format=_lambda.LoggingFormat.JSON,
+            logging_format=self.LAMBDA_LOGGING_FORMAT,
             system_log_level_v2=_lambda.SystemLogLevel.INFO,
-            architecture=_lambda.Architecture.ARM_64,
+            architecture=self.LAMBDA_ARCHITECTURE,
         )
 
         # POST /api/orders/
         api_resource.add_method(http_method='POST', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
+        return lambda_function
+
+    def _build_get_lambda_role(self, db: dynamodb.TableV2) -> iam.Role:
+        return iam.Role(
+            self,
+            'GetOrderServiceRoleArn',
+            assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
+            inline_policies={
+                'dynamodb_db': iam.PolicyDocument(
+                    statements=[
+                        iam.PolicyStatement(
+                            actions=['dynamodb:GetItem'],
+                            resources=[db.table_arn],
+                            effect=iam.Effect.ALLOW,
+                        )
+                    ]
+                ),
+            },
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name=(f'service-role/{constants.LAMBDA_BASIC_EXECUTION_ROLE}'))
+            ],
+        )
+
+    def _build_delete_lambda_role(self, db: dynamodb.TableV2) -> iam.Role:
+        return iam.Role(
+            self,
+            'DeleteOrderServiceRoleArn',
+            assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
+            inline_policies={
+                'dynamodb_db': iam.PolicyDocument(
+                    statements=[
+                        iam.PolicyStatement(
+                            actions=['dynamodb:GetItem', 'dynamodb:DeleteItem'],
+                            resources=[db.table_arn],
+                            effect=iam.Effect.ALLOW,
+                        )
+                    ]
+                ),
+            },
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name=(f'service-role/{constants.LAMBDA_BASIC_EXECUTION_ROLE}'))
+            ],
+        )
+
+    def _add_get_lambda_integration(
+        self,
+        api_resource: aws_apigateway.Resource,
+        role: iam.Role,
+        db: dynamodb.TableV2,
+    ) -> _lambda.Function:
+        log_group = logs.LogGroup(
+            self,
+            f'{constants.GET_LAMBDA}LogGroup',
+            retention=logs.RetentionDays.ONE_DAY,
+            removal_policy=RemovalPolicy.DESTROY,
+        )
+
+        lambda_function = _lambda.Function(
+            self,
+            constants.GET_LAMBDA,
+            runtime=self.LAMBDA_RUNTIME,
+            code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
+            handler='service.handlers.handle_get_order.lambda_handler',
+            environment={
+                constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,
+                constants.POWER_TOOLS_LOG_LEVEL: 'INFO',
+                'TABLE_NAME': db.table_name,
+            },
+            tracing=_lambda.Tracing.ACTIVE,
+            retry_attempts=0,
+            timeout=Duration.seconds(constants.API_HANDLER_LAMBDA_TIMEOUT),
+            memory_size=constants.API_HANDLER_LAMBDA_MEMORY_SIZE,
+            layers=[self.common_layer],
+            role=role,
+            log_group=log_group,
+            logging_format=self.LAMBDA_LOGGING_FORMAT,
+            system_log_level_v2=_lambda.SystemLogLevel.INFO,
+            architecture=self.LAMBDA_ARCHITECTURE,
+        )
+
+        # GET /api/orders/{order_id}
+        api_resource.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
+        return lambda_function
+
+    def _add_delete_lambda_integration(
+        self,
+        api_resource: aws_apigateway.Resource,
+        role: iam.Role,
+        db: dynamodb.TableV2,
+    ) -> _lambda.Function:
+        log_group = logs.LogGroup(
+            self,
+            f'{constants.DELETE_LAMBDA}LogGroup',
+            retention=logs.RetentionDays.ONE_DAY,
+            removal_policy=RemovalPolicy.DESTROY,
+        )
+
+        lambda_function = _lambda.Function(
+            self,
+            constants.DELETE_LAMBDA,
+            runtime=self.LAMBDA_RUNTIME,
+            code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
+            handler='service.handlers.handle_delete_order.lambda_handler',
+            environment={
+                constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,
+                constants.POWER_TOOLS_LOG_LEVEL: 'INFO',
+                'TABLE_NAME': db.table_name,
+            },
+            tracing=_lambda.Tracing.ACTIVE,
+            retry_attempts=0,
+            timeout=Duration.seconds(constants.API_HANDLER_LAMBDA_TIMEOUT),
+            memory_size=constants.API_HANDLER_LAMBDA_MEMORY_SIZE,
+            layers=[self.common_layer],
+            role=role,
+            log_group=log_group,
+            logging_format=self.LAMBDA_LOGGING_FORMAT,
+            system_log_level_v2=_lambda.SystemLogLevel.INFO,
+            architecture=self.LAMBDA_ARCHITECTURE,
+        )
+
+        # DELETE /api/orders/{order_id}
+        api_resource.add_method(http_method='DELETE', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
         return lambda_function

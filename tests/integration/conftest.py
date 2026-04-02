@@ -1,6 +1,11 @@
 import os
+import uuid
+from datetime import datetime, timezone
+from functools import lru_cache
+from typing import Any
 
 import pytest
+from pydynox import DynamoDBClient, dynamodb_model
 
 from cdk.service.constants import (
     CONFIGURATION_NAME,
@@ -11,7 +16,37 @@ from cdk.service.constants import (
     SERVICE_NAME,
     TABLE_NAME_OUTPUT,
 )
+from service.dal.models.db import OrderEntry
 from tests.utils import get_stack_output
+
+_dynamo_client = DynamoDBClient()
+
+
+@lru_cache
+def _get_order_model(table_name: str):
+    @dynamodb_model(table=table_name, partition_key='id', client=_dynamo_client)
+    class DynamoOrderEntry(OrderEntry):
+        pass
+
+    return DynamoOrderEntry
+
+
+def create_order_in_db(table_name: str, customer_name: str, order_item_count: int) -> dict[str, Any]:
+    """Create an order directly in DynamoDB via pydynox."""
+    order_id = str(uuid.uuid4())
+    entry = _get_order_model(table_name)(
+        id=order_id,
+        name=customer_name,
+        item_count=order_item_count,
+        created_at=int(datetime.now(timezone.utc).timestamp()),
+    )
+    entry.sync_save()
+    return {'id': order_id, 'name': customer_name, 'item_count': order_item_count}
+
+
+def get_order_from_db(table_name: str, order_id: str) -> OrderEntry | None:
+    """Get an order directly from DynamoDB via pydynox. Returns None if not found."""
+    return _get_order_model(table_name).sync_get(id=order_id)
 
 
 @pytest.fixture(scope='module', autouse=True)

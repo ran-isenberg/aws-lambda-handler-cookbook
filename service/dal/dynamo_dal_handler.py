@@ -8,7 +8,7 @@ from pydynox import DynamoDBClient, dynamodb_model
 from service.dal.db_handler import DalHandler
 from service.dal.models.db import OrderEntry
 from service.handlers.utils.observability import logger, tracer
-from service.models.exceptions import InternalServerException
+from service.models.exceptions import InternalServerException, OrderNotFoundException
 from service.models.order import Order
 
 
@@ -56,3 +56,44 @@ class DynamoDalHandler(DalHandler):
 
         logger.info('finished create order successfully', order_item_count=order_item_count, customer_name=customer_name)
         return Order(id=entry.id, name=entry.name, item_count=entry.item_count)
+
+    @tracer.capture_method(capture_response=False)
+    def get_order_from_db(self, order_id: str) -> Order:
+        logger.info('trying to get order')
+        try:
+            entry = self._get_order_model().sync_get(id=order_id)
+        except (ValidationError, Exception) as exc:  # pragma: no cover
+            error_msg = 'failed to get order'
+            logger.exception(error_msg)
+            raise InternalServerException(error_msg) from exc
+
+        if entry is None:
+            logger.info('order was not found')
+            raise OrderNotFoundException(f'order {order_id} was not found')
+
+        logger.info('finished get order successfully')
+        return Order(id=entry.id, name=entry.name, item_count=entry.item_count)
+
+    @tracer.capture_method(capture_response=False)
+    def delete_order_from_db(self, order_id: str) -> None:
+        logger.info('trying to delete order')
+        # first verify order exists
+        try:
+            entry = self._get_order_model().sync_get(id=order_id)
+        except (ValidationError, Exception) as exc:  # pragma: no cover
+            error_msg = 'failed to delete order'
+            logger.exception(error_msg)
+            raise InternalServerException(error_msg) from exc
+
+        if entry is None:
+            logger.info('order was not found')
+            raise OrderNotFoundException(f'order {order_id} was not found')
+
+        try:
+            entry.sync_delete()
+        except Exception as exc:  # pragma: no cover
+            error_msg = 'failed to delete order'
+            logger.exception(error_msg)
+            raise InternalServerException(error_msg) from exc
+
+        logger.info('finished delete order successfully')

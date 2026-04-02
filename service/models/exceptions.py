@@ -4,3 +4,7 @@ class InternalServerException(Exception):
 
 class DynamicConfigurationException(Exception):
     pass
+
+
+class OrderNotFoundException(Exception):
+    pass

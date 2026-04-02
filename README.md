@@ -79,15 +79,18 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 ### Serverless Service - The Order service
 
-* This project provides a working orders service where customers can create orders of items.
+* This project provides a working orders service where customers can create, get, and delete orders of items.
 
-* The project deploys an API GW with an AWS Lambda integration under the path POST /api/orders/ and stores data in a DynamoDB table.
+* The project deploys an API GW with AWS Lambda integrations and stores data in a DynamoDB table:
+    * `POST /api/orders/` - Create a new order
+    * `GET /api/orders/{order_id}` - Get an order by ID
+    * `DELETE /api/orders/{order_id}` - Delete an order by ID
 
 ```mermaid
 flowchart LR
     subgraph AWS["AWS Cloud"]
         subgraph APIGW["API Gateway"]
-            REST["REST API<br/>POST /api/orders"]
+            REST["REST API<br/>POST /api/orders<br/>GET /api/orders/{id}<br/>DELETE /api/orders/{id}"]
         end
 
         subgraph Security["Security (Production)"]
@@ -95,7 +98,9 @@ flowchart LR
         end
 
         subgraph Compute["Compute"]
-            LAMBDA["Lambda Function<br/>Python 3.14"]
+            CREATE["Create Order<br/>Lambda Function"]
+            GET["Get Order<br/>Lambda Function"]
+            DELETE["Delete Order<br/>Lambda Function"]
             LAYER["Lambda Layer<br/>Common Dependencies"]
         end
 
@@ -111,16 +116,24 @@ flowchart LR
 
     CLIENT((Client)) --> WAF
     WAF --> REST
-    REST --> LAMBDA
-    LAMBDA --> LAYER
-    LAMBDA --> APPCONFIG
-    LAMBDA --> DDB
-    LAMBDA --> IDEMPOTENCY
+    REST --> CREATE
+    REST --> GET
+    REST --> DELETE
+    CREATE --> LAYER
+    GET --> LAYER
+    DELETE --> LAYER
+    CREATE --> APPCONFIG
+    CREATE --> DDB
+    CREATE --> IDEMPOTENCY
+    GET --> DDB
+    DELETE --> DDB
 
     style CLIENT fill:#f9f,stroke:#333
     style WAF fill:#ff6b6b,stroke:#333
     style REST fill:#4ecdc4,stroke:#333
-    style LAMBDA fill:#ffe66d,stroke:#333
+    style CREATE fill:#ffe66d,stroke:#333
+    style GET fill:#ffe66d,stroke:#333
+    style DELETE fill:#ffe66d,stroke:#333
     style LAYER fill:#ffe66d,stroke:#333
     style APPCONFIG fill:#95e1d3,stroke:#333
     style DDB fill:#4a90d9,stroke:#333
@@ -197,7 +210,7 @@ flowchart TB
 
 ## CDK Deployment
 
-The CDK code create an API GW with a path of /api/orders which triggers the lambda on 'POST' requests.
+The CDK code creates an API GW with paths /api/orders (POST) and /api/orders/{order_id} (GET, DELETE), each backed by a dedicated Lambda function.
 
 The AWS Lambda handler uses a Lambda layer optimization which takes all the packages under the [packages] section in the Pipfile and downloads them in via a Docker instance.
 
