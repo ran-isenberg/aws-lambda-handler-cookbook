@@ -26,3 +26,12 @@ class InternalServerErrorOutput(BaseModel):
 
 class OrderNotFoundOutput(BaseModel):
     error: Annotated[str, Field(description='Error description')] = 'order was not found'
+
+
+class InvalidNextTokenOutput(BaseModel):
+    error: Annotated[str, Field(description='Error description')] = 'invalid next_token'
+
+
+class ListOrdersOutput(BaseModel):
+    orders: Annotated[list[Order], Field(description='Orders in this page')]
+    next_token: Annotated[str | None, Field(description='Opaque cursor; pass back as next_token to get the next page')] = None

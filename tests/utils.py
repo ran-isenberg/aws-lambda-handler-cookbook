@@ -81,7 +81,7 @@ def generate_api_gw_event(body: Optional[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def generate_api_gw_event_with_path_params(http_method: str, path: str, path_parameters: dict[str, str]) -> dict[str, Any]:
+def generate_api_gw_event_with_path_params(http_method: str, path: str, path_parameters: Optional[dict[str, str]]) -> dict[str, Any]:
     return {
         'version': '1.0',
         'resource': path,

@@ -49,6 +49,22 @@ wheels = [
 ]
 
 [[package]]
+name = "aws-cdk-aws-ec2-alpha"
+version = "2.250.0a0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aws-cdk-lib" },
+    { name = "constructs" },
+    { name = "jsii" },
+    { name = "publication" },
+    { name = "typeguard" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/26/3e/0c4fca128d9191522e1b7ce85cfe0cbb4ecbc99848f4348db1e903aac6dd/aws_cdk_aws_ec2_alpha-2.250.0a0.tar.gz", hash = "sha256:f4508faded77098930be2340a153b29ca9a124a3a27d1a7b47f849da7fe5743e", size = 357903, upload-time = "2026-04-14T21:42:35.616Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bb/97/57f8652729cbdbd90fafe82d55a26d89dec58f7a16bf714c0426c83e9d43/aws_cdk_aws_ec2_alpha-2.250.0a0-py3-none-any.whl", hash = "sha256:aed131fa2d30ed30ca0833bb69322e442d69f58e016c8b8b011a60c62477551c", size = 339615, upload-time = "2026-04-14T21:41:36.746Z" },
+]
+
+[[package]]
 name = "aws-cdk-aws-lambda-python-alpha"
 version = "2.250.0a0"
 source = { registry = "https://pypi.org/simple" }
@@ -124,6 +140,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "aws-cdk-aws-ec2-alpha" },
     { name = "aws-cdk-aws-lambda-python-alpha" },
     { name = "aws-cdk-lib" },
     { name = "cdk-monitoring-constructs" },
@@ -162,8 +179,9 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "aws-cdk-aws-lambda-python-alpha", specifier = ">=2.180.0a0" },
-    { name = "aws-cdk-lib", specifier = ">=2.180.0" },
+    { name = "aws-cdk-aws-ec2-alpha", specifier = ">=2.250.0a0" },
+    { name = "aws-cdk-aws-lambda-python-alpha", specifier = ">=2.250.0a0" },
+    { name = "aws-cdk-lib", specifier = ">=2.250.0" },
     { name = "cdk-monitoring-constructs" },
     { name = "cdk-nag", specifier = ">2.0.0" },
     { name = "constructs", specifier = ">=10.0.0" },

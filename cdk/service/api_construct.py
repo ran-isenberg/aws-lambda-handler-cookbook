@@ -1,4 +1,6 @@
-from aws_cdk import CfnOutput, Duration, RemovalPolicy, aws_apigateway
+from typing import cast
+
+from aws_cdk import CfnOutput, Duration, RemovalPolicy, Size, aws_apigateway
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
@@ -8,6 +10,7 @@ from constructs import Construct
 
 import cdk.service.constants as constants
 from cdk.service.api_db_construct import ApiDbConstruct
+from cdk.service.lambda_managed_instance_construct import LambdaManagedInstanceConstruct
 from cdk.service.monitoring import CrudMonitoring
 from cdk.service.waf_construct import WafToApiGatewayConstruct
 
@@ -34,6 +37,14 @@ class ApiConstruct(Construct):
         order_id_resource = orders_resource.add_resource('{order_id}')
         self.get_order_func = self._add_get_lambda_integration(order_id_resource, self.get_order_role, self.api_db.db)
         self.delete_order_func = self._add_delete_lambda_integration(order_id_resource, self.delete_order_role, self.api_db.db)
+        self.managed_instance = LambdaManagedInstanceConstruct(
+            self,
+            f'{id_}ManagedInstance',
+            architecture=self.LAMBDA_ARCHITECTURE,
+            availability_zones=constants.MANAGED_INSTANCE_AVAILABILITY_ZONES,
+        )
+        self.list_order_role = self._build_list_lambda_role(self.api_db.db)
+        self.list_order_func = self._add_list_lambda_integration(orders_resource, self.list_order_role, self.api_db.db, self.managed_instance)
         self._build_swagger_endpoints(rest_api=self.rest_api, dest_func=self.create_order_func)
         self.monitoring = CrudMonitoring(
             self,
@@ -41,7 +52,12 @@ class ApiConstruct(Construct):
             self.rest_api,
             self.api_db.db,
             self.api_db.idempotency_db,
-            [self.create_order_func, self.get_order_func, self.delete_order_func],
+            [
+                self.create_order_func,
+                self.get_order_func,
+                self.delete_order_func,
+                self.list_order_func,
+            ],
         )
 
         if is_production_env:
@@ -297,4 +313,88 @@ class ApiConstruct(Construct):
 
         # DELETE /api/orders/{order_id}
         api_resource.add_method(http_method='DELETE', integration=aws_apigateway.LambdaIntegration(handler=lambda_function))
+        return lambda_function
+
+    def _build_list_lambda_role(self, db: dynamodb.TableV2) -> iam.Role:
+        return iam.Role(
+            self,
+            'ListOrderServiceRoleArn',
+            assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
+            inline_policies={
+                'dynamodb_db': iam.PolicyDocument(
+                    statements=[
+                        iam.PolicyStatement(
+                            actions=['dynamodb:Scan'],
+                            resources=[db.table_arn],
+                            effect=iam.Effect.ALLOW,
+                        )
+                    ]
+                ),
+            },
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name(f'service-role/{constants.LAMBDA_BASIC_EXECUTION_ROLE}'),
+            ],
+        )
+
+    def _add_list_lambda_integration(
+        self,
+        api_resource: aws_apigateway.Resource,
+        role: iam.Role,
+        db: dynamodb.TableV2,
+        managed_instance: LambdaManagedInstanceConstruct,
+    ) -> _lambda.Function:
+        log_group = logs.LogGroup(
+            self,
+            f'{constants.LIST_LAMBDA}LogGroup',
+            retention=logs.RetentionDays.ONE_DAY,
+            removal_policy=RemovalPolicy.DESTROY,
+        )
+
+        lambda_function = _lambda.Function(
+            self,
+            constants.LIST_LAMBDA,
+            runtime=self.LAMBDA_RUNTIME,
+            code=_lambda.Code.from_asset(constants.BUILD_FOLDER),
+            handler='service.handlers.handle_list_orders.lambda_handler',
+            environment={
+                constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,
+                constants.POWER_TOOLS_LOG_LEVEL: 'INFO',
+                'TABLE_NAME': db.table_name,
+            },
+            tracing=_lambda.Tracing.ACTIVE,
+            retry_attempts=0,
+            timeout=Duration.seconds(constants.API_HANDLER_LAMBDA_TIMEOUT),
+            memory_size=constants.MANAGED_INSTANCE_MEMORY_SIZE,
+            ephemeral_storage_size=Size.mebibytes(constants.MANAGED_INSTANCE_EPHEMERAL_STORAGE),
+            layers=[self.common_layer],
+            role=role,
+            log_group=log_group,
+            logging_format=self.LAMBDA_LOGGING_FORMAT,
+            system_log_level_v2=_lambda.SystemLogLevel.INFO,
+            architecture=managed_instance.architecture,
+        )
+
+        cfn_function = cast(_lambda.CfnFunction, lambda_function.node.default_child)
+        cfn_function.add_property_override(
+            'CapacityProviderConfig',
+            {
+                'LambdaManagedInstancesCapacityProviderConfig': {
+                    'CapacityProviderArn': managed_instance.capacity_provider_arn,
+                    'ExecutionEnvironmentMemoryGiBPerVCpu': constants.MANAGED_INSTANCE_MEMORY_GIB_PER_VCPU,
+                    'PerExecutionEnvironmentMaxConcurrency': constants.MANAGED_INSTANCE_MAX_CONCURRENCY_PER_ENV,
+                },
+            },
+        )
+        cfn_function.add_dependency(managed_instance.capacity_provider)
+
+        # Managed Instances serves only published versions — route API Gateway through an alias
+        alias = _lambda.Alias(
+            self,
+            f'{constants.LIST_LAMBDA}LiveAlias',
+            alias_name='live',
+            version=lambda_function.current_version,
+        )
+
+        # GET /api/orders
+        api_resource.add_method(http_method='GET', integration=aws_apigateway.LambdaIntegration(handler=alias))
         return lambda_function

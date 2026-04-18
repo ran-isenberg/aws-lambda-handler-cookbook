@@ -5,7 +5,7 @@ from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
-from service.handlers.models.env_vars import GetDeleteHandlerEnvVars
+from service.handlers.models.env_vars import GetHandlerEnvVars
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.get_order import get_order
@@ -34,7 +34,7 @@ from service.models.output import GetOrderOutput, InternalServerErrorOutput, Ord
     tags=['CRUD'],
 )
 def handle_get_order(order_id: str) -> GetOrderOutput:
-    env_vars: GetDeleteHandlerEnvVars = get_environment_variables(model=GetDeleteHandlerEnvVars)
+    env_vars: GetHandlerEnvVars = get_environment_variables(model=GetHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
     logger.append_keys(order_id=order_id)
     logger.info('got get order request')
@@ -49,7 +49,7 @@ def handle_get_order(order_id: str) -> GetOrderOutput:
     return response
 
 
-@init_environment_variables(model=GetDeleteHandlerEnvVars)
+@init_environment_variables(model=GetHandlerEnvVars)
 @logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_REST)
 @metrics.log_metrics
 @tracer.capture_lambda_handler(capture_response=False)

@@ -1,3 +1,5 @@
+import base64
+import json
 import uuid
 from datetime import datetime, timezone
 from typing import Any
@@ -8,7 +10,7 @@ from pydynox import DynamoDBClient, dynamodb_model
 from service.dal.db_handler import DalHandler
 from service.dal.models.db import OrderEntry
 from service.handlers.utils.observability import logger, tracer
-from service.models.exceptions import InternalServerException, OrderNotFoundException
+from service.models.exceptions import InternalServerException, InvalidNextTokenException, OrderNotFoundException
 from service.models.order import Order
 
 
@@ -97,3 +99,40 @@ class DynamoDalHandler(DalHandler):
             raise InternalServerException(error_msg) from exc
 
         logger.info('finished delete order successfully')
+
+    @tracer.capture_method(capture_response=False)
+    def list_orders_from_db(self, limit: int, next_token: str | None) -> tuple[list[Order], str | None]:
+        logger.info('trying to list orders', limit=limit, has_next_token=next_token is not None)
+        exclusive_start_key = self._decode_next_token(next_token)
+        try:
+            result = self._client.sync_scan(
+                table=self.table_name,
+                limit=limit,
+                last_evaluated_key=exclusive_start_key,
+            )
+            items = list(result)
+            last_evaluated_key = result.last_evaluated_key
+        except (ValidationError, Exception) as exc:  # pragma: no cover
+            error_msg = 'failed to list orders'
+            logger.exception(error_msg)
+            raise InternalServerException(error_msg) from exc
+
+        orders = [Order(id=item['id'], name=item['name'], item_count=int(item['item_count'])) for item in items]
+        new_next_token = self._encode_next_token(last_evaluated_key)
+        logger.info('finished list orders successfully', order_count=len(orders), has_more=new_next_token is not None)
+        return orders, new_next_token
+
+    @staticmethod
+    def _encode_next_token(last_evaluated_key: dict[str, Any] | None) -> str | None:
+        if not last_evaluated_key:
+            return None
+        return base64.urlsafe_b64encode(json.dumps(last_evaluated_key).encode()).decode()
+
+    @staticmethod
+    def _decode_next_token(next_token: str | None) -> dict[str, Any] | None:
+        if not next_token:
+            return None
+        try:
+            return json.loads(base64.urlsafe_b64decode(next_token.encode()).decode())
+        except Exception as exc:
+            raise InvalidNextTokenException('invalid next_token') from exc
