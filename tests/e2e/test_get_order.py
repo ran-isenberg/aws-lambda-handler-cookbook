@@ -3,17 +3,13 @@ from http import HTTPStatus
 
 import requests
 
-from service.models.input import CreateOrderRequest
 from tests.utils import generate_random_string
 
 
-def test_handler_200_ok(api_gw_url):
-    # Given: An existing order created via POST
+def test_handler_200_ok(api_gw_url, order_factory):
+    # Given: An existing order
     customer_name = f'{generate_random_string()}-RanTheBuilder'
-    body = CreateOrderRequest(customer_name=customer_name, order_item_count=5)
-    create_response = requests.post(api_gw_url, data=body.model_dump_json())
-    assert create_response.status_code == HTTPStatus.OK
-    created_order = json.loads(create_response.text)
+    created_order = order_factory(customer_name, 5)
 
     # When: Making a GET request to the API Gateway URL with the order ID
     response = requests.get(f'{api_gw_url}/{created_order["id"]}')

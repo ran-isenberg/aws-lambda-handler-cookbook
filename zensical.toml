@@ -25,6 +25,7 @@ nav = [
         { "Environment Variables" = "best_practices/environment_variables.md" },
         { "Idempotency" = "https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/" },
         { "Input Validation" = "best_practices/input_validation.md" },
+        { "Lambda Managed Instances" = "best_practices/managed_instances.md" },
         { "Logger" = "best_practices/logger.md" },
         { "Metrics" = "best_practices/metrics.md" },
         { "Monitoring" = "best_practices/monitoring.md" },

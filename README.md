@@ -85,12 +85,13 @@ This project aims to reduce cognitive load and answer these questions for you by
     * `POST /api/orders/` - Create a new order
     * `GET /api/orders/{order_id}` - Get an order by ID
     * `DELETE /api/orders/{order_id}` - Delete an order by ID
+    * `GET /api/orders/?limit={n}&next_token={cursor}` - List orders with pagination, served by an **AWS Lambda Managed Instances** pool
 
 ```mermaid
 flowchart LR
     subgraph AWS["AWS Cloud"]
         subgraph APIGW["API Gateway"]
-            REST["REST API<br/>POST /api/orders<br/>GET /api/orders/{id}<br/>DELETE /api/orders/{id}"]
+            REST["REST API<br/>POST /api/orders<br/>GET /api/orders/{id}<br/>GET /api/orders (list)<br/>DELETE /api/orders/{id}"]
         end
 
         subgraph Security["Security (Production)"]
@@ -102,6 +103,12 @@ flowchart LR
             GET["Get Order<br/>Lambda Function"]
             DELETE["Delete Order<br/>Lambda Function"]
             LAYER["Lambda Layer<br/>Common Dependencies"]
+        end
+
+        subgraph LMI["Lambda Managed Instances (VPC)"]
+            LIST_ALIAS["ListOrders Alias: live"]
+            LIST["List Orders<br/>Lambda Function"]
+            CP["Capacity Provider<br/>EC2 pool, 2 AZs"]
         end
 
         subgraph Config["Configuration"]
@@ -119,6 +126,9 @@ flowchart LR
     REST --> CREATE
     REST --> GET
     REST --> DELETE
+    REST --> LIST_ALIAS
+    LIST_ALIAS --> LIST
+    LIST -.runs on.-> CP
     CREATE --> LAYER
     GET --> LAYER
     DELETE --> LAYER
@@ -127,6 +137,7 @@ flowchart LR
     CREATE --> IDEMPOTENCY
     GET --> DDB
     DELETE --> DDB
+    LIST --> DDB
 
     style CLIENT fill:#f9f,stroke:#333
     style WAF fill:#ff6b6b,stroke:#333
@@ -135,10 +146,30 @@ flowchart LR
     style GET fill:#ffe66d,stroke:#333
     style DELETE fill:#ffe66d,stroke:#333
     style LAYER fill:#ffe66d,stroke:#333
+    style LIST fill:#ffa500,stroke:#333
+    style LIST_ALIAS fill:#4ecdc4,stroke:#333
+    style CP fill:#ff6b6b,stroke:#333
     style APPCONFIG fill:#95e1d3,stroke:#333
     style DDB fill:#4a90d9,stroke:#333
     style IDEMPOTENCY fill:#4a90d9,stroke:#333
 ```
+
+#### **LIST orders via AWS Lambda Managed Instances**
+
+The `GET /api/orders/` endpoint is deliberately powered by
+[AWS Lambda Managed Instances](https://aws.amazon.com/blogs/aws/introducing-aws-lambda-managed-instances-serverless-simplicity-with-ec2-flexibility/)
+(LMI) rather than standard Lambda. LMI maintains a warm pool of execution
+environments on an EC2-backed capacity provider, so paginated list traffic
+avoids cold starts, runs inside a private VPC with DynamoDB and observability
+VPC endpoints, and can cap concurrency per environment (useful for bounding
+DynamoDB Scan pressure). The CRUD endpoints stay on standard Lambda — LMI is
+picked per-function, only where its extra surface area pays off.
+
+See the
+[Lambda Managed Instances deep-dive](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/managed_instances/)
+for tuning knobs (memory-to-vCPU ratio, min/max environments, per-env
+concurrency), the matching CDK construct, and the gotchas around version
+publishing and memory/CPU constraints.
 
 #### **Monitoring Design**
 
@@ -207,6 +238,7 @@ flowchart TB
 * Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
 * CI swagger protection - fails the PR if your swagger JSON file (stored at docs/swagger/openapi.json) is out of date
 * Automated protection against API breaking changes
+* AWS Lambda Managed Instances pool powers the paginated LIST endpoint (VPC, capacity provider, warm environments)
 
 ## CDK Deployment
 

@@ -22,3 +22,6 @@ class DalHandler(ABC, metaclass=_SingletonMeta):
 
     @abstractmethod
     def delete_order_from_db(self, order_id: str) -> None: ...  # pragma: no cover
+
+    @abstractmethod
+    def list_orders_from_db(self, limit: int, next_token: str | None) -> tuple[list[Order], str | None]: ...  # pragma: no cover

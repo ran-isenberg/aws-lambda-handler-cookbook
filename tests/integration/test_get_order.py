@@ -2,7 +2,6 @@ import json
 from http import HTTPStatus
 
 from service.dal.dynamo_dal_handler import DynamoDalHandler
-from tests.integration.conftest import create_order_in_db
 from tests.utils import generate_api_gw_event_with_path_params, generate_context, generate_random_string
 
 
@@ -17,11 +16,11 @@ def call_get_order(order_id: str) -> dict:
     return lambda_handler(event, generate_context())
 
 
-def test_handler_200_ok(table_name: str):
+def test_handler_200_ok(order_factory):
     # Given: An existing order in the database
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
-    created_order = create_order_in_db(table_name, customer_name, order_item_count)
+    created_order = order_factory(customer_name, order_item_count)
 
     # When: The get order lambda_handler is called with the order ID
     response = call_get_order(created_order['id'])

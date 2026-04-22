@@ -37,7 +37,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 flowchart LR
     subgraph AWS["AWS Cloud"]
         subgraph APIGW["API Gateway"]
-            REST["REST API<br/>POST /api/orders<br/>GET /api/orders/{id}<br/>DELETE /api/orders/{id}"]
+            REST["REST API<br/>POST /api/orders<br/>GET /api/orders/{id}<br/>GET /api/orders (list)<br/>DELETE /api/orders/{id}"]
         end
 
         subgraph Security["Security (Production)"]
@@ -49,6 +49,12 @@ flowchart LR
             GET["Get Order<br/>Lambda Function"]
             DELETE["Delete Order<br/>Lambda Function"]
             LAYER["Lambda Layer<br/>Common Dependencies"]
+        end
+
+        subgraph LMI["Lambda Managed Instances (VPC)"]
+            LIST_ALIAS["ListOrders Alias: live"]
+            LIST["List Orders<br/>Lambda Function"]
+            CP["Capacity Provider<br/>EC2 pool, 2 AZs"]
         end
 
         subgraph Config["Configuration"]
@@ -66,6 +72,9 @@ flowchart LR
     REST --> CREATE
     REST --> GET
     REST --> DELETE
+    REST --> LIST_ALIAS
+    LIST_ALIAS --> LIST
+    LIST -.runs on.-> CP
     CREATE --> LAYER
     GET --> LAYER
     DELETE --> LAYER
@@ -74,6 +83,7 @@ flowchart LR
     CREATE --> IDEMPOTENCY
     GET --> DDB
     DELETE --> DDB
+    LIST --> DDB
 
     style CLIENT fill:#f9f,stroke:#333
     style WAF fill:#ff6b6b,stroke:#333
@@ -82,6 +92,9 @@ flowchart LR
     style GET fill:#ffe66d,stroke:#333
     style DELETE fill:#ffe66d,stroke:#333
     style LAYER fill:#ffe66d,stroke:#333
+    style LIST fill:#ffa500,stroke:#333
+    style LIST_ALIAS fill:#4ecdc4,stroke:#333
+    style CP fill:#ff6b6b,stroke:#333
     style APPCONFIG fill:#95e1d3,stroke:#333
     style DDB fill:#4a90d9,stroke:#333
     style IDEMPOTENCY fill:#4a90d9,stroke:#333
@@ -89,12 +102,26 @@ flowchart LR
 
 <p class="mermaid-hint">Click diagram to zoom</p>
 
-- This project provides a working orders service where customers can create, get, and delete orders of items.
+- This project provides a working orders service where customers can create, get, list, and delete orders of items.
 
 - The project deploys an API GW with AWS Lambda integrations and stores orders data in a DynamoDB table:
     - `POST /api/orders/` - Create a new order
     - `GET /api/orders/{order_id}` - Get an order by ID
     - `DELETE /api/orders/{order_id}` - Delete an order by ID
+    - `GET /api/orders/?limit={n}&next_token={cursor}` - List orders with pagination, served by an **AWS Lambda Managed Instances** pool
+
+#### **LIST orders via AWS Lambda Managed Instances**
+
+The `GET /api/orders/` endpoint runs on
+[AWS Lambda Managed Instances](https://aws.amazon.com/blogs/aws/introducing-aws-lambda-managed-instances-serverless-simplicity-with-ec2-flexibility/){:target="_blank" rel="noopener"}
+(LMI) instead of standard Lambda. LMI keeps a warm EC2-backed pool of
+execution environments inside a private VPC, eliminating cold starts on
+paginated traffic and letting the function cap concurrency per environment
+to bound DynamoDB Scan pressure. The other CRUD endpoints remain on standard
+Lambda — LMI is adopted per-function, only where the extra surface area
+(VPC, capacity provider, alias-based publishing) is justified.
+
+See the [Lambda Managed Instances deep-dive](best_practices/managed_instances.md) for architecture, tuning knobs, and the constraints we hit in production.
 
 #### **Monitoring Design**
 

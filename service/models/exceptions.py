@@ -8,3 +8,7 @@ class DynamicConfigurationException(Exception):
 
 class OrderNotFoundException(Exception):
     pass
+
+
+class InvalidNextTokenException(Exception):
+    pass

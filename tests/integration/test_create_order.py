@@ -46,7 +46,7 @@ def call_create_order(body: dict[str, Any]) -> dict[str, Any]:
     return lambda_handler(body, generate_context())
 
 
-def test_handler_200_ok(mocker, table_name: str):
+def test_handler_200_ok(mocker, table_name: str, tracked_order_ids: list[str]):
     # Given: Dynamic configuration is mocked and a valid order creation request
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = f'{generate_random_string()}-RanTheBuilder'
@@ -60,6 +60,7 @@ def test_handler_200_ok(mocker, table_name: str):
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
     assert body_dict['id']
+    tracked_order_ids.append(body_dict['id'])
     assert body_dict['name'] == customer_name
     assert body_dict['item_count'] == 5
 

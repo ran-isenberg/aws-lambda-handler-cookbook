@@ -3,8 +3,8 @@ from http import HTTPStatus
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver, Response, content_types
 
 from service.handlers.utils.observability import logger
-from service.models.exceptions import DynamicConfigurationException, InternalServerException, OrderNotFoundException
-from service.models.output import InternalServerErrorOutput, OrderNotFoundOutput
+from service.models.exceptions import DynamicConfigurationException, InternalServerException, InvalidNextTokenException, OrderNotFoundException
+from service.models.output import InternalServerErrorOutput, InvalidNextTokenOutput, OrderNotFoundOutput
 
 ORDERS_PATH = '/api/orders/'
 
@@ -38,3 +38,9 @@ def handle_internal_server_error(ex: InternalServerException):  # receives excep
 def handle_order_not_found_error(ex: OrderNotFoundException):  # receives exception raised
     logger.exception('order was not found')
     return Response(status_code=HTTPStatus.NOT_FOUND, content_type=content_types.APPLICATION_JSON, body=OrderNotFoundOutput().model_dump())
+
+
+@app.exception_handler(InvalidNextTokenException)
+def handle_invalid_next_token(ex: InvalidNextTokenException):  # receives exception raised
+    logger.info('invalid next_token provided')
+    return Response(status_code=HTTPStatus.BAD_REQUEST, content_type=content_types.APPLICATION_JSON, body=InvalidNextTokenOutput().model_dump())

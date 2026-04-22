@@ -25,5 +25,13 @@ class MyHandlerEnvVars(Observability, DynamicConfiguration, Idempotency):
     TABLE_NAME: Annotated[str, Field(min_length=1)]
 
 
-class GetDeleteHandlerEnvVars(Observability):
+class GetHandlerEnvVars(Observability):
+    TABLE_NAME: Annotated[str, Field(min_length=1)]
+
+
+class DeleteHandlerEnvVars(Observability):
+    TABLE_NAME: Annotated[str, Field(min_length=1)]
+
+
+class ListHandlerEnvVars(Observability):
     TABLE_NAME: Annotated[str, Field(min_length=1)]

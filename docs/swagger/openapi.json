@@ -135,6 +135,90 @@
       }
     },
     "/api/orders": {
+      "get": {
+        "tags": [
+          "CRUD"
+        ],
+        "summary": "List orders",
+        "description": "List orders with pagination. Pass the returned next_token to fetch the next page.",
+        "operationId": "handle_list_orders_api_orders_get",
+        "parameters": [
+          {
+            "description": "Max orders to return per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100.0,
+              "minimum": 1.0,
+              "title": "Limit",
+              "description": "Max orders to return per page",
+              "default": 10
+            },
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "description": "Opaque cursor returned from a previous call",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Next Token",
+              "description": "Opaque cursor returned from a previous call"
+            },
+            "name": "next_token",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "A page of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListOrdersOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid next_token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidNextTokenOutput"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorOutput"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "CRUD"
@@ -309,6 +393,77 @@
         },
         "type": "object",
         "title": "InternalServerErrorOutput"
+      },
+      "InvalidNextTokenOutput": {
+        "properties": {
+          "error": {
+            "type": "string",
+            "title": "Error",
+            "description": "Error description",
+            "default": "invalid next_token"
+          }
+        },
+        "type": "object",
+        "title": "InvalidNextTokenOutput"
+      },
+      "ListOrdersOutput": {
+        "properties": {
+          "orders": {
+            "items": {
+              "$ref": "#/components/schemas/Order"
+            },
+            "type": "array",
+            "title": "Orders",
+            "description": "Orders in this page"
+          },
+          "next_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Token",
+            "description": "Opaque cursor; pass back as next_token to get the next page"
+          }
+        },
+        "type": "object",
+        "required": [
+          "orders"
+        ],
+        "title": "ListOrdersOutput"
+      },
+      "Order": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Name",
+            "description": "Customer name"
+          },
+          "item_count": {
+            "type": "integer",
+            "title": "Item Count",
+            "description": "Amount of items in order"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 36,
+            "minLength": 36,
+            "title": "Id",
+            "description": "Order ID as UUID"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "item_count",
+          "id"
+        ],
+        "title": "Order"
       },
       "OrderNotFoundOutput": {
         "properties": {

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aws_lambda_handler_cookbook"
-version = "9.2.1"
+version = "10.0"
 description = "This repository provides a working, deployable, open source based, AWS Lambda handler and CDK Python code. This handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler"
 authors = [{name = "Ran Isenberg"}]
 classifiers = [
@@ -35,10 +35,11 @@ Repository = "https://github.com/ran-isenberg/aws-lambda-handler-cookbook"
 dev = [
     # CDK
     "service-cdk",
-    "aws-cdk-lib>=2.180.0",
+    "aws-cdk-lib>=2.250.0",
     "constructs>=10.0.0",
     "cdk-nag>2.0.0",
-    "aws-cdk-aws-lambda-python-alpha>=2.180.0a0",
+    "aws-cdk-aws-lambda-python-alpha>=2.250.0a0",
+    "aws-cdk-aws-ec2-alpha>=2.250.0a0",
     "cdk-monitoring-constructs",
     # DEV
     "pytest",
