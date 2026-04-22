@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from aws_cdk import CfnOutput, CfnResource, RemovalPolicy
+from aws_cdk import CfnOutput, CfnResource, RemovalPolicy, Stack
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
@@ -26,7 +26,7 @@ class LambdaManagedInstanceConstruct(Construct):
         )
         self.capacity_provider_arn = self.capacity_provider.get_att('Arn').to_string()
 
-        CfnOutput(self, 'ManagedInstanceCapacityProviderName', value=constants.MANAGED_INSTANCE_CAPACITY_PROVIDER)
+        CfnOutput(self, 'ManagedInstanceCapacityProviderName', value=self._capacity_provider_name())
 
     def _build_networking(self, availability_zones: list[str]) -> tuple[VpcV2, Sequence[ec2.ISubnet], ec2.SecurityGroup]:
         vpc = VpcV2(
@@ -133,13 +133,17 @@ class LambdaManagedInstanceConstruct(Construct):
             ],
         )
 
+    def _capacity_provider_name(self) -> str:
+        return f'{Stack.of(self).stack_name}-{constants.MANAGED_INSTANCE_CAPACITY_PROVIDER}'
+
     def _build_capacity_provider(self, subnet_ids: list[str], security_group_id: str, operator_role_arn: str) -> CfnResource:
+        name = self._capacity_provider_name()
         return CfnResource(
             self,
-            constants.MANAGED_INSTANCE_CAPACITY_PROVIDER,
+            name,
             type='AWS::Lambda::CapacityProvider',
             properties={
-                'CapacityProviderName': constants.MANAGED_INSTANCE_CAPACITY_PROVIDER,
+                'CapacityProviderName': name,
                 'VpcConfig': {
                     'SubnetIds': subnet_ids,
                     'SecurityGroupIds': [security_group_id],
