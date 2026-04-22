@@ -385,6 +385,13 @@ class ApiConstruct(Construct):
                 },
             },
         )
+        cfn_function.add_property_override(
+            'FunctionScalingConfig',
+            {
+                'MinExecutionEnvironments': constants.MANAGED_INSTANCE_MIN_EXECUTION_ENVIRONMENTS,
+                'MaxExecutionEnvironments': constants.MANAGED_INSTANCE_MAX_EXECUTION_ENVIRONMENTS,
+            },
+        )
         cfn_function.add_dependency(managed_instance.capacity_provider)
 
         # Managed Instances serves only published versions — route API Gateway through an alias

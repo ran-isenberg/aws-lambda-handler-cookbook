@@ -12,6 +12,7 @@ This section covers essential best practices for building production-ready AWS L
 | [Dynamic Configuration](dynamic_configuration.md) | Feature flags and runtime configuration with AWS AppConfig |
 | [Environment Variables](environment_variables.md) | Secure and validated environment variable handling         |
 | [Input Validation](input_validation.md)           | Request validation with Pydantic models                    |
+| [Lambda Managed Instances](managed_instances.md)  | Running the LIST endpoint on an LMI capacity provider      |
 | [Logger](logger.md)                               | Structured logging with AWS Lambda Powertools              |
 | [Metrics](metrics.md)                             | Custom CloudWatch metrics for business KPIs                |
 | [Monitoring](monitoring.md)                       | CloudWatch dashboards and alarms                           |

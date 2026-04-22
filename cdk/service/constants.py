@@ -41,10 +41,12 @@ MANAGED_INSTANCE_LAMBDA_ROLE = 'ManagedInstanceLambdaRole'
 MANAGED_INSTANCE_VPC = 'ManagedInstanceVpc'
 MANAGED_INSTANCE_SECURITY_GROUP = 'ManagedInstanceSg'
 MANAGED_INSTANCE_OPERATOR_POLICY = 'AWSLambdaManagedEC2ResourceOperator'
-MANAGED_INSTANCE_MEMORY_SIZE = 4096  # MB
+MANAGED_INSTANCE_MEMORY_SIZE = 2048  # MB
 MANAGED_INSTANCE_EPHEMERAL_STORAGE = 512  # MB
 MANAGED_INSTANCE_MAX_VCPU = 100
 MANAGED_INSTANCE_VPC_CIDR = '10.0.0.0/16'
 MANAGED_INSTANCE_AVAILABILITY_ZONES = ['us-east-1a', 'us-east-1b']
-MANAGED_INSTANCE_MEMORY_GIB_PER_VCPU = 4  # allowed: 2-8; RAM-to-vCPU ratio used to select instance type (2=c-family, 4=m-family, 8=r-family)
+MANAGED_INSTANCE_MEMORY_GIB_PER_VCPU = 2  # allowed: 2-8; RAM-to-vCPU ratio used to select instance type (2=c-family, 4=m-family, 8=r-family)
 MANAGED_INSTANCE_MAX_CONCURRENCY_PER_ENV = 4  # allowed: 1-1600; caps concurrent invocations per environment. Python runs one process per invocation, so lower values reduce memory contention within MemorySize.
+MANAGED_INSTANCE_MIN_EXECUTION_ENVIRONMENTS = 3  # 3 is the minimum and default
+MANAGED_INSTANCE_MAX_EXECUTION_ENVIRONMENTS = 4
