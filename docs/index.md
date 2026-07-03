@@ -205,6 +205,20 @@ AI-DLC provides a structured, adaptive workflow for:
 
 The AI-DLC workflow artifacts are stored in the `aidlc-docs/` directory.
 
+### **Claude Code Project Rules**
+
+The repository also ships persistent instructions for [Claude Code](https://claude.com/claude-code){:target="_blank" rel="noopener"} and other `CLAUDE.md`-aware AI agents, so generated code follows the project's conventions automatically:
+
+- `CLAUDE.md` - project overview, layout, and planning guidelines, loaded every session.
+- `.claude/rules/` - topic-scoped rule files that load automatically; path-scoped rules load only when the matching files are edited:
+    - `makefile.md` - the `make` command reference; always drive tasks through targets.
+    - `github-actions.md` - CI workflows and SHA-pinning of actions.
+    - `service.md` and `models.md` - handler/logic/dal layering, Powertools, and Pydantic conventions.
+    - `testing.md` - unit, integration, e2e, and infrastructure test patterns.
+    - `cdk.md` - construct and stack structure, and `cdk-nag` v3 suppression conventions.
+    - `docs.md` - documentation build, markdownlint, and OpenAPI schema sync.
+    - `security.md`, `dependencies.md`, and `git-pr.md` - secrets and IAM, dependency management, and Conventional Commits.
+
 ## **Serverless Best Practices**
 
 The AWS Lambda handler will implement multiple best practice utilities.
