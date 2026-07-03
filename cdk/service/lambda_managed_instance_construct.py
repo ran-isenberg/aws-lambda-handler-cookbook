@@ -1,12 +1,11 @@
 from typing import Sequence
 
-from aws_cdk import CfnOutput, CfnResource, RemovalPolicy, Stack
+from aws_cdk import Acknowledgment, CfnOutput, CfnResource, RemovalPolicy, Stack, Validations
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_lambda as _lambda
 from aws_cdk import aws_logs as logs
 from aws_cdk.aws_ec2_alpha import IpAddresses, IpCidr, SubnetV2, VpcV2
-from cdk_nag import NagSuppressions
 from constructs import Construct
 
 import cdk.service.constants as constants
@@ -80,17 +79,14 @@ class LambdaManagedInstanceConstruct(Construct):
             allow_all_outbound=False,
         )
         endpoints_sg.add_ingress_rule(peer=client_sg, connection=ec2.Port.tcp(443), description='HTTPS from capacity provider instances')
-        NagSuppressions.add_resource_suppressions(
-            endpoints_sg,
-            [
-                {
-                    'id': 'CdkNagValidationFailure',
-                    'reason': (
-                        'Ingress CIDR is a CFN intrinsic (VPC CidrBlock) added by InterfaceVpcEndpoint; '
-                        'it resolves to the private VPC CIDR, not 0.0.0.0/0.'
-                    ),
-                },
-            ],
+        Validations.of(endpoints_sg).acknowledge(
+            Acknowledgment(
+                id='AwsSolutions-EC23',
+                reason=(
+                    'Ingress CIDR is a CFN intrinsic (VPC CidrBlock) added by InterfaceVpcEndpoint; '
+                    'it resolves to the private VPC CIDR, not 0.0.0.0/0.'
+                ),
+            ),
         )
 
         for endpoint_id, service in (

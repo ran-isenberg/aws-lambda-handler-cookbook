@@ -37,7 +37,7 @@ dev = [
     "service-cdk",
     "aws-cdk-lib>=2.250.0",
     "constructs>=10.0.0",
-    "cdk-nag>2.0.0",
+    "cdk-nag>=3.0.0,<4.0.0",
     "aws-cdk-aws-lambda-python-alpha>=2.250.0a0",
     "aws-cdk-aws-ec2-alpha>=2.250.0a0",
     "cdk-monitoring-constructs",
