@@ -251,3 +251,6 @@ lambda_requirements.txt
 .dccache
 node_modules/
 .ruff_cache
+
+# Claude Code personal, machine-local settings (shared config lives in .claude/settings.json)
+.claude/settings.local.json

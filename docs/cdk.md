@@ -123,6 +123,8 @@ Under tests there is an `infrastructure` folder for CDK infrastructure tests.
 
 The first test, `test_cdk` uses CDK's testing framework which asserts that required resources exists so the application will not break anything upon deployment.
 
-The security tests are based on `cdk_nag`. It checks your cloudformation output for security best practices. It can be found in the `service_stack.py` as part of the stack definition. It will fail the deployment when there is a security issue.
+The security tests are based on `cdk_nag` (v3). It checks your cloudformation output for security best practices. It can be found in the `service_stack.py` as part of the stack definition. It will fail the deployment when there is a security issue.
+
+`cdk-nag` v3 is wired through CDK's native validations: the rule pack is applied with `Validations.of(self).add_plugins(AwsSolutionsChecks(...))`, and individual findings are acknowledged (suppressed) with a documented reason via `Validations.of(scope).acknowledge(...)` - the `NagSuppressions` API from v2 has been removed.
 
 For more information see the [AWS CDK-Nag documentation](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/check-aws-cdk-applications-or-cloudformation-templates-for-best-practices-by-using-cdk-nag-rule-packs.html){:target="_blank" rel="noopener"}.
