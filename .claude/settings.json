@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "defaultMode": "plan",
+  "permissions": {
+    "allow": [
+      "Bash(make dev)",
+      "Bash(make format)",
+      "Bash(make format-fix)",
+      "Bash(make lint)",
+      "Bash(make lint-docs)",
+      "Bash(make mypy-lint)",
+      "Bash(make complex)",
+      "Bash(make pre-commit)",
+      "Bash(make unit)",
+      "Bash(make infra-tests)",
+      "Bash(make docs)",
+      "Bash(make openapi)",
+      "Bash(make compare-openapi)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(uv run pytest:*)",
+      "Bash(uv run ruff:*)"
+    ],
+    "ask": [
+      "Bash(make integration)",
+      "Bash(make coverage-tests)",
+      "Bash(make e2e)"
+    ],
+    "deny": [
+      "Bash(make deploy)",
+      "Bash(make destroy)",
+      "Bash(cdk deploy:*)",
+      "Bash(cdk destroy:*)",
+      "Bash(aws:*)"
+    ]
+  }
+}
