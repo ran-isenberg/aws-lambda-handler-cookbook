@@ -4,6 +4,6 @@
         "cdk": "^2.1129.0"
     },
     "devDependencies": {
-        "markdownlint-cli": "^0.49.0"
+        "markdownlint-cli": "^0.49.1"
     }
 }
