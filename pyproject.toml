@@ -108,6 +108,8 @@ exclude = [
 # Same as Black.
 line-length = 150
 indent-width = 4
+# apply the excludes to the files pre-commit passes explicitly as well
+force-exclude = true
 
 # Assume Python 3.14
 target-version = "py314"
@@ -125,6 +127,8 @@ select = [
 ignore = [ "E203", "E266", "E501", "W191"]
 
 [tool.ruff.format]
+# ruff formats python code blocks in markdown, which breaks the docs snippet includes (--8<-- "path")
+exclude = ["*.md"]
 quote-style = "single"
 
 # Like Black, indent with spaces, rather than tabs.
