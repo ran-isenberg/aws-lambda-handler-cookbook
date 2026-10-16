@@ -343,7 +343,7 @@ class ApiConstruct(Construct):
                 'dynamodb_db': iam.PolicyDocument(
                     statements=[
                         iam.PolicyStatement(
-                            actions=['dynamodb:Scan'],
+                            actions=['dynamodb:Query'],
                             resources=[db.table_arn],
                             effect=iam.Effect.ALLOW,
                         )

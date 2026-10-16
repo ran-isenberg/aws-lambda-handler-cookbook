@@ -8,19 +8,19 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.dynamic_configuration import MyConfiguration
 from service.handlers.models.env_vars import MyHandlerEnvVars
-from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_WRITE
+from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_WRITE, get_caller_id
 from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.create_order import create_order
-from service.models.input import CreateOrderRequest
+from service.models.input import CreateOrderRequest, OwnedCreateOrderRequest
 from service.models.output import CreateOrderOutput, InternalServerErrorOutput
 
 
 @app.post(
     ORDERS_PATH,
     summary='Create an order',
-    description='Create an order identified by the body payload',
+    description='Create an order identified by the body payload, owned by the caller',
     response_description='The created order',
     responses={
         200: {
@@ -40,6 +40,8 @@ from service.models.output import CreateOrderOutput, InternalServerErrorOutput
 def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> CreateOrderOutput:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
+    owner_id = get_caller_id()
+    logger.append_keys(owner_id=owner_id)
     logger.info('got create order request', order=create_input.model_dump())
 
     my_configuration = parse_configuration(model=MyConfiguration)
@@ -47,7 +49,7 @@ def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=F
 
     metrics.add_metric(name='ValidCreateOrderEvents', unit=MetricUnit.Count, value=1)
     response: CreateOrderOutput = create_order(
-        order_request=create_input,
+        order_request=OwnedCreateOrderRequest(**create_input.model_dump(), owner_id=owner_id),
         table_name=env_vars.TABLE_NAME,
         context=app.lambda_context,
     )

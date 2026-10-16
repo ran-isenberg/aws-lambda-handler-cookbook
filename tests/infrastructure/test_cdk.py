@@ -89,3 +89,24 @@ def test_managed_instances_list_lambda_gets_jwks_at_deploy_time():
     assert len(jwks_lambdas) == 1
     vpc_endpoints = template.find_resources('AWS::EC2::VPCEndpoint')
     assert not [endpoint for endpoint in vpc_endpoints.values() if 'cognito-idp' in str(endpoint['Properties']['ServiceName'])]
+
+
+def test_orders_are_partitioned_by_owner():
+    app = App()
+
+    service_stack = ServiceStack(app, 'service-test', is_production_env=True)
+    template = Template.from_stack(service_stack)
+
+    # users only reach their own orders: the orders table is keyed by (owner_id, id)
+    template.has_resource_properties(
+        'AWS::DynamoDB::GlobalTable',
+        {
+            'KeySchema': [{'AttributeName': 'owner_id', 'KeyType': 'HASH'}, {'AttributeName': 'id', 'KeyType': 'RANGE'}],
+        },
+    )
+
+    # the list Lambda queries the caller's partition, it never scans the whole table
+    policies = template.find_resources('AWS::IAM::Role', {'Properties': {'Policies': Match.any_value()}})
+    actions = str([role['Properties']['Policies'] for role in policies.values()])
+    assert 'dynamodb:Query' in actions
+    assert 'dynamodb:Scan' not in actions

@@ -179,6 +179,7 @@ The API is protected with **Amazon Cognito** and the Powertools for AWS Lambda [
 | `POST /api/orders`, `DELETE /api/orders/{order_id}` | `orders/write` |
 
 * A missing or invalid token (an ID token too) returns `401`, a missing scope returns `403`.
+* Orders belong to the user that created them (the access token `sub` claim). Users only get, delete and list their own orders, an order of another user returns `404`. The orders table is keyed by `owner_id` and `id`, so listing is a `Query` of the caller's orders.
 * Scopes come from the user's Cognito group: `orders-readers` gets `orders/read`, `orders-writers` gets `orders/read` and `orders/write`.
 * A Cognito **pre token generation** trigger (event version 2) adds the `aud` claim and the scopes to access tokens issued by the Cognito API, which the `JWTVerifier.cognito()` profile requires. Read about why in the [Authentication documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/).
 * The LIST function runs in the Lambda Managed Instances VPC without internet access, and the Cognito VPC endpoint does not serve the user pool public keys (JWKS). A deploy time custom resource fetches the JWKS and passes it to the LIST function in the `COGNITO_JWKS` environment variable, which the verifier uses instead of downloading it.
@@ -192,7 +193,7 @@ The `GET /api/orders/` endpoint is deliberately powered by
 environments on an EC2-backed capacity provider, so paginated list traffic
 avoids cold starts, runs inside a private VPC with DynamoDB and observability
 VPC endpoints, and can cap concurrency per environment (useful for bounding
-DynamoDB Scan pressure). The CRUD endpoints stay on standard Lambda — LMI is
+DynamoDB Query pressure). The CRUD endpoints stay on standard Lambda — LMI is
 picked per-function, only where its extra surface area pays off.
 
 See the

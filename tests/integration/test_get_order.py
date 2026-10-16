@@ -17,11 +17,11 @@ def call_get_order(order_id: str, headers: dict[str, str]) -> dict:
     return lambda_handler(event, generate_context())
 
 
-def test_handler_200_ok(order_factory, reader_headers):
-    # Given: An existing order in the database
+def test_handler_200_ok(order_factory, reader_user, reader_headers):
+    # Given: An existing order of the caller in the database
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
-    created_order = order_factory(customer_name, order_item_count)
+    created_order = order_factory(reader_user, customer_name, order_item_count)
 
     # When: The get order lambda_handler is called with the order ID
     response = call_get_order(created_order['id'], reader_headers)

@@ -46,7 +46,7 @@ def call_create_order(body: dict[str, Any]) -> dict[str, Any]:
     return lambda_handler(body, generate_context())
 
 
-def test_handler_200_ok(mocker, table_name: str, tracked_order_ids: list[str], writer_headers):
+def test_handler_200_ok(mocker, table_name: str, tracked_orders: list[tuple[str, str]], writer_user, writer_headers):
     # Given: Dynamic configuration is mocked and a valid order creation request
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = f'{generate_random_string()}-RanTheBuilder'
@@ -60,14 +60,14 @@ def test_handler_200_ok(mocker, table_name: str, tracked_order_ids: list[str], w
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
     assert body_dict['id']
-    tracked_order_ids.append(body_dict['id'])
+    tracked_orders.append((writer_user.sub, body_dict['id']))
     assert body_dict['name'] == customer_name
     assert body_dict['item_count'] == 5
 
     # Use pydynox to verify the item was saved correctly
     db_handler = DynamoDalHandler(table_name)
     OrderEntryModel = db_handler._get_order_model()
-    saved_order = OrderEntryModel.sync_get(id=body_dict['id'])
+    saved_order = OrderEntryModel.sync_get(owner_id=writer_user.sub, id=body_dict['id'])
     assert saved_order is not None
     assert saved_order.name == customer_name
     assert saved_order.item_count == order_item_count

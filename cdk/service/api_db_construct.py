@@ -38,7 +38,9 @@ class ApiDbConstruct(Construct):
             self,
             table_id,
             table_name=table_id,
-            partition_key=dynamodb.Attribute(name='id', type=dynamodb.AttributeType.STRING),
+            # orders are partitioned by the user that owns them (access token sub claim), so users only reach their own orders
+            partition_key=dynamodb.Attribute(name='owner_id', type=dynamodb.AttributeType.STRING),
+            sort_key=dynamodb.Attribute(name='id', type=dynamodb.AttributeType.STRING),
             billing=dynamodb.Billing.on_demand(),
             point_in_time_recovery_specification=dynamodb.PointInTimeRecoverySpecification(
                 point_in_time_recovery_enabled=True,

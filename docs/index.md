@@ -117,7 +117,7 @@ The `GET /api/orders/` endpoint runs on
 (LMI) instead of standard Lambda. LMI keeps a warm EC2-backed pool of
 execution environments inside a private VPC, eliminating cold starts on
 paginated traffic and letting the function cap concurrency per environment
-to bound DynamoDB Scan pressure. The other CRUD endpoints remain on standard
+to bound DynamoDB Query pressure. The other CRUD endpoints remain on standard
 Lambda — LMI is adopted per-function, only where the extra surface area
 (VPC, capacity provider, alias-based publishing) is justified.
 

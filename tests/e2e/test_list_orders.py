@@ -6,10 +6,10 @@ import requests
 from tests.utils import generate_random_string
 
 
-def test_handler_200_ok(api_gw_url, order_factory, reader_headers):
-    # Given: An existing order created via the factory
+def test_handler_200_ok(api_gw_url, order_factory, reader_user, reader_headers):
+    # Given: An existing order of the caller created via the factory
     customer_name = f'{generate_random_string()}-RanTheBuilder'
-    created_order = order_factory(customer_name, 5)
+    created_order = order_factory(reader_user, customer_name, 5)
 
     # When: Making a GET request to /api/orders with a generous limit
     response = requests.get(api_gw_url, params={'limit': 100}, headers=reader_headers)
@@ -23,10 +23,10 @@ def test_handler_200_ok(api_gw_url, order_factory, reader_headers):
     assert created_order['id'] in ids
 
 
-def test_handler_pagination_round_trip(api_gw_url, order_factory, reader_headers):
+def test_handler_pagination_round_trip(api_gw_url, order_factory, reader_user, reader_headers):
     # Given: Two orders exist (create them to guarantee at least two pages with limit=1)
     for _ in range(2):
-        order_factory(f'{generate_random_string()}-RanTheBuilder', 1)
+        order_factory(reader_user, f'{generate_random_string()}-RanTheBuilder', 1)
 
     # When: Fetching the first page with limit=1
     first = requests.get(api_gw_url, params={'limit': 1}, headers=reader_headers)

@@ -6,10 +6,10 @@ import requests
 from tests.utils import generate_random_string
 
 
-def test_handler_200_ok(api_gw_url, order_factory, reader_headers):
-    # Given: An existing order
+def test_handler_200_ok(api_gw_url, order_factory, reader_user, reader_headers):
+    # Given: An existing order of the caller
     customer_name = f'{generate_random_string()}-RanTheBuilder'
-    created_order = order_factory(customer_name, 5)
+    created_order = order_factory(reader_user, customer_name, 5)
 
     # When: Making a GET request to the API Gateway URL with the order ID
     response = requests.get(f'{api_gw_url}/{created_order["id"]}', headers=reader_headers)

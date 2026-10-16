@@ -6,7 +6,7 @@ from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.env_vars import DeleteHandlerEnvVars
-from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_WRITE
+from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_WRITE, get_caller_id
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.delete_order import delete_order
@@ -16,7 +16,7 @@ from service.models.output import DeleteOrderOutput, InternalServerErrorOutput, 
 @app.delete(
     f'{ORDERS_PATH}<order_id>',
     summary='Delete an order',
-    description='Delete an order by its ID',
+    description='Delete an order of the caller by its ID',
     response_description='The deleted order confirmation',
     responses={
         200: {
@@ -24,7 +24,7 @@ from service.models.output import DeleteOrderOutput, InternalServerErrorOutput, 
             'content': {'application/json': {'model': DeleteOrderOutput}},
         },
         404: {
-            'description': 'Order not found',
+            'description': 'Order not found (or owned by another user)',
             'content': {'application/json': {'model': OrderNotFoundOutput}},
         },
         501: {
@@ -40,11 +40,13 @@ from service.models.output import DeleteOrderOutput, InternalServerErrorOutput, 
 def handle_delete_order(order_id: str) -> DeleteOrderOutput:
     env_vars: DeleteHandlerEnvVars = get_environment_variables(model=DeleteHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
-    logger.append_keys(order_id=order_id)
+    owner_id = get_caller_id()
+    logger.append_keys(order_id=order_id, owner_id=owner_id)
     logger.info('got delete order request')
 
     metrics.add_metric(name='ValidDeleteOrderEvents', unit=MetricUnit.Count, value=1)
     response: DeleteOrderOutput = delete_order(
+        owner_id=owner_id,
         order_id=order_id,
         table_name=env_vars.TABLE_NAME,
     )

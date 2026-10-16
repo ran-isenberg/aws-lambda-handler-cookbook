@@ -18,6 +18,7 @@ class CognitoPool:
 @dataclass(frozen=True)
 class CognitoUser:
     username: str
+    sub: str  # the user id, the owner_id of the orders the user creates
     access_token: str
     id_token: str
 
@@ -45,7 +46,8 @@ def create_cognito_user(pool: CognitoPool, groups: list[str]) -> CognitoUser:
     client = _cognito_client(pool.user_pool_id)
     username = f'test-{generate_random_string(10)}-{uuid.uuid4().hex[:8]}'
     password = f'Aa1!{secrets.token_urlsafe(16)}'  # meets the user pool password policy
-    client.admin_create_user(UserPoolId=pool.user_pool_id, Username=username, MessageAction='SUPPRESS')  # SUPPRESS: no invitation message
+    created = client.admin_create_user(UserPoolId=pool.user_pool_id, Username=username, MessageAction='SUPPRESS')  # SUPPRESS: no invitation message
+    sub = next(attribute['Value'] for attribute in created['User']['Attributes'] if attribute['Name'] == 'sub')
     try:
         client.admin_set_user_password(UserPoolId=pool.user_pool_id, Username=username, Password=password, Permanent=True)
         for group in groups:
@@ -60,7 +62,7 @@ def create_cognito_user(pool: CognitoPool, groups: list[str]) -> CognitoUser:
         # do not leave a half created user behind, the caller never gets the chance to delete it
         delete_cognito_user(pool, username)
         raise
-    return CognitoUser(username=username, access_token=auth_result['AccessToken'], id_token=auth_result['IdToken'])
+    return CognitoUser(username=username, sub=sub, access_token=auth_result['AccessToken'], id_token=auth_result['IdToken'])
 
 
 def delete_cognito_user(pool: CognitoPool, username: str) -> None:

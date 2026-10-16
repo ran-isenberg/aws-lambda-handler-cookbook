@@ -7,7 +7,7 @@ from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.env_vars import ListHandlerEnvVars
-from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_READ
+from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_READ, get_caller_id
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.list_orders import list_orders
@@ -17,7 +17,7 @@ from service.models.output import InternalServerErrorOutput, InvalidNextTokenOut
 @app.get(
     ORDERS_PATH,
     summary='List orders',
-    description='List orders with pagination. Pass the returned next_token to fetch the next page.',
+    description="List the caller's orders with pagination. Pass the returned next_token to fetch the next page.",
     response_description='A page of orders and an optional next_token cursor',
     responses={
         200: {
@@ -44,10 +44,12 @@ def handle_list_orders(
 ) -> ListOrdersOutput:
     env_vars: ListHandlerEnvVars = get_environment_variables(model=ListHandlerEnvVars)
     logger.debug('environment variables', env_vars=env_vars.model_dump())
+    owner_id = get_caller_id()
+    logger.append_keys(owner_id=owner_id)
     logger.info('got list orders request', limit=limit)
 
     metrics.add_metric(name='ValidListOrdersEvents', unit=MetricUnit.Count, value=1)
-    response: ListOrdersOutput = list_orders(table_name=env_vars.TABLE_NAME, limit=limit, next_token=next_token)
+    response: ListOrdersOutput = list_orders(owner_id=owner_id, table_name=env_vars.TABLE_NAME, limit=limit, next_token=next_token)
 
     logger.info('finished handling list orders request', order_count=len(response.orders), has_more=response.next_token is not None)
     return response

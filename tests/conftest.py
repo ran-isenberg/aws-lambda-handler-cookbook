@@ -17,17 +17,18 @@ _dynamo_client = DynamoDBClient()
 
 @lru_cache
 def _get_order_model(table_name: str):
-    @dynamodb_model(table=table_name, partition_key='id', client=_dynamo_client)
+    @dynamodb_model(table=table_name, partition_key='owner_id', sort_key='id', client=_dynamo_client)
     class DynamoOrderEntry(OrderEntry):
         pass
 
     return DynamoOrderEntry
 
 
-def create_order_in_db(table_name: str, customer_name: str, order_item_count: int) -> dict[str, Any]:
-    """Create an order directly in DynamoDB via pydynox."""
+def create_order_in_db(table_name: str, owner_id: str, customer_name: str, order_item_count: int) -> dict[str, Any]:
+    """Create an order owned by owner_id directly in DynamoDB via pydynox."""
     order_id = str(uuid.uuid4())
     entry = _get_order_model(table_name)(
+        owner_id=owner_id,
         id=order_id,
         name=customer_name,
         item_count=order_item_count,
@@ -37,14 +38,14 @@ def create_order_in_db(table_name: str, customer_name: str, order_item_count: in
     return {'id': order_id, 'name': customer_name, 'item_count': order_item_count}
 
 
-def get_order_from_db(table_name: str, order_id: str) -> OrderEntry | None:
+def get_order_from_db(table_name: str, owner_id: str, order_id: str) -> OrderEntry | None:
     """Get an order directly from DynamoDB via pydynox. Returns None if not found."""
-    return _get_order_model(table_name).sync_get(id=order_id)
+    return _get_order_model(table_name).sync_get(owner_id=owner_id, id=order_id)
 
 
-def delete_order_from_db(table_name: str, order_id: str) -> None:
+def delete_order_from_db(table_name: str, owner_id: str, order_id: str) -> None:
     """Delete an order directly from DynamoDB via pydynox. Silent if already gone."""
-    entry = _get_order_model(table_name).sync_get(id=order_id)
+    entry = _get_order_model(table_name).sync_get(owner_id=owner_id, id=order_id)
     if entry is not None:
         entry.sync_delete()
 
@@ -56,27 +57,27 @@ def table_name():
 
 @pytest.fixture
 def order_factory(table_name):
-    """Create orders directly in DynamoDB and delete them automatically at test teardown."""
-    created_ids: list[str] = []
+    """Create orders owned by a user directly in DynamoDB and delete them automatically at test teardown."""
+    created: list[tuple[str, str]] = []
 
-    def _create(customer_name: str, order_item_count: int) -> dict[str, Any]:
-        order = create_order_in_db(table_name, customer_name, order_item_count)
-        created_ids.append(order['id'])
+    def _create(owner: CognitoUser, customer_name: str, order_item_count: int) -> dict[str, Any]:
+        order = create_order_in_db(table_name, owner.sub, customer_name, order_item_count)
+        created.append((owner.sub, order['id']))
         return order
 
     yield _create
 
-    for order_id in created_ids:
-        delete_order_from_db(table_name, order_id)
+    for owner_id, order_id in created:
+        delete_order_from_db(table_name, owner_id, order_id)
 
 
 @pytest.fixture
-def tracked_order_ids(table_name):
-    """Append order ids created by the test; teardown deletes them from DynamoDB."""
-    ids: list[str] = []
-    yield ids
-    for order_id in ids:
-        delete_order_from_db(table_name, order_id)
+def tracked_orders(table_name):
+    """Append the (owner_id, order_id) of orders created by the test; teardown deletes them from DynamoDB."""
+    orders: list[tuple[str, str]] = []
+    yield orders
+    for owner_id, order_id in orders:
+        delete_order_from_db(table_name, owner_id, order_id)
 
 
 # Cognito users are created once per test session (not per test), and deleted when the session ends.
@@ -89,6 +90,14 @@ def cognito_pool() -> CognitoPool:
 @pytest.fixture(scope='session')
 def writer_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
     """Has the orders/read and orders/write scopes."""
+    user = create_cognito_user(cognito_pool, [WRITERS_GROUP])
+    yield user
+    delete_cognito_user(cognito_pool, user.username)
+
+
+@pytest.fixture(scope='session')
+def other_writer_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
+    """A second writer, to verify that users can't reach each other's orders."""
     user = create_cognito_user(cognito_pool, [WRITERS_GROUP])
     yield user
     delete_cognito_user(cognito_pool, user.username)
@@ -113,6 +122,11 @@ def no_scope_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
 @pytest.fixture(scope='session')
 def writer_headers(writer_user: CognitoUser) -> dict[str, str]:
     return bearer_headers(writer_user.access_token)
+
+
+@pytest.fixture(scope='session')
+def other_writer_headers(other_writer_user: CognitoUser) -> dict[str, str]:
+    return bearer_headers(other_writer_user.access_token)
 
 
 @pytest.fixture(scope='session')

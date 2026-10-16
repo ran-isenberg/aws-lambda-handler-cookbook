@@ -25,12 +25,21 @@ The order API is protected with Amazon Cognito access tokens. Each Lambda functi
 --8<-- "service/handlers/utils/auth.py"
 ```
 
-The verifier is created once per execution environment, so the JWKS is fetched once and reused by warm invocations.
+The verifier is created once per execution environment, so the JWKS is fetched once and reused by warm invocations. A route uses it with `middlewares=REQUIRE_READ` or `middlewares=REQUIRE_WRITE`.
 
-The LIST function runs in the Lambda Managed Instances VPC, which has no internet access (and the Cognito VPC endpoint does not serve the JWKS), so it gets the JWKS at deploy time instead: a CloudFormation custom resource fetches it and passes it in the `COGNITO_JWKS` environment variable. A route uses it with `middlewares=REQUIRE_READ` or `middlewares=REQUIRE_WRITE`.
+The LIST function runs in the Lambda Managed Instances VPC, which has no internet access (and the Cognito VPC endpoint does not serve the JWKS), so it gets the JWKS at deploy time instead: a CloudFormation custom resource fetches it and passes it in the `COGNITO_JWKS` environment variable.
 
 !!! note "Validation runs before authorization"
     The Event Handler validates the request before it runs route middleware. A caller without a token that sends an invalid body gets a `422` before it gets a `401`. A valid body gets the `401`.
+
+## **Order ownership**
+
+Every order belongs to the user that created it, and users can only get, delete and list their own orders.
+
+- The owner is the access token `sub` claim, read with `get_caller_id()` from the claims the auth middleware adds to the resolver context. `sub` is immutable and unique, unlike the username, which can be reused after a user is deleted.
+- The orders table is keyed by `owner_id` (partition key) and `id` (sort key). Get and delete read the item by both keys, so an order of another user returns `404`, exactly like an order that does not exist. This does not reveal which order ids exist.
+- List runs a strongly consistent `Query` on the caller's partition instead of a `Scan` of the whole table. A `next_token` of another user, or a forged one, returns `400`.
+- The owner is part of the create order idempotency key, so the same request body sent by two users creates two orders.
 
 ## **The audience claim**
 
@@ -52,8 +61,9 @@ The audience is therefore the app client id, which is weaker than a resource bou
 The integration and e2e tests do not mock the verifier. They use real tokens from the deployed user pool.
 
 - The helpers in `tests/auth_utils.py` create a user with the admin API, add it to a group, sign it in to get a real access token and delete it.
-- The fixtures in `tests/conftest.py` create three users once per test session: `writer_user`, `reader_user` and `no_scope_user`. They are deleted when the session ends, also when a test fails.
-- The bearer token is passed to the tests as ready to use `Authorization` headers: `writer_headers`, `reader_headers` and `no_scope_headers`.
+- The fixtures in `tests/conftest.py` create four users once per test session: `writer_user`, `other_writer_user` (to test order ownership), `reader_user` and `no_scope_user`. They are deleted when the session ends, also when a test fails.
+- The bearer token is passed to the tests as ready to use `Authorization` headers: `writer_headers`, `other_writer_headers`, `reader_headers` and `no_scope_headers`.
+- `order_factory(owner, name, item_count)` creates orders owned by a test user (`owner.sub`) directly in DynamoDB.
 
 The identity that runs the tests needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.
 

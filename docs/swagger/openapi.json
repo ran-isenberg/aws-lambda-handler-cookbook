@@ -16,7 +16,7 @@
           "CRUD"
         ],
         "summary": "Get an order",
-        "description": "Get an order by its ID",
+        "description": "Get an order of the caller by its ID",
         "operationId": "handle_get_order_api_orders__order_id__get",
         "parameters": [
           {
@@ -51,7 +51,7 @@
             }
           },
           "404": {
-            "description": "Order not found",
+            "description": "Order not found (or owned by another user)",
             "content": {
               "application/json": {
                 "schema": {
@@ -102,7 +102,7 @@
           "CRUD"
         ],
         "summary": "Delete an order",
-        "description": "Delete an order by its ID",
+        "description": "Delete an order of the caller by its ID",
         "operationId": "handle_delete_order_api_orders__order_id__delete",
         "parameters": [
           {
@@ -137,7 +137,7 @@
             }
           },
           "404": {
-            "description": "Order not found",
+            "description": "Order not found (or owned by another user)",
             "content": {
               "application/json": {
                 "schema": {
@@ -190,7 +190,7 @@
           "CRUD"
         ],
         "summary": "List orders",
-        "description": "List orders with pagination. Pass the returned next_token to fetch the next page.",
+        "description": "List the caller's orders with pagination. Pass the returned next_token to fetch the next page.",
         "operationId": "handle_list_orders_api_orders_get",
         "parameters": [
           {
@@ -299,7 +299,7 @@
           "CRUD"
         ],
         "summary": "Create an order",
-        "description": "Create an order identified by the body payload",
+        "description": "Create an order identified by the body payload, owned by the caller",
         "operationId": "handle_create_order_api_orders_post",
         "requestBody": {
           "content": {

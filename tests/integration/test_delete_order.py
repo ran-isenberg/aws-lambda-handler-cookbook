@@ -18,11 +18,11 @@ def call_delete_order(order_id: str, headers: dict[str, str]) -> dict:
     return lambda_handler(event, generate_context())
 
 
-def test_handler_200_ok(table_name: str, writer_headers):
-    # Given: An existing order in the database
+def test_handler_200_ok(table_name: str, writer_user, writer_headers):
+    # Given: An existing order of the caller in the database
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
-    created_order = create_order_in_db(table_name, customer_name, order_item_count)
+    created_order = create_order_in_db(table_name, writer_user.sub, customer_name, order_item_count)
 
     # When: The delete order lambda_handler is called with the order ID
     response = call_delete_order(created_order['id'], writer_headers)
@@ -33,7 +33,7 @@ def test_handler_200_ok(table_name: str, writer_headers):
     assert body_dict['order_id'] == created_order['id']
 
     # And: Verify the order no longer exists in the database
-    entry = get_order_from_db(table_name, created_order['id'])
+    entry = get_order_from_db(table_name, writer_user.sub, created_order['id'])
     assert entry is None
 
 

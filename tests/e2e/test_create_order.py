@@ -7,7 +7,7 @@ from service.models.input import CreateOrderRequest
 from tests.utils import generate_random_string
 
 
-def test_handler_200_ok(api_gw_url, tracked_order_ids: list[str], writer_headers):
+def test_handler_200_ok(api_gw_url, tracked_orders: list[tuple[str, str]], writer_user, writer_headers):
     # Given: A valid order request payload
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=5)
@@ -19,7 +19,7 @@ def test_handler_200_ok(api_gw_url, tracked_order_ids: list[str], writer_headers
     assert response.status_code == HTTPStatus.OK
     body_dict = json.loads(response.text)
     assert body_dict['id']
-    tracked_order_ids.append(body_dict['id'])
+    tracked_orders.append((writer_user.sub, body_dict['id']))
     assert body_dict['name'] == customer_name
     assert body_dict['item_count'] == 5
 

@@ -88,7 +88,7 @@ def test_reader_can_read(api_gw_url, reader_headers):
     assert call_api(api_gw_url, 'GET_ONE', reader_headers).status_code == HTTPStatus.NOT_FOUND
 
 
-def test_writer_can_read_and_write(api_gw_url, writer_headers, tracked_order_ids):
+def test_writer_can_read_and_write(api_gw_url, writer_user, writer_headers, tracked_orders):
     # Given: A real writer (orders/read and orders/write scopes)
     # When: Creating an order
     response = call_api(api_gw_url, 'POST', writer_headers)
@@ -96,7 +96,7 @@ def test_writer_can_read_and_write(api_gw_url, writer_headers, tracked_order_ids
     # Then: The order is created and can be read and deleted
     assert response.status_code == HTTPStatus.OK
     order_id = json.loads(response.text)['id']
-    tracked_order_ids.append(order_id)
+    tracked_orders.append((writer_user.sub, order_id))
     assert requests.get(f'{api_gw_url}/{order_id}', headers=writer_headers).status_code == HTTPStatus.OK
     assert requests.delete(f'{api_gw_url}/{order_id}', headers=writer_headers).status_code == HTTPStatus.OK
 

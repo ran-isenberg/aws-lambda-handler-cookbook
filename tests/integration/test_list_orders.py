@@ -23,10 +23,10 @@ def call_list_orders(headers: dict[str, str], limit: int | None = None, next_tok
     return lambda_handler(event, generate_context())
 
 
-def test_handler_200_ok_single_page(order_factory, reader_headers):
-    # Given: Two existing orders
-    created_a = order_factory(f'{generate_random_string()}-A', 3)
-    created_b = order_factory(f'{generate_random_string()}-B', 7)
+def test_handler_200_ok_single_page(order_factory, reader_user, reader_headers):
+    # Given: Two existing orders of the caller
+    created_a = order_factory(reader_user, f'{generate_random_string()}-A', 3)
+    created_b = order_factory(reader_user, f'{generate_random_string()}-B', 7)
 
     # When: Listing with a large limit so everything fits in one page
     response = call_list_orders(reader_headers, limit=100)
@@ -39,9 +39,9 @@ def test_handler_200_ok_single_page(order_factory, reader_headers):
     assert created_b['id'] in ids
 
 
-def test_handler_pagination_walks_all_pages(order_factory, reader_headers):
-    # Given: Three existing orders
-    created_ids = {order_factory(f'{generate_random_string()}-X', i + 1)['id'] for i in range(3)}
+def test_handler_pagination_walks_all_pages(order_factory, reader_user, reader_headers):
+    # Given: Three existing orders of the caller
+    created_ids = {order_factory(reader_user, f'{generate_random_string()}-X', i + 1)['id'] for i in range(3)}
 
     # When: Paginating through with limit=1
     seen: set[str] = set()
@@ -75,10 +75,10 @@ def test_handler_invalid_next_token(reader_headers):
 
 
 def test_internal_server_error(mocker, table_name: str, reader_headers):
-    # Given: A simulated error during DB interaction — patch pydynox client's sync_scan so the DAL try/except wraps it
+    # Given: A simulated error during DB interaction — patch pydynox client's sync_query so the DAL try/except wraps it
     from pydynox import DynamoDBClient
 
-    mocker.patch.object(DynamoDBClient, 'sync_scan', side_effect=Exception('DynamoDB error'))
+    mocker.patch.object(DynamoDBClient, 'sync_query', side_effect=Exception('DynamoDB error'))
 
     # When: The list orders lambda_handler is called
     response = call_list_orders(reader_headers, limit=10)
