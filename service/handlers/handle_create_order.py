@@ -8,7 +8,8 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.dynamic_configuration import MyConfiguration
 from service.handlers.models.env_vars import MyHandlerEnvVars
-from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_WRITE, get_caller_id
+from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_WRITE
+from service.handlers.utils.caller import get_caller_id
 from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app

@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 
 from service.dal.dynamo_dal_handler import DynamoDalHandler
+from service.handlers.utils.caller import get_caller_id
 from service.models.exceptions import InternalServerException, InvalidNextTokenException
 
 OWNER_ID = 'owner-sub-1'
@@ -17,10 +18,7 @@ def _token(start_key: Any) -> str:
 
 
 @pytest.fixture
-def resolver(monkeypatch) -> Iterator[Any]:
-    # the auth module builds the JWTVerifier at import time from the Cognito environment variables (no network call)
-    monkeypatch.setenv('COGNITO_USER_POOL_ID', 'us-east-1_AbC123xyz')
-    monkeypatch.setenv('COGNITO_CLIENT_ID', '1example23456789')
+def resolver() -> Iterator[Any]:
     from service.handlers.utils.rest_api_resolver import app
 
     yield app
@@ -28,8 +26,6 @@ def resolver(monkeypatch) -> Iterator[Any]:
 
 
 def test_get_caller_id_is_the_sub_claim(resolver):
-    from service.handlers.utils.auth import get_caller_id
-
     # Given: The verified claims that the auth middleware adds to the resolver context
     resolver.append_context(claims={'sub': OWNER_ID, 'username': 'reusable-name'})
 
@@ -39,8 +35,6 @@ def test_get_caller_id_is_the_sub_claim(resolver):
 
 @pytest.mark.parametrize('context', [{}, {'claims': {}}, {'claims': {'sub': ''}}, {'claims': {'sub': 7}}])
 def test_get_caller_id_without_verified_sub(resolver, context):
-    from service.handlers.utils.auth import get_caller_id
-
     # Given: No verified claims with a sub claim (a route without the auth middleware)
     resolver.append_context(**context)
 
