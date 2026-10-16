@@ -24,16 +24,21 @@ def generate_context() -> LambdaContext:
     return context
 
 
+def _multi_value_headers(headers: Optional[dict[str, str]]) -> dict[str, list[str]]:
+    # API Gateway sends every header in both 'headers' and 'multiValueHeaders'
+    return {name: [value] for name, value in (headers or {}).items()}
+
+
 # example taken from AWS Lambda Powertools test files
 # https://github.com/awslabs/aws-lambda-powertools-python/blob/develop/tests/events/apiGatewayProxyEvent.json
-def generate_api_gw_event(body: Optional[dict[str, Any]]) -> dict[str, Any]:
+def generate_api_gw_event(body: Optional[dict[str, Any]], headers: Optional[dict[str, str]] = None) -> dict[str, Any]:
     return {
         'version': '1.0',
         'resource': '/api/orders',
         'path': '/api/orders',
         'httpMethod': 'POST',
-        'headers': {'Content-Type': 'application/json', 'Header2': 'value2'},
-        'multiValueHeaders': {'Header1': ['value1'], 'Header2': ['value1', 'value2']},
+        'headers': {'Content-Type': 'application/json', 'Header2': 'value2', **(headers or {})},
+        'multiValueHeaders': {'Header1': ['value1'], 'Header2': ['value1', 'value2'], **_multi_value_headers(headers)},
         'queryStringParameters': {'parameter1': 'value1', 'parameter2': 'value'},
         'multiValueQueryStringParameters': {'parameter1': ['value1', 'value2'], 'parameter2': ['value']},
         'requestContext': {
@@ -81,14 +86,16 @@ def generate_api_gw_event(body: Optional[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def generate_api_gw_event_with_path_params(http_method: str, path: str, path_parameters: Optional[dict[str, str]]) -> dict[str, Any]:
+def generate_api_gw_event_with_path_params(
+    http_method: str, path: str, path_parameters: Optional[dict[str, str]], headers: Optional[dict[str, str]] = None
+) -> dict[str, Any]:
     return {
         'version': '1.0',
         'resource': path,
         'path': path,
         'httpMethod': http_method,
-        'headers': {'Content-Type': 'application/json', 'Header2': 'value2'},
-        'multiValueHeaders': {'Header1': ['value1'], 'Header2': ['value1', 'value2']},
+        'headers': {'Content-Type': 'application/json', 'Header2': 'value2', **(headers or {})},
+        'multiValueHeaders': {'Header1': ['value1'], 'Header2': ['value1', 'value2'], **_multi_value_headers(headers)},
         'queryStringParameters': {'parameter1': 'value1', 'parameter2': 'value'},
         'multiValueQueryStringParameters': {'parameter1': ['value1', 'value2'], 'parameter2': ['value']},
         'requestContext': {

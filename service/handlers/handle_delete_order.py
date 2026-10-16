@@ -6,6 +6,7 @@ from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.env_vars import DeleteHandlerEnvVars
+from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_WRITE
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.delete_order import delete_order
@@ -30,8 +31,11 @@ from service.models.output import DeleteOrderOutput, InternalServerErrorOutput, 
             'description': 'Internal server error',
             'content': {'application/json': {'model': InternalServerErrorOutput}},
         },
+        **AUTH_RESPONSES,
     },
     tags=['CRUD'],
+    security=BEARER_SECURITY,
+    middlewares=REQUIRE_WRITE,
 )
 def handle_delete_order(order_id: str) -> DeleteOrderOutput:
     env_vars: DeleteHandlerEnvVars = get_environment_variables(model=DeleteHandlerEnvVars)

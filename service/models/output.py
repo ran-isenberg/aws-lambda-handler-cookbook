@@ -28,6 +28,15 @@ class OrderNotFoundOutput(BaseModel):
     error: Annotated[str, Field(description='Error description')] = 'order was not found'
 
 
+# the Powertools JWTVerifier middleware returns these bodies for failed authentication / authorization
+class UnauthorizedOutput(BaseModel):
+    message: Annotated[str, Field(description='Error description')] = 'Unauthorized'
+
+
+class ForbiddenOutput(BaseModel):
+    message: Annotated[str, Field(description='Error description')] = 'Forbidden'
+
+
 class InvalidNextTokenOutput(BaseModel):
     error: Annotated[str, Field(description='Error description')] = 'invalid next_token'
 

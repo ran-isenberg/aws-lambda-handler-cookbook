@@ -3,6 +3,7 @@ from cdk_nag import AwsSolutionsChecks
 from constructs import Construct
 
 from cdk.service.api_construct import ApiConstruct
+from cdk.service.auth_construct import AuthConstruct
 from cdk.service.configuration.configuration_construct import ConfigurationStore
 from cdk.service.constants import CONFIGURATION_NAME, ENVIRONMENT, OWNER_TAG, SERVICE_NAME, SERVICE_NAME_TAG
 from cdk.service.utils import get_construct_name, get_username
@@ -23,11 +24,15 @@ class ServiceStack(Stack):
             SERVICE_NAME,
             CONFIGURATION_NAME,
         )
+        self.auth = AuthConstruct(self, get_construct_name(stack_prefix=id, construct_name='Auth'))
         self.api = ApiConstruct(
             self,
             get_construct_name(stack_prefix=id, construct_name='Crud'),
             self.dynamic_configuration.app_name,
             is_production_env=is_production_env,
+            user_pool_id=self.auth.user_pool.user_pool_id,
+            user_pool_client_id=self.auth.user_pool_client.user_pool_client_id,
+            user_pool_jwks=self.auth.jwks,
         )
 
         # add security check
@@ -50,8 +55,11 @@ class ServiceStack(Stack):
                 'AwsSolutions-APIG1': 'not mandatory in a sample blueprint',
                 'AwsSolutions-APIG3': 'not mandatory in a sample blueprint',
                 'AwsSolutions-APIG6': 'not mandatory in a sample blueprint',
-                'AwsSolutions-APIG4': 'authorization not mandatory in a sample blueprint',
-                'AwsSolutions-COG4': 'not using cognito',
+                'AwsSolutions-APIG4': 'authorization is enforced inside the Lambda functions by the Powertools JWTVerifier (Cognito access tokens and scopes)',
+                'AwsSolutions-COG2': 'MFA is not required: the pool is admin-provisioned, has no self sign up and is a sample blueprint',
+                'AwsSolutions-COG3': 'advanced security mode is a paid add-on and is not mandatory in a sample blueprint',
+                'AwsSolutions-COG8': 'the Essentials feature plan is enough (it supports the pre token generation V2 trigger); the Plus plan is a paid tier not needed in a sample blueprint',
+                'AwsSolutions-COG4': 'no API Gateway Cognito authorizer: tokens are verified in the Lambda functions by the Powertools JWTVerifier',
                 'AwsSolutions-L1': 'False positive',
             }
         )

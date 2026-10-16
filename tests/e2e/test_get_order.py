@@ -6,13 +6,13 @@ import requests
 from tests.utils import generate_random_string
 
 
-def test_handler_200_ok(api_gw_url, order_factory):
+def test_handler_200_ok(api_gw_url, order_factory, reader_headers):
     # Given: An existing order
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     created_order = order_factory(customer_name, 5)
 
     # When: Making a GET request to the API Gateway URL with the order ID
-    response = requests.get(f'{api_gw_url}/{created_order["id"]}')
+    response = requests.get(f'{api_gw_url}/{created_order["id"]}', headers=reader_headers)
 
     # Then: Validate the response contains the correct order data
     assert response.status_code == HTTPStatus.OK
@@ -22,12 +22,12 @@ def test_handler_200_ok(api_gw_url, order_factory):
     assert body_dict['item_count'] == 5
 
 
-def test_handler_order_not_found(api_gw_url):
+def test_handler_order_not_found(api_gw_url, reader_headers):
     # Given: A non-existent order ID
     non_existent_id = '00000000-0000-0000-0000-000000000000'
 
     # When: Making a GET request to the API Gateway URL
-    response = requests.get(f'{api_gw_url}/{non_existent_id}')
+    response = requests.get(f'{api_gw_url}/{non_existent_id}', headers=reader_headers)
 
     # Then: Validate the response status is 404 NOT FOUND
     assert response.status_code == HTTPStatus.NOT_FOUND

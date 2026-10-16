@@ -12,7 +12,7 @@
 
 - Language: Python 3.14
 - Infrastructure: AWS CDK
-- Cloud Services: AWS Lambda, API Gateway, DynamoDB, AppConfig, WAF, CloudWatch
+- Cloud Services: AWS Lambda, API Gateway, DynamoDB, AppConfig, WAF, CloudWatch, Cognito
 - Key Libraries: AWS Lambda Powertools, Pydantic, Boto3, pydynox, aws-lambda-env-modeler, cachetools
 - Documentation: Zensical
 - Package Manager: uv
@@ -39,6 +39,7 @@ make deploy
 ## API
 
 - `POST /api/orders/` - Create an order (idempotent, Pydantic-validated, OpenAPI documented at /swagger)
+- All `/api/orders` routes require a Cognito access token (`Authorization: Bearer <token>`) verified in the Lambdas by the Powertools `JWTVerifier`: scope `orders/read` for GET, `orders/write` for POST and DELETE (401 without a valid token, 403 without the scope). `/swagger` is public.
 
 ## Architecture
 

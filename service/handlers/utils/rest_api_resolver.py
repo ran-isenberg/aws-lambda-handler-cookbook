@@ -1,20 +1,29 @@
 from http import HTTPStatus
 
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver, Response, content_types
+from aws_lambda_powertools.event_handler.openapi.models import HTTPBearer, SecurityScheme
 
 from service.handlers.utils.observability import logger
 from service.models.exceptions import DynamicConfigurationException, InternalServerException, InvalidNextTokenException, OrderNotFoundException
 from service.models.output import InternalServerErrorOutput, InvalidNextTokenOutput, OrderNotFoundOutput
 
 ORDERS_PATH = '/api/orders/'
+OPENAPI_TITLE = 'AWS Lambda Handler Cookbook - Orders Service'
+BEARER_SECURITY_SCHEME_NAME = 'bearerAuth'
+BEARER_SECURITY_SCHEMES: dict[str, SecurityScheme] = {
+    BEARER_SECURITY_SCHEME_NAME: HTTPBearer(bearerFormat='JWT', description='Amazon Cognito access token sent as: Authorization: Bearer <token>')
+}
 
 app = APIGatewayRestResolver(enable_validation=True)
-app.enable_swagger(path='/swagger', title='AWS Lambda Handler Cookbook - Orders Service')
+# security_schemes is set here (and not only in enable_swagger) so that the OpenAPI merge (make openapi) sees it as well
+app.configure_openapi(title=OPENAPI_TITLE, security_schemes=BEARER_SECURITY_SCHEMES)
+app.enable_swagger(path='/swagger', title=OPENAPI_TITLE)
 app.configure_openapi_merge(
     path='service/handlers/',
     pattern='*/.py',
     resolver_name='app',
-    title='AWS Lambda Handler Cookbook - Orders Service',
+    title=OPENAPI_TITLE,
+    security_schemes=BEARER_SECURITY_SCHEMES,
 )
 
 

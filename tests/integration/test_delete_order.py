@@ -6,25 +6,26 @@ from tests.conftest import create_order_in_db, get_order_from_db
 from tests.utils import generate_api_gw_event_with_path_params, generate_context, generate_random_string
 
 
-def call_delete_order(order_id: str) -> dict:
+def call_delete_order(order_id: str, headers: dict[str, str]) -> dict:
     from service.handlers.handle_delete_order import lambda_handler
 
     event = generate_api_gw_event_with_path_params(
         http_method='DELETE',
         path=f'/api/orders/{order_id}',
         path_parameters={'order_id': order_id},
+        headers=headers,
     )
     return lambda_handler(event, generate_context())
 
 
-def test_handler_200_ok(table_name: str):
+def test_handler_200_ok(table_name: str, writer_headers):
     # Given: An existing order in the database
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
     created_order = create_order_in_db(table_name, customer_name, order_item_count)
 
     # When: The delete order lambda_handler is called with the order ID
-    response = call_delete_order(created_order['id'])
+    response = call_delete_order(created_order['id'], writer_headers)
 
     # Then: Validate the response confirms deletion
     assert response['statusCode'] == HTTPStatus.OK
@@ -36,12 +37,12 @@ def test_handler_200_ok(table_name: str):
     assert entry is None
 
 
-def test_handler_order_not_found():
+def test_handler_order_not_found(writer_headers):
     # Given: A non-existent order ID
     non_existent_id = '00000000-0000-0000-0000-000000000000'
 
     # When: The delete order lambda_handler is called
-    response = call_delete_order(non_existent_id)
+    response = call_delete_order(non_existent_id, writer_headers)
 
     # Then: Validate the response is a 404 not found
     assert response['statusCode'] == HTTPStatus.NOT_FOUND
@@ -49,12 +50,12 @@ def test_handler_order_not_found():
     assert body_dict == {'error': 'order was not found'}
 
 
-def test_internal_server_error(mocker, table_name: str):
+def test_internal_server_error(mocker, table_name: str, writer_headers):
     # Given: A simulated error during DB interaction
     mocker.patch.object(DynamoDalHandler, '_get_order_model', side_effect=Exception('DynamoDB error'))
 
     # When: The delete order lambda_handler is called
-    response = call_delete_order('00000000-0000-0000-0000-000000000001')
+    response = call_delete_order('00000000-0000-0000-0000-000000000001', writer_headers)
 
     # Then: Ensure the response reflects an internal server error
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR

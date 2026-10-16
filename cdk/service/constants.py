@@ -33,6 +33,17 @@ ENVIRONMENT = 'dev'
 CONFIGURATION_NAME = 'my_conf'
 CONFIGURATION_MAX_AGE_MINUTES = '5'  # time to store app config conf in the cache before refetching it
 
+# Authentication (Cognito + Powertools JWTVerifier)
+USER_POOL_ID_OUTPUT = 'UserPoolIdOutput'
+USER_POOL_CLIENT_ID_OUTPUT = 'UserPoolClientIdOutput'
+PRE_TOKEN_LAMBDA = 'PreTokenGeneration'
+FETCH_JWKS_LAMBDA = 'FetchUserPoolJwks'
+USER_POOL_JWKS_RESOURCE = 'UserPoolJwks'
+READERS_GROUP = 'orders-readers'
+WRITERS_GROUP = 'orders-writers'
+READ_SCOPE = 'orders/read'
+WRITE_SCOPE = 'orders/write'
+
 # Lambda Managed Instances
 MANAGED_INSTANCE_LAMBDA = 'ManagedInstanceOrder'
 MANAGED_INSTANCE_CAPACITY_PROVIDER = 'OrdersCapacityProvider'

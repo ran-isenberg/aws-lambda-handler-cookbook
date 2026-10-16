@@ -21,6 +21,7 @@ nav = [
         "best_practices/index.md",
         { "Architecture Layers" = "https://ranthebuilder.cloud/blog/learn-how-to-write-aws-lambda-functions-with-architecture-layers/" },
         { "CDK Best Practices" = "https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/" },
+        { "Authentication" = "best_practices/authentication.md" },
         { "Dynamic Configuration" = "best_practices/dynamic_configuration.md" },
         { "Environment Variables" = "best_practices/environment_variables.md" },
         { "Idempotency" = "https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/" },

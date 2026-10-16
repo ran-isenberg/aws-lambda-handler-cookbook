@@ -35,6 +35,8 @@ _DUMMY_ENV_VARS = {
     'REST_API': 'https://dummy.execute-api.us-east-1.amazonaws.com',
     'ROLE_ARN': 'arn:aws:iam::123456789012:role/dummy',
     'TABLE_NAME': 'dummy',
+    'COGNITO_USER_POOL_ID': 'us-east-1_dummy',
+    'COGNITO_CLIENT_ID': 'dummy',
 }
 
 
@@ -60,7 +62,15 @@ def write_swagger(out_destination: str, out_filename: str) -> None:
 
     file_path = os.path.join(out_destination, out_filename)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    merge = OpenAPIMerge(title='AWS Lambda Handler Cookbook - Orders Service', version='1.0.0', on_conflict='warn')
+    # imported here, after the dummy env vars are set, since the handler modules read env vars at import time
+    from service.handlers.utils.rest_api_resolver import BEARER_SECURITY_SCHEMES
+
+    merge = OpenAPIMerge(
+        title='AWS Lambda Handler Cookbook - Orders Service',
+        version='1.0.0',
+        on_conflict='warn',
+        security_schemes=BEARER_SECURITY_SCHEMES,
+    )
     files = merge.discover(
         path='service/handlers',
         pattern='**/*.py',

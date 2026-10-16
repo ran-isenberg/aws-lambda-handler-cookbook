@@ -7,6 +7,7 @@ from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.env_vars import ListHandlerEnvVars
+from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_READ
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
 from service.logic.list_orders import list_orders
@@ -31,8 +32,11 @@ from service.models.output import InternalServerErrorOutput, InvalidNextTokenOut
             'description': 'Internal server error',
             'content': {'application/json': {'model': InternalServerErrorOutput}},
         },
+        **AUTH_RESPONSES,
     },
     tags=['CRUD'],
+    security=BEARER_SECURITY,
+    middlewares=REQUIRE_READ,
 )
 def handle_list_orders(
     limit: Annotated[int, Query(ge=1, le=100, description='Max orders to return per page')] = 10,

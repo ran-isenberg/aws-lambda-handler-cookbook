@@ -9,6 +9,7 @@ This section covers essential best practices for building production-ready AWS L
 
 | Practice                                          | Description                                                |
 | ------------------------------------------------- | ---------------------------------------------------------- |
+| [Authentication](authentication.md)               | Amazon Cognito and the Powertools JWT verifier             |
 | [Dynamic Configuration](dynamic_configuration.md) | Feature flags and runtime configuration with AWS AppConfig |
 | [Environment Variables](environment_variables.md) | Secure and validated environment variable handling         |
 | [Input Validation](input_validation.md)           | Request validation with Pydantic models                    |

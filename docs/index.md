@@ -232,6 +232,7 @@ The utilities cover multiple aspects of a production-ready service, including:
 - [**Observability: Business KPI Metrics**](best_practices/metrics.md)
 - [**Environment Variables**](best_practices/environment_variables.md)
 - [**Input Validation**](best_practices/input_validation.md)
+- [**Authentication**](best_practices/authentication.md)
 - [**Dynamic configuration & features flags**](best_practices/dynamic_configuration.md)
 - [**Serverless Monitoring**](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
 - [**API Idempotency**](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/){:target="_blank" rel="noopener"}

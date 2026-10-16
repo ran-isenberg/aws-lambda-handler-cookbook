@@ -87,6 +87,8 @@ This project aims to reduce cognitive load and answer these questions for you by
     * `DELETE /api/orders/{order_id}` - Delete an order by ID
     * `GET /api/orders/?limit={n}&next_token={cursor}` - List orders with pagination, served by an **AWS Lambda Managed Instances** pool
 
+* All `/api/orders` routes require an **Amazon Cognito access token** (`Authorization: Bearer <token>`), see [Authentication](#authentication). `/swagger` is public.
+
 ```mermaid
 flowchart LR
     subgraph AWS["AWS Cloud"]
@@ -111,6 +113,11 @@ flowchart LR
             CP["Capacity Provider<br/>EC2 pool, 2 AZs"]
         end
 
+        subgraph Auth["Authentication"]
+            COGNITO["Cognito User Pool<br/>groups: readers, writers"]
+            PRETOKEN["Pre Token Generation<br/>Lambda (adds aud + scopes)"]
+        end
+
         subgraph Config["Configuration"]
             APPCONFIG["AppConfig<br/>Feature Flags"]
         end
@@ -121,7 +128,9 @@ flowchart LR
         end
     end
 
-    CLIENT((Client)) --> WAF
+    CLIENT((Client)) -.sign in, get token.-> COGNITO
+    COGNITO -.-> PRETOKEN
+    CLIENT --> WAF
     WAF --> REST
     REST --> CREATE
     REST --> GET
@@ -138,6 +147,10 @@ flowchart LR
     GET --> DDB
     DELETE --> DDB
     LIST --> DDB
+    CREATE -.verifies JWT.-> COGNITO
+    GET -.verifies JWT.-> COGNITO
+    DELETE -.verifies JWT.-> COGNITO
+    LIST -.verifies JWT.-> COGNITO
 
     style CLIENT fill:#f9f,stroke:#333
     style WAF fill:#ff6b6b,stroke:#333
@@ -150,9 +163,26 @@ flowchart LR
     style LIST_ALIAS fill:#4ecdc4,stroke:#333
     style CP fill:#ff6b6b,stroke:#333
     style APPCONFIG fill:#95e1d3,stroke:#333
+    style COGNITO fill:#dd344c,stroke:#333,color:#fff
+    style PRETOKEN fill:#ffe66d,stroke:#333
     style DDB fill:#4a90d9,stroke:#333
     style IDEMPOTENCY fill:#4a90d9,stroke:#333
 ```
+
+#### **Authentication**
+
+The API is protected with **Amazon Cognito** and the Powertools for AWS Lambda [JWT verifier](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.36.0) (`aws_lambda_powertools.utilities.auth_alpha.JWTVerifier`, alpha). Every order Lambda verifies the access token itself (signature, issuer, expiration, app client, audience and scope), there is no API Gateway authorizer:
+
+| Route | Required scope |
+| --- | --- |
+| `GET /api/orders`, `GET /api/orders/{order_id}` | `orders/read` |
+| `POST /api/orders`, `DELETE /api/orders/{order_id}` | `orders/write` |
+
+* A missing or invalid token (an ID token too) returns `401`, a missing scope returns `403`.
+* Scopes come from the user's Cognito group: `orders-readers` gets `orders/read`, `orders-writers` gets `orders/read` and `orders/write`.
+* A Cognito **pre token generation** trigger (event version 2) adds the `aud` claim and the scopes to access tokens issued by the Cognito API, which the `JWTVerifier.cognito()` profile requires. Read about why in the [Authentication documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/).
+* The LIST function runs in the Lambda Managed Instances VPC without internet access, and the Cognito VPC endpoint does not serve the user pool public keys (JWKS). A deploy time custom resource fetches the JWKS and passes it to the LIST function in the `COGNITO_JWKS` environment variable, which the verifier uses instead of downloading it.
+* The integration and e2e tests create real users, sign them in to get **real access tokens** and delete the users when the test session ends. The identity that runs the tests needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.
 
 #### **LIST orders via AWS Lambda Managed Instances**
 
@@ -233,6 +263,8 @@ flowchart TB
 * Features flags and configuration based on AWS AppConfig
 * Idempotent API
 * REST API protected by WAF with four AWS managed rules in production deployment
+* Amazon Cognito authentication with scope based authorization (`orders/read`, `orders/write`), verified in the Lambdas by the Powertools JWT verifier
+* Integration and end to end tests use real Cognito users and real access tokens, created and deleted by the tests
 * CloudWatch dashboards - High level and low level including CloudWatch alarms
 * Unit, infrastructure, security, integration and end to end tests.
 * Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
@@ -242,7 +274,7 @@ flowchart TB
 
 ## CDK Deployment
 
-The CDK code creates an API GW with paths /api/orders (POST) and /api/orders/{order_id} (GET, DELETE), each backed by a dedicated Lambda function.
+The CDK code creates an API GW with paths /api/orders (POST) and /api/orders/{order_id} (GET, DELETE), each backed by a dedicated Lambda function, and a Cognito user pool (with its app client, groups and pre token generation trigger) that protects them.
 
 The AWS Lambda handler uses a Lambda layer optimization which takes all the packages under the [packages] section in the Pipfile and downloads them in via a Docker instance.
 
@@ -261,6 +293,7 @@ The utilities cover multiple aspect of a production-ready service, including:
 * [Observability: Business KPIs Metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/)
 * [Environment Variables](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-environment-variables/)
 * [Input Validation](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation/)
+* [Authentication](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/)
 * [Dynamic Configuration & feature flags](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices/)
 * [Start Your AWS Serverless Service With Two Clicks](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project/)
 * [CDK Best practices](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/)

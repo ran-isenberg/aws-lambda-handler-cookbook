@@ -1,4 +1,5 @@
 import uuid
+from collections.abc import Iterator
 from datetime import datetime, timezone
 from functools import lru_cache
 from typing import Any
@@ -6,8 +7,9 @@ from typing import Any
 import pytest
 from pydynox import DynamoDBClient, dynamodb_model
 
-from cdk.service.constants import TABLE_NAME_OUTPUT
+from cdk.service.constants import READERS_GROUP, TABLE_NAME_OUTPUT, WRITERS_GROUP
 from service.dal.models.db import OrderEntry
+from tests.auth_utils import CognitoPool, CognitoUser, bearer_headers, create_cognito_user, delete_cognito_user, get_cognito_pool
 from tests.utils import get_stack_output
 
 _dynamo_client = DynamoDBClient()
@@ -75,3 +77,49 @@ def tracked_order_ids(table_name):
     yield ids
     for order_id in ids:
         delete_order_from_db(table_name, order_id)
+
+
+# Cognito users are created once per test session (not per test), and deleted when the session ends.
+# Tests receive the ready to use 'Authorization: Bearer <access token>' headers through the *_headers fixtures.
+@pytest.fixture(scope='session')
+def cognito_pool() -> CognitoPool:
+    return get_cognito_pool()
+
+
+@pytest.fixture(scope='session')
+def writer_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
+    """Has the orders/read and orders/write scopes."""
+    user = create_cognito_user(cognito_pool, [WRITERS_GROUP])
+    yield user
+    delete_cognito_user(cognito_pool, user.username)
+
+
+@pytest.fixture(scope='session')
+def reader_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
+    """Has the orders/read scope only."""
+    user = create_cognito_user(cognito_pool, [READERS_GROUP])
+    yield user
+    delete_cognito_user(cognito_pool, user.username)
+
+
+@pytest.fixture(scope='session')
+def no_scope_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
+    """Can sign in, but is not in any group, so it has no orders scope."""
+    user = create_cognito_user(cognito_pool, [])
+    yield user
+    delete_cognito_user(cognito_pool, user.username)
+
+
+@pytest.fixture(scope='session')
+def writer_headers(writer_user: CognitoUser) -> dict[str, str]:
+    return bearer_headers(writer_user.access_token)
+
+
+@pytest.fixture(scope='session')
+def reader_headers(reader_user: CognitoUser) -> dict[str, str]:
+    return bearer_headers(reader_user.access_token)
+
+
+@pytest.fixture(scope='session')
+def no_scope_headers(no_scope_user: CognitoUser) -> dict[str, str]:
+    return bearer_headers(no_scope_user.access_token)

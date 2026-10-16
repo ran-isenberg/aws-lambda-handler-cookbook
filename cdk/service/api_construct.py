@@ -20,9 +20,25 @@ class ApiConstruct(Construct):
     LAMBDA_ARCHITECTURE = _lambda.Architecture.ARM_64
     LAMBDA_LOGGING_FORMAT = _lambda.LoggingFormat.JSON
 
-    def __init__(self, scope: Construct, id_: str, appconfig_app_name: str, is_production_env: bool) -> None:
+    def __init__(
+        self,
+        scope: Construct,
+        id_: str,
+        appconfig_app_name: str,
+        is_production_env: bool,
+        user_pool_id: str,
+        user_pool_client_id: str,
+        user_pool_jwks: str,
+    ) -> None:
         super().__init__(scope, id_)
         self.id_ = id_
+        # Cognito details needed by the Lambdas to verify access tokens (Powertools JWTVerifier)
+        self.auth_env_vars = {
+            'COGNITO_USER_POOL_ID': user_pool_id,
+            'COGNITO_CLIENT_ID': user_pool_client_id,
+        }
+        # the list Lambda (managed instances VPC) has no internet access, so it gets the JWKS instead of fetching it
+        self.user_pool_jwks = user_pool_jwks
         self.api_db = ApiDbConstruct(self, f'{id_}db')
         self.lambda_role = self._build_lambda_role(self.api_db.db, self.api_db.idempotency_db)
         self.common_layer = self._build_common_layer()
@@ -176,6 +192,7 @@ class ApiConstruct(Construct):
                 'ROLE_ARN': 'arn:partition:service:region:account-id:resource-type:resource-id',  # for env vars example
                 'TABLE_NAME': db.table_name,
                 'IDEMPOTENCY_TABLE_NAME': idempotency_table.table_name,
+                **self.auth_env_vars,
             },
             tracing=_lambda.Tracing.ACTIVE,
             retry_attempts=0,
@@ -258,6 +275,7 @@ class ApiConstruct(Construct):
                 constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,
                 constants.POWER_TOOLS_LOG_LEVEL: 'INFO',
                 'TABLE_NAME': db.table_name,
+                **self.auth_env_vars,
             },
             tracing=_lambda.Tracing.ACTIVE,
             retry_attempts=0,
@@ -298,6 +316,7 @@ class ApiConstruct(Construct):
                 constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,
                 constants.POWER_TOOLS_LOG_LEVEL: 'INFO',
                 'TABLE_NAME': db.table_name,
+                **self.auth_env_vars,
             },
             tracing=_lambda.Tracing.ACTIVE,
             retry_attempts=0,
@@ -360,6 +379,8 @@ class ApiConstruct(Construct):
                 constants.POWERTOOLS_SERVICE_NAME: constants.SERVICE_NAME,
                 constants.POWER_TOOLS_LOG_LEVEL: 'INFO',
                 'TABLE_NAME': db.table_name,
+                **self.auth_env_vars,
+                'COGNITO_JWKS': self.user_pool_jwks,
             },
             tracing=_lambda.Tracing.ACTIVE,
             retry_attempts=0,
@@ -392,7 +413,7 @@ class ApiConstruct(Construct):
                 'MaxExecutionEnvironments': constants.MANAGED_INSTANCE_MAX_EXECUTION_ENVIRONMENTS,
             },
         )
-        cfn_function.add_dependency(managed_instance.capacity_provider)
+        cfn_function.add_resource_dependency(managed_instance.capacity_provider)
 
         # Managed Instances serves only published versions — route API Gateway through an alias
         alias = _lambda.Alias(

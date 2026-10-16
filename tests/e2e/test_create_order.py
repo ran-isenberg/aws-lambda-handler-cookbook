@@ -7,13 +7,13 @@ from service.models.input import CreateOrderRequest
 from tests.utils import generate_random_string
 
 
-def test_handler_200_ok(api_gw_url, tracked_order_ids: list[str]):
+def test_handler_200_ok(api_gw_url, tracked_order_ids: list[str], writer_headers):
     # Given: A valid order request payload
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=5)
 
     # When: Making a POST request to the API Gateway URL
-    response = requests.post(api_gw_url, data=body.model_dump_json())
+    response = requests.post(api_gw_url, data=body.model_dump_json(), headers=writer_headers)
 
     # Then: Validate the response and its body with expected values
     assert response.status_code == HTTPStatus.OK
@@ -27,7 +27,7 @@ def test_handler_200_ok(api_gw_url, tracked_order_ids: list[str]):
     original_order_id = body_dict['id']
 
     # When: Sending the same request (testing idempotency)
-    response = requests.post(api_gw_url, data=body.model_dump_json())
+    response = requests.post(api_gw_url, data=body.model_dump_json(), headers=writer_headers)
 
     # Then: Validate that the new order ID is same as the original order ID
     assert response.status_code == HTTPStatus.OK
@@ -35,12 +35,12 @@ def test_handler_200_ok(api_gw_url, tracked_order_ids: list[str]):
     assert body_dict['id'] == original_order_id
 
 
-def test_handler_bad_request(api_gw_url):
+def test_handler_bad_request(api_gw_url, writer_headers):
     # Given: A malformed request payload (bad request), missing name
     body_str = json.dumps({'order_item_count': 5})
 
     # When: Making a POST request to the API Gateway URL
-    response = requests.post(api_gw_url, data=body_str)
+    response = requests.post(api_gw_url, data=body_str, headers=writer_headers)
 
     # Then: Validate the response status is 422 UNPROCESSABLE_ENTITY
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY

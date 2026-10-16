@@ -69,8 +69,33 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The access token does not have the required scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenOutput"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -130,8 +155,33 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The access token does not have the required scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenOutput"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/api/orders": {
@@ -216,8 +266,33 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The access token does not have the required scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenOutput"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -266,8 +341,33 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The access token does not have the required scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenOutput"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -338,6 +438,18 @@
           "order_id"
         ],
         "title": "DeleteOrderOutput"
+      },
+      "ForbiddenOutput": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Error description",
+            "default": "Forbidden"
+          }
+        },
+        "type": "object",
+        "title": "ForbiddenOutput"
       },
       "GetOrderOutput": {
         "properties": {
@@ -477,6 +589,18 @@
         "type": "object",
         "title": "OrderNotFoundOutput"
       },
+      "UnauthorizedOutput": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Error description",
+            "default": "Unauthorized"
+          }
+        },
+        "type": "object",
+        "title": "UnauthorizedOutput"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -518,6 +642,14 @@
         },
         "type": "object",
         "title": "ResponseValidationError"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "Amazon Cognito access token sent as: Authorization: Bearer <token>",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
