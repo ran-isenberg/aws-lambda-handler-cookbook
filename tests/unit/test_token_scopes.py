@@ -1,26 +1,23 @@
 import pytest
 
-from cdk.service.constants import READ_SCOPE, READERS_GROUP, WRITE_SCOPE, WRITERS_GROUP
+from cdk.service.constants import MANAGE_SCOPE, MANAGERS_GROUP
 from service.logic.token_scopes import GROUP_SCOPES, access_token_customization, scopes_for_groups
 
 
 def test_cdk_and_service_agree_on_groups_and_scopes():
     # Given: The group and scope names defined in the CDK constants (user pool) and in the service (trigger logic)
-    # When & Then: They are the same, otherwise the deployed groups would not grant any scope
-    assert set(GROUP_SCOPES) == {READERS_GROUP, WRITERS_GROUP}
-    assert GROUP_SCOPES[READERS_GROUP] == (READ_SCOPE,)
-    assert GROUP_SCOPES[WRITERS_GROUP] == (READ_SCOPE, WRITE_SCOPE)
+    # When & Then: They are the same, otherwise the deployed group would not grant the manage scope
+    assert GROUP_SCOPES == {MANAGERS_GROUP: (MANAGE_SCOPE,)}
 
 
 @pytest.mark.parametrize(
     'groups, expected',
     [
-        ([READERS_GROUP], [READ_SCOPE]),
-        ([WRITERS_GROUP], [READ_SCOPE, WRITE_SCOPE]),
-        ([READERS_GROUP, WRITERS_GROUP], [READ_SCOPE, WRITE_SCOPE]),  # no duplicate read scope
+        ([MANAGERS_GROUP], [MANAGE_SCOPE]),
+        ([MANAGERS_GROUP, MANAGERS_GROUP], [MANAGE_SCOPE]),  # no duplicate scope
         (['unknown-group'], []),
-        ([READERS_GROUP, 'unknown-group'], [READ_SCOPE]),
-        ([], []),
+        ([MANAGERS_GROUP, 'unknown-group'], [MANAGE_SCOPE]),
+        ([], []),  # a user in no group: can still get and list their own orders, which need no scope
     ],
 )
 def test_scopes_for_groups(groups, expected):
@@ -33,20 +30,20 @@ def test_scopes_for_groups(groups, expected):
 
 
 def test_access_token_customization_adds_audience_and_scopes():
-    # Given: A client id and a user in the writers group
+    # Given: A client id and a user in the managers group
     # When: Building the pre token generation response
-    response = access_token_customization('1example23456789', [WRITERS_GROUP])
+    response = access_token_customization('1example23456789', [MANAGERS_GROUP])
 
-    # Then: The access token gets the client id as audience and the read and write scopes
+    # Then: The access token gets the client id as audience and the manage scope
     access_token = response['claimsAndScopeOverrideDetails']['accessTokenGeneration']
     assert access_token['claimsToAddOrOverride'] == {'aud': '1example23456789'}
-    assert access_token['scopesToAdd'] == [READ_SCOPE, WRITE_SCOPE]
+    assert access_token['scopesToAdd'] == [MANAGE_SCOPE]
 
 
 def test_access_token_customization_only_customizes_the_access_token():
-    # Given: A user in the readers group
+    # Given: A user in the managers group
     # When: Building the pre token generation response
-    response = access_token_customization('1example23456789', [READERS_GROUP])
+    response = access_token_customization('1example23456789', [MANAGERS_GROUP])
 
     # Then: The ID token and the groups are untouched
     assert list(response['claimsAndScopeOverrideDetails']) == ['accessTokenGeneration']

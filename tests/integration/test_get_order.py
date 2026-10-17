@@ -17,14 +17,14 @@ def call_get_order(order_id: str, headers: dict[str, str]) -> dict:
     return lambda_handler(event, generate_context())
 
 
-def test_handler_200_ok(order_factory, reader_user, reader_headers):
+def test_handler_200_ok(order_factory, member_user, member_headers):
     # Given: An existing order of the caller in the database
     customer_name = f'{generate_random_string()}-RanTheBuilder'
     order_item_count = 5
-    created_order = order_factory(reader_user, customer_name, order_item_count)
+    created_order = order_factory(member_user, customer_name, order_item_count)
 
     # When: The get order lambda_handler is called with the order ID
-    response = call_get_order(created_order['id'], reader_headers)
+    response = call_get_order(created_order['id'], member_headers)
 
     # Then: Validate the response contains the correct order data
     assert response['statusCode'] == HTTPStatus.OK
@@ -34,12 +34,12 @@ def test_handler_200_ok(order_factory, reader_user, reader_headers):
     assert body_dict['item_count'] == order_item_count
 
 
-def test_handler_order_not_found(reader_headers):
+def test_handler_order_not_found(member_headers):
     # Given: A non-existent order ID
     non_existent_id = '00000000-0000-0000-0000-000000000000'
 
     # When: The get order lambda_handler is called
-    response = call_get_order(non_existent_id, reader_headers)
+    response = call_get_order(non_existent_id, member_headers)
 
     # Then: Validate the response is a 404 not found
     assert response['statusCode'] == HTTPStatus.NOT_FOUND
@@ -47,12 +47,12 @@ def test_handler_order_not_found(reader_headers):
     assert body_dict == {'error': 'order was not found'}
 
 
-def test_internal_server_error(mocker, table_name: str, reader_headers):
+def test_internal_server_error(mocker, table_name: str, member_headers):
     # Given: A simulated error during DB interaction
     mocker.patch.object(DynamoDalHandler, '_get_order_model', side_effect=Exception('DynamoDB error'))
 
     # When: The get order lambda_handler is called
-    response = call_get_order('00000000-0000-0000-0000-000000000001', reader_headers)
+    response = call_get_order('00000000-0000-0000-0000-000000000001', member_headers)
 
     # Then: Ensure the response reflects an internal server error
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR

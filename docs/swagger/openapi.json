@@ -79,16 +79,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "The access token does not have the required scope",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ForbiddenOutput"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -167,7 +157,7 @@
             }
           },
           "403": {
-            "description": "The access token does not have the required scope",
+            "description": "The access token does not have the orders/manage scope",
             "content": {
               "application/json": {
                 "schema": {
@@ -276,16 +266,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "The access token does not have the required scope",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ForbiddenOutput"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -348,16 +328,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedOutput"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "The access token does not have the required scope",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ForbiddenOutput"
                 }
               }
             }

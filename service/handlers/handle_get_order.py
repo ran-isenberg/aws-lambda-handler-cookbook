@@ -6,7 +6,7 @@ from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.env_vars import GetHandlerEnvVars
-from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_READ
+from service.handlers.utils.auth import BEARER_SECURITY, REQUIRE_SIGNED_IN, SIGNED_IN_AUTH_RESPONSES
 from service.handlers.utils.caller import get_caller_id
 from service.handlers.utils.observability import logger, metrics, tracer
 from service.handlers.utils.rest_api_resolver import ORDERS_PATH, app
@@ -32,11 +32,11 @@ from service.models.output import GetOrderOutput, InternalServerErrorOutput, Ord
             'description': 'Internal server error',
             'content': {'application/json': {'model': InternalServerErrorOutput}},
         },
-        **AUTH_RESPONSES,
+        **SIGNED_IN_AUTH_RESPONSES,
     },
     tags=['CRUD'],
     security=BEARER_SECURITY,
-    middlewares=REQUIRE_READ,
+    middlewares=REQUIRE_SIGNED_IN,
 )
 def handle_get_order(order_id: str) -> GetOrderOutput:
     env_vars: GetHandlerEnvVars = get_environment_variables(model=GetHandlerEnvVars)

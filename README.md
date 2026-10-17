@@ -114,7 +114,7 @@ flowchart LR
         end
 
         subgraph Auth["Authentication"]
-            COGNITO["Cognito User Pool<br/>groups: readers, writers"]
+            COGNITO["Cognito User Pool<br/>group: managers"]
             PRETOKEN["Pre Token Generation<br/>Lambda (adds aud + scopes)"]
         end
 
@@ -168,17 +168,16 @@ flowchart LR
 
 #### **Authentication**
 
-The API is protected with **Amazon Cognito** and the Powertools for AWS Lambda [JWT verifier](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.36.0) (`aws_lambda_powertools.utilities.auth_alpha.JWTVerifier`, alpha). Every order Lambda verifies the access token itself (signature, issuer, expiration, app client, audience and scope), there is no API Gateway authorizer:
+The API is protected with **Amazon Cognito** and the Powertools for AWS Lambda [JWT verifier](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.36.0) (`aws_lambda_powertools.utilities.auth_alpha.JWTVerifier`, alpha). Every order Lambda verifies the access token itself (signature, issuer, expiration, app client and audience, and the scope on delete), there is no API Gateway authorizer:
 
-| Route | Required scope |
+| Route | Who can call it |
 | --- | --- |
-| `GET /api/orders`, `GET /api/orders/{order_id}` | `orders/read` |
-| `POST /api/orders`, `DELETE /api/orders/{order_id}` | `orders/write` |
+| `POST /api/orders`, `GET /api/orders`, `GET /api/orders/{order_id}` | Any signed in user (valid access token) |
+| `DELETE /api/orders/{order_id}` | Members of the `orders-managers` group (`orders/manage` scope) |
 
-* A missing or invalid token (an ID token too) returns `401`, a missing scope returns `403`.
-* Orders belong to the user that created them (the access token `sub` claim). Users only get, delete and list their own orders, an order of another user returns `404`. The orders table is keyed by `owner_id` and `id`, so listing is a `Query` of the caller's orders.
-* Scopes come from the user's Cognito group: `orders-readers` gets `orders/read`, `orders-writers` gets `orders/read` and `orders/write`.
-* A Cognito **pre token generation** trigger (event version 2) adds the `aud` claim and the scopes to access tokens issued by the Cognito API, which the `JWTVerifier.cognito()` profile requires. Read about why in the [Authentication documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/).
+* A missing or invalid token (an ID token too) returns `401`, a delete without the `orders/manage` scope returns `403`.
+* Orders belong to the user that created them (the access token `sub` claim). Users only get, delete and list their own orders, an order of another user returns `404`, for managers too. The orders table is keyed by `owner_id` and `id`, so listing is a `Query` of the caller's orders.
+* A Cognito **pre token generation** trigger (event version 2) adds the `aud` claim, and the `orders/manage` scope for members of `orders-managers`, to access tokens issued by the Cognito API, which the `JWTVerifier.cognito()` profile requires. Read about why in the [Authentication documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/).
 * The LIST function runs in the Lambda Managed Instances VPC without internet access, and the Cognito VPC endpoint does not serve the user pool public keys (JWKS). A deploy time custom resource fetches the JWKS and passes it to the LIST function in the `COGNITO_JWKS` environment variable, which the verifier uses instead of downloading it.
 * The integration and e2e tests create real users, sign them in to get **real access tokens** and delete the users when the test session ends. The identity that runs the tests needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.
 
@@ -265,7 +264,7 @@ flowchart TB
 * Features flags and configuration based on AWS AppConfig
 * Idempotent API
 * REST API protected by WAF with four AWS managed rules in production deployment
-* Amazon Cognito authentication with scope based authorization (`orders/read`, `orders/write`), verified in the Lambdas by the Powertools JWT verifier
+* Amazon Cognito authentication, verified in the Lambdas by the Powertools JWT verifier: any signed in user can create, get and list orders, deleting requires the `orders/manage` scope
 * Per-user order ownership: users only get, delete and list their own orders (the access token `sub` claim is the owner)
 * Integration and end to end tests use real Cognito users and real access tokens, created and deleted by the tests
 * CloudWatch dashboards - High level and low level including CloudWatch alarms

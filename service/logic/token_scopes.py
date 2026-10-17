@@ -1,12 +1,11 @@
 from typing import Any
 
-READ_SCOPE = 'orders/read'
-WRITE_SCOPE = 'orders/write'
+# Deleting orders requires this scope. Creating, getting and listing your own orders only requires a valid access token.
+MANAGE_SCOPE = 'orders/manage'
 
 # Cognito user pool group -> scopes granted in the access token
 GROUP_SCOPES: dict[str, tuple[str, ...]] = {
-    'orders-readers': (READ_SCOPE,),
-    'orders-writers': (READ_SCOPE, WRITE_SCOPE),
+    'orders-managers': (MANAGE_SCOPE,),
 }
 
 

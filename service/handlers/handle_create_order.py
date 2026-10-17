@@ -8,7 +8,7 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 
 from service.handlers.models.dynamic_configuration import MyConfiguration
 from service.handlers.models.env_vars import MyHandlerEnvVars
-from service.handlers.utils.auth import AUTH_RESPONSES, BEARER_SECURITY, REQUIRE_WRITE
+from service.handlers.utils.auth import BEARER_SECURITY, REQUIRE_SIGNED_IN, SIGNED_IN_AUTH_RESPONSES
 from service.handlers.utils.caller import get_caller_id
 from service.handlers.utils.dynamic_configuration import parse_configuration
 from service.handlers.utils.observability import logger, metrics, tracer
@@ -32,11 +32,11 @@ from service.models.output import CreateOrderOutput, InternalServerErrorOutput
             'description': 'Internal server error',
             'content': {'application/json': {'model': InternalServerErrorOutput}},
         },
-        **AUTH_RESPONSES,
+        **SIGNED_IN_AUTH_RESPONSES,
     },
     tags=['CRUD'],
     security=BEARER_SECURITY,
-    middlewares=REQUIRE_WRITE,
+    middlewares=REQUIRE_SIGNED_IN,
 )
 def handle_create_order(create_input: Annotated[CreateOrderRequest, Body(embed=False, media_type='application/json')]) -> CreateOrderOutput:
     env_vars: MyHandlerEnvVars = get_environment_variables(model=MyHandlerEnvVars)

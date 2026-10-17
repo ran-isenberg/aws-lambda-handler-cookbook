@@ -39,7 +39,7 @@ make deploy
 ## API
 
 - `POST /api/orders/` - Create an order (idempotent, Pydantic-validated, OpenAPI documented at /swagger)
-- All `/api/orders` routes require a Cognito access token (`Authorization: Bearer <token>`) verified in the Lambdas by the Powertools `JWTVerifier`: scope `orders/read` for GET, `orders/write` for POST and DELETE (401 without a valid token, 403 without the scope). `/swagger` is public.
+- All `/api/orders` routes require a Cognito access token (`Authorization: Bearer <token>`) verified in the Lambdas by the Powertools `JWTVerifier`: any signed in user can create, get and list their own orders, DELETE also requires the `orders/manage` scope from the `orders-managers` group (401 without a valid token, 403 on delete without the scope). Users only reach their own orders. `/swagger` is public.
 
 ## Architecture
 

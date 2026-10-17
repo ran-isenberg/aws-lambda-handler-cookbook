@@ -7,7 +7,7 @@ from aws_lambda_powertools.utilities.auth_alpha import JWTVerifier
 
 from service.handlers.models.env_vars import Authentication
 from service.handlers.utils.rest_api_resolver import BEARER_SECURITY_SCHEME_NAME
-from service.logic.token_scopes import READ_SCOPE, WRITE_SCOPE
+from service.logic.token_scopes import MANAGE_SCOPE
 from service.models.output import ForbiddenOutput, UnauthorizedOutput
 
 _env_vars: Authentication = get_environment_variables(model=Authentication)
@@ -23,20 +23,25 @@ verifier: JWTVerifier = JWTVerifier.cognito(
     jwks=_env_vars.COGNITO_JWKS,
 )
 
-# Route middlewares: 401 for a missing/invalid token, 403 for a missing scope. Pass as `middlewares=` to a route.
-REQUIRE_READ: list[Callable[..., Any]] = [verifier.require(scopes=[READ_SCOPE])]
-REQUIRE_WRITE: list[Callable[..., Any]] = [verifier.require(scopes=[WRITE_SCOPE])]
+# Route middlewares, pass as `middlewares=` to a route. Every user only reaches their own orders (see caller.py).
+# REQUIRE_SIGNED_IN: any valid access token of the user pool, 401 otherwise (create, get and list your own orders).
+# REQUIRE_MANAGE: also the orders/manage scope, 403 without it (delete your own orders).
+REQUIRE_SIGNED_IN: list[Callable[..., Any]] = [verifier.require()]
+REQUIRE_MANAGE: list[Callable[..., Any]] = [verifier.require(scopes=[MANAGE_SCOPE])]
 
 
 # OpenAPI: the security requirement and the auth failure responses to document on a protected route.
 BEARER_SECURITY: list[dict[str, list[str]]] = [{BEARER_SECURITY_SCHEME_NAME: []}]
-AUTH_RESPONSES: dict[int, OpenAPIResponse] = {
+SIGNED_IN_AUTH_RESPONSES: dict[int, OpenAPIResponse] = {
     401: {
         'description': 'Missing or invalid access token',
         'content': {'application/json': {'model': UnauthorizedOutput}},
     },
+}
+MANAGE_AUTH_RESPONSES: dict[int, OpenAPIResponse] = {
+    **SIGNED_IN_AUTH_RESPONSES,
     403: {
-        'description': 'The access token does not have the required scope',
+        'description': f'The access token does not have the {MANAGE_SCOPE} scope',
         'content': {'application/json': {'model': ForbiddenOutput}},
     },
 }

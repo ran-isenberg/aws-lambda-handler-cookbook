@@ -58,7 +58,7 @@ flowchart LR
         end
 
         subgraph Auth["Authentication"]
-            COGNITO["Cognito User Pool<br/>groups: readers, writers"]
+            COGNITO["Cognito User Pool<br/>group: managers"]
             PRETOKEN["Pre Token Generation<br/>Lambda (adds aud + scopes)"]
         end
 
@@ -120,7 +120,8 @@ flowchart LR
     - `DELETE /api/orders/{order_id}` - Delete an order by ID
     - `GET /api/orders/?limit={n}&next_token={cursor}` - List orders with pagination, served by an **AWS Lambda Managed Instances** pool
 
-- All `/api/orders` routes require an **Amazon Cognito access token** (`Authorization: Bearer <token>`), verified in the Lambdas by the Powertools JWT verifier: `orders/read` for GET, `orders/write` for POST and DELETE. Orders belong to the user that created them, and users only reach their own orders. `/swagger` is public. See [Authentication](best_practices/authentication.md).
+- All `/api/orders` routes require an **Amazon Cognito access token** (`Authorization: Bearer <token>`), verified in the Lambdas by the Powertools JWT verifier. Any signed in user can create, get and list orders, deleting an order requires the `orders/manage` scope (`orders-managers` group).
+  Orders belong to the user that created them, and users only reach their own orders. `/swagger` is public. See [Authentication & Authorization](best_practices/authentication.md).
 
 #### **LIST orders via AWS Lambda Managed Instances**
 
@@ -201,7 +202,7 @@ flowchart TB
 - Features flags and configuration based on AWS AppConfig
 - CloudWatch dashboards - High level and low level including CloudWatch alarms
 - Idempotent API
-- Amazon Cognito authentication with scope based authorization (`orders/read`, `orders/write`), verified in the Lambdas by the Powertools JWT verifier
+- Amazon Cognito authentication, verified in the Lambdas by the Powertools JWT verifier: any signed in user can create, get and list orders, deleting requires the `orders/manage` scope
 - Per-user order ownership: users only get, delete and list their own orders (the access token `sub` claim is the owner)
 - REST API protected by WAF with four AWS managed rules in production deployment
 - Unit, infrastructure, security, integration and E2E tests.

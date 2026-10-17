@@ -26,16 +26,16 @@ def generate_pre_token_event(groups: list[str] | None) -> dict[str, Any]:
 
 
 def test_adds_audience_and_scopes_of_the_users_groups():
-    # Given: A token generation event of a user that is a member of the writers group
-    event = generate_pre_token_event(['orders-writers'])
+    # Given: A token generation event of a user that is a member of the managers group
+    event = generate_pre_token_event(['orders-managers'])
 
     # When: The trigger runs
     result = lambda_handler(event, generate_context())
 
-    # Then: The access token gets the app client id as audience and the read and write scopes
+    # Then: The access token gets the app client id as audience and the manage scope
     access_token = result['response']['claimsAndScopeOverrideDetails']['accessTokenGeneration']
     assert access_token['claimsToAddOrOverride'] == {'aud': CLIENT_ID}
-    assert access_token['scopesToAdd'] == ['orders/read', 'orders/write']
+    assert access_token['scopesToAdd'] == ['orders/manage']
 
 
 def test_user_without_groups_gets_audience_but_no_scopes():
@@ -44,7 +44,7 @@ def test_user_without_groups_gets_audience_but_no_scopes():
         # When: The trigger runs
         result = lambda_handler(event, generate_context())
 
-        # Then: The audience is added, but no scope is granted
+        # Then: The audience is added, but no scope is granted (the user can still get and list their own orders)
         access_token = result['response']['claimsAndScopeOverrideDetails']['accessTokenGeneration']
         assert access_token['claimsToAddOrOverride'] == {'aud': CLIENT_ID}
         assert access_token['scopesToAdd'] == []
@@ -52,7 +52,7 @@ def test_user_without_groups_gets_audience_but_no_scopes():
 
 def test_does_not_override_groups_or_id_token():
     # Given: A token generation event
-    event = generate_pre_token_event(['orders-readers'])
+    event = generate_pre_token_event(['orders-managers'])
 
     # When: The trigger runs
     result = lambda_handler(event, generate_context())

@@ -5,7 +5,7 @@ from service.models.exceptions import InternalServerException
 def get_caller_id() -> str:
     """The verified caller's user id: the access token 'sub' claim, which identifies the owner of an order.
 
-    Call it only from a route protected by REQUIRE_READ or REQUIRE_WRITE (see auth.py), their middleware adds the verified claims to the
+    Call it only from a route protected by REQUIRE_SIGNED_IN or REQUIRE_MANAGE (see auth.py), their middleware adds the verified claims to the
     resolver context. 'sub' is immutable and unique per user pool user, unlike the username which can be reused after a user is deleted.
     Kept out of auth.py, which builds the verifier from environment variables at import time.
     """

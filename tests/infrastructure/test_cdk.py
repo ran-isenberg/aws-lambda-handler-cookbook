@@ -1,7 +1,7 @@
 from aws_cdk import App
 from aws_cdk.assertions import Match, Template
 
-from cdk.service.constants import READERS_GROUP, USER_POOL_CLIENT_ID_OUTPUT, USER_POOL_ID_OUTPUT, WRITERS_GROUP
+from cdk.service.constants import MANAGERS_GROUP, USER_POOL_CLIENT_ID_OUTPUT, USER_POOL_ID_OUTPUT
 from cdk.service.service_stack import ServiceStack
 
 
@@ -43,10 +43,9 @@ def test_cognito_user_pool():
         {'GenerateSecret': False, 'ExplicitAuthFlows': ['ALLOW_ADMIN_USER_PASSWORD_AUTH', 'ALLOW_REFRESH_TOKEN_AUTH']},
     )
 
-    # the groups that drive the scopes
-    template.resource_count_is('AWS::Cognito::UserPoolGroup', 2)
-    template.has_resource_properties('AWS::Cognito::UserPoolGroup', {'GroupName': READERS_GROUP})
-    template.has_resource_properties('AWS::Cognito::UserPoolGroup', {'GroupName': WRITERS_GROUP})
+    # the only group: its members get the manage scope (create and delete orders)
+    template.resource_count_is('AWS::Cognito::UserPoolGroup', 1)
+    template.has_resource_properties('AWS::Cognito::UserPoolGroup', {'GroupName': MANAGERS_GROUP})
 
     # the tests read the pool details from the stack outputs
     template.has_output(USER_POOL_ID_OUTPUT, {})

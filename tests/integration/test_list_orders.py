@@ -23,13 +23,13 @@ def call_list_orders(headers: dict[str, str], limit: int | None = None, next_tok
     return lambda_handler(event, generate_context())
 
 
-def test_handler_200_ok_single_page(order_factory, reader_user, reader_headers):
+def test_handler_200_ok_single_page(order_factory, member_user, member_headers):
     # Given: Two existing orders of the caller
-    created_a = order_factory(reader_user, f'{generate_random_string()}-A', 3)
-    created_b = order_factory(reader_user, f'{generate_random_string()}-B', 7)
+    created_a = order_factory(member_user, f'{generate_random_string()}-A', 3)
+    created_b = order_factory(member_user, f'{generate_random_string()}-B', 7)
 
     # When: Listing with a large limit so everything fits in one page
-    response = call_list_orders(reader_headers, limit=100)
+    response = call_list_orders(member_headers, limit=100)
 
     # Then: Both orders are returned
     assert response['statusCode'] == HTTPStatus.OK
@@ -39,16 +39,16 @@ def test_handler_200_ok_single_page(order_factory, reader_user, reader_headers):
     assert created_b['id'] in ids
 
 
-def test_handler_pagination_walks_all_pages(order_factory, reader_user, reader_headers):
+def test_handler_pagination_walks_all_pages(order_factory, member_user, member_headers):
     # Given: Three existing orders of the caller
-    created_ids = {order_factory(reader_user, f'{generate_random_string()}-X', i + 1)['id'] for i in range(3)}
+    created_ids = {order_factory(member_user, f'{generate_random_string()}-X', i + 1)['id'] for i in range(3)}
 
     # When: Paginating through with limit=1
     seen: set[str] = set()
     token: str | None = None
     pages = 0
     while True:
-        response = call_list_orders(reader_headers, limit=1, next_token=token)
+        response = call_list_orders(member_headers, limit=1, next_token=token)
         assert response['statusCode'] == HTTPStatus.OK
         body = json.loads(response['body'])
         seen.update(o['id'] for o in body['orders'])
@@ -63,10 +63,10 @@ def test_handler_pagination_walks_all_pages(order_factory, reader_user, reader_h
     assert pages >= 2
 
 
-def test_handler_invalid_next_token(reader_headers):
+def test_handler_invalid_next_token(member_headers):
     # Given: A malformed next_token
     # When: The list handler is called with it
-    response = call_list_orders(reader_headers, limit=10, next_token='not-valid-base64!!!')
+    response = call_list_orders(member_headers, limit=10, next_token='not-valid-base64!!!')
 
     # Then: The response is a 400 Bad Request
     assert response['statusCode'] == HTTPStatus.BAD_REQUEST
@@ -74,14 +74,14 @@ def test_handler_invalid_next_token(reader_headers):
     assert body == {'error': 'invalid next_token'}
 
 
-def test_internal_server_error(mocker, table_name: str, reader_headers):
+def test_internal_server_error(mocker, table_name: str, member_headers):
     # Given: A simulated error during DB interaction — patch pydynox client's sync_query so the DAL try/except wraps it
     from pydynox import DynamoDBClient
 
     mocker.patch.object(DynamoDBClient, 'sync_query', side_effect=Exception('DynamoDB error'))
 
     # When: The list orders lambda_handler is called
-    response = call_list_orders(reader_headers, limit=10)
+    response = call_list_orders(member_headers, limit=10)
 
     # Then: The response reflects an internal server error
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR

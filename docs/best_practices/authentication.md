@@ -1,10 +1,10 @@
 ---
 title: Authentication & Authorization
-description: Amazon Cognito, the Powertools JWT verifier, scopes and order ownership
+description: Amazon Cognito, the Powertools JWT verifier, the manage scope and order ownership
 ---
 The order API is protected with Amazon Cognito access tokens. Each Lambda function verifies the token itself with the Powertools for AWS Lambda [JWT verifier](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.36.0){:target="_blank" rel="noopener"} (`aws_lambda_powertools.utilities.auth_alpha.JWTVerifier`), there is no API Gateway authorizer.
 
-Authorization has two levels: a scope per route, and order ownership, so users only reach their own orders.
+Every signed in user can create, get and list their own orders. Deleting an order also requires the `orders/manage` scope, which only members of the `orders-managers` group get. On top of that, users only ever reach their own orders, see [Order ownership](#order-ownership).
 
 !!! warning "Alpha utility"
     The `auth_alpha` utilities may change before they are generally available. Pin the Powertools version and install the extra: `aws-lambda-powertools[jwt]`.
@@ -13,14 +13,14 @@ Authorization has two levels: a scope per route, and order ownership, so users o
 
 1. A caller signs in to the Cognito user pool and gets an access token.
 2. The caller sends the token in the `Authorization: Bearer <token>` header.
-3. The route middleware created by `verifier.require(scopes=[...])` verifies the signature (with the user pool JWKS), the issuer, the expiration, the app client and the audience, and checks the scope.
-4. The response is `401` for a missing or invalid token (an ID token is rejected too) and `403` for a missing scope. The `/swagger` endpoints stay public.
+3. The route middleware created by `verifier.require()` verifies the signature (with the user pool JWKS), the issuer, the expiration, the app client and the audience. On the delete route, `verifier.require(scopes=['orders/manage'])` also checks the scope.
+4. The response is `401` for a missing or invalid token (an ID token is rejected too) and `403` on delete without the `orders/manage` scope. The `/swagger` endpoints stay public.
 5. The handler reads the caller's user id from the verified token and only reaches that user's orders, see [Order ownership](#order-ownership).
 
-| Route                                               | Required scope |
-| --------------------------------------------------- | -------------- |
-| `GET /api/orders`, `GET /api/orders/{order_id}`     | `orders/read`  |
-| `POST /api/orders`, `DELETE /api/orders/{order_id}` | `orders/write` |
+| Route                                                               | Who can call it                                                           | Middleware          |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------------------- |
+| `POST /api/orders`, `GET /api/orders`, `GET /api/orders/{order_id}` | Any signed in user (valid access token), on their own orders              | `REQUIRE_SIGNED_IN` |
+| `DELETE /api/orders/{order_id}`                                     | Members of `orders-managers` (`orders/manage` scope), on their own orders | `REQUIRE_MANAGE`    |
 
 ## **Verifier and routes**
 
@@ -28,7 +28,7 @@ Authorization has two levels: a scope per route, and order ownership, so users o
 --8<-- "service/handlers/utils/auth.py"
 ```
 
-The verifier is created once per execution environment. It caches the user pool JWKS for 5 minutes (the Powertools default) and then fetches it again, so warm invocations don't download the keys on every request. A route uses the verifier with `middlewares=REQUIRE_READ` or `middlewares=REQUIRE_WRITE`.
+The verifier is created once per execution environment. It caches the user pool JWKS for 5 minutes (the Powertools default) and then fetches it again, so warm invocations don't download the keys on every request. A route uses the verifier with `middlewares=REQUIRE_SIGNED_IN` (create, get, list) or `middlewares=REQUIRE_MANAGE` (delete).
 
 The LIST function is the exception: it runs in the Lambda Managed Instances VPC, which has no route to the public JWKS URL. A CloudFormation custom resource fetches the JWKS at deploy time and passes it to the function in the `COGNITO_JWKS` environment variable,
 and the verifier uses those keys instead of downloading them. A new user pool triggers the custom resource again, which fetches the new keys.
@@ -54,10 +54,8 @@ Every order belongs to the user that created it, and users can only get, delete 
 - List runs a strongly consistent `Query` on the caller's partition instead of a `Scan` of the whole table. A `next_token` of another user, or a forged one, returns `400`.
 - The owner is part of the create order idempotency key, so the same request body sent by two users creates two orders.
 
-!!! info "The reader role and ownership"
-    Only writers can create orders, and users only see their own orders. A user in `orders-readers` alone therefore owns no orders: its get returns `404` and its list is empty.
-
-    In this blueprint the reader role shows scope based authorization. A real service would give readers access to their own orders created by another process, or add a separate scope (for example support or admin) that can read across owners.
+!!! info "Ownership comes first"
+    The `orders/manage` scope does not grant access to other users' orders: a manager deletes only their own orders, and gets `404` for an order of another user. To let a support or admin role read or delete across owners, add a separate scope and an explicit code path for it.
 
 ## **The audience claim**
 
@@ -66,7 +64,7 @@ Every order belongs to the user that created it, and users can only get, delete 
 To get tokens without a browser, the user pool has a [pre token generation trigger](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-token-generation.html){:target="_blank" rel="noopener"} (event version 2, which requires the Essentials feature plan) that adds to the access token:
 
 - `aud`, set to the app client id.
-- The scopes of the user's groups: `orders-readers` gets `orders/read`, `orders-writers` gets `orders/read` and `orders/write`.
+- The scopes of the user's groups: `orders-managers` gets `orders/manage`. A user in no group gets no scope, and can still create, get and list their own orders.
 
 ```python title="service/handlers/handle_pre_token_generation.py"
 --8<-- "service/handlers/handle_pre_token_generation.py"
@@ -79,8 +77,8 @@ The audience is therefore the app client id, which is weaker than a resource bou
 The integration and e2e tests do not mock the verifier. They use real tokens from the deployed user pool.
 
 - The helpers in `tests/auth_utils.py` create a user with the admin API, add it to a group, sign it in to get a real access token and delete it.
-- The fixtures in `tests/conftest.py` create four users once per test session: `writer_user`, `other_writer_user` (to test order ownership), `reader_user` and `no_scope_user`. They are deleted when the session ends, also when a test fails.
-- The bearer token is passed to the tests as ready to use `Authorization` headers: `writer_headers`, `other_writer_headers`, `reader_headers` and `no_scope_headers`.
+- The fixtures in `tests/conftest.py` create three users once per test session: `member_user` (no group, the regular user), `manager_user` (in `orders-managers`) and `other_manager_user` (to test order ownership). They are deleted when the session ends, also when a test fails.
+- The bearer token is passed to the tests as ready to use `Authorization` headers: `member_headers`, `manager_headers` and `other_manager_headers`.
 - `order_factory(owner, name, item_count)` creates orders owned by a test user (`owner.sub`) directly in DynamoDB.
 
 The identity that runs the tests needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.

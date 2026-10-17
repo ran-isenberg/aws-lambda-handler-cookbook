@@ -7,7 +7,7 @@ from typing import Any
 import pytest
 from pydynox import DynamoDBClient, dynamodb_model
 
-from cdk.service.constants import READERS_GROUP, TABLE_NAME_OUTPUT, WRITERS_GROUP
+from cdk.service.constants import MANAGERS_GROUP, TABLE_NAME_OUTPUT
 from service.dal.models.db import OrderEntry
 from tests.auth_utils import CognitoPool, CognitoUser, bearer_headers, create_cognito_user, delete_cognito_user, get_cognito_pool
 from tests.utils import get_stack_output
@@ -88,52 +88,39 @@ def cognito_pool() -> CognitoPool:
 
 
 @pytest.fixture(scope='session')
-def writer_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
-    """Has the orders/read and orders/write scopes."""
-    user = create_cognito_user(cognito_pool, [WRITERS_GROUP])
+def manager_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
+    """In the managers group (orders/manage scope): can create, get, list and delete their own orders."""
+    user = create_cognito_user(cognito_pool, [MANAGERS_GROUP])
     yield user
     delete_cognito_user(cognito_pool, user.username)
 
 
 @pytest.fixture(scope='session')
-def other_writer_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
-    """A second writer, to verify that users can't reach each other's orders."""
-    user = create_cognito_user(cognito_pool, [WRITERS_GROUP])
+def other_manager_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
+    """A second manager, to verify that users can't reach each other's orders."""
+    user = create_cognito_user(cognito_pool, [MANAGERS_GROUP])
     yield user
     delete_cognito_user(cognito_pool, user.username)
 
 
 @pytest.fixture(scope='session')
-def reader_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
-    """Has the orders/read scope only."""
-    user = create_cognito_user(cognito_pool, [READERS_GROUP])
-    yield user
-    delete_cognito_user(cognito_pool, user.username)
-
-
-@pytest.fixture(scope='session')
-def no_scope_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
-    """Can sign in, but is not in any group, so it has no orders scope."""
+def member_user(cognito_pool: CognitoPool) -> Iterator[CognitoUser]:
+    """A signed in user in no group (no scope): can get and list their own orders, can't create or delete orders."""
     user = create_cognito_user(cognito_pool, [])
     yield user
     delete_cognito_user(cognito_pool, user.username)
 
 
 @pytest.fixture(scope='session')
-def writer_headers(writer_user: CognitoUser) -> dict[str, str]:
-    return bearer_headers(writer_user.access_token)
+def manager_headers(manager_user: CognitoUser) -> dict[str, str]:
+    return bearer_headers(manager_user.access_token)
 
 
 @pytest.fixture(scope='session')
-def other_writer_headers(other_writer_user: CognitoUser) -> dict[str, str]:
-    return bearer_headers(other_writer_user.access_token)
+def other_manager_headers(other_manager_user: CognitoUser) -> dict[str, str]:
+    return bearer_headers(other_manager_user.access_token)
 
 
 @pytest.fixture(scope='session')
-def reader_headers(reader_user: CognitoUser) -> dict[str, str]:
-    return bearer_headers(reader_user.access_token)
-
-
-@pytest.fixture(scope='session')
-def no_scope_headers(no_scope_user: CognitoUser) -> dict[str, str]:
-    return bearer_headers(no_scope_user.access_token)
+def member_headers(member_user: CognitoUser) -> dict[str, str]:
+    return bearer_headers(member_user.access_token)

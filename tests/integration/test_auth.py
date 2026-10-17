@@ -2,7 +2,7 @@ import json
 from http import HTTPStatus
 from typing import Any
 
-from cdk.service.constants import READ_SCOPE, WRITE_SCOPE
+from cdk.service.constants import MANAGE_SCOPE
 from service.models.input import CreateOrderRequest
 from tests.auth_utils import bearer_headers
 from tests.utils import generate_api_gw_event, generate_api_gw_event_with_path_params, generate_context, generate_random_string
@@ -47,21 +47,21 @@ def call_list_orders(headers: dict[str, str] | None) -> dict[str, Any]:
 ALL_CALLS = [call_create_order, call_get_order, call_delete_order, call_list_orders]
 
 
-def test_access_token_has_audience_and_scopes_of_the_groups(cognito_pool, writer_user, reader_user):
-    # Given: A real writer and a real reader user, signed in with the Cognito API (their access tokens come from Cognito)
+def test_access_token_has_audience_and_scopes_of_the_groups(cognito_pool, manager_user, member_user):
+    # Given: A real manager and a real member (no group), signed in with the Cognito API (their access tokens come from Cognito)
     from service.handlers.utils.auth import verifier
 
     # When: Verifying their access tokens with the same JWTVerifier the handlers use
-    writer_claims = verifier.verify(writer_user.access_token)
-    reader_claims = verifier.verify(reader_user.access_token)
+    manager_claims = verifier.verify(manager_user.access_token)
+    member_claims = verifier.verify(member_user.access_token)
 
-    # Then: The pre token generation trigger added the audience and the scopes of the groups
-    assert writer_claims['aud'] == cognito_pool.client_id
-    assert writer_claims['client_id'] == cognito_pool.client_id
-    assert writer_claims['token_use'] == 'access'
-    assert {READ_SCOPE, WRITE_SCOPE}.issubset(writer_claims['scope'].split(' '))
-    assert READ_SCOPE in reader_claims['scope'].split(' ')
-    assert WRITE_SCOPE not in reader_claims['scope'].split(' ')
+    # Then: The pre token generation trigger added the audience to both, and the manage scope only to the manager
+    for claims in (manager_claims, member_claims):
+        assert claims['aud'] == cognito_pool.client_id
+        assert claims['client_id'] == cognito_pool.client_id
+        assert claims['token_use'] == 'access'
+    assert MANAGE_SCOPE in manager_claims['scope'].split(' ')
+    assert MANAGE_SCOPE not in member_claims.get('scope', '').split(' ')
 
 
 def test_missing_token_is_401():
@@ -106,42 +106,44 @@ def test_invalid_token_is_401():
         assert response['statusCode'] == HTTPStatus.UNAUTHORIZED, call.__name__
 
 
-def test_id_token_is_401(writer_user):
+def test_id_token_is_401(manager_user):
     for call in ALL_CALLS:
         # Given: A request with a real, valid Cognito ID token (not an access token)
         # When: Calling the handler
-        response = call(bearer_headers(writer_user.id_token))
+        response = call(bearer_headers(manager_user.id_token))
 
         # Then: Unauthorized, only access tokens are accepted
         assert response['statusCode'] == HTTPStatus.UNAUTHORIZED, call.__name__
 
 
-def test_user_without_scope_is_403(no_scope_headers):
-    # Given: A real user that is not a member of any group, so its access token has no orders scope
-    for call in ALL_CALLS:
-        # When: Calling the handler with its valid access token
-        response = call(no_scope_headers)
+def test_member_cannot_delete(member_headers):
+    # Given: A real signed in user in no group, so its access token has no orders/manage scope
+    # When: Deleting an order with its valid access token
+    response = call_delete_order(member_headers)
 
-        # Then: Forbidden (authenticated, but not authorized)
-        assert response['statusCode'] == HTTPStatus.FORBIDDEN, call.__name__
-        assert json.loads(response['body']) == {'message': 'Forbidden'}
-
-
-def test_reader_cannot_write_but_can_read(reader_headers):
-    # Given: A real reader (orders/read scope only)
-    # When & Then: Write operations are forbidden
-    assert call_create_order(reader_headers)['statusCode'] == HTTPStatus.FORBIDDEN
-    assert call_delete_order(reader_headers)['statusCode'] == HTTPStatus.FORBIDDEN
-
-    # When & Then: Read operations pass authorization (the order does not exist, so get is 404, list is 200)
-    assert call_get_order(reader_headers)['statusCode'] == HTTPStatus.NOT_FOUND
-    assert call_list_orders(reader_headers)['statusCode'] == HTTPStatus.OK
+    # Then: Forbidden (authenticated, but not authorized). Creating orders is covered by test_create_order.py
+    assert response['statusCode'] == HTTPStatus.FORBIDDEN
+    assert json.loads(response['body']) == {'message': 'Forbidden'}
 
 
-def test_writer_passes_authorization_on_every_route(writer_headers):
-    # Given: A real writer (orders/read and orders/write scopes)
-    # When & Then: Read and delete pass authorization (the order does not exist, so get and delete are 404, list is 200).
-    # Creating an order as a writer is covered by test_create_order.py
-    assert call_list_orders(writer_headers)['statusCode'] == HTTPStatus.OK
-    assert call_get_order(writer_headers)['statusCode'] == HTTPStatus.NOT_FOUND
-    assert call_delete_order(writer_headers)['statusCode'] == HTTPStatus.NOT_FOUND
+def test_member_can_get_and_list_own_orders(order_factory, member_user, member_headers):
+    # Given: An order of a signed in user in no group (orders are created for it directly in the table)
+    from tests.integration.test_get_order import call_get_order as call_get_order_by_id
+    from tests.integration.test_list_orders import call_list_orders as call_list_orders_with_limit
+
+    order = order_factory(member_user, f'{generate_random_string()}-Member', 2)
+
+    # When & Then: Getting and listing only need a valid access token, no scope
+    assert call_get_order_by_id(order['id'], member_headers)['statusCode'] == HTTPStatus.OK
+    listed = call_list_orders_with_limit(member_headers, limit=100)
+    assert listed['statusCode'] == HTTPStatus.OK
+    assert order['id'] in {o['id'] for o in json.loads(listed['body'])['orders']}
+
+
+def test_manager_passes_authorization_on_every_route(manager_headers):
+    # Given: A real manager (orders/manage scope)
+    # When & Then: Every route passes authorization (the order does not exist, so get and delete are 404, list is 200).
+    # Deleting an existing order as a manager is covered by test_delete_order.py
+    assert call_list_orders(manager_headers)['statusCode'] == HTTPStatus.OK
+    assert call_get_order(manager_headers)['statusCode'] == HTTPStatus.NOT_FOUND
+    assert call_delete_order(manager_headers)['statusCode'] == HTTPStatus.NOT_FOUND

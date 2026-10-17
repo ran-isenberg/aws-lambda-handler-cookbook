@@ -51,54 +51,51 @@ def test_invalid_token_is_401(api_gw_url, route):
 
 
 @pytest.mark.parametrize('route', ALL_ROUTES)
-def test_id_token_is_401(api_gw_url, writer_user, route):
+def test_id_token_is_401(api_gw_url, manager_user, route):
     # Given: A real, valid Cognito ID token (not an access token)
     # When: Calling a protected route
-    response = call_api(api_gw_url, route, bearer_headers(writer_user.id_token))
+    response = call_api(api_gw_url, route, bearer_headers(manager_user.id_token))
 
     # Then: Unauthorized, only access tokens are accepted
     assert response.status_code == HTTPStatus.UNAUTHORIZED
 
 
-@pytest.mark.parametrize('route', ALL_ROUTES)
-def test_user_without_scope_is_403(api_gw_url, no_scope_headers, route):
-    # Given: A real user that is not a member of any group, so its access token has no orders scope
-    # When: Calling a protected route with its valid access token
-    response = call_api(api_gw_url, route, no_scope_headers)
-
-    # Then: Forbidden (authenticated, but not authorized)
-    assert response.status_code == HTTPStatus.FORBIDDEN
-    assert json.loads(response.text) == {'message': 'Forbidden'}
-
-
-@pytest.mark.parametrize('route', ['POST', 'DELETE'])
-def test_reader_cannot_write(api_gw_url, reader_headers, route):
-    # Given: A real reader (orders/read scope only)
-    # When: Calling a write route
-    response = call_api(api_gw_url, route, reader_headers)
-
-    # Then: Forbidden
-    assert response.status_code == HTTPStatus.FORBIDDEN
-
-
-def test_reader_can_read(api_gw_url, reader_headers):
-    # Given: A real reader (orders/read scope only)
-    # When & Then: Read routes pass authorization (the order does not exist, so get is 404, list is 200)
-    assert call_api(api_gw_url, 'LIST', reader_headers).status_code == HTTPStatus.OK
-    assert call_api(api_gw_url, 'GET_ONE', reader_headers).status_code == HTTPStatus.NOT_FOUND
-
-
-def test_writer_can_read_and_write(api_gw_url, writer_user, writer_headers, tracked_orders):
-    # Given: A real writer (orders/read and orders/write scopes)
+def test_member_can_create_but_not_delete(api_gw_url, member_user, member_headers, tracked_orders):
+    # Given: A real signed in user in no group, so its access token has no orders/manage scope
     # When: Creating an order
-    response = call_api(api_gw_url, 'POST', writer_headers)
+    response = call_api(api_gw_url, 'POST', member_headers)
 
-    # Then: The order is created and can be read and deleted
+    # Then: The order is created and the member can get it, but deleting it is forbidden (authenticated, but not authorized)
     assert response.status_code == HTTPStatus.OK
     order_id = json.loads(response.text)['id']
-    tracked_orders.append((writer_user.sub, order_id))
-    assert requests.get(f'{api_gw_url}/{order_id}', headers=writer_headers).status_code == HTTPStatus.OK
-    assert requests.delete(f'{api_gw_url}/{order_id}', headers=writer_headers).status_code == HTTPStatus.OK
+    tracked_orders.append((member_user.sub, order_id))
+    assert requests.get(f'{api_gw_url}/{order_id}', headers=member_headers).status_code == HTTPStatus.OK
+    deleted = requests.delete(f'{api_gw_url}/{order_id}', headers=member_headers)
+    assert deleted.status_code == HTTPStatus.FORBIDDEN
+    assert json.loads(deleted.text) == {'message': 'Forbidden'}
+
+
+def test_member_can_get_and_list_own_orders(api_gw_url, order_factory, member_user, member_headers):
+    # Given: An order of a signed in user in no group (created for it directly in the table)
+    order = order_factory(member_user, f'{generate_random_string()}-Member', 2)
+
+    # When & Then: Getting and listing only need a valid access token, no scope
+    assert requests.get(f'{api_gw_url}/{order["id"]}', headers=member_headers).status_code == HTTPStatus.OK
+    listed = requests.get(api_gw_url, params={'limit': 100}, headers=member_headers)
+    assert listed.status_code == HTTPStatus.OK
+    assert order['id'] in {o['id'] for o in json.loads(listed.text)['orders']}
+
+
+def test_manager_can_delete(api_gw_url, manager_user, manager_headers, tracked_orders):
+    # Given: A real manager (orders/manage scope) and an order it created
+    response = call_api(api_gw_url, 'POST', manager_headers)
+
+    # When & Then: The manager can get and delete its own order
+    assert response.status_code == HTTPStatus.OK
+    order_id = json.loads(response.text)['id']
+    tracked_orders.append((manager_user.sub, order_id))
+    assert requests.get(f'{api_gw_url}/{order_id}', headers=manager_headers).status_code == HTTPStatus.OK
+    assert requests.delete(f'{api_gw_url}/{order_id}', headers=manager_headers).status_code == HTTPStatus.OK
 
 
 def test_swagger_is_public():

@@ -39,10 +39,8 @@ USER_POOL_CLIENT_ID_OUTPUT = 'UserPoolClientIdOutput'
 PRE_TOKEN_LAMBDA = 'PreTokenGeneration'
 FETCH_JWKS_LAMBDA = 'FetchUserPoolJwks'
 USER_POOL_JWKS_RESOURCE = 'UserPoolJwks'
-READERS_GROUP = 'orders-readers'
-WRITERS_GROUP = 'orders-writers'
-READ_SCOPE = 'orders/read'
-WRITE_SCOPE = 'orders/write'
+MANAGERS_GROUP = 'orders-managers'  # members can delete orders; every signed in user can create, get and list their own orders
+MANAGE_SCOPE = 'orders/manage'
 
 # Lambda Managed Instances
 MANAGED_INSTANCE_LAMBDA = 'ManagedInstanceOrder'

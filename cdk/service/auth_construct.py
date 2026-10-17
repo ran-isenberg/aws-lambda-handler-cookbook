@@ -140,17 +140,11 @@ class AuthConstruct(Construct):
         )
 
     def _build_groups(self, user_pool: cognito.UserPool) -> None:
+        # creating, getting and listing your own orders only needs a valid access token, so the only group is the one that can delete orders
         cognito.CfnUserPoolGroup(
             self,
-            'ReadersGroup',
+            'ManagersGroup',
             user_pool_id=user_pool.user_pool_id,
-            group_name=constants.READERS_GROUP,
-            description=f'Members get the {constants.READ_SCOPE} scope',
-        )
-        cognito.CfnUserPoolGroup(
-            self,
-            'WritersGroup',
-            user_pool_id=user_pool.user_pool_id,
-            group_name=constants.WRITERS_GROUP,
-            description=f'Members get the {constants.READ_SCOPE} and {constants.WRITE_SCOPE} scopes',
+            group_name=constants.MANAGERS_GROUP,
+            description=f'Members get the {constants.MANAGE_SCOPE} scope: they can delete their own orders',
         )
