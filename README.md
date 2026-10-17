@@ -79,7 +79,7 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 ### Serverless Service - The Order service
 
-* This project provides a working orders service where customers can create, get, and delete orders of items.
+* This project provides a working orders service where customers can create, get, list, and delete orders of items.
 
 * The project deploys an API GW with AWS Lambda integrations and stores data in a DynamoDB table:
     * `POST /api/orders/` - Create a new order
@@ -152,21 +152,18 @@ flowchart LR
     DELETE -.verifies JWT.-> COGNITO
     LIST -.verifies JWT.-> COGNITO
 
-    style CLIENT fill:#f9f,stroke:#333
-    style WAF fill:#ff6b6b,stroke:#333
-    style REST fill:#4ecdc4,stroke:#333
-    style CREATE fill:#ffe66d,stroke:#333
-    style GET fill:#ffe66d,stroke:#333
-    style DELETE fill:#ffe66d,stroke:#333
-    style LAYER fill:#ffe66d,stroke:#333
-    style LIST fill:#ffa500,stroke:#333
-    style LIST_ALIAS fill:#4ecdc4,stroke:#333
-    style CP fill:#ff6b6b,stroke:#333
-    style APPCONFIG fill:#95e1d3,stroke:#333
-    style COGNITO fill:#dd344c,stroke:#333,color:#fff
-    style PRETOKEN fill:#ffe66d,stroke:#333
-    style DDB fill:#4a90d9,stroke:#333
-    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+    classDef client fill:#232F3E,stroke:#232F3E,color:#fff
+    classDef network fill:#8C4FFF,stroke:#5A30B5,color:#fff
+    classDef security fill:#DD344C,stroke:#A3233A,color:#fff
+    classDef compute fill:#ED7100,stroke:#B35500,color:#1b1b1b
+    classDef database fill:#C925D1,stroke:#8F1A95,color:#fff
+    classDef management fill:#E7157B,stroke:#A50F58,color:#fff
+    class CLIENT client
+    class WAF,COGNITO security
+    class REST network
+    class CREATE,GET,DELETE,LAYER,LIST,LIST_ALIAS,CP,PRETOKEN compute
+    class DDB,IDEMPOTENCY database
+    class APPCONFIG management
 ```
 
 #### **Authentication**
@@ -241,12 +238,16 @@ flowchart TB
     LAMBDA_ALARM --> LL
     DDB_ALARM --> LL
 
-    style HL fill:#4ecdc4,stroke:#333
-    style LL fill:#4ecdc4,stroke:#333
-    style SNS fill:#ff6b6b,stroke:#333
-    style API_ALARM fill:#ffe66d,stroke:#333
-    style LAMBDA_ALARM fill:#ffe66d,stroke:#333
-    style DDB_ALARM fill:#ffe66d,stroke:#333
+    classDef network fill:#8C4FFF,stroke:#5A30B5,color:#fff
+    classDef compute fill:#ED7100,stroke:#B35500,color:#1b1b1b
+    classDef database fill:#C925D1,stroke:#8F1A95,color:#fff
+    classDef management fill:#E7157B,stroke:#A50F58,color:#fff
+    classDef integration fill:#E7157B,stroke:#A50F58,color:#fff
+    class APIGW network
+    class LAMBDA compute
+    class DDB database
+    class HL,LL,API_ALARM,LAMBDA_ALARM,DDB_ALARM management
+    class SNS integration
 ```
 
 ### **Features**
@@ -265,6 +266,7 @@ flowchart TB
 * Idempotent API
 * REST API protected by WAF with four AWS managed rules in production deployment
 * Amazon Cognito authentication with scope based authorization (`orders/read`, `orders/write`), verified in the Lambdas by the Powertools JWT verifier
+* Per-user order ownership: users only get, delete and list their own orders (the access token `sub` claim is the owner)
 * Integration and end to end tests use real Cognito users and real access tokens, created and deleted by the tests
 * CloudWatch dashboards - High level and low level including CloudWatch alarms
 * Unit, infrastructure, security, integration and end to end tests.
@@ -289,18 +291,18 @@ Each utility is implemented when a new blog post is published about that utility
 
 The utilities cover multiple aspect of a production-ready service, including:
 
-* [Logging](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging/)
-* [Observability: Monitoring and Tracing](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability/)
-* [Observability: Business KPIs Metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/)
+* [API Idempotency](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/)
+* [Authentication & Authorization](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/)
+* [CDK Best practices](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/)
+* [Dynamic Configuration & feature flags](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices/)
 * [Environment Variables](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-environment-variables/)
 * [Input Validation](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation/)
-* [Authentication](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/)
-* [Dynamic Configuration & feature flags](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices/)
-* [Start Your AWS Serverless Service With Two Clicks](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project/)
-* [CDK Best practices](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/)
+* [Logging](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging/)
+* [Observability: Business KPIs Metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/)
+* [Observability: Monitoring and Tracing](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability/)
 * [Serverless Monitoring](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
-* [API Idempotency](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/)
 * [Serverless OpenAPI Documentation with AWS Powertools](https://ranthebuilder.cloud/blog/serverless-open-api-documentation-with-aws-powertools/)
+* [Start Your AWS Serverless Service With Two Clicks](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project/)
 
 ## Getting started
 

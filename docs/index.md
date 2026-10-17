@@ -57,6 +57,11 @@ flowchart LR
             CP["Capacity Provider<br/>EC2 pool, 2 AZs"]
         end
 
+        subgraph Auth["Authentication"]
+            COGNITO["Cognito User Pool<br/>groups: readers, writers"]
+            PRETOKEN["Pre Token Generation<br/>Lambda (adds aud + scopes)"]
+        end
+
         subgraph Config["Configuration"]
             APPCONFIG["AppConfig<br/>Feature Flags"]
         end
@@ -67,7 +72,9 @@ flowchart LR
         end
     end
 
-    CLIENT((Client)) --> WAF
+    CLIENT((Client)) -.sign in, get token.-> COGNITO
+    COGNITO -.-> PRETOKEN
+    CLIENT --> WAF
     WAF --> REST
     REST --> CREATE
     REST --> GET
@@ -84,20 +91,23 @@ flowchart LR
     GET --> DDB
     DELETE --> DDB
     LIST --> DDB
+    CREATE -.verifies JWT.-> COGNITO
+    GET -.verifies JWT.-> COGNITO
+    DELETE -.verifies JWT.-> COGNITO
+    LIST -.verifies JWT.-> COGNITO
 
-    style CLIENT fill:#f9f,stroke:#333
-    style WAF fill:#ff6b6b,stroke:#333
-    style REST fill:#4ecdc4,stroke:#333
-    style CREATE fill:#ffe66d,stroke:#333
-    style GET fill:#ffe66d,stroke:#333
-    style DELETE fill:#ffe66d,stroke:#333
-    style LAYER fill:#ffe66d,stroke:#333
-    style LIST fill:#ffa500,stroke:#333
-    style LIST_ALIAS fill:#4ecdc4,stroke:#333
-    style CP fill:#ff6b6b,stroke:#333
-    style APPCONFIG fill:#95e1d3,stroke:#333
-    style DDB fill:#4a90d9,stroke:#333
-    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+    classDef client fill:#232F3E,stroke:#232F3E,color:#fff
+    classDef network fill:#8C4FFF,stroke:#5A30B5,color:#fff
+    classDef security fill:#DD344C,stroke:#A3233A,color:#fff
+    classDef compute fill:#ED7100,stroke:#B35500,color:#1b1b1b
+    classDef database fill:#C925D1,stroke:#8F1A95,color:#fff
+    classDef management fill:#E7157B,stroke:#A50F58,color:#fff
+    class CLIENT client
+    class WAF,COGNITO security
+    class REST network
+    class CREATE,GET,DELETE,LAYER,LIST,LIST_ALIAS,CP,PRETOKEN compute
+    class DDB,IDEMPOTENCY database
+    class APPCONFIG management
 ```
 
 <p class="mermaid-hint">Click diagram to zoom</p>
@@ -109,6 +119,8 @@ flowchart LR
     - `GET /api/orders/{order_id}` - Get an order by ID
     - `DELETE /api/orders/{order_id}` - Delete an order by ID
     - `GET /api/orders/?limit={n}&next_token={cursor}` - List orders with pagination, served by an **AWS Lambda Managed Instances** pool
+
+- All `/api/orders` routes require an **Amazon Cognito access token** (`Authorization: Bearer <token>`), verified in the Lambdas by the Powertools JWT verifier: `orders/read` for GET, `orders/write` for POST and DELETE. Orders belong to the user that created them, and users only reach their own orders. `/swagger` is public. See [Authentication](best_practices/authentication.md).
 
 #### **LIST orders via AWS Lambda Managed Instances**
 
@@ -162,12 +174,16 @@ flowchart TB
     LAMBDA_ALARM --> LL
     DDB_ALARM --> LL
 
-    style HL fill:#4ecdc4,stroke:#333
-    style LL fill:#4ecdc4,stroke:#333
-    style SNS fill:#ff6b6b,stroke:#333
-    style API_ALARM fill:#ffe66d,stroke:#333
-    style LAMBDA_ALARM fill:#ffe66d,stroke:#333
-    style DDB_ALARM fill:#ffe66d,stroke:#333
+    classDef network fill:#8C4FFF,stroke:#5A30B5,color:#fff
+    classDef compute fill:#ED7100,stroke:#B35500,color:#1b1b1b
+    classDef database fill:#C925D1,stroke:#8F1A95,color:#fff
+    classDef management fill:#E7157B,stroke:#A50F58,color:#fff
+    classDef integration fill:#E7157B,stroke:#A50F58,color:#fff
+    class APIGW network
+    class LAMBDA compute
+    class DDB database
+    class HL,LL,API_ALARM,LAMBDA_ALARM,DDB_ALARM management
+    class SNS integration
 ```
 
 <p class="mermaid-hint">Click diagram to zoom</p>
@@ -185,8 +201,11 @@ flowchart TB
 - Features flags and configuration based on AWS AppConfig
 - CloudWatch dashboards - High level and low level including CloudWatch alarms
 - Idempotent API
+- Amazon Cognito authentication with scope based authorization (`orders/read`, `orders/write`), verified in the Lambdas by the Powertools JWT verifier
+- Per-user order ownership: users only get, delete and list their own orders (the access token `sub` claim is the owner)
 - REST API protected by WAF with four AWS managed rules in production deployment
 - Unit, infrastructure, security, integration and E2E tests.
+- Integration and E2E tests use real Cognito users and real access tokens, created and deleted by the tests
 - Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
 - Automated protection against API breaking changes
 
@@ -227,16 +246,16 @@ Each utility is implemented when a new blog post is published about that utility
 
 The utilities cover multiple aspects of a production-ready service, including:
 
-- [**Logging**](best_practices/logger.md)
-- [**Observability: Monitoring and Tracing**](best_practices/tracer.md)
-- [**Observability: Business KPI Metrics**](best_practices/metrics.md)
+- [**API Idempotency**](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/){:target="_blank" rel="noopener"}
+- [**Authentication & Authorization**](best_practices/authentication.md)
+- [**Dynamic configuration & features flags**](best_practices/dynamic_configuration.md)
 - [**Environment Variables**](best_practices/environment_variables.md)
 - [**Input Validation**](best_practices/input_validation.md)
-- [**Authentication**](best_practices/authentication.md)
-- [**Dynamic configuration & features flags**](best_practices/dynamic_configuration.md)
-- [**Serverless Monitoring**](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
-- [**API Idempotency**](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/){:target="_blank" rel="noopener"}
 - [**Learn How to Write AWS Lambda Functions with Three Architecture Layers**](https://ranthebuilder.cloud/blog/learn-how-to-write-aws-lambda-functions-with-architecture-layers/){:target="_blank" rel="noopener"}
+- [**Logging**](best_practices/logger.md)
+- [**Observability: Business KPI Metrics**](best_practices/metrics.md)
+- [**Observability: Monitoring and Tracing**](best_practices/tracer.md)
+- [**Serverless Monitoring**](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
 - [**Serverless OpenAPI Documentation with AWS Powertools**](https://ranthebuilder.cloud/blog/serverless-open-api-documentation-with-aws-powertools/){:target="_blank" rel="noopener"}
 
 While the code examples are written in Python, the principles are valid to any supported AWS Lambda handler programming language.

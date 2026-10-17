@@ -92,7 +92,8 @@ class AuthConstruct(Construct):
             ),
         )
         # a new user pool id (pool replaced) triggers an update, which fetches the new pool's keys.
-        # Cognito does not rotate user pool signing keys, so the keys fetched at deploy time stay valid.
+        # Cognito might rotate user pool signing keys (no published schedule). The keys are only refreshed on deploy,
+        # so after a rotation the functions that use them reject new tokens until the next deployment.
         jwks_resource = CustomResource(
             self,
             constants.USER_POOL_JWKS_RESOURCE,

@@ -76,6 +76,26 @@ def test_missing_token_is_401():
         assert response['multiValueHeaders']['WWW-Authenticate'] == ['Bearer']
 
 
+def test_request_validation_runs_before_authorization():
+    # Given: Invalid requests without an Authorization header (an invalid body, and a limit outside 1-100)
+    from service.handlers.handle_create_order import lambda_handler as create_handler
+    from service.handlers.handle_list_orders import lambda_handler as list_handler
+
+    create_event = generate_api_gw_event({'customer_name': 'RanTheBuilder', 'order_item_count': 'not-a-number'}, None)
+    list_event = generate_api_gw_event_with_path_params(http_method='GET', path='/api/orders', path_parameters=None, headers=None)
+    list_event['queryStringParameters'] = {'limit': '0'}
+    list_event['multiValueQueryStringParameters'] = {'limit': ['0']}
+
+    # When: Calling the handlers
+    create_response = create_handler(create_event, generate_context())
+    list_response = list_handler(list_event, generate_context())
+
+    # Then: The Event Handler validates the request before the auth middleware runs, so it is 422 and not 401
+    # (documented in docs/best_practices/authentication.md, a Powertools upgrade that changes the order fails this test)
+    assert create_response['statusCode'] == HTTPStatus.UNPROCESSABLE_ENTITY
+    assert list_response['statusCode'] == HTTPStatus.UNPROCESSABLE_ENTITY
+
+
 def test_invalid_token_is_401():
     for call in ALL_CALLS:
         # Given: A request with a token that is not a JWT
