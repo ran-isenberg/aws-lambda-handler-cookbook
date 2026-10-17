@@ -79,13 +79,15 @@ This project aims to reduce cognitive load and answer these questions for you by
 
 ### Serverless Service - The Order service
 
-* This project provides a working orders service where customers can create, get, and delete orders of items.
+* This project provides a working orders service where customers can create, get, list, and delete orders of items.
 
 * The project deploys an API GW with AWS Lambda integrations and stores data in a DynamoDB table:
     * `POST /api/orders/` - Create a new order
     * `GET /api/orders/{order_id}` - Get an order by ID
     * `DELETE /api/orders/{order_id}` - Delete an order by ID
     * `GET /api/orders/?limit={n}&next_token={cursor}` - List orders with pagination, served by an **AWS Lambda Managed Instances** pool
+
+* All `/api/orders` routes require an **Amazon Cognito access token** (`Authorization: Bearer <token>`), see [Authentication](#authentication). `/swagger` is public.
 
 ```mermaid
 flowchart LR
@@ -111,6 +113,11 @@ flowchart LR
             CP["Capacity Provider<br/>EC2 pool, 2 AZs"]
         end
 
+        subgraph Auth["Authentication"]
+            COGNITO["Cognito User Pool<br/>group: managers"]
+            PRETOKEN["Pre Token Generation<br/>Lambda (adds aud + scopes)"]
+        end
+
         subgraph Config["Configuration"]
             APPCONFIG["AppConfig<br/>Feature Flags"]
         end
@@ -121,7 +128,9 @@ flowchart LR
         end
     end
 
-    CLIENT((Client)) --> WAF
+    CLIENT((Client)) -.sign in, get token.-> COGNITO
+    COGNITO -.-> PRETOKEN
+    CLIENT --> WAF
     WAF --> REST
     REST --> CREATE
     REST --> GET
@@ -138,21 +147,39 @@ flowchart LR
     GET --> DDB
     DELETE --> DDB
     LIST --> DDB
+    CREATE -.verifies JWT.-> COGNITO
+    GET -.verifies JWT.-> COGNITO
+    DELETE -.verifies JWT.-> COGNITO
+    LIST -.verifies JWT.-> COGNITO
 
-    style CLIENT fill:#f9f,stroke:#333
-    style WAF fill:#ff6b6b,stroke:#333
-    style REST fill:#4ecdc4,stroke:#333
-    style CREATE fill:#ffe66d,stroke:#333
-    style GET fill:#ffe66d,stroke:#333
-    style DELETE fill:#ffe66d,stroke:#333
-    style LAYER fill:#ffe66d,stroke:#333
-    style LIST fill:#ffa500,stroke:#333
-    style LIST_ALIAS fill:#4ecdc4,stroke:#333
-    style CP fill:#ff6b6b,stroke:#333
-    style APPCONFIG fill:#95e1d3,stroke:#333
-    style DDB fill:#4a90d9,stroke:#333
-    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+    classDef client fill:#232F3E,stroke:#232F3E,color:#fff
+    classDef network fill:#8C4FFF,stroke:#5A30B5,color:#fff
+    classDef security fill:#DD344C,stroke:#A3233A,color:#fff
+    classDef compute fill:#ED7100,stroke:#B35500,color:#1b1b1b
+    classDef database fill:#C925D1,stroke:#8F1A95,color:#fff
+    classDef management fill:#E7157B,stroke:#A50F58,color:#fff
+    class CLIENT client
+    class WAF,COGNITO security
+    class REST network
+    class CREATE,GET,DELETE,LAYER,LIST,LIST_ALIAS,CP,PRETOKEN compute
+    class DDB,IDEMPOTENCY database
+    class APPCONFIG management
 ```
+
+#### **Authentication**
+
+The API is protected with **Amazon Cognito** and the Powertools for AWS Lambda [JWT verifier](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.36.0) (`aws_lambda_powertools.utilities.auth_alpha.JWTVerifier`, alpha). Every order Lambda verifies the access token itself (signature, issuer, expiration, app client and audience, and the scope on delete), there is no API Gateway authorizer:
+
+| Route | Who can call it |
+| --- | --- |
+| `POST /api/orders`, `GET /api/orders`, `GET /api/orders/{order_id}` | Any signed in user (valid access token) |
+| `DELETE /api/orders/{order_id}` | Members of the `orders-managers` group (`orders/manage` scope) |
+
+* A missing or invalid token (an ID token too) returns `401`, a delete without the `orders/manage` scope returns `403`.
+* Orders belong to the user that created them (the access token `sub` claim). Users only get, delete and list their own orders, an order of another user returns `404`, for managers too. The orders table is keyed by `owner_id` and `id`, so listing is a `Query` of the caller's orders.
+* A Cognito **pre token generation** trigger (event version 2) adds the `aud` claim, and the `orders/manage` scope for members of `orders-managers`, to access tokens issued by the Cognito API, which the `JWTVerifier.cognito()` profile requires. Read about why in the [Authentication documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/).
+* The LIST function runs in the Lambda Managed Instances VPC without internet access, and the Cognito VPC endpoint does not serve the user pool public keys (JWKS). A deploy time custom resource fetches the JWKS and passes it to the LIST function in the `COGNITO_JWKS` environment variable, which the verifier uses instead of downloading it.
+* The integration and e2e tests create real users, sign them in to get **real access tokens** and delete the users when the test session ends. The identity that runs the tests needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.
 
 #### **LIST orders via AWS Lambda Managed Instances**
 
@@ -162,7 +189,7 @@ The `GET /api/orders/` endpoint is deliberately powered by
 environments on an EC2-backed capacity provider, so paginated list traffic
 avoids cold starts, runs inside a private VPC with DynamoDB and observability
 VPC endpoints, and can cap concurrency per environment (useful for bounding
-DynamoDB Scan pressure). The CRUD endpoints stay on standard Lambda — LMI is
+DynamoDB Query pressure). The CRUD endpoints stay on standard Lambda — LMI is
 picked per-function, only where its extra surface area pays off.
 
 See the
@@ -210,12 +237,16 @@ flowchart TB
     LAMBDA_ALARM --> LL
     DDB_ALARM --> LL
 
-    style HL fill:#4ecdc4,stroke:#333
-    style LL fill:#4ecdc4,stroke:#333
-    style SNS fill:#ff6b6b,stroke:#333
-    style API_ALARM fill:#ffe66d,stroke:#333
-    style LAMBDA_ALARM fill:#ffe66d,stroke:#333
-    style DDB_ALARM fill:#ffe66d,stroke:#333
+    classDef network fill:#8C4FFF,stroke:#5A30B5,color:#fff
+    classDef compute fill:#ED7100,stroke:#B35500,color:#1b1b1b
+    classDef database fill:#C925D1,stroke:#8F1A95,color:#fff
+    classDef management fill:#E7157B,stroke:#A50F58,color:#fff
+    classDef integration fill:#E7157B,stroke:#A50F58,color:#fff
+    class APIGW network
+    class LAMBDA compute
+    class DDB database
+    class HL,LL,API_ALARM,LAMBDA_ALARM,DDB_ALARM management
+    class SNS integration
 ```
 
 ### **Features**
@@ -233,6 +264,9 @@ flowchart TB
 * Features flags and configuration based on AWS AppConfig
 * Idempotent API
 * REST API protected by WAF with four AWS managed rules in production deployment
+* Amazon Cognito authentication, verified in the Lambdas by the Powertools JWT verifier: any signed in user can create, get and list orders, deleting requires the `orders/manage` scope
+* Per-user order ownership: users only get, delete and list their own orders (the access token `sub` claim is the owner)
+* Integration and end to end tests use real Cognito users and real access tokens, created and deleted by the tests
 * CloudWatch dashboards - High level and low level including CloudWatch alarms
 * Unit, infrastructure, security, integration and end to end tests.
 * Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
@@ -242,7 +276,7 @@ flowchart TB
 
 ## CDK Deployment
 
-The CDK code creates an API GW with paths /api/orders (POST) and /api/orders/{order_id} (GET, DELETE), each backed by a dedicated Lambda function.
+The CDK code creates an API GW with paths /api/orders (POST) and /api/orders/{order_id} (GET, DELETE), each backed by a dedicated Lambda function, and a Cognito user pool (with its app client, groups and pre token generation trigger) that protects them.
 
 The AWS Lambda handler uses a Lambda layer optimization which takes all the packages under the [packages] section in the Pipfile and downloads them in via a Docker instance.
 
@@ -256,17 +290,18 @@ Each utility is implemented when a new blog post is published about that utility
 
 The utilities cover multiple aspect of a production-ready service, including:
 
-* [Logging](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging/)
-* [Observability: Monitoring and Tracing](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability/)
-* [Observability: Business KPIs Metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/)
+* [API Idempotency](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/)
+* [Authentication & Authorization](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/)
+* [CDK Best practices](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/)
+* [Dynamic Configuration & feature flags](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices/)
 * [Environment Variables](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-environment-variables/)
 * [Input Validation](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-5-input-validation/)
-* [Dynamic Configuration & feature flags](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-6-feature-flags-configuration-best-practices/)
-* [Start Your AWS Serverless Service With Two Clicks](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project/)
-* [CDK Best practices](https://ranthebuilder.cloud/blog/aws-cdk-best-practices-from-the-trenches/)
+* [Logging](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-1-logging/)
+* [Observability: Business KPIs Metrics](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-3-business-domain-observability/)
+* [Observability: Monitoring and Tracing](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-elevate-your-handler-s-code-part-2-observability/)
 * [Serverless Monitoring](https://ranthebuilder.cloud/blog/how-to-effortlessly-monitor-serverless-applications-with-cloudwatch-part-one/)
-* [API Idempotency](https://ranthebuilder.cloud/blog/serverless-api-idempotency-with-aws-lambda-powertools-and-cdk/)
 * [Serverless OpenAPI Documentation with AWS Powertools](https://ranthebuilder.cloud/blog/serverless-open-api-documentation-with-aws-powertools/)
+* [Start Your AWS Serverless Service With Two Clicks](https://ranthebuilder.cloud/blog/aws-lambda-cookbook-part-7-how-to-use-the-aws-lambda-cookbook-github-template-project/)
 
 ## Getting started
 

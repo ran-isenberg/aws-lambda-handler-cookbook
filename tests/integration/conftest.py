@@ -14,7 +14,7 @@ from tests.utils import get_stack_output
 
 
 @pytest.fixture(scope='module', autouse=True)
-def init(table_name):
+def init(table_name, cognito_pool):
     os.environ[POWERTOOLS_SERVICE_NAME] = SERVICE_NAME
     os.environ[POWER_TOOLS_LOG_LEVEL] = 'DEBUG'
     os.environ['REST_API'] = 'https://www.ranthebuilder.cloud/api'
@@ -26,3 +26,6 @@ def init(table_name):
     os.environ['AWS_DEFAULT_REGION'] = 'us-east-1'  # used for appconfig mocked boto calls
     os.environ['TABLE_NAME'] = table_name
     os.environ['IDEMPOTENCY_TABLE_NAME'] = get_stack_output(IDEMPOTENCY_TABLE_NAME_OUTPUT)
+    # the handlers verify real Cognito access tokens (Powertools JWTVerifier) of the deployed user pool
+    os.environ['COGNITO_USER_POOL_ID'] = cognito_pool.user_pool_id
+    os.environ['COGNITO_CLIENT_ID'] = cognito_pool.client_id

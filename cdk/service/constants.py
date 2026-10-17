@@ -5,7 +5,7 @@ CREATE_LAMBDA = 'CreateOrder'
 GET_LAMBDA = 'GetOrder'
 DELETE_LAMBDA = 'DeleteOrder'
 LIST_LAMBDA = 'ListOrders'
-TABLE_NAME = 'orders'
+TABLE_NAME = 'OrdersByOwner'  # partitioned by owner_id; a key schema change needs a new name, CloudFormation can't replace a named table
 IDEMPOTENCY_TABLE_NAME = 'Idempotency'
 TABLE_NAME_OUTPUT = 'DbOutput'
 IDEMPOTENCY_TABLE_NAME_OUTPUT = 'IdempotencyDbOutput'
@@ -32,6 +32,15 @@ COMMON_LAYER_BUILD_FOLDER = '.build/common_layer'
 ENVIRONMENT = 'dev'
 CONFIGURATION_NAME = 'my_conf'
 CONFIGURATION_MAX_AGE_MINUTES = '5'  # time to store app config conf in the cache before refetching it
+
+# Authentication (Cognito + Powertools JWTVerifier)
+USER_POOL_ID_OUTPUT = 'UserPoolIdOutput'
+USER_POOL_CLIENT_ID_OUTPUT = 'UserPoolClientIdOutput'
+PRE_TOKEN_LAMBDA = 'PreTokenGeneration'
+FETCH_JWKS_LAMBDA = 'FetchUserPoolJwks'
+USER_POOL_JWKS_RESOURCE = 'UserPoolJwks'
+MANAGERS_GROUP = 'orders-managers'  # members can delete orders; every signed in user can create, get and list their own orders
+MANAGE_SCOPE = 'orders/manage'
 
 # Lambda Managed Instances
 MANAGED_INSTANCE_LAMBDA = 'ManagedInstanceOrder'

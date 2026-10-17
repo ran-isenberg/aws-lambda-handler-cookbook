@@ -56,10 +56,14 @@ flowchart LR
     ENV2 --> DDB_EP
     DDB_EP --> DDB
 
-    style CP fill:#ff6b6b,stroke:#333
-    style FN fill:#ffe66d,stroke:#333
-    style ALIAS fill:#4ecdc4,stroke:#333
-    style DDB fill:#4a90d9,stroke:#333
+    classDef network fill:#8C4FFF,stroke:#5A30B5,color:#fff
+    classDef security fill:#DD344C,stroke:#A3233A,color:#fff
+    classDef compute fill:#ED7100,stroke:#B35500,color:#1b1b1b
+    classDef database fill:#C925D1,stroke:#8F1A95,color:#fff
+    class SG security
+    class APIGW,DDB_EP,LOGS_EP,XRAY_EP network
+    class ALIAS,FN,CP,ENV1,ENV2,ENV3 compute
+    class DDB database
 ```
 
 Two CDK pieces cooperate:
