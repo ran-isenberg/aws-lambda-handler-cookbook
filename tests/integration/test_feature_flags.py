@@ -74,7 +74,7 @@ def spy_on_premium_logic(mocker):
     return mocker.spy(cr, 'apply_premium_user_discount')
 
 
-def test_handler_campaign_on_200_ok(mocker):
+def test_handler_campaign_on_200_ok(mocker, member_headers):
     # Given: A mocked dynamic configuration with campaign ON and a valid order request.
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_ON)
     campaign_logic_spy = spy_on_campaign_logic(mocker)
@@ -83,14 +83,14 @@ def test_handler_campaign_on_200_ok(mocker):
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
 
     # When: The order creation lambda_handler is called
-    response = call_create_order(generate_api_gw_event(body.model_dump()))
+    response = call_create_order(generate_api_gw_event(body.model_dump(), member_headers))
 
     # Then: Validate the response and ensure the campaign logic was executed.
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
     assert campaign_logic_spy.call_count == 1
 
 
-def test_handler_campaign_off_200_ok(mocker):
+def test_handler_campaign_off_200_ok(mocker, member_headers):
     # Given: A mocked dynamic configuration with campaign OFF and a valid order request.
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_OFF)
     campaign_logic_spy = spy_on_campaign_logic(mocker)
@@ -99,14 +99,14 @@ def test_handler_campaign_off_200_ok(mocker):
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
 
     # When: The order creation lambda_handler is called
-    response = call_create_order(generate_api_gw_event(body.model_dump()))
+    response = call_create_order(generate_api_gw_event(body.model_dump(), member_headers))
 
     # Then: Validate the response and ensure the campaign logic was not executed.
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
     assert campaign_logic_spy.call_count == 0
 
 
-def test_handler_premium_on_200_ok(mocker, monkeypatch):
+def test_handler_premium_on_200_ok(mocker, monkeypatch, member_headers):
     # Given: A mocked dynamic configuration with premium ON and a valid order request.
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_ON)
     # Set POWERTOOLS_IDEMPOTENCY_DISABLED before calling decorated functions
@@ -117,14 +117,14 @@ def test_handler_premium_on_200_ok(mocker, monkeypatch):
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
 
     # When: The order creation lambda_handler is called
-    response = call_create_order(generate_api_gw_event(body.model_dump()))
+    response = call_create_order(generate_api_gw_event(body.model_dump(), member_headers))
 
     # Then: Validate the response and ensure the premium logic was executed.
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)
     assert premium_logic_spy.call_count == 1
 
 
-def test_handler_premium_off_200_ok(mocker):
+def test_handler_premium_off_200_ok(mocker, member_headers):
     # Given: A mocked dynamic configuration with premium OFF and a valid order request.
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA_CAMPAIGN_ON)
     premium_logic_spy = spy_on_premium_logic(mocker)
@@ -133,7 +133,7 @@ def test_handler_premium_off_200_ok(mocker):
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
 
     # When: The order creation lambda_handler is called
-    response = call_create_order(generate_api_gw_event(body.model_dump()))
+    response = call_create_order(generate_api_gw_event(body.model_dump(), member_headers))
 
     # Then: Validate the response and ensure the premium logic was not executed.
     assert_response(response, HTTPStatus.OK, customer_name, order_item_count)

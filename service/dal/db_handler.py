@@ -15,13 +15,13 @@ class _SingletonMeta(ABCMeta):
 # data access handler / integration later adapter class
 class DalHandler(ABC, metaclass=_SingletonMeta):
     @abstractmethod
-    def create_order_in_db(self, customer_name: str, order_item_count: int) -> Order: ...  # pragma: no cover
+    def create_order_in_db(self, owner_id: str, customer_name: str, order_item_count: int) -> Order: ...  # pragma: no cover
 
     @abstractmethod
-    def get_order_from_db(self, order_id: str) -> Order: ...  # pragma: no cover
+    def get_order_from_db(self, owner_id: str, order_id: str) -> Order: ...  # pragma: no cover
 
     @abstractmethod
-    def delete_order_from_db(self, order_id: str) -> None: ...  # pragma: no cover
+    def delete_order_from_db(self, owner_id: str, order_id: str) -> None: ...  # pragma: no cover
 
     @abstractmethod
-    def list_orders_from_db(self, limit: int, next_token: str | None) -> tuple[list[Order], str | None]: ...  # pragma: no cover
+    def list_orders_from_db(self, owner_id: str, limit: int, next_token: str | None) -> tuple[list[Order], str | None]: ...  # pragma: no cover

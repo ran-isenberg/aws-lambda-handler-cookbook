@@ -86,9 +86,8 @@ flowchart LR
     QS -->|Success| Tests
     Tests -->|Success| D[Ready to Merge]
 
-    style QS fill:#e1f5fe
-    style Tests fill:#fff3e0
-    style D fill:#c8e6c9
+    classDef success fill:#2E7D32,stroke:#1B5E20,color:#fff
+    class D success
 ```
 
 <p class="mermaid-hint">Click diagram to zoom</p>
@@ -143,11 +142,6 @@ flowchart LR
     Trigger --> Staging
     Staging -->|Success| Production
     Production -->|Success| Parallel
-
-    style Staging fill:#fff3e0
-    style Production fill:#ffebee
-    style Docs fill:#e8f5e9
-    style Release fill:#e3f2fd
 ```
 
 <p class="mermaid-hint">Click diagram to zoom</p>

@@ -63,19 +63,18 @@ flowchart LR
     DELETE --> DDB
     LIST --> DDB
 
-    style CLIENT fill:#f9f,stroke:#333
-    style WAF fill:#ff6b6b,stroke:#333
-    style REST fill:#4ecdc4,stroke:#333
-    style CREATE fill:#ffe66d,stroke:#333
-    style GET fill:#ffe66d,stroke:#333
-    style DELETE fill:#ffe66d,stroke:#333
-    style LAYER fill:#ffe66d,stroke:#333
-    style LIST fill:#ffa500,stroke:#333
-    style LIST_ALIAS fill:#4ecdc4,stroke:#333
-    style CP fill:#ff6b6b,stroke:#333
-    style APPCONFIG fill:#95e1d3,stroke:#333
-    style DDB fill:#4a90d9,stroke:#333
-    style IDEMPOTENCY fill:#4a90d9,stroke:#333
+    classDef client fill:#232F3E,stroke:#232F3E,color:#fff
+    classDef network fill:#8C4FFF,stroke:#5A30B5,color:#fff
+    classDef security fill:#DD344C,stroke:#A3233A,color:#fff
+    classDef compute fill:#ED7100,stroke:#B35500,color:#1b1b1b
+    classDef database fill:#C925D1,stroke:#8F1A95,color:#fff
+    classDef management fill:#E7157B,stroke:#A50F58,color:#fff
+    class CLIENT client
+    class WAF security
+    class REST network
+    class CREATE,GET,DELETE,LAYER,LIST,LIST_ALIAS,CP compute
+    class DDB,IDEMPOTENCY database
+    class APPCONFIG management
 ```
 
 <p class="mermaid-hint">Click diagram to zoom</p>

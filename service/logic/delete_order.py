@@ -5,9 +5,9 @@ from service.models.output import DeleteOrderOutput
 
 
 @tracer.capture_method(capture_response=False)
-def delete_order(order_id: str, table_name: str) -> DeleteOrderOutput:
+def delete_order(owner_id: str, order_id: str, table_name: str) -> DeleteOrderOutput:
     logger.info('starting to handle delete order request', order_id=order_id)
 
     dal_handler: DalHandler = get_dal_handler(table_name)
-    dal_handler.delete_order_from_db(order_id)
+    dal_handler.delete_order_from_db(owner_id, order_id)
     return DeleteOrderOutput(order_id=order_id)

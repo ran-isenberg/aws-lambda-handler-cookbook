@@ -46,7 +46,7 @@ def call_create_order(body: dict[str, Any]) -> dict[str, Any]:
     return lambda_handler(body, generate_context())
 
 
-def test_handler_200_ok(mocker, table_name: str, tracked_order_ids: list[str]):
+def test_handler_200_ok(mocker, table_name: str, tracked_orders: list[tuple[str, str]], member_user, member_headers):
     # Given: Dynamic configuration is mocked and a valid order creation request
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
     customer_name = f'{generate_random_string()}-RanTheBuilder'
@@ -54,20 +54,20 @@ def test_handler_200_ok(mocker, table_name: str, tracked_order_ids: list[str]):
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
 
     # When: The order creation lambda_handler is called
-    response = call_create_order(generate_api_gw_event(body.model_dump()))
+    response = call_create_order(generate_api_gw_event(body.model_dump(), member_headers))
 
     # Then: Validate the response and data in DynamoDB table
     assert response['statusCode'] == HTTPStatus.OK
     body_dict = json.loads(response['body'])
     assert body_dict['id']
-    tracked_order_ids.append(body_dict['id'])
+    tracked_orders.append((member_user.sub, body_dict['id']))
     assert body_dict['name'] == customer_name
     assert body_dict['item_count'] == 5
 
     # Use pydynox to verify the item was saved correctly
     db_handler = DynamoDalHandler(table_name)
     OrderEntryModel = db_handler._get_order_model()
-    saved_order = OrderEntryModel.sync_get(id=body_dict['id'])
+    saved_order = OrderEntryModel.sync_get(owner_id=member_user.sub, id=body_dict['id'])
     assert saved_order is not None
     assert saved_order.name == customer_name
     assert saved_order.item_count == order_item_count
@@ -75,7 +75,7 @@ def test_handler_200_ok(mocker, table_name: str, tracked_order_ids: list[str]):
     assert now - saved_order.created_at <= 60  # assume item was created in last minute, check that utc time calc is correct
 
 
-def test_internal_server_error(mocker, table_name: str):
+def test_internal_server_error(mocker, table_name: str, member_headers):
     # Given: Dynamic configuration and a simulated error during DB interaction
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
 
@@ -85,7 +85,7 @@ def test_internal_server_error(mocker, table_name: str):
     body = CreateOrderRequest(customer_name='RanTheBuilder', order_item_count=5)
 
     # When: The order creation lambda_handler is called
-    response = call_create_order(generate_api_gw_event(body.model_dump()))
+    response = call_create_order(generate_api_gw_event(body.model_dump(), member_headers))
 
     # Then: Ensure the response reflects an internal server error
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR
@@ -93,12 +93,12 @@ def test_internal_server_error(mocker, table_name: str):
     assert body_dict == {'error': 'internal server error'}
 
 
-def test_handler_bad_request(mocker):
+def test_handler_bad_request(mocker, member_headers):
     # Given: Dynamic configuration is mocked and an invalid order request is prepared
     mock_dynamic_configuration(mocker, MOCKED_SCHEMA)
 
     # When: The order creation lambda_handler is called with invalid input
-    response = call_create_order(generate_api_gw_event({'order_item_count': 5}))
+    response = call_create_order(generate_api_gw_event({'order_item_count': 5}, member_headers))
 
     # Then: Validate the response is a unprocessable entity and error message is correct
     assert response['statusCode'] == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -106,7 +106,7 @@ def test_handler_bad_request(mocker):
     assert body_dict.get('detail') == [{'loc': ['body', 'customer_name'], 'type': 'missing'}]
 
 
-def test_handler_failed_appconfig_fetch(mocker):
+def test_handler_failed_appconfig_fetch(mocker, member_headers):
     # Given: Simulated failure during AppConfig fetch and a valid order request
     mock_exception_dynamic_configuration(mocker)
     customer_name = f'{generate_random_string()}-RanTheBuilder'
@@ -114,7 +114,7 @@ def test_handler_failed_appconfig_fetch(mocker):
     body = CreateOrderRequest(customer_name=customer_name, order_item_count=order_item_count)
 
     # When: The order creation lambda_handler is called
-    response = call_create_order(generate_api_gw_event(body.model_dump()))
+    response = call_create_order(generate_api_gw_event(body.model_dump(), member_headers))
 
     # Then: Validate the response indicates an internal server error and error message
     assert response['statusCode'] == HTTPStatus.INTERNAL_SERVER_ERROR

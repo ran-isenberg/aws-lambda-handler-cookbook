@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aws_lambda_handler_cookbook"
-version = "10.0"
+version = "11.0"
 description = "This repository provides a working, deployable, open source based, AWS Lambda handler and CDK Python code. This handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler"
 authors = [{name = "Ran Isenberg"}]
 classifiers = [
@@ -21,7 +21,7 @@ requires-python = ">=3.14"
 dependencies = [
     "pydantic>=2.12.0",
     "email-validator",
-    "aws-lambda-powertools[tracer]>=3.22.1",
+    "aws-lambda-powertools[tracer,jwt]>=3.36.0",
     "pydynox[pydantic]>=0.22.0",
     "cachetools",
     "boto3>=1.26.125",
@@ -108,6 +108,8 @@ exclude = [
 # Same as Black.
 line-length = 150
 indent-width = 4
+# apply the excludes to the files pre-commit passes explicitly as well
+force-exclude = true
 
 # Assume Python 3.14
 target-version = "py314"
@@ -125,6 +127,8 @@ select = [
 ignore = [ "E203", "E266", "E501", "W191"]
 
 [tool.ruff.format]
+# ruff formats python code blocks in markdown, which breaks the docs snippet includes (--8<-- "path")
+exclude = ["*.md"]
 quote-style = "single"
 
 # Like Black, indent with spaces, rather than tabs.

@@ -6,13 +6,13 @@ import requests
 from tests.utils import generate_random_string
 
 
-def test_handler_200_ok(api_gw_url, order_factory):
-    # Given: An existing order created via the factory
+def test_handler_200_ok(api_gw_url, order_factory, member_user, member_headers):
+    # Given: An existing order of the caller created via the factory
     customer_name = f'{generate_random_string()}-RanTheBuilder'
-    created_order = order_factory(customer_name, 5)
+    created_order = order_factory(member_user, customer_name, 5)
 
     # When: Making a GET request to /api/orders with a generous limit
-    response = requests.get(api_gw_url, params={'limit': 100})
+    response = requests.get(api_gw_url, params={'limit': 100}, headers=member_headers)
 
     # Then: The response is 200 and contains the created order
     assert response.status_code == HTTPStatus.OK
@@ -23,20 +23,20 @@ def test_handler_200_ok(api_gw_url, order_factory):
     assert created_order['id'] in ids
 
 
-def test_handler_pagination_round_trip(api_gw_url, order_factory):
+def test_handler_pagination_round_trip(api_gw_url, order_factory, member_user, member_headers):
     # Given: Two orders exist (create them to guarantee at least two pages with limit=1)
     for _ in range(2):
-        order_factory(f'{generate_random_string()}-RanTheBuilder', 1)
+        order_factory(member_user, f'{generate_random_string()}-RanTheBuilder', 1)
 
     # When: Fetching the first page with limit=1
-    first = requests.get(api_gw_url, params={'limit': 1})
+    first = requests.get(api_gw_url, params={'limit': 1}, headers=member_headers)
     assert first.status_code == HTTPStatus.OK
     first_body = json.loads(first.text)
     assert len(first_body['orders']) == 1
     assert first_body['next_token']
 
     # And: Passing next_token to fetch the second page
-    second = requests.get(api_gw_url, params={'limit': 1, 'next_token': first_body['next_token']})
+    second = requests.get(api_gw_url, params={'limit': 1, 'next_token': first_body['next_token']}, headers=member_headers)
 
     # Then: The second page loads and returns a different order
     assert second.status_code == HTTPStatus.OK
@@ -46,9 +46,9 @@ def test_handler_pagination_round_trip(api_gw_url, order_factory):
         assert second_body['orders'][0]['id'] != first_body['orders'][0]['id']
 
 
-def test_handler_invalid_next_token(api_gw_url):
+def test_handler_invalid_next_token(api_gw_url, member_headers):
     # When: Calling list with a malformed next_token
-    response = requests.get(api_gw_url, params={'next_token': 'not-valid-base64!!!'})
+    response = requests.get(api_gw_url, params={'next_token': 'not-valid-base64!!!'}, headers=member_headers)
 
     # Then: The API responds with 400 Bad Request
     assert response.status_code == HTTPStatus.BAD_REQUEST

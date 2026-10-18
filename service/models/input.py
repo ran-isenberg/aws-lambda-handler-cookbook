@@ -15,3 +15,12 @@ class CreateOrderRequest(BaseModel):
         if v <= 0:
             raise ValueError('order_item_count must be larger than 0')
         return v
+
+
+class OwnedCreateOrderRequest(CreateOrderRequest):
+    """A create order request and the user that makes it (internal, not part of the API body).
+
+    The owner is part of the idempotency key: the same body sent by two users creates two orders.
+    """
+
+    owner_id: Annotated[str, Field(min_length=1, description='The id (access token sub claim) of the user that owns the order')]

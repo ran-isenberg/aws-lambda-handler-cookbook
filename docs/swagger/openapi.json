@@ -16,7 +16,7 @@
           "CRUD"
         ],
         "summary": "Get an order",
-        "description": "Get an order by its ID",
+        "description": "Get an order of the caller by its ID",
         "operationId": "handle_get_order_api_orders__order_id__get",
         "parameters": [
           {
@@ -51,7 +51,7 @@
             }
           },
           "404": {
-            "description": "Order not found",
+            "description": "Order not found (or owned by another user)",
             "content": {
               "application/json": {
                 "schema": {
@@ -69,15 +69,30 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedOutput"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "CRUD"
         ],
         "summary": "Delete an order",
-        "description": "Delete an order by its ID",
+        "description": "Delete an order of the caller by its ID",
         "operationId": "handle_delete_order_api_orders__order_id__delete",
         "parameters": [
           {
@@ -112,7 +127,7 @@
             }
           },
           "404": {
-            "description": "Order not found",
+            "description": "Order not found (or owned by another user)",
             "content": {
               "application/json": {
                 "schema": {
@@ -130,8 +145,33 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedOutput"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The access token does not have the orders/manage scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenOutput"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/api/orders": {
@@ -140,7 +180,7 @@
           "CRUD"
         ],
         "summary": "List orders",
-        "description": "List orders with pagination. Pass the returned next_token to fetch the next page.",
+        "description": "List the caller's orders with pagination. Pass the returned next_token to fetch the next page.",
         "operationId": "handle_list_orders_api_orders_get",
         "parameters": [
           {
@@ -216,15 +256,30 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedOutput"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": [
           "CRUD"
         ],
         "summary": "Create an order",
-        "description": "Create an order identified by the body payload",
+        "description": "Create an order identified by the body payload, owned by the caller",
         "operationId": "handle_create_order_api_orders_post",
         "requestBody": {
           "content": {
@@ -266,8 +321,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Missing or invalid access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedOutput"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -338,6 +408,18 @@
           "order_id"
         ],
         "title": "DeleteOrderOutput"
+      },
+      "ForbiddenOutput": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Error description",
+            "default": "Forbidden"
+          }
+        },
+        "type": "object",
+        "title": "ForbiddenOutput"
       },
       "GetOrderOutput": {
         "properties": {
@@ -477,6 +559,18 @@
         "type": "object",
         "title": "OrderNotFoundOutput"
       },
+      "UnauthorizedOutput": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Error description",
+            "default": "Unauthorized"
+          }
+        },
+        "type": "object",
+        "title": "UnauthorizedOutput"
+      },
       "ValidationError": {
         "properties": {
           "loc": {
@@ -518,6 +612,14 @@
         },
         "type": "object",
         "title": "ResponseValidationError"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "Amazon Cognito access token sent as: Authorization: Bearer <token>",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

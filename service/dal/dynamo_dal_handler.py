@@ -27,8 +27,8 @@ class DynamoDalHandler(DalHandler):
             A pydynox-decorated Pydantic model class bound to the table.
         """
         if self._order_model is None:
-
-            @dynamodb_model(table=self.table_name, partition_key='id', client=self._client)
+            # orders are partitioned by their owner: a user can only reach their own orders, and listing them is a Query
+            @dynamodb_model(table=self.table_name, partition_key='owner_id', sort_key='id', client=self._client)
             class DynamoOrderEntry(OrderEntry):
                 pass
 
@@ -39,12 +39,13 @@ class DynamoDalHandler(DalHandler):
         return int(datetime.now(timezone.utc).timestamp())
 
     @tracer.capture_method(capture_response=False)
-    def create_order_in_db(self, customer_name: str, order_item_count: int) -> Order:
+    def create_order_in_db(self, owner_id: str, customer_name: str, order_item_count: int) -> Order:
         order_id = str(uuid.uuid4())
         logger.append_keys(order_id=order_id)
         logger.info('trying to save order', customer_name=customer_name, order_item_count=order_item_count)
         try:
             entry = self._get_order_model()(
+                owner_id=owner_id,
                 id=order_id,
                 name=customer_name,
                 item_count=order_item_count,
@@ -60,10 +61,11 @@ class DynamoDalHandler(DalHandler):
         return Order(id=entry.id, name=entry.name, item_count=entry.item_count)
 
     @tracer.capture_method(capture_response=False)
-    def get_order_from_db(self, order_id: str) -> Order:
+    def get_order_from_db(self, owner_id: str, order_id: str) -> Order:
         logger.info('trying to get order')
         try:
-            entry = self._get_order_model().sync_get(id=order_id)
+            # an order of another user is not found, just like an order that does not exist
+            entry = self._get_order_model().sync_get(owner_id=owner_id, id=order_id)
         except (ValidationError, Exception) as exc:  # pragma: no cover
             error_msg = 'failed to get order'
             logger.exception(error_msg)
@@ -77,11 +79,11 @@ class DynamoDalHandler(DalHandler):
         return Order(id=entry.id, name=entry.name, item_count=entry.item_count)
 
     @tracer.capture_method(capture_response=False)
-    def delete_order_from_db(self, order_id: str) -> None:
+    def delete_order_from_db(self, owner_id: str, order_id: str) -> None:
         logger.info('trying to delete order')
-        # first verify order exists
+        # first verify order exists and belongs to the caller
         try:
-            entry = self._get_order_model().sync_get(id=order_id)
+            entry = self._get_order_model().sync_get(owner_id=owner_id, id=order_id)
         except (ValidationError, Exception) as exc:  # pragma: no cover
             error_msg = 'failed to delete order'
             logger.exception(error_msg)
@@ -101,14 +103,18 @@ class DynamoDalHandler(DalHandler):
         logger.info('finished delete order successfully')
 
     @tracer.capture_method(capture_response=False)
-    def list_orders_from_db(self, limit: int, next_token: str | None) -> tuple[list[Order], str | None]:
+    def list_orders_from_db(self, owner_id: str, limit: int, next_token: str | None) -> tuple[list[Order], str | None]:
         logger.info('trying to list orders', limit=limit, has_next_token=next_token is not None)
-        exclusive_start_key = self._decode_next_token(next_token)
+        exclusive_start_key = self._decode_next_token(next_token, owner_id)
         try:
-            result = self._client.sync_scan(
+            result = self._client.sync_query(
                 table=self.table_name,
+                key_condition_expression='#owner_id = :owner_id',
+                expression_attribute_names={'#owner_id': 'owner_id'},
+                expression_attribute_values={':owner_id': owner_id},
                 limit=limit,
                 last_evaluated_key=exclusive_start_key,
+                consistent_read=True,  # an order the user just created is listed
             )
             items = list(result)
             last_evaluated_key = result.last_evaluated_key
@@ -129,10 +135,19 @@ class DynamoDalHandler(DalHandler):
         return base64.urlsafe_b64encode(json.dumps(last_evaluated_key).encode()).decode()
 
     @staticmethod
-    def _decode_next_token(next_token: str | None) -> dict[str, Any] | None:
+    def _decode_next_token(next_token: str | None, owner_id: str) -> dict[str, Any] | None:
         if not next_token:
             return None
         try:
-            return json.loads(base64.urlsafe_b64decode(next_token.encode()).decode())
+            start_key = json.loads(base64.urlsafe_b64decode(next_token.encode()).decode())
         except Exception as exc:
             raise InvalidNextTokenException('invalid next_token') from exc
+        # a next_token of another user (or a forged one) must not start the query in another partition
+        if (
+            not isinstance(start_key, dict)
+            or start_key.keys() != {'owner_id', 'id'}
+            or start_key['owner_id'] != owner_id
+            or not isinstance(start_key['id'], str)
+        ):
+            raise InvalidNextTokenException('invalid next_token')
+        return start_key

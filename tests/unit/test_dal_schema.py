@@ -8,6 +8,7 @@ from service.dal.models.db import OrderEntry
 
 order_id = str(uuid.uuid4())
 created_at = int(datetime.now(timezone.utc).timestamp())
+owner_id = 'owner-sub-1'
 
 
 def test_invalid_items_type():
@@ -17,7 +18,7 @@ def test_invalid_items_type():
 
     # When & Then: OrderEntry is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
-        OrderEntry(id=order_id, name=customer_name, item_count=order_item_count, created_at=created_at)
+        OrderEntry(owner_id=owner_id, id=order_id, name=customer_name, item_count=order_item_count, created_at=created_at)
 
 
 def test_invalid_items_negative():
@@ -27,7 +28,7 @@ def test_invalid_items_negative():
 
     # When & Then: OrderEntry is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
-        OrderEntry(id=order_id, name=customer_name, item_count=order_item_count, created_at=created_at)
+        OrderEntry(owner_id=owner_id, id=order_id, name=customer_name, item_count=order_item_count, created_at=created_at)
 
 
 def test_invalid_items_zero():
@@ -37,7 +38,7 @@ def test_invalid_items_zero():
 
     # When & Then: OrderEntry is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
-        OrderEntry(id=order_id, name=customer_name, item_count=order_item_count, created_at=created_at)
+        OrderEntry(owner_id=owner_id, id=order_id, name=customer_name, item_count=order_item_count, created_at=created_at)
 
 
 def test_invalid_order_id():
@@ -48,7 +49,7 @@ def test_invalid_order_id():
 
     # When & Then: OrderEntry is initialized, expect a ValidationError
     with pytest.raises(ValidationError):
-        OrderEntry(id=order_id_invalid, name=customer_name, item_count=order_item_count, created_at=created_at)
+        OrderEntry(owner_id=owner_id, id=order_id_invalid, name=customer_name, item_count=order_item_count, created_at=created_at)
 
 
 def test_valid_output():
@@ -58,4 +59,12 @@ def test_valid_output():
 
     # When: OrderEntry is initialized
     # Then: No exception should be raised
-    OrderEntry(id=order_id, name=customer_name, item_count=order_item_count, created_at=created_at)
+    OrderEntry(owner_id=owner_id, id=order_id, name=customer_name, item_count=order_item_count, created_at=created_at)
+
+
+@pytest.mark.parametrize('owner', [None, ''])
+def test_invalid_owner_id(owner):
+    # Given: A missing or empty owner_id (the table partition key)
+    # When & Then: OrderEntry is initialized, expect a ValidationError
+    with pytest.raises(ValidationError):
+        OrderEntry(owner_id=owner, id=order_id, name='222', item_count=4, created_at=created_at)
