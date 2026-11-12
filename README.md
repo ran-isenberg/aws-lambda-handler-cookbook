@@ -257,7 +257,7 @@ flowchart TB
 * Python Serverless service with a recommended file structure.
 * CDK infrastructure with infrastructure tests and security tests.
 * CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
-* CI/CD pipeline order: quality checks → unit, infrastructure and integration tests (local AWS Emulator, no AWS credentials) → deploy → E2E tests, so a failing test stops the pipeline before anything is deployed.
+* CI/CD pipeline order: quality checks → unit, infrastructure and integration tests (local AWS Emulator, no AWS credentials) → deploy → E2E tests, so a failing check or test stops the pipeline before anything is deployed. On pull requests, the quality checks and the tests run in one job, so the setup runs once.
 * CI/CD pipeline deploys to dev/staging and production environments with different gates between each environment
 * Automatic GitHub releases with semantic versioning based on conventional commits
 * Automatic PR labeling based on commit message prefixes (feat, fix, docs, chore)

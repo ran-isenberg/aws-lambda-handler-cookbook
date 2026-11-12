@@ -17,8 +17,15 @@ on:
     branches: [main]
 
 jobs:
-  quality_standards:
-    runs-on: ubuntu-24.04-arm
+  # Quality checks, then unit, infrastructure and integration tests, the integration tests against a local AWS Emulator:
+  # no AWS credentials. One job, so the setup (checkout, uv, Python, Node, dependencies) runs once.
+  quality_and_integration:
+    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
+    environment: dev # only for the CODECOV_TOKEN environment secret: without id-token: write the job can't assume the AWS role
+    permissions:
+      contents: read
+    env:
+      AWS_DEFAULT_REGION: "us-east-1" # botocore does not read AWS_REGION
     steps:
       - run: |
           echo "🎉 The job was automatically triggered by a ${{ env.EVENT_NAME }} event." >> $GITHUB_STEP_SUMMARY
@@ -38,6 +45,11 @@ jobs:
           enable-cache: true
       - name: Set up Python
         run: uv python install ${{ env.PYTHON_VERSION }}
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
       - name: Install dependencies
         run: make dev
       - name: pre commit
@@ -46,31 +58,6 @@ jobs:
         run: make lint
       - name: Complexity scan
         run: make complex
-  # Unit, infrastructure and integration tests, the integration tests against a local AWS Emulator: no AWS credentials.
-  integration:
-    needs: quality_standards
-    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
-    environment: dev # only for the CODECOV_TOKEN environment secret: without id-token: write the job can't assume the AWS role
-    permissions:
-      contents: read
-    env:
-      AWS_DEFAULT_REGION: "us-east-1" # botocore does not read AWS_REGION
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Install uv
-        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
-        with:
-          enable-cache: true
-      - name: Set up Python
-        run: uv python install ${{ env.PYTHON_VERSION }}
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-      - name: Install dependencies
-        run: make dev
       # The AWS Emulator publishes only an LTS/latest package URL (no versioned download), see .claude/skills/aws-emulator
       - name: Install AWS Emulator
         run: |
@@ -101,7 +88,7 @@ jobs:
         run: make emulator-stop
 
   deploy_and_e2e:
-    needs: integration
+    needs: quality_and_integration
     runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
     environment: dev
     permissions:

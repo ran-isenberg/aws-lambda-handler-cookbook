@@ -60,18 +60,12 @@ flowchart LR
         A[PR Created]
     end
 
-    subgraph QS["quality_standards"]
+    subgraph Integration["quality_and_integration (dev environment, no AWS credentials)"]
         direction TB
-        B1[Checkout] --> B2[Install uv & Python]
-        B2 --> B3[Install Dependencies]
-        B3 --> B4[Pre-commit Checks]
-        B4 --> B5[Linting & Formatting]
-        B5 --> B6[Complexity Scan]
-    end
-
-    subgraph Integration["integration (no AWS credentials)"]
-        direction TB
-        I1[Checkout & Setup] --> I2[Install & Start AWS Emulator]
+        I0[Checkout & Setup] --> Q1[Pre-commit Checks]
+        Q1 --> Q2[Linting & Formatting]
+        Q2 --> Q3[Complexity Scan]
+        Q3 --> I2[Install & Start AWS Emulator]
         I2 --> I3[Unit Tests]
         I3 --> I4[Infrastructure Tests]
         I4 --> I5[Coverage Tests: unit + integration]
@@ -87,8 +81,7 @@ flowchart LR
         C5 --> C6[Destroy Stack]
     end
 
-    PR --> QS
-    QS -->|Success| Integration
+    PR --> Integration
     Integration -->|Success| Tests
     Tests -->|Success| D[Ready to Merge]
 
@@ -100,11 +93,11 @@ flowchart LR
 
 `pr-serverless-service` runs for every pull request you open. It expects you defined a GitHub environments by the name `dev`, `staging` and `production` and for each environments to have the following variables: `CODECOV_TOKEN` for CodeCov integration and `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
 
-It includes three jobs: 'quality_standards', 'integration' and 'deploy_and_e2e'. Each job runs only if the previous one passed, and all of them MUST pass in order to be able to merge.
+It includes two jobs: 'quality_and_integration' and 'deploy_and_e2e'. 'deploy_and_e2e' runs only if 'quality_and_integration' passed, and both MUST pass in order to be able to merge.
 
-'quality_standards' includes all linters and pre-commit checks.
+'quality_and_integration' runs all linters and pre-commit checks, then the unit, infrastructure and integration tests with code coverage. It is one job so the setup (checkout, uv, Python, Node and dependencies) runs once.
 
-'integration' runs the unit, infrastructure and integration tests with code coverage. The integration tests run against a local [AWS Emulator](https://docs.aws.amazon.com/emulator/latest/userguide/){:target="_blank" rel="noopener"} installed on the runner, so this job has no AWS credentials, and a failing test stops the pipeline before anything is deployed.
+The integration tests run against a local [AWS Emulator](https://docs.aws.amazon.com/emulator/latest/userguide/){:target="_blank" rel="noopener"} installed on the runner, so this job has no AWS credentials, and a failing test stops the pipeline before anything is deployed.
 
 The job fails if the emulator does not report its telemetry as disabled.
 
@@ -168,12 +161,12 @@ flowchart LR
 
 It includes the jobs 'integration', 'staging', 'production', 'publish_github_pages' and 'create_release'.
 
-'integration' is the same job as in the PR pipeline: unit, infrastructure and integration tests against a local AWS Emulator, with code coverage and no AWS credentials.
+'integration' runs the same tests as the PR pipeline's 'quality_and_integration' job, without the quality checks (they already passed on the PR): unit, infrastructure and integration tests against a local AWS Emulator, with code coverage and no AWS credentials.
 
-'staging' does not run any of the 'quality_standards' checks, since they were already checked before the code was merged. It deploys and runs the E2E tests. Stack is not deleted. Stack has a 'staging' prefix as part of its name.
+'staging' does not run any of the quality checks, since they were already checked before the code was merged. It deploys and runs the E2E tests. Stack is not deleted. Stack has a 'staging' prefix as part of its name.
 Any failure in staging will stop the pipeline and production environment will not get updated with the new code.
 
-'production' does not run any of the 'quality_standards' checks, since they were already checked before the code was merged. It does not run any test at the moment. Stack is not deleted. Stack has a 'production' prefix as part of its name.
+'production' does not run any of the quality checks, since they were already checked before the code was merged. It does not run any test at the moment. Stack is not deleted. Stack has a 'production' prefix as part of its name.
 
 ### **create_release**
 
