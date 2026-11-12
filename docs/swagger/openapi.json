@@ -595,7 +595,6 @@
         "type": "object",
         "required": [
           "loc",
-          "msg",
           "type"
         ],
         "title": "ValidationError"
