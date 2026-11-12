@@ -1,4 +1,4 @@
-.PHONY: dev lint mypy-lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format format-fix compare-openapi openapi pr watch update-deps emulator-install emulator-start emulator-run emulator-stop emulator-check
+.PHONY: dev lint mypy-lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format format-fix compare-openapi openapi pr watch update-deps emulator-install emulator-start emulator-run emulator-stop emulator-check publish-docs
 PYTHON := ".venv/bin/python3"
 
 EMULATOR_PORT ?= 9297
@@ -7,6 +7,9 @@ EMULATOR_CONTAINER := aws-emulator-$(EMULATOR_PORT)
 EMULATOR_DIR := $(HOME)/.aws/emulator/$(EMULATOR_PORT)
 EMULATOR_LOG := $(HOME)/.aws/emulator/$(EMULATOR_PORT).log
 EMULATOR_CONFIG := $(CURDIR)/emulator/config.toml
+# Linux (CI): the Debian package installs here and doesn't add itself to PATH. Only an LTS/latest URL is published.
+EMULATOR_BIN := /opt/aws-emulator/bin/aws-emulator
+EMULATOR_DEB_URL := https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/latest/aws-emulator
 EMULATOR_LOGS := if [ "$$(uname)" = "Darwin" ]; then docker logs $(EMULATOR_CONTAINER) 2>&1; else cat $(EMULATOR_LOG); fi
 EMULATOR_HEALTH := curl -sf --cacert $(EMULATOR_DIR)/ca.pem https://127.0.0.1:$(EMULATOR_PORT)/__admin/health
 # Test runs against the emulator: its endpoint, per-run credentials and CA. Real AWS credentials are removed,
@@ -118,9 +121,19 @@ update-deps:
 openapi:
 	uv run python generate_openapi.py
 
-# --- AWS Emulator (local AWS APIs over HTTPS on 127.0.0.1, runs in Docker) ---
+# --- AWS Emulator (local AWS APIs over HTTPS on 127.0.0.1) ---
+# Darwin: build the Docker image (no native package). Linux (CI): install the latest Debian package with sudo.
+# sha256sum only logs which build was installed: there is no published checksum to verify against.
 emulator-install:
-	docker build --pull --no-cache -t $(EMULATOR_IMAGE) emulator
+	if [ "$$(uname)" = "Darwin" ]; then \
+		docker build --pull --no-cache -t $(EMULATOR_IMAGE) emulator; \
+	else \
+		deb="$$(mktemp -d)/aws-emulator.deb" && \
+		curl -fsSLo "$$deb" "$(EMULATOR_DEB_URL)_$$(dpkg --print-architecture).deb" && \
+		sha256sum "$$deb" && \
+		sudo apt-get install -y "$$deb" && \
+		$(EMULATOR_BIN) -v; \
+	fi
 
 # Darwin: in Docker (no native package). Linux: the installed aws-emulator package (CI). No-op when already up.
 # Each step is one shell command: macOS ships GNU Make 3.81, which ignores .ONESHELL.
@@ -141,7 +154,7 @@ emulator-run:
 			-v "$(EMULATOR_DIR):/home/emulator/.aws/emulator/$(EMULATOR_PORT)" \
 			$(EMULATOR_IMAGE) -p $(EMULATOR_PORT) --idle-timeout 3600 || exit 1; \
 	else \
-		EMULATOR_CONFIG=$(EMULATOR_CONFIG) nohup aws-emulator -p $(EMULATOR_PORT) --idle-timeout 3600 > $(EMULATOR_LOG) 2>&1 & \
+		EMULATOR_CONFIG=$(EMULATOR_CONFIG) nohup $(EMULATOR_BIN) -p $(EMULATOR_PORT) --idle-timeout 3600 > $(EMULATOR_LOG) 2>&1 & \
 	fi
 	for i in $$(seq 60); do $(EMULATOR_HEALTH) >/dev/null 2>&1 && break; sleep 1; done
 	$(MAKE) emulator-check

@@ -1,8 +1,41 @@
-.PHONY: dev lint mypy-lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format format-fix compare-openapi openapi pr watch update-deps
+.PHONY: dev lint mypy-lint complex coverage pre-commit sort deploy destroy deps unit infra-tests integration e2e coverage-tests docs lint-docs build format format-fix compare-openapi openapi pr watch update-deps emulator-install emulator-start emulator-run emulator-stop emulator-check publish-docs
 PYTHON := ".venv\Scripts\python.exe"
-# Use CMD shell explicitly for Windows commands
+# Use CMD shell explicitly for Windows commands. Every recipe line runs in its own cmd /C, so multi-step logic
+# has to fit on one line (chained with &, && and ||).
 SHELL := cmd.exe
 .SHELLFLAGS := /D /C
+
+# AWS Emulator runs natively only on Linux; on Windows it runs in Docker (Docker Desktop must be running).
+EMULATOR_PORT ?= 9297
+EMULATOR_IMAGE := aws-emulator
+EMULATOR_CONTAINER := aws-emulator-$(EMULATOR_PORT)
+EMULATOR_DIR := $(USERPROFILE)\.aws\emulator\$(EMULATOR_PORT)
+EMULATOR_CONFIG := $(CURDIR)/emulator/config.toml
+# --ssl-no-revoke: Windows curl (Schannel) otherwise fails, as the emulator's local CA has no revocation endpoint.
+EMULATOR_HEALTH := curl -sf --ssl-no-revoke --cacert "$(EMULATOR_DIR)\ca.pem" https://127.0.0.1:$(EMULATOR_PORT)/__admin/health
+EMULATOR_DOCKER_RUN := docker run -d --rm --name $(EMULATOR_CONTAINER) \
+	--network aws-emulator \
+	--cap-drop ALL --security-opt no-new-privileges --read-only \
+	-e EMULATOR_TELEMETRY=off \
+	-e EMULATOR_CONFIG=/etc/aws-emulator/config.toml \
+	-v "$(EMULATOR_CONFIG):/etc/aws-emulator/config.toml:ro" \
+	-p 127.0.0.1:$(EMULATOR_PORT):$(EMULATOR_PORT) \
+	-v "$(EMULATOR_DIR):/home/emulator/.aws/emulator/$(EMULATOR_PORT)" \
+	$(EMULATOR_IMAGE) -p $(EMULATOR_PORT) --idle-timeout 3600
+# Test runs against the emulator: its endpoint, per-run credentials and CA. Real AWS credentials are removed,
+# so a misconfigured run can't reach a real account. pydynox (AWS SDK for Rust) reads SSL_CERT_FILE, not AWS_CA_BUNDLE.
+# `set "X=" 2>nul &` removes X (and doesn't stop the chain when X wasn't set).
+EMULATOR_ENV := set "AWS_PROFILE=" 2>nul & set "AWS_DEFAULT_PROFILE=" 2>nul & set "AWS_ACCESS_KEY_ID=" 2>nul & \
+	set "AWS_SECRET_ACCESS_KEY=" 2>nul & set "AWS_SESSION_TOKEN=" 2>nul & \
+	set "AWS_ENDPOINT_URL=https://127.0.0.1:$(EMULATOR_PORT)" & \
+	set "AWS_CA_BUNDLE=$(EMULATOR_DIR)\ca.pem" & \
+	set "SSL_CERT_FILE=$(EMULATOR_DIR)\ca.pem" & \
+	set "AWS_SHARED_CREDENTIALS_FILE=$(EMULATOR_DIR)\emulator_credentials" & \
+	set "AWS_CONFIG_FILE=$(EMULATOR_DIR)\config" & \
+	set "AWS_EC2_METADATA_DISABLED=true" & \
+	set "AWS_DISABLE_HOST_PREFIX_INJECTION=true" & \
+	set "AWS_REGION=us-east-1" & \
+	set "AWS_DEFAULT_REGION=us-east-1" &
 
 OPENAPI_DIR := .\docs\swagger
 CURRENT_OPENAPI := $(OPENAPI_DIR)\openapi.json
@@ -55,15 +88,15 @@ infra-tests: build
 	uv run pytest tests\infrastructure
 
 integration:
-	uv run pytest tests\integration --cov-config=.coveragerc --cov=service --cov-report xml
+	$(EMULATOR_ENV) uv run pytest tests\integration --cov-config=.coveragerc --cov=service --cov-report xml
 
 e2e:
 	uv run pytest tests\e2e --cov-config=.coveragerc --cov=service --cov-report xml
 
-pr: deps format pre-commit complex lint lint-docs unit deploy coverage-tests e2e openapi
+pr: deps format pre-commit complex lint lint-docs unit infra-tests emulator-start coverage-tests emulator-stop deploy e2e openapi
 
 coverage-tests:
-	uv run pytest tests\unit tests\integration --cov-config=.coveragerc --cov=service --cov-report xml
+	$(EMULATOR_ENV) uv run pytest tests\unit tests\integration --cov-config=.coveragerc --cov=service --cov-report xml
 
 deploy: build
 	npx cdk deploy --app="$(PYTHON) app.py" --require-approval=never
@@ -73,6 +106,9 @@ destroy:
 
 docs:
 	uv run zensical serve
+
+publish-docs:
+	uv run zensical build --clean
 
 lint-docs:
 	npx markdownlint-cli --fix "docs"
@@ -87,10 +123,10 @@ update-deps:
 	@echo "Updating pre-commit hooks..."
 	pre-commit autoupdate
 	@echo "Fetching latest CDK version from npm..."
-	for /f "tokens=*" %%i in ('npm view aws-cdk version') do set LATEST_CDK_VERSION=%%i
-	@echo "Found CDK version: %LATEST_CDK_VERSION%"
+	$(eval LATEST_CDK_VERSION := $(shell npm view aws-cdk version))
+	@echo "Found CDK version: $(LATEST_CDK_VERSION)"
 	@echo "Updating package.json with latest CDK version..."
-	node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json')); pkg.dependencies['aws-cdk'] = process.env.LATEST_CDK_VERSION; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 4));"
+	node -e "const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json')); pkg.dependencies['aws-cdk'] = '$(LATEST_CDK_VERSION)'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 4));"
 	npm i --package-lock-only
 	@echo "Installing npm dependencies..."
 	npm install
@@ -99,14 +135,30 @@ update-deps:
 openapi:
 	uv run python generate_openapi.py
 
+# --- AWS Emulator (local AWS APIs over HTTPS on 127.0.0.1, runs in Docker on Windows) ---
+emulator-install:
+	docker build --pull --no-cache -t $(EMULATOR_IMAGE) emulator
+
+# No-op when already up.
+emulator-start:
+	@$(EMULATOR_HEALTH) >nul 2>&1 && echo AWS Emulator already running on port $(EMULATOR_PORT) || $(MAKE) emulator-run
+
+emulator-run:
+	if not exist "$(EMULATOR_DIR)" mkdir "$(EMULATOR_DIR)"
+	-docker network create aws-emulator >nul 2>&1
+	$(EMULATOR_DOCKER_RUN)
+	for /L %i in (1,1,60) do @($(EMULATOR_HEALTH) >nul 2>&1 && exit /b 0 || ping -n 2 127.0.0.1 >nul)
+	$(MAKE) emulator-check
+
+# Fails unless the emulator is healthy and its startup notice reports telemetry disabled.
+emulator-check:
+	$(EMULATOR_HEALTH) || (docker logs $(EMULATOR_CONTAINER) & exit /b 1)
+	@echo.
+	docker logs $(EMULATOR_CONTAINER) 2>&1 | findstr /I /C:"telemetry: disabled" || (echo AWS Emulator telemetry is not disabled & docker logs $(EMULATOR_CONTAINER) & exit /b 1)
+
+emulator-stop:
+	-docker stop $(EMULATOR_CONTAINER)
+
 compare-openapi:
 	uv run python generate_openapi.py --out-destination "." --out-filename "openapi_latest.json"
-	fc /B "$(CURRENT_OPENAPI)" "$(LATEST_OPENAPI)" >nul 2>&1
-	if errorlevel 1 (
-		del "$(LATEST_OPENAPI)"
-		echo "Swagger files are not equal, did you run 'make pr' or 'make openapi'?"
-		exit /b 1
-	) else (
-		del "$(LATEST_OPENAPI)"
-		echo "Swagger file is up to date"
-	)
+	fc /B "$(CURRENT_OPENAPI)" "$(LATEST_OPENAPI)" >nul 2>&1 && (del "$(LATEST_OPENAPI)" & echo Swagger file is up to date) || (del "$(LATEST_OPENAPI)" & echo Swagger files are not equal, did you run 'make pr' or 'make openapi'? & exit /b 1)

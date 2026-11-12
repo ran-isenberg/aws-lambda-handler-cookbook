@@ -43,17 +43,10 @@ jobs:
       - name: Install dependencies
         run: make dev
       # The AWS Emulator publishes only an LTS/latest package URL (no versioned download), see .claude/skills/aws-emulator
-      - name: Install AWS Emulator
-        run: |
-          deb="$(mktemp -d)/aws-emulator.deb"
-          curl -fsSLo "$deb" https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/latest/aws-emulator_arm64.deb
-          sha256sum "$deb"
-          sudo apt-get install -y "$deb"
-          echo /opt/aws-emulator/bin >> "$GITHUB_PATH"
+      - name: Install AWS Emulator # Linux: installs the Debian package
+        run: make emulator-install
       - name: Start AWS Emulator # fails unless it is healthy and telemetry is disabled (emulator/config.toml)
-        run: |
-          aws-emulator -v
-          make emulator-start
+        run: make emulator-start
       - name: Unit tests
         run: make unit
       - name: Infrastructure tests

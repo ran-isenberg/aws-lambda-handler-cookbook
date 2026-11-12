@@ -62,7 +62,7 @@ Make sure you have [uv](https://docs.astral.sh/uv/) installed.
 
 You can also run 'make pr' to run all checks, file formatters, unit and infrastructure tests, integration tests against a local [AWS Emulator](https://docs.aws.amazon.com/emulator/latest/userguide/), then deploy to AWS and run the E2E tests.
 
-The integration tests need no AWS account: start the emulator with `make emulator-start` (run `make emulator-install` once on macOS/Windows to build its Docker image), then run `make integration`.
+The integration tests need no AWS account: start the emulator with `make emulator-start` (run `make emulator-install` once: on macOS/Windows it builds a Docker image, on Linux and CI it installs the Debian package), then run `make integration`.
 
 ## **The Problem**
 

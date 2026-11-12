@@ -76,7 +76,7 @@ make dev
 
 # Run tests
 make unit
-make emulator-install  # once, on macOS/Windows (builds the AWS Emulator Docker image)
+make emulator-install  # once: Docker image on macOS/Windows, Debian package on Linux/CI
 make emulator-start    # local AWS Emulator for the integration tests
 make integration       # no AWS account needed
 make e2e               # needs a deployed stack (make deploy)

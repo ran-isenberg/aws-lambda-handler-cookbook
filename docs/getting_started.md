@@ -72,8 +72,8 @@ Integration tests can be found under the ``tests/integration`` folder.
 Start the emulator once, then run the tests:
 
 ```bash
-make emulator-install  # macOS/Windows: build the emulator Docker image (Docker must be running)
-make emulator-start    # macOS: runs it in Docker; Linux: runs the installed aws-emulator package
+make emulator-install  # macOS/Windows: build the Docker image (Docker must be running); Linux/CI: install the .deb (sudo)
+make emulator-start    # macOS/Windows: runs it in Docker; Linux: runs the installed aws-emulator package
 make integration
 make emulator-stop     # state is in memory only: a restart gives a clean emulator
 ```

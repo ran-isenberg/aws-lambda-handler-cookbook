@@ -17,7 +17,7 @@ ad hoc when a target exists — targets encode the right flags, env, and orderin
 | `make infra-tests` | CDK synth assertions (`tests/infrastructure/`). |
 | `make integration` | Integration tests against the local AWS Emulator (no AWS access). |
 | `make coverage-tests` | Unit + integration with coverage (AWS Emulator, no AWS access). |
-| `make emulator-install` | Build the AWS Emulator Docker image (macOS/Windows). |
+| `make emulator-install` | Install the AWS Emulator: Docker image on macOS/Windows, latest `.deb` via `sudo apt-get` on Linux (CI uses this). |
 | `make emulator-start` / `make emulator-stop` | Start (Docker on macOS, package on Linux; no-op if up) / stop the emulator. |
 | `make emulator-check` | Fail unless the emulator is healthy and reports telemetry disabled. |
 | `make e2e` | End-to-end tests against deployed stack. |
