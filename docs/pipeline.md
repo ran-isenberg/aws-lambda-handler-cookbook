@@ -8,8 +8,7 @@ description: AWS Lambda Cookbook - Elevate Your Handler's Code Python pipeline
 The GitHub CI/CD pipeline includes the following steps.
 
 !!! warning "Required Configuration"
-    The deploy jobs use environment secrets (under the defined environment 'dev', 'staging' and 'production') for the role to deploy to AWS.
-    The 'integration' jobs use no environment, so they never wait for an approval: they run against a local AWS Emulator and get no AWS credentials. They pass their coverage report to the deploy job, which uploads it to Codecov with the environment's `CODECOV_TOKEN`.
+    The deploy jobs use environment secrets (under the defined environment 'dev', 'staging' and 'production') for the role to deploy to AWS. The 'integration' jobs use no environment, so they never wait for an approval: they run against a local AWS Emulator, get no AWS credentials, and read `CODECOV_TOKEN` as a repository secret.
 
 When you clone this repository be sure to define the environments in your [repo settings](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) and create a secret per environment:
 
@@ -99,7 +98,7 @@ flowchart LR
 
 <p class="mermaid-hint">Click diagram to zoom</p>
 
-`pr-serverless-service` runs for every pull request you open. It expects GitHub environments by the name `dev`, `staging` and `production`, `dev` and `staging` with a `CODECOV_TOKEN` for CodeCov integration, and each with an `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
+`pr-serverless-service` runs for every pull request you open. It expects a repository secret `CODECOV_TOKEN` for CodeCov integration, and GitHub environments by the name `dev`, `staging` and `production`, each with an `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
 
 Only the jobs that deploy use an environment, so a required reviewer on `dev` gates the deploy and E2E tests, not the unit and integration tests.
 
