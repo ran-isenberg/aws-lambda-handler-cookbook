@@ -194,6 +194,7 @@ flowchart TB
 - Python Serverless service with a recommended file structure.
 - CDK infrastructure with infrastructure tests and security tests.
 - CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
+- CI/CD pipeline order: quality checks → unit, infrastructure and integration tests (local AWS Emulator, no AWS credentials) → deploy → E2E tests, so a failing test stops the pipeline before anything is deployed.
 - CI/CD pipeline deploys to dev/staging and production environment with different gates between each environment
 - Makefile for simple developer experience.
 - The AWS Lambda handler embodies Serverless best practices and has all the bells and whistles for a proper production ready handler.
@@ -206,7 +207,8 @@ flowchart TB
 - Per-user order ownership: users only get, delete and list their own orders (the access token `sub` claim is the owner)
 - REST API protected by WAF with four AWS managed rules in production deployment
 - Unit, infrastructure, security, integration and E2E tests.
-- Integration and E2E tests use real Cognito users and real access tokens, created and deleted by the tests
+- Integration tests run against a local [AWS Emulator](https://docs.aws.amazon.com/emulator/latest/userguide/){:target="_blank" rel="noopener"} with telemetry off, no AWS account needed
+- E2E tests use real Cognito users and real access tokens, created and deleted by the tests
 - Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
 - Automated protection against API breaking changes
 
@@ -238,6 +240,7 @@ The repository also ships persistent instructions for [Claude Code](https://clau
     - `cdk.md` - construct and stack structure, and `cdk-nag` v3 suppression conventions.
     - `docs.md` - documentation build, markdownlint, and OpenAPI schema sync.
     - `security.md`, `dependencies.md`, and `git-pr.md` - secrets and IAM, dependency management, and Conventional Commits.
+- `.claude/skills/aws-emulator/` - the AWS Emulator agent skill: install, connect, troubleshoot and check compatibility of the emulator the integration tests run against.
 
 ## **Serverless Best Practices**
 

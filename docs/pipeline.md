@@ -8,7 +8,7 @@ description: AWS Lambda Cookbook - Elevate Your Handler's Code Python pipeline
 The GitHub CI/CD pipeline includes the following steps.
 
 !!! warning "Required Configuration"
-    The pipelines uses environment secrets (under the defined environment 'dev', 'staging' and 'production') for code coverage and for the role to deploy to AWS.
+    The pipelines uses environment secrets (under the defined environment 'dev', 'staging' and 'production') for code coverage and for the role to deploy to AWS. The 'integration' jobs only read the code coverage secret: they run against a local AWS Emulator and get no AWS credentials.
 
 When you clone this repository be sure to define the environments in your [repo settings](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) and create a secret per environment:
 
@@ -30,11 +30,10 @@ All steps can be run locally using the makefile. See details below:
 - Python complexity checks: radon and xenon  - run `make complex` in the IDE
 - Unit tests. Run `make unit` to run unit tests in the IDE
 - Infrastructure test. Run `make infra-tests` to run the CDK infrastructure tests in the IDE
-- Code coverage by [codecov.io](https://about.codecov.io/)
+- Integration tests - run `make emulator-start`, then `make integration` in the IDE. They run against a local AWS Emulator, no AWS account needed. Stop it with `make emulator-stop`.
+- Code coverage tests (unit + integration, against the AWS Emulator) - run `make coverage-tests` in the IDE, reported to [codecov.io](https://about.codecov.io/)
 - Deploy CDK - run `make deploy` in the IDE, will also run security tests based on cdk_nag
-- Integration tests - run `make integration` in the IDE.
-- E2E tests  - run `make e2e` in the IDE
-- Code coverage tests  - run `make coverage-tests` in the IDE after CDK dep
+- E2E tests  - run `make e2e` in the IDE, against the deployed stack
 - OpenAPI Swagger file - run
 - Update GitHub documentation branch
 - Update dependencies and CDK version automatically to the latest versions: run `make update-deps`.
@@ -70,20 +69,27 @@ flowchart LR
         B5 --> B6[Complexity Scan]
     end
 
-    subgraph Tests["tests (dev environment)"]
+    subgraph Integration["integration (no AWS credentials)"]
+        direction TB
+        I1[Checkout & Setup] --> I2[Install & Start AWS Emulator]
+        I2 --> I3[Unit Tests]
+        I3 --> I4[Infrastructure Tests]
+        I4 --> I5[Coverage Tests: unit + integration]
+        I5 --> I6[Codecov]
+    end
+
+    subgraph Tests["deploy_and_e2e (dev environment)"]
         direction TB
         C1[Checkout & Setup] --> C2[Configure AWS OIDC]
-        C2 --> C3[Unit Tests]
-        C3 --> C4[Infrastructure Tests]
-        C4 --> C5[Deploy to AWS]
-        C5 --> C6[OpenAPI Validation]
-        C6 --> C7[Coverage Tests]
-        C7 --> C8[E2E Tests]
-        C8 --> C9[Destroy Stack]
+        C2 --> C3[Deploy to AWS]
+        C3 --> C4[OpenAPI Validation]
+        C4 --> C5[E2E Tests]
+        C5 --> C6[Destroy Stack]
     end
 
     PR --> QS
-    QS -->|Success| Tests
+    QS -->|Success| Integration
+    Integration -->|Success| Tests
     Tests -->|Success| D[Ready to Merge]
 
     classDef success fill:#2E7D32,stroke:#1B5E20,color:#fff
@@ -94,13 +100,17 @@ flowchart LR
 
 `pr-serverless-service` runs for every pull request you open. It expects you defined a GitHub environments by the name `dev`, `staging` and `production` and for each environments to have the following variables: `CODECOV_TOKEN` for CodeCov integration and `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
 
-It includes two jobs: 'quality_standards' and 'tests' where a failure in 'quality_standards' does not trigger 'tests'. Both jobs MUST pass in order to to be able to merge.
+It includes three jobs: 'quality_standards', 'integration' and 'deploy_and_e2e'. Each job runs only if the previous one passed, and all of them MUST pass in order to be able to merge.
 
-'quality_standards' includes all linters, pre-commit checks and units tests and 'tests' deploys the service to AWS, runs code coverage checks,
+'quality_standards' includes all linters and pre-commit checks.
 
-checks that your OpenAPI file is up to date and corresponds to the actual deployment (fails if it does not, hence your documentation is out of date), security checks and E2E tests. Stack is destroyed at the end. Stack has a 'dev'
+'integration' runs the unit, infrastructure and integration tests with code coverage. The integration tests run against a local [AWS Emulator](https://docs.aws.amazon.com/emulator/latest/userguide/){:target="_blank" rel="noopener"} installed on the runner, so this job has no AWS credentials, and a failing test stops the pipeline before anything is deployed.
 
-prefix as part of its name. Each environment has a pre-defined stack prefix.
+The job fails if the emulator does not report its telemetry as disabled.
+
+'deploy_and_e2e' deploys the service to AWS, checks that your OpenAPI file is up to date and corresponds to the actual deployment (fails if it does not, hence your documentation is out of date), runs security checks and E2E tests.
+
+Stack is destroyed at the end. Stack has a 'dev' prefix as part of its name. Each environment has a pre-defined stack prefix.
 
 Once merged, `main-serverless-service` will run.
 
@@ -113,12 +123,19 @@ flowchart LR
         A[Push to main]
     end
 
+    subgraph Integration["integration (no AWS credentials)"]
+        direction TB
+        I1[Checkout & Setup] --> I2[Install & Start AWS Emulator]
+        I2 --> I3[Unit & Infrastructure Tests]
+        I3 --> I4[Coverage Tests: unit + integration]
+        I4 --> I5[Codecov]
+    end
+
     subgraph Staging["staging"]
         direction TB
         S1[Checkout & Setup] --> S2[Configure AWS OIDC]
         S2 --> S3[Deploy to AWS]
-        S3 --> S4[Coverage Tests]
-        S4 --> S5[E2E Tests]
+        S3 --> S4[E2E Tests]
     end
 
     subgraph Production["production"]
@@ -139,7 +156,8 @@ flowchart LR
         end
     end
 
-    Trigger --> Staging
+    Trigger --> Integration
+    Integration -->|Success| Staging
     Staging -->|Success| Production
     Production -->|Success| Parallel
 ```
@@ -148,9 +166,11 @@ flowchart LR
 
 `main-serverless-service` runs for every MERGED pull request that runs on the main branch. It expects you defined a GitHub environments by the name `staging` and `production` and that both includes a secret by the name of `AWS_ROLE`.
 
-It includes three jobs: 'staging', 'production' and 'publish_github_pages'.
+It includes the jobs 'integration', 'staging', 'production', 'publish_github_pages' and 'create_release'.
 
-'staging' does not run any of the 'quality_standards' checks, since they were already checked before the code was merged. It runs just coverage tests and E2E tests. Stack is not deleted. Stack has a 'staging' prefix as part of its name.
+'integration' is the same job as in the PR pipeline: unit, infrastructure and integration tests against a local AWS Emulator, with code coverage and no AWS credentials.
+
+'staging' does not run any of the 'quality_standards' checks, since they were already checked before the code was merged. It deploys and runs the E2E tests. Stack is not deleted. Stack has a 'staging' prefix as part of its name.
 Any failure in staging will stop the pipeline and production environment will not get updated with the new code.
 
 'production' does not run any of the 'quality_standards' checks, since they were already checked before the code was merged. It does not run any test at the moment. Stack is not deleted. Stack has a 'production' prefix as part of its name.

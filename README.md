@@ -60,7 +60,9 @@ make deploy
 
 Make sure you have [uv](https://docs.astral.sh/uv/) installed.
 
-You can also run 'make pr' will run all checks, synth, file formatters , unit tests, deploy to AWS and run integration and E2E tests.
+You can also run 'make pr' to run all checks, file formatters, unit and infrastructure tests, integration tests against a local [AWS Emulator](https://docs.aws.amazon.com/emulator/latest/userguide/), then deploy to AWS and run the E2E tests.
+
+The integration tests need no AWS account: start the emulator with `make emulator-start` (run `make emulator-install` once on macOS/Windows to build its Docker image), then run `make integration`.
 
 ## **The Problem**
 
@@ -179,7 +181,8 @@ The API is protected with **Amazon Cognito** and the Powertools for AWS Lambda [
 * Orders belong to the user that created them (the access token `sub` claim). Users only get, delete and list their own orders, an order of another user returns `404`, for managers too. The orders table is keyed by `owner_id` and `id`, so listing is a `Query` of the caller's orders.
 * A Cognito **pre token generation** trigger (event version 2) adds the `aud` claim, and the `orders/manage` scope for members of `orders-managers`, to access tokens issued by the Cognito API, which the `JWTVerifier.cognito()` profile requires. Read about why in the [Authentication documentation](https://ran-isenberg.github.io/aws-lambda-handler-cookbook/best_practices/authentication/).
 * The LIST function runs in the Lambda Managed Instances VPC without internet access, and the Cognito VPC endpoint does not serve the user pool public keys (JWKS). A deploy time custom resource fetches the JWKS and passes it to the LIST function in the `COGNITO_JWKS` environment variable, which the verifier uses instead of downloading it.
-* The integration and e2e tests create real users, sign them in to get **real access tokens** and delete the users when the test session ends. The identity that runs the tests needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.
+* The e2e tests create real users, sign them in to get **real access tokens** and delete the users when the test session ends. The identity that runs them needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.
+* The integration tests run against a local AWS Emulator, whose Cognito tokens can't be verified yet. They sign Cognito-shaped access tokens with a per session test key, published to the handlers in `COGNITO_JWKS`, and shape them with the real pre token generation trigger.
 
 #### **LIST orders via AWS Lambda Managed Instances**
 
@@ -254,6 +257,7 @@ flowchart TB
 * Python Serverless service with a recommended file structure.
 * CDK infrastructure with infrastructure tests and security tests.
 * CI/CD pipelines based on Github actions that deploys to AWS with python linters, complexity checks and style formatters.
+* CI/CD pipeline order: quality checks → unit, infrastructure and integration tests (local AWS Emulator, no AWS credentials) → deploy → E2E tests, so a failing test stops the pipeline before anything is deployed.
 * CI/CD pipeline deploys to dev/staging and production environments with different gates between each environment
 * Automatic GitHub releases with semantic versioning based on conventional commits
 * Automatic PR labeling based on commit message prefixes (feat, fix, docs, chore)
@@ -266,7 +270,8 @@ flowchart TB
 * REST API protected by WAF with four AWS managed rules in production deployment
 * Amazon Cognito authentication, verified in the Lambdas by the Powertools JWT verifier: any signed in user can create, get and list orders, deleting requires the `orders/manage` scope
 * Per-user order ownership: users only get, delete and list their own orders (the access token `sub` claim is the owner)
-* Integration and end to end tests use real Cognito users and real access tokens, created and deleted by the tests
+* Integration tests run against a local [AWS Emulator](https://docs.aws.amazon.com/emulator/latest/userguide/) with telemetry off, no AWS account needed
+* End to end tests use real Cognito users and real access tokens, created and deleted by the tests
 * CloudWatch dashboards - High level and low level including CloudWatch alarms
 * Unit, infrastructure, security, integration and end to end tests.
 * Automatically generated OpenAPI endpoint: /swagger with Pydantic schemas for both requests and responses
@@ -349,6 +354,7 @@ The repository also ships persistent instructions for [Claude Code](https://clau
     * `cdk.md` - construct and stack structure, and `cdk-nag` v3 suppression conventions.
     * `docs.md` - documentation build, markdownlint, and OpenAPI schema sync.
     * `security.md`, `dependencies.md`, and `git-pr.md` - secrets and IAM, dependency management, and Conventional Commits.
+* `.claude/skills/aws-emulator/` - the AWS Emulator agent skill: install, connect, troubleshoot and check compatibility of the emulator the integration tests run against.
 
 ## Credits
 

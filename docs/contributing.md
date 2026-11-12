@@ -76,8 +76,10 @@ make dev
 
 # Run tests
 make unit
-make integration
-make e2e
+make emulator-install  # once, on macOS/Windows (builds the AWS Emulator Docker image)
+make emulator-start    # local AWS Emulator for the integration tests
+make integration       # no AWS account needed
+make e2e               # needs a deployed stack (make deploy)
 
 # Run all PR checks
 make pr
@@ -93,7 +95,8 @@ make docs
 | `make dev`         | Set up development environment      |
 | `make pr`          | Run all checks before PR submission |
 | `make unit`        | Run unit tests                      |
-| `make integration` | Run integration tests               |
+| `make integration` | Run integration tests (AWS Emulator) |
+| `make emulator-start` / `make emulator-stop` | Start / stop the local AWS Emulator |
 | `make e2e`         | Run end-to-end tests                |
 | `make lint`        | Run linting and type checks         |
 | `make format`      | Format code                         |
