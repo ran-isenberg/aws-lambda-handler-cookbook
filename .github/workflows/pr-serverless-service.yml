@@ -50,7 +50,8 @@ jobs:
   integration:
     needs: quality_standards
     runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
-    environment: dev # only for the CODECOV_TOKEN environment secret: without id-token: write the job can't assume the AWS role
+    # No environment: the dev environment requires a reviewer, and this job needs no approval. It has no AWS credentials
+    # (no id-token: write) and reads CODECOV_TOKEN as a repository secret.
     permissions:
       contents: read
     env:
