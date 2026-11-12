@@ -21,7 +21,8 @@ jobs:
   # no AWS credentials. One job, so the setup (checkout, uv, Python, Node, dependencies) runs once.
   quality_and_integration:
     runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
-    environment: dev # only for the CODECOV_TOKEN environment secret: without id-token: write the job can't assume the AWS role
+    # No environment: quality checks and tests never wait for an approval. No AWS credentials (no id-token: write).
+    # CODECOV_TOKEN is a repository secret.
     permissions:
       contents: read
     env:

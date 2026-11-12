@@ -20,7 +20,8 @@ jobs:
   # Unit, infrastructure and integration tests, the integration tests against a local AWS Emulator: no AWS credentials.
   integration:
     runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
-    environment: staging # only for the CODECOV_TOKEN environment secret: without id-token: write the job can't assume the AWS role
+    # No environment: tests never wait for an approval. No AWS credentials (no id-token: write).
+    # CODECOV_TOKEN is a repository secret.
     permissions:
       contents: read
     env:
