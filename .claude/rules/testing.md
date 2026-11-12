@@ -10,7 +10,7 @@ Four suites, each with a distinct scope and cost. Put a test at the lowest layer
 | Suite | Dir | Scope | Command |
 | --- | --- | --- | --- |
 | Unit | `tests/unit/` | Pure logic & models, no AWS | `make unit` |
-| Integration | `tests/integration/` | Handler + logic + DAL, AWS/mocks | `make integration` |
+| Integration | `tests/integration/` | Handler + logic + DAL, AWS Emulator/mocks | `make integration` |
 | Infrastructure | `tests/infrastructure/` | CDK synth assertions | `make infra-tests` |
 | E2E | `tests/e2e/` | Deployed stack over HTTP | `make e2e` |
 
@@ -23,6 +23,12 @@ Four suites, each with a distinct scope and cost. Put a test at the lowest layer
   (`generate_api_gw_event`, `generate_context`, `generate_random_string`) and invoke the handler.
   Mock dynamic configuration / feature flags with an inline schema + `mocker` (see
   `test_feature_flags.py` / `mock_dynamic_configuration`); don't reach a live AppConfig.
+  They run against a local **AWS Emulator** (`make emulator-start` first), never real AWS: the Makefile
+  sets the emulator env and strips real credentials, and `tests/integration/conftest.py` exits unless
+  `AWS_ENDPOINT_URL` is `127.0.0.1`. Resources come from fixtures (`emulator_resources` creates the
+  DynamoDB tables, unique names per session), not stack outputs. Access tokens are minted locally
+  (`tests/integration/tokens.py`, verified via `COGNITO_JWKS`) because the emulator's Cognito JWKS
+  and triggers don't work yet. AppConfig stays mocked (the emulator returns 501).
 - **Infrastructure** (`tests/infrastructure/test_cdk.py`): synth the stack and assert with
   `aws_cdk.assertions.Template` — resource counts and key properties (e.g. exactly one RestApi,
   two DynamoDB global tables). Add/adjust these whenever you change `cdk/`.

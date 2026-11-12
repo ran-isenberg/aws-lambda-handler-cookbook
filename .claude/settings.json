@@ -4,6 +4,11 @@
   "permissions": {
     "allow": [
       "Bash(make dev)",
+      "Bash(make emulator-start)",
+      "Bash(make emulator-stop)",
+      "Bash(make integration)",
+      "Bash(make emulator-check)",
+      "Bash(make coverage-tests)",
       "Bash(make format)",
       "Bash(make format-fix)",
       "Bash(make lint)",

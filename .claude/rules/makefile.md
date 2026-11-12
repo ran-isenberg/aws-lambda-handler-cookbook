@@ -15,8 +15,11 @@ ad hoc when a target exists — targets encode the right flags, env, and orderin
 | `make pre-commit` | Run pre-commit hooks. |
 | `make unit` | Unit tests — fast, no AWS. |
 | `make infra-tests` | CDK synth assertions (`tests/infrastructure/`). |
-| `make integration` | Integration tests (may touch AWS). |
-| `make coverage-tests` | Unit + integration with coverage. |
+| `make integration` | Integration tests against the local AWS Emulator (no AWS access). |
+| `make coverage-tests` | Unit + integration with coverage (AWS Emulator, no AWS access). |
+| `make emulator-install` | Install the AWS Emulator: Docker image on macOS/Windows, latest `.deb` via `sudo apt-get` on Linux (CI uses this). |
+| `make emulator-start` / `make emulator-stop` | Start (Docker on macOS, package on Linux; no-op if up) / stop the emulator. |
+| `make emulator-check` | Fail unless the emulator is healthy and reports telemetry disabled. |
 | `make e2e` | End-to-end tests against deployed stack. |
 | `make deploy` / `make destroy` | **Cloud-mutating** — CDK deploy / destroy. |
 | `make docs` / `make lint-docs` / `make publish-docs` | Docs build / markdownlint / publish. |
@@ -27,8 +30,10 @@ ad hoc when a target exists — targets encode the right flags, env, and orderin
 ### Rules
 
 - Before opening a PR, run `make pr` — it chains
-  `deps format pre-commit complex lint lint-docs unit deploy coverage-tests e2e openapi`.
-- `make deploy`, `make destroy`, and any AWS-touching suite (`integration`, `coverage-tests`, `e2e`)
-  hit real cloud resources. Never run them during planning/exploration or without a clear reason.
+  `deps format pre-commit complex lint lint-docs unit infra-tests emulator-start coverage-tests emulator-stop deploy e2e openapi`.
+- `make deploy`, `make destroy` and `make e2e` hit real cloud resources. Never run them during
+  planning/exploration or without a clear reason. `integration` and `coverage-tests` run only against
+  the local AWS Emulator (real credentials are stripped) and are safe to run.
+- macOS ships GNU Make 3.81, which ignores `.ONESHELL`: write each recipe step as one shell command.
 - When editing the Makefile: keep targets `.PHONY`, one responsibility per target, and compose
   higher-level targets from smaller ones (as `pr` does) rather than duplicating command lines.

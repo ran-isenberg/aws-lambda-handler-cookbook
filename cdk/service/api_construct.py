@@ -383,7 +383,8 @@ class ApiConstruct(Construct):
                 'COGNITO_JWKS': self.user_pool_jwks,
             },
             tracing=_lambda.Tracing.ACTIVE,
-            retry_attempts=0,
+            # no retry_attempts here: it creates an EventInvokeConfig on $LATEST, which Lambda rejects for a function
+            # on a capacity provider once it has a published version. It is set on the alias below instead.
             timeout=Duration.seconds(constants.API_HANDLER_LAMBDA_TIMEOUT),
             memory_size=constants.MANAGED_INSTANCE_MEMORY_SIZE,
             ephemeral_storage_size=Size.mebibytes(constants.MANAGED_INSTANCE_EPHEMERAL_STORAGE),
@@ -421,6 +422,7 @@ class ApiConstruct(Construct):
             f'{constants.LIST_LAMBDA}LiveAlias',
             alias_name='live',
             version=lambda_function.current_version,
+            retry_attempts=0,  # the EventInvokeConfig targets the alias, not $LATEST
         )
 
         # GET /api/orders

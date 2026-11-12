@@ -17,7 +17,55 @@ on:
     branches: [main]
 
 jobs:
+  # Unit, infrastructure and integration tests, the integration tests against a local AWS Emulator: no AWS credentials.
+  integration:
+    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
+    # No environment: tests never wait for an approval. No AWS credentials (no id-token: write).
+    # CODECOV_TOKEN is a repository secret.
+    permissions:
+      contents: read
+    env:
+      AWS_DEFAULT_REGION: "us-east-1" # botocore does not read AWS_REGION
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install uv
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - name: Install dependencies
+        run: make dev
+      # The AWS Emulator publishes only an LTS/latest package URL (no versioned download), see .claude/skills/aws-emulator
+      - name: Install AWS Emulator # Linux: installs the Debian package
+        run: make emulator-install
+      - name: Start AWS Emulator # fails unless it is healthy and telemetry is disabled (emulator/config.toml)
+        run: make emulator-start
+      - name: Unit tests
+        run: make unit
+      - name: Infrastructure tests
+        run: make infra-tests
+      - name: Code coverage tests # unit + integration tests, against the emulator
+        run: make coverage-tests
+      - name: Codecov
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: yes # optional (default = false)
+          verbose: yes # optional (default = false)
+      - name: Stop AWS Emulator
+        if: always()
+        run: make emulator-stop
+
   staging:
+    needs: [integration]
     runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
     environment: staging
     permissions:
@@ -36,7 +84,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install uv
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
       - name: Set up Python
@@ -63,19 +111,6 @@ jobs:
         run: make deploy
         env:
           ENVIRONMENT: staging # Custom environment variable
-      # NOTE: these run unit and integration tests
-      # we can look into coverage collection only later to make it faster and less brittle (--collect-only)
-      - name: Code coverage tests
-        run: make coverage-tests
-        env:
-          ENVIRONMENT: staging # Custom environment variable
-      - name: Codecov
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: yes # optional (default = false)
-          verbose: yes # optional (default = false)
       - name: Run E2E tests
         run: make e2e
         env:
@@ -101,7 +136,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install uv
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
       - name: Set up Python
@@ -142,7 +177,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install uv
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
       - name: Set up Python

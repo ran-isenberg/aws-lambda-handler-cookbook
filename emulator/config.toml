@@ -1,0 +1,3 @@
+# AWS Emulator settings (EMULATOR_CONFIG points here, locally and in CI). Telemetry stays off.
+[telemetry]
+enabled = false

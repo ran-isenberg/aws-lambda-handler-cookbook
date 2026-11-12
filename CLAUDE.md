@@ -27,6 +27,8 @@ plus CDK deployment code, a CI/CD pipeline, and tests.
 - `.claude/rules/cdk.md` — construct and stack structure. *(scoped to `cdk/`)*
 - `.claude/rules/docs.md` — Zensical build, markdownlint, OpenAPI sync. *(scoped to `docs/`)*
 - `.claude/rules/security.md` — secrets, IAM, cdk-nag, WAF, OIDC. **(loaded every session)**
+- `.claude/skills/aws-emulator/` — AWS Emulator skill: install, connect, troubleshoot, compatibility checks
+  (the integration tests run against it).
 - `.claude/rules/dependencies.md` — uv + npm, `make update-deps`, audits. **(loaded every session)**
 - `.claude/rules/git-pr.md` — Conventional Commits, release bumps, PR labels. **(loaded every session)**
 

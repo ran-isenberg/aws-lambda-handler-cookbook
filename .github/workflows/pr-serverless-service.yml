@@ -17,8 +17,16 @@ on:
     branches: [main]
 
 jobs:
-  quality_standards:
-    runs-on: ubuntu-24.04-arm
+  # Quality checks, then unit, infrastructure and integration tests, the integration tests against a local AWS Emulator:
+  # no AWS credentials. One job, so the setup (checkout, uv, Python, Node, dependencies) runs once.
+  quality_and_integration:
+    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
+    # No environment: quality checks and tests never wait for an approval. No AWS credentials (no id-token: write).
+    # CODECOV_TOKEN is a repository secret.
+    permissions:
+      contents: read
+    env:
+      AWS_DEFAULT_REGION: "us-east-1" # botocore does not read AWS_REGION
     steps:
       - run: |
           echo "🎉 The job was automatically triggered by a ${{ env.EVENT_NAME }} event." >> $GITHUB_STEP_SUMMARY
@@ -33,11 +41,16 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install uv
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
       - name: Set up Python
         run: uv python install ${{ env.PYTHON_VERSION }}
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
       - name: Install dependencies
         run: make dev
       - name: pre commit
@@ -46,8 +59,30 @@ jobs:
         run: make lint
       - name: Complexity scan
         run: make complex
-  tests:
-    needs: quality_standards
+      # The AWS Emulator publishes only an LTS/latest package URL (no versioned download), see .claude/skills/aws-emulator
+      - name: Install AWS Emulator # Linux: installs the Debian package
+        run: make emulator-install
+      - name: Start AWS Emulator # fails unless it is healthy and telemetry is disabled (emulator/config.toml)
+        run: make emulator-start
+      - name: Unit tests
+        run: make unit
+      - name: Infrastructure tests
+        run: make infra-tests
+      - name: Code coverage tests # unit + integration tests, against the emulator
+        run: make coverage-tests
+      - name: Codecov
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: yes # optional (default = false)
+          verbose: yes # optional (default = false)
+      - name: Stop AWS Emulator
+        if: always()
+        run: make emulator-stop
+
+  deploy_and_e2e:
+    needs: quality_and_integration
     runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
     environment: dev
     permissions:
@@ -56,7 +91,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install uv
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
       - name: Set up Python
@@ -76,30 +111,15 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
         env:
           SESSION_NAME: "github-${{github.sha}}-dev"
-      - name: Unit tests
-        run: make unit
-      - name: Infrastructure tests
-        run: make infra-tests
       - name: Deploy to AWS
         run: make deploy
-      # NOTE: these run unit and integration tests
-      # we can look into coverage collection only later to make it faster and less brittle (--collect-only)
       - name: Check OpenAPI Spec breaking action
-        uses: oasdiff/oasdiff-action/breaking@b9325c9e0a27ab65b0da3b766522cedec6be81dc # v0.1.18
+        uses: oasdiff/oasdiff-action/breaking@8a211b41745fcecdfa4a86531ffbf08934fb14f6 # v0.1.23
         with:
           base: https://raw.githubusercontent.com/ran-isenberg/aws-lambda-handler-cookbook/main/docs/swagger/openapi.json
           revision: ./docs/swagger/openapi.json
       - name: Validate OpenAPI Documentation
         run: make compare-openapi
-      - name: Code coverage tests
-        run: make coverage-tests
-      - name: Codecov
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: yes # optional (default = false)
-          verbose: yes # optional (default = false)
       - name: Run E2E tests
         run: make e2e
       - name: Destroy stack

@@ -62,14 +62,25 @@ You can run the tests by using the following command: ``make unit``.
 
 ## **Integration Tests**
 
-!!! warning "Deploy First"
-    Make sure you deploy the stack first as these tests trigger your Lambda handler LOCALLY but communicate with AWS services.
+!!! info "No AWS account needed"
+    These tests trigger your Lambda handler LOCALLY and talk to a local [AWS Emulator](https://docs.aws.amazon.com/emulator/latest/userguide/){:target="_blank" rel="noopener"}, never to a real AWS account. The test fixtures create the DynamoDB tables in the emulator, and sign the Cognito-shaped access tokens with a per session test key.
 
 These tests allow you to debug in your IDE your AWS Lambda function.
 
 Integration tests can be found under the ``tests/integration`` folder.
 
-You can run the tests by using the following command: ``make integration``.
+Start the emulator once, then run the tests:
+
+```bash
+make emulator-install  # macOS/Windows: build the Docker image (Docker must be running); Linux/CI: install the .deb (sudo)
+make emulator-start    # macOS/Windows: runs it in Docker; Linux: runs the installed aws-emulator package
+make integration
+make emulator-stop     # state is in memory only: a restart gives a clean emulator
+```
+
+On Linux, install the emulator package instead of the Docker image, see the [AWS Emulator user guide](https://docs.aws.amazon.com/emulator/latest/userguide/getting-started-linux.html){:target="_blank" rel="noopener"}. Telemetry is turned off by the committed ``emulator/config.toml``, and ``make emulator-start`` fails if the emulator does not report it as disabled.
+
+``make integration`` removes your AWS credentials from the test environment and the tests refuse to run unless ``AWS_ENDPOINT_URL`` points at ``127.0.0.1``, so they can't touch a real account.
 
 ## **E2E Tests**
 

@@ -74,14 +74,24 @@ The audience is therefore the app client id, which is weaker than a resource bou
 
 ## **Testing with real tokens**
 
-The integration and e2e tests do not mock the verifier. They use real tokens from the deployed user pool.
+The integration and e2e tests do not mock the verifier. The e2e tests use real tokens from the deployed user pool.
 
 - The helpers in `tests/auth_utils.py` create a user with the admin API, add it to a group, sign it in to get a real access token and delete it.
 - The fixtures in `tests/conftest.py` create three users once per test session: `member_user` (no group, the regular user), `manager_user` (in `orders-managers`) and `other_manager_user` (to test order ownership). They are deleted when the session ends, also when a test fails.
 - The bearer token is passed to the tests as ready to use `Authorization` headers: `member_headers`, `manager_headers` and `other_manager_headers`.
 - `order_factory(owner, name, item_count)` creates orders owned by a test user (`owner.sub`) directly in DynamoDB.
 
-The identity that runs the tests needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.
+The identity that runs the e2e tests needs these permissions on the user pool: `cognito-idp:AdminCreateUser`, `AdminSetUserPassword`, `AdminAddUserToGroup`, `AdminInitiateAuth` and `AdminDeleteUser`.
+
+### **Integration tests: locally minted tokens**
+
+The integration tests run against a local AWS Emulator, whose Cognito can't be used yet: its user pool JWKS has no RSA key material, so its tokens can't be verified, and it does not invoke the pre token generation trigger. Instead, `tests/integration/tokens.py` plays the user pool:
+
+- It generates an RSA key pair once per test session and publishes the public key to the handlers in the `COGNITO_JWKS` environment variable, the same variable the LIST function uses in production.
+- It signs Cognito-shaped access and ID tokens (`iss`, `token_use`, `client_id`, `sub`, `cognito:groups`) for the same `member_user`, `manager_user` and `other_manager_user` fixtures.
+- The `aud` claim and the `orders/manage` scope come from calling the real pre token generation trigger handler, so a regression in it fails the integration tests.
+
+The handlers still verify every token with their real `JWTVerifier`. No AWS credentials or Cognito permissions are needed.
 
 ## **More Details**
 

@@ -1,0 +1,35 @@
+{
+    "name": "aws-emulator",
+    "skillVersion": "v1",
+    "description": "Installs, starts and troubleshoots AWS Emulator, the local emulator of AWS service APIs, and checks whether a project or a single operation works on the installed build. Use when the user wants to install or start the emulator, point the AWS CLI or an AWS SDK at it, fix a connection, TLS, certificate or request-signing error against it, run it in containers, CI or an agent sandbox, or asks whether AWS Emulator supports, works with, or is faithful enough for their app, repo, tests or a specific AWS operation (any language, SDK, CLI or IaC). Covers AWS Emulator only. Does not apply when the user asks about LocalStack, moto or any other local emulator or mock, including what it supports or whether an app works on it, and not for deploying to real AWS or production use.",
+    "categories": [],
+    "files": [
+        {
+            "path": "SKILL.md"
+        },
+        {
+            "path": "references/compatibility-check.md"
+        },
+        {
+            "path": "references/compatibility-classify-traces.md"
+        },
+        {
+            "path": "references/compatibility-find-usage.md"
+        },
+        {
+            "path": "references/connect.md"
+        },
+        {
+            "path": "references/container.md"
+        },
+        {
+            "path": "references/linux-package.md"
+        },
+        {
+            "path": "references/rust-embedded.md"
+        },
+        {
+            "path": "references/troubleshooting.md"
+        }
+    ]
+}
