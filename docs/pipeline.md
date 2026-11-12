@@ -8,7 +8,7 @@ description: AWS Lambda Cookbook - Elevate Your Handler's Code Python pipeline
 The GitHub CI/CD pipeline includes the following steps.
 
 !!! warning "Required Configuration"
-    The deploy jobs use environment secrets (under the defined environment 'dev', 'staging' and 'production') for the role to deploy to AWS. The 'integration' jobs use no environment, so they never wait for an approval: they run against a local AWS Emulator, get no AWS credentials, and read `CODECOV_TOKEN` as a repository secret.
+    The pipelines uses environment secrets (under the defined environment 'dev', 'staging' and 'production') for code coverage and for the role to deploy to AWS. The 'integration' jobs only read the code coverage secret: they run against a local AWS Emulator and get no AWS credentials.
 
 When you clone this repository be sure to define the environments in your [repo settings](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) and create a secret per environment:
 
@@ -98,9 +98,7 @@ flowchart LR
 
 <p class="mermaid-hint">Click diagram to zoom</p>
 
-`pr-serverless-service` runs for every pull request you open. It expects a repository secret `CODECOV_TOKEN` for CodeCov integration, and GitHub environments by the name `dev`, `staging` and `production`, each with an `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
-
-Only the jobs that deploy use an environment, so a required reviewer on `dev` gates the deploy and E2E tests, not the unit and integration tests.
+`pr-serverless-service` runs for every pull request you open. It expects you defined a GitHub environments by the name `dev`, `staging` and `production` and for each environments to have the following variables: `CODECOV_TOKEN` for CodeCov integration and `AWS_ROLE` that allows GitHub to deploy to that AWS account (one for dev, one for staging and one for production accounts).
 
 It includes three jobs: 'quality_standards', 'integration' and 'deploy_and_e2e'. Each job runs only if the previous one passed, and all of them MUST pass in order to be able to merge.
 
