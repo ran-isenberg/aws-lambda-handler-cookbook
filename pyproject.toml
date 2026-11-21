@@ -12,16 +12,16 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
-    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
 ]
 readme = "README.md"
 keywords = ["aws lambda cookbook", "guide to aws lambda", "cdk blueprint", "best practices", "serverless service blueprint"]
 license = {text = "MIT-0"}
-requires-python = ">=3.14"
+requires-python = ">=3.15"
 dependencies = [
     "pydantic>=2.12.0",
     "email-validator",
-    "aws-lambda-powertools[tracer,jwt]>=3.36.0",
+    "aws-lambda-powertools[tracer,jwt]>=3.41.0",
     "pydynox[pydantic]>=0.22.0",
     "cachetools",
     "boto3>=1.26.125",
@@ -111,8 +111,8 @@ indent-width = 4
 # apply the excludes to the files pre-commit passes explicitly as well
 force-exclude = true
 
-# Assume Python 3.14
-target-version = "py314"
+# Assume Python 3.15
+target-version = "py315"
 
 [tool.ruff.lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.

@@ -1,9 +1,13 @@
 {
     "dependencies": {
-        "aws-cdk": "2.1148.1",
+        "aws-cdk": "2.1149.0",
         "cdk": "^2.1129.0"
     },
     "devDependencies": {
-        "markdownlint-cli": "^0.49.0"
+        "markdownlint-cli": "^0.50.0"
+    },
+    "overrides": {
+        "katex": "^0.18.2",
+        "minimatch": "^11.0.1"
     }
 }

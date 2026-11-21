@@ -24,7 +24,7 @@ Code lives in `cdk/service/`. `app.py` (repo root) is the CDK entry point that i
 ### Rules
 
 - Add a new capability as a **new construct** and compose it in `ServiceStack`; keep the stack thin.
-- Lambda defaults are class constants on the construct (`PYTHON_3_14`, `ARM_64`, JSON logging) — reuse
+- Lambda defaults are class constants on the construct (`PYTHON_3_15`, `ARM_64`, JSON logging) — reuse
   them; don't drift runtime/arch per function.
 - IAM: grant least privilege with per-function roles and `grant_*` helpers; never attach broad managed
   policies. New resources must pass `cdk-nag` (v3) — fix the finding, or acknowledge it **with a reason**.
