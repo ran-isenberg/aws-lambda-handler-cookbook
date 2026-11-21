@@ -3,7 +3,7 @@ from typing import Any
 
 from aws_lambda_env_modeler import get_environment_variables
 from aws_lambda_powertools.event_handler.openapi.types import OpenAPIResponse
-from aws_lambda_powertools.utilities.auth_alpha import JWTVerifier
+from aws_lambda_powertools.utilities.auth import JWTVerifier
 
 from service.handlers.models.env_vars import Authentication
 from service.handlers.utils.rest_api_resolver import BEARER_SECURITY_SCHEME_NAME

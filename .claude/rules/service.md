@@ -28,5 +28,5 @@ Strict layering — keep each layer's job separate:
   via `get_environment_variables(model=...)`; never read `os.environ` directly in logic.
 - Validate all input with Pydantic models; return typed output models — don't hand-build dicts.
 - Dynamic config / feature flags go through `parse_configuration(...)`, not ad-hoc AppConfig calls.
-- Ruff is the source of truth: line length 150, py314, rules `E,W,F,I,C,B` (see `pyproject.toml`).
+- Ruff is the source of truth: line length 150, py315, rules `E,W,F,I,C,B` (see `pyproject.toml`).
 - Any behavior change ships with a test — see `.claude/rules/testing.md`.

@@ -10,7 +10,7 @@ description: AWS Lambda Cookbook Project Getting started
 
 * **Docker** - install [Docker](https://www.docker.com/){:target="_blank" rel="noopener"}. Required for the Lambda layer packaging process.
 * **[AWS CDK](cdk.md)** - Required for synth & deploying the AWS Cloudformation stack. Run CDK [Bootstrap](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html) on your AWS account and region.
-* Python 3.14
+* Python 3.15
 * [uv](https://docs.astral.sh/uv/){:target="_blank" rel="noopener"} - A fast Python package installer and resolver. Install with ``curl -LsSf https://astral.sh/uv/install.sh | sh`` or ``pip install uv``.
 
 !!! tip "Windows Users"

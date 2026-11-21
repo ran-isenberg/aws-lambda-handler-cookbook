@@ -10,7 +10,7 @@
 
 ## Tech Stack
 
-- Language: Python 3.14
+- Language: Python 3.15
 - Infrastructure: AWS CDK
 - Cloud Services: AWS Lambda, API Gateway, DynamoDB, AppConfig, WAF, CloudWatch, Cognito
 - Key Libraries: AWS Lambda Powertools, Pydantic, Boto3, pydynox, aws-lambda-env-modeler, cachetools

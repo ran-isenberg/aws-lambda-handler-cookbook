@@ -8,7 +8,7 @@ and load automatically (path-scoped ones only when you touch matching files).
 Production-grade blueprint for AWS Serverless services in Python: a Lambda handler skeleton
 plus CDK deployment code, a CI/CD pipeline, and tests.
 
-- **Runtime:** Python `>=3.14`, managed with `uv`. **Infra:** AWS CDK. **Docs:** MkDocs → GitHub Pages.
+- **Runtime:** Python `>=3.15`, managed with `uv`. **Infra:** AWS CDK. **Docs:** MkDocs → GitHub Pages.
 
 ### Layout
 

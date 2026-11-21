@@ -2,12 +2,12 @@
 title: Authentication & Authorization
 description: Amazon Cognito, the Powertools JWT verifier, the manage scope and order ownership
 ---
-The order API is protected with Amazon Cognito access tokens. Each Lambda function verifies the token itself with the Powertools for AWS Lambda [JWT verifier](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.36.0){:target="_blank" rel="noopener"} (`aws_lambda_powertools.utilities.auth_alpha.JWTVerifier`), there is no API Gateway authorizer.
+The order API is protected with Amazon Cognito access tokens. Each Lambda function verifies the token itself with the Powertools for AWS Lambda [JWT verifier](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.41.0){:target="_blank" rel="noopener"} (`aws_lambda_powertools.utilities.auth.JWTVerifier`), there is no API Gateway authorizer.
 
 Every signed in user can create, get and list their own orders. Deleting an order also requires the `orders/manage` scope, which only members of the `orders-managers` group get. On top of that, users only ever reach their own orders, see [Order ownership](#order-ownership).
 
-!!! warning "Alpha utility"
-    The `auth_alpha` utilities may change before they are generally available. Pin the Powertools version and install the extra: `aws-lambda-powertools[jwt]`.
+!!! note "Installation"
+    The Auth utility is generally available since Powertools v3.41.0 (it moved from `auth_alpha` to `aws_lambda_powertools.utilities.auth`). Install the extra: `aws-lambda-powertools[jwt]`.
 
 ## **How it works**
 
@@ -95,7 +95,7 @@ The handlers still verify every token with their real `JWTVerifier`. No AWS cred
 
 ## **More Details**
 
-- [Powertools for AWS Lambda v3.36.0 release notes](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.36.0){:target="_blank" rel="noopener"}, which introduced the JWT verifier
+- [Powertools for AWS Lambda v3.36.0 release notes](https://github.com/aws-powertools/powertools-lambda-python/releases/tag/v3.41.0){:target="_blank" rel="noopener"}, which introduced the JWT verifier
 - [Understanding the access token](https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-the-access-token.html){:target="_blank" rel="noopener"} (Amazon Cognito)
 - [Pre token generation Lambda trigger](https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-token-generation.html){:target="_blank" rel="noopener"} (Amazon Cognito)
 - [Scopes, M2M, and resource servers](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-define-resource-servers.html){:target="_blank" rel="noopener"} (Amazon Cognito)

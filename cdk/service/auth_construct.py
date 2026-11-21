@@ -19,7 +19,7 @@ class AuthConstruct(Construct):
     to access tokens issued by the Cognito API, so tests and backend clients can sign in without a browser.
     """
 
-    LAMBDA_RUNTIME = _lambda.Runtime.PYTHON_3_14
+    LAMBDA_RUNTIME = _lambda.Runtime.PYTHON_3_15
     LAMBDA_ARCHITECTURE = _lambda.Architecture.ARM_64
     LAMBDA_LOGGING_FORMAT = _lambda.LoggingFormat.JSON
 
