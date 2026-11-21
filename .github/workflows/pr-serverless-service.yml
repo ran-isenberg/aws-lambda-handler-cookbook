@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: "24"
+  NODE_VERSION: "26"
   PYTHON_VERSION: "3.15"
   AWS_REGION: "us-east-1"
 
@@ -20,7 +20,7 @@ jobs:
   # Quality checks, then unit, infrastructure and integration tests, the integration tests against a local AWS Emulator:
   # no AWS credentials. One job, so the setup (checkout, uv, Python, Node, dependencies) runs once.
   quality_and_integration:
-    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
+    runs-on: ubuntu-26.04-arm # Native ARM64 runner for faster builds
     # No environment: quality checks and tests never wait for an approval. No AWS credentials (no id-token: write).
     # CODECOV_TOKEN is a repository secret.
     permissions:
@@ -83,7 +83,7 @@ jobs:
 
   deploy_and_e2e:
     needs: quality_and_integration
-    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
+    runs-on: ubuntu-26.04-arm # Native ARM64 runner for faster builds
     environment: dev
     permissions:
       id-token: write # required for requesting the JWT (GitHub OIDC)

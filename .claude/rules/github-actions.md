@@ -30,6 +30,6 @@ Workflows: `main-serverless-service.yml` (push to main → staging → productio
   default; add `id-token: write` only for the OIDC AWS-auth jobs, `pages: write` only for Pages).
 - AWS auth uses OIDC via `aws-actions/configure-aws-credentials` with `role-to-assume` — never
   long-lived keys. Secrets come from `secrets.*`; never inline credentials.
-- Prefer the `ubuntu-24.04-arm` runners already used here for build/deploy jobs (faster ARM64).
+- Prefer the `ubuntu-26.04-arm` runners already used here for build/deploy jobs (faster ARM64).
 - After editing a workflow, sanity-check YAML and that every `uses:` line still carries a SHA:
   `grep -rEn "uses: .+@[0-9a-f]{40} # v" .github/workflows/`.
