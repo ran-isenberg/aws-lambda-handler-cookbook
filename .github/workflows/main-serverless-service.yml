@@ -6,7 +6,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: "24"
+  NODE_VERSION: "26"
   PYTHON_VERSION: "3.15"
   AWS_REGION: "us-east-1"
 
@@ -19,7 +19,7 @@ on:
 jobs:
   # Unit, infrastructure and integration tests, the integration tests against a local AWS Emulator: no AWS credentials.
   integration:
-    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
+    runs-on: ubuntu-26.04-arm # Native ARM64 runner for faster builds
     # No environment: tests never wait for an approval. No AWS credentials (no id-token: write).
     # CODECOV_TOKEN is a repository secret.
     permissions:
@@ -66,7 +66,7 @@ jobs:
 
   staging:
     needs: [integration]
-    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
+    runs-on: ubuntu-26.04-arm # Native ARM64 runner for faster builds
     environment: staging
     permissions:
       id-token: write # required for requesting the JWT (GitHub OIDC)
@@ -117,7 +117,7 @@ jobs:
           ENVIRONMENT: staging # Custom environment variable
 
   production:
-    runs-on: ubuntu-24.04-arm # Native ARM64 runner for faster builds
+    runs-on: ubuntu-26.04-arm # Native ARM64 runner for faster builds
     needs: [staging]
     environment: production
     permissions:
